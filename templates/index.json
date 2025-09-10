@@ -213,7 +213,7 @@
         "image_tiLxBN": {
           "type": "image",
           "settings": {
-            "block_heading": "Main Heading",
+            "block_heading": "Free Shipping",
             "link": ""
           }
         },
@@ -267,7 +267,7 @@
         "speed": "2",
         "enable_reverse_animation": false,
         "block_background_color": "",
-        "block_heading_color": "",
+        "block_heading_color": "#ffffff",
         "custom_class_name": ""
       }
     },
