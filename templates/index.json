@@ -201,6 +201,7 @@
         "7a934f16-93e4-4280-9e19-639c37ec8e04",
         "ffac71a2-ea74-4a14-a25b-fea523e739ca"
       ],
+      "disabled": true,
       "settings": {
         "full": true,
         "spacing_both_ends": true,
@@ -278,6 +279,7 @@
     },
     "16481947033cff8e5d": {
       "type": "home-product-carousel",
+      "disabled": true,
       "settings": {
         "full": true,
         "spacing_both_ends": true,
@@ -353,6 +355,7 @@
     },
     "1654174468919269e9": {
       "type": "home-video-banner",
+      "disabled": true,
       "settings": {
         "full": true,
         "spacing_both_ends": false,
@@ -473,6 +476,7 @@
         "67bcc9c7-f639-4aa2-b376-c848097ae9ad",
         "31bb133f-fc55-4044-b2a5-5c2046e0b291"
       ],
+      "disabled": true,
       "settings": {
         "full": false,
         "spacing_both_ends": false,
@@ -522,6 +526,7 @@
     },
     "16543197328863c2ad": {
       "type": "home-product-carousel",
+      "disabled": true,
       "settings": {
         "full": false,
         "spacing_both_ends": false,
@@ -609,8 +614,8 @@
         "enable_overlay": true,
         "background_color": "#fff64f",
         "overlay_transparency": "1",
-        "section_heading": "Our blog",
-        "section_sub_heading": "Rise & Energize",
+        "section_heading": "Latest news",
+        "section_sub_heading": "Latest news",
         "section_description": "Latest Reads",
         "section_button_text": "See all",
         "section_button_link": "shopify://blogs/news",
@@ -630,8 +635,8 @@
         "blog_show_button": false,
         "blog_show_description": true,
         "block_banner_style": "grid-style",
-        "post_limit": 3,
-        "grid": "3",
+        "post_limit": 4,
+        "grid": "4",
         "text_position": "text-start",
         "enable_box_shadow": false,
         "vertical_position": "vertical-center",
@@ -669,8 +674,8 @@
         "lap_masonry_content_width": "40/60",
         "enable_slider": false,
         "enable_auto_height": true,
-        "items_per_view": 3,
-        "items_laptop_view": 3,
+        "items_per_view": 4,
+        "items_laptop_view": 4,
         "items_tablet_view": 2,
         "items_mobile_view": 1,
         "enable_center_mode": false,
