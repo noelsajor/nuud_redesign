@@ -129,6 +129,60 @@
         "custom_class_name": ""
       }
     },
+    "inner_page_team_section_BVE8ig": {
+      "type": "inner-page-team-section",
+      "blocks": {
+        "content_Kc4ePE": {
+          "type": "content",
+          "settings": {
+            "name": "Name",
+            "designation": "Customer support",
+            "facebook": "#",
+            "twitter": "#",
+            "pinterest": "#",
+            "youtube": "#"
+          }
+        }
+      },
+      "block_order": [
+        "content_Kc4ePE"
+      ],
+      "name": "Team section",
+      "settings": {
+        "enable": true,
+        "full": false,
+        "spacing_both_ends": false,
+        "padding": "120,120",
+        "margin": "0,0",
+        "show_background_image": false,
+        "background_style": "default",
+        "enable_overlay": false,
+        "background_color": "",
+        "overlay_transparency": "0.5",
+        "mask_image_color": "",
+        "section_heading": "inner-page our team",
+        "section_sub_heading": "Sub Heading",
+        "section_description": "Use this text to share the information which you like!.",
+        "section_button_text": "",
+        "section_button_link": "",
+        "section_heading_color": "",
+        "section_sub_heading_color": "",
+        "section_description_color": "",
+        "section_button_bg_color": "",
+        "section_button_text_color": "",
+        "section_button_hover_bg_color": "",
+        "section_button_hover_text_color": "",
+        "heading_position": "text-center",
+        "column": "three-column",
+        "block_heading_color": "",
+        "block_designation_color": "",
+        "block_bg": "",
+        "block_social_icon_bg_color": "",
+        "block_social_icon_color": "",
+        "block_social_icon_hover_bg_color": "",
+        "block_social_icon_hover_color": ""
+      }
+    },
     "home_marquee_section_gzaknE": {
       "type": "home-marquee-section",
       "blocks": {
@@ -1056,6 +1110,7 @@
   },
   "order": [
     "16484715585d0b75d2",
+    "inner_page_team_section_BVE8ig",
     "home_marquee_section_gzaknE",
     "16541744395d995d24",
     "16481947033cff8e5d",
