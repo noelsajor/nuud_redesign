@@ -751,9 +751,7 @@
         "a07d22ae-54a5-4835-a825-ddae028cf967",
         "6f058149-508e-4e89-a305-4ae708360831"
       ],
-      "custom_css": [
-        "{border-radius: 16px;}"
-      ],
+      "custom_css": [],
       "settings": {
         "full": true,
         "spacing_both_ends": true,
@@ -821,7 +819,7 @@
         "navigation_button_hover_icon_color": "#f76d3c",
         "navigation_dot_color": "",
         "navigation_dot_active_color": "",
-        "custom_class_name": "orange_bg"
+        "custom_class_name": ""
       }
     },
     "1654342738f0510186": {
