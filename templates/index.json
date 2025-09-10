@@ -1097,6 +1097,48 @@
         "custom_class_name": ""
       }
     },
+    "faq_template_2_6FECce": {
+      "type": "faq-template-2",
+      "blocks": {
+        "text_WHUJ8B": {
+          "type": "text",
+          "settings": {
+            "question": "What’s NUUD?",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam"
+          }
+        }
+      },
+      "block_order": [
+        "text_WHUJ8B"
+      ],
+      "name": "Faq template 2",
+      "settings": {
+        "full": false,
+        "spacing_both_ends": false,
+        "padding": "0,0",
+        "margin": "0,0",
+        "show_background_image": false,
+        "background_style": "none",
+        "background_size": "auto",
+        "enable_overlay": true,
+        "background_color": "#ff679a",
+        "overlay_transparency": "1",
+        "section_heading": "Frecuently Asked Questions",
+        "section_sub_heading": "NUUD Respond",
+        "section_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat24",
+        "section_button_text": "",
+        "section_button_link": "",
+        "section_heading_color": "",
+        "section_sub_heading_color": "",
+        "section_description_color": "",
+        "section_button_bg_color": "",
+        "section_button_text_color": "",
+        "section_button_hover_bg_color": "",
+        "section_button_hover_text_color": "",
+        "heading_position": "text-start",
+        "grid": "4"
+      }
+    },
     "16543298581bb386bd": {
       "type": "home-featured-blog",
       "settings": {
@@ -1437,6 +1479,7 @@
     "home_product_carousel_KYpYQH",
     "home_product_carousel_bdndwD",
     "1654336925c509c587",
+    "faq_template_2_6FECce",
     "16543298581bb386bd",
     "home_marquee_section_P9T4Vp",
     "1654342738f0510186",
