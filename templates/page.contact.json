@@ -1,0 +1,201 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "contact",
+      "settings": {
+        "full": false,
+        "spacing_both_ends": true,
+        "padding": "0,0",
+        "margin": "0,0",
+        "show_background_image": true,
+        "background_image": "shopify://shop_images/contact_bg.png",
+        "background_style": "none",
+        "background_size": "auto",
+        "overlay_transparency": "1",
+        "section_heading": "Contact information",
+        "section_sub_heading": "Find Us",
+        "section_description": "",
+        "section_button_text": "",
+        "section_button_link": "",
+        "section_heading_color": "#ffffff",
+        "section_sub_heading_color": "#ffffff",
+        "section_description_color": "#ffffff",
+        "section_button_bg_color": "#ff679a",
+        "section_button_text_color": "#ffffff",
+        "section_button_hover_bg_color": "#f76d3c",
+        "section_button_hover_text_color": "#ffffff",
+        "heading_position": "text-center",
+        "contact_layout": "block_layout",
+        "enable_gmap": true,
+        "contact_iframe_code": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d31327.056950652583!2d77.044357!3d11.047464!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x181af0c54e886b2e!2siamdesigning!5e0!3m2!1sen!2sus!4v1648109956644!5m2!1sen!2sus\" width=\"100%\" height=\"100%\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>",
+        "enable_contact_info": true,
+        "contactborder_color": "#ff679a",
+        "contact_hvrborder_color": "#ff679a",
+        "icontactheading_color": "#ff679a",
+        "contacticon_bg_color": "#ff679a",
+        "contacticon_color": "#ff679a",
+        "contacticon_hoverbg_color": "#ff679a",
+        "contacticonhover_color": "#ff679a",
+        "contact_phone": true,
+        "contact_module_contact_phonetitle": "Contact no",
+        "contact_icon_1": "",
+        "contact_phone1": "0000 - 123 - 456789",
+        "contact_phone2": "",
+        "contact_module_email": true,
+        "contact_module_contact_title": "Email us",
+        "contact_icon_2": "",
+        "contact_module_email1": "info@example.com",
+        "contact_module_email2": "",
+        "contact_module_address": true,
+        "contact_module_address_title": "Address",
+        "contact_icon_3": "",
+        "contact_module_address1": "No: 58 A, East Madison Street, Baltimore, MD, USA 4508",
+        "contact_module_address2": "",
+        "enable_contact_form": true,
+        "contact_form_title": "Write Us Get in touch"
+      }
+    },
+    "16545160672cfb6452": {
+      "type": "home-image-gallery",
+      "blocks": {
+        "1654516067a981cd79-0": {
+          "type": "image_image",
+          "settings": {
+            "image": "shopify://shop_images/insta06.jpg",
+            "icon_class": "",
+            "overlay_title": "Shop the Look",
+            "link": ""
+          }
+        },
+        "1654516067a981cd79-1": {
+          "type": "image_image",
+          "settings": {
+            "image": "shopify://shop_images/insta05.jpg",
+            "icon_class": "",
+            "overlay_title": "",
+            "link": ""
+          }
+        },
+        "1654516067a981cd79-2": {
+          "type": "image_image",
+          "settings": {
+            "image": "shopify://shop_images/insta04.jpg",
+            "icon_class": "",
+            "overlay_title": "",
+            "link": ""
+          }
+        },
+        "1654516067a981cd79-3": {
+          "type": "image_image",
+          "settings": {
+            "image": "shopify://shop_images/insta03.jpg",
+            "icon_class": "",
+            "overlay_title": "",
+            "link": ""
+          }
+        },
+        "1654516067a981cd79-4": {
+          "type": "image_image",
+          "settings": {
+            "image": "shopify://shop_images/insta02.jpg",
+            "icon_class": "",
+            "overlay_title": "",
+            "link": ""
+          }
+        },
+        "cb63955a-4b6c-41ca-b99d-367eb83dc42f": {
+          "type": "image_image",
+          "settings": {
+            "image": "shopify://shop_images/insta01.jpg",
+            "icon_class": "",
+            "overlay_title": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "1654516067a981cd79-0",
+        "1654516067a981cd79-1",
+        "1654516067a981cd79-2",
+        "1654516067a981cd79-3",
+        "1654516067a981cd79-4",
+        "cb63955a-4b6c-41ca-b99d-367eb83dc42f"
+      ],
+      "settings": {
+        "full": true,
+        "spacing_both_ends": false,
+        "padding": "0,0",
+        "margin": "0,0",
+        "show_background_image": false,
+        "background_style": "none",
+        "background_size": "auto",
+        "enable_overlay": false,
+        "background_color": "",
+        "overlay_transparency": "0.5",
+        "section_heading": "",
+        "section_sub_heading": "",
+        "section_description": "",
+        "section_button_text": "instagram",
+        "section_button_link": "shopify://collections",
+        "section_heading_color": "",
+        "section_sub_heading_color": "",
+        "section_description_color": "",
+        "section_button_bg_color": "#efefee",
+        "section_button_text_color": "#343434",
+        "section_button_hover_bg_color": "#ff679a",
+        "section_button_hover_text_color": "#ffffff",
+        "heading_position": "text-center",
+        "grid": "6",
+        "column_gap": "0",
+        "image_list_text": "",
+        "image_list_link": "",
+        "enable_overlay_content": false,
+        "item_height": 320,
+        "item_height_laptop": 300,
+        "item_height_tab": 250,
+        "item_height_mobile": 200,
+        "image_link_bg_color": "",
+        "image_link_text_color": "",
+        "image_link_hover_bg_color": "",
+        "image_link_hover_text_color": "",
+        "image_overlay_icon_color": "",
+        "image_overlay_color": "",
+        "icon_size": "24",
+        "enable_slider": false,
+        "remove_button_space": false,
+        "enable_auto_height": true,
+        "items_per_view": 4,
+        "items_laptop_view": 3,
+        "items_tablet_view": 2,
+        "items_mobile_view": 1,
+        "enable_center_mode": false,
+        "slider_autoplay": 0,
+        "dots": true,
+        "carousel_pagination_alignment": "center_pagination",
+        "arrows": true,
+        "nav_arrow_position": "navigation-bottom-center",
+        "center_nav_arrow_alignment": "outside_container",
+        "navigation_button_color": "",
+        "navigation_button_icon_color": "",
+        "navigation_button_hover_color": "",
+        "navigation_button_hover_icon_color": "",
+        "navigation_dot_color": "",
+        "navigation_dot_active_color": "",
+        "custom_class_name": ""
+      }
+    }
+  },
+  "order": [
+    "main",
+    "16545160672cfb6452"
+  ]
+}

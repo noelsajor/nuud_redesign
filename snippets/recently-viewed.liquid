@@ -1,0 +1,56 @@
+<script src="//ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js" type="text/javascript"></script>
+{{ 'jquery.products.min.js' | asset_url | script_tag }}
+<div id="recently-viewed-products" class="recently-viewed-products clearfix" style="display:none"> <p id="recently">{{ 'recently_viewed.label.title' | t }}</p> </div>
+{% raw %}
+<script id="recently-viewed-product-template"  type="text/x-jquery-tmpl">
+<div id="product-${handle}" class="product">
+  <div class="image"> <a href="${url}"> <img src="${Shopify.Products.resizeImage(featured_image, "medium")}" /> </a> </div>
+  <div class="details">
+    <a href="${url}">
+      <span class="title">${title}</span>
+      <span class="price">{{if price_varies}}{{/if}}${Shopify.formatMoney(price)}</span>
+  </a>
+  </div>
+   <form action="/cart/add" method="post" class="variants" id="product-actions-${id}" enctype="multipart/form-data" style="padding:0px;">    
+            {{if !available}} 
+            <input class="btn add-to-cart-btn" type="submit" {% endraw %} value="{{ 'products.product.unavailable' | t }}{% raw %}" disabled="disabled"/>
+            {{else variants.length > 1 }}
+            <input class="btn" type="button" onclick="window.location.href='${url}'" {% endraw %} value="{{ 'products.product.select_options' | t }}{% raw %}"/>
+            {{else}}
+            <input type="hidden" name="id" value="${variants[0].id}" />      
+            <input class="btn add-to-cart-btn" type="submit" {% endraw %} value="{{ 'products.product.add_to_cart' | t }}{% raw %}"/>
+            {{/if}}
+  </form>
+  </div>
+
+</script>
+{% endraw %}
+
+<script> 
+  
+  Shopify.Products.showRecentlyViewed( { howManyToShow: {{ settings.rvp_limit -}} } );  
+  
+  $(document).ready(function(){
+    $("#recently").click(function(){
+      $("#recently-viewed-products .product").slideToggle(750);
+    });
+  });
+</script>
+
+<style>
+  
+  #recently{ position:relative; }
+  #recently:after{ content: "\f0dd"; font-family: FontAwesome;display: block; }
+  .recently-viewed-products { position: fixed; cursor: pointer; right: 15px; width: 70px; top: 50%; transform: translateY(-50%); text-align: center; z-index: 3; padding: 5px; background-color: var(--DTTertiaryColor); border: 1px solid var(--DTColor_Border);transition: var(--DTBaseTransition); }
+  .recently-viewed-products:hover{ background-color: var(--DTBodyBGColor); }
+  .recently-viewed-products .product { position:relative; line-height: normal; font-size: 12px; display: flex; flex-direction: row-reverse; margin-top: 10px; display: none; }
+  .recently-viewed-products .product form { display:none; }
+  .recently-viewed-products .product .details { position: absolute;opacity: 0;left: -100px; width: 120px; top: 0; bottom: 0; text-align: end; transition: .3s all cubic-bezier(0.65, 0.05, 0.36, 1); display: flex; align-items: center; padding: 10px; background-color: var(--DTTertiaryColor); }
+  .recently-viewed-products .product .details > * { width:100%; }
+  .recently-viewed-products .product:hover .details {left: -125px; opacity:1;}
+  .recently-viewed-products .product .image { margin:0; }
+  .recently-viewed-products .product .image img { object-fit: cover; width: 100%;}
+  .recently-viewed-products .product .price { display: block; }
+  
+</style>
+

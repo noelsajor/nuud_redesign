@@ -1,0 +1,231 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "full": false,
+        "spacing_both_ends": false,
+        "padding": "0,0",
+        "margin": "0,0"
+      }
+    },
+    "165459686706a0ff6d": {
+      "type": "inner-page-team-section",
+      "blocks": {
+        "f71717fb-25f2-490c-8457-1bfa784e3191": {
+          "type": "content",
+          "settings": {
+            "image": "shopify://shop_images/team09.jpg",
+            "name": "Jasmine",
+            "designation": "Staff",
+            "facebook": "#",
+            "twitter": "#",
+            "pinterest": "#",
+            "youtube": ""
+          }
+        },
+        "2be6f31b-52ab-4386-93f6-4017a0c42204": {
+          "type": "content",
+          "settings": {
+            "image": "shopify://shop_images/team02.jpg",
+            "name": "William",
+            "designation": "Fresh Juice Maker",
+            "facebook": "#",
+            "twitter": "#",
+            "pinterest": "#",
+            "youtube": ""
+          }
+        },
+        "5cd7289d-1a14-4d2c-a9a7-3b3c061632c1": {
+          "type": "content",
+          "settings": {
+            "image": "shopify://shop_images/team03.jpg",
+            "name": "Loara",
+            "designation": "Head Chef",
+            "facebook": "#",
+            "twitter": "#",
+            "pinterest": "#",
+            "youtube": ""
+          }
+        },
+        "08c7680b-11f8-4d97-9ada-ec2bf7ece837": {
+          "type": "content",
+          "settings": {
+            "image": "shopify://shop_images/team05.jpg",
+            "name": "Riya Thomas",
+            "designation": "Manager",
+            "facebook": "#",
+            "twitter": "#",
+            "pinterest": "#",
+            "youtube": ""
+          }
+        },
+        "cf5503d2-287c-423c-a043-bdd572d304e1": {
+          "type": "content",
+          "settings": {
+            "image": "shopify://shop_images/team04.jpg",
+            "name": "Alwin",
+            "designation": "Juice Maker",
+            "facebook": "#",
+            "twitter": "#",
+            "pinterest": "#",
+            "youtube": ""
+          }
+        },
+        "42eafb90-8a05-4adb-8e46-9624f4293633": {
+          "type": "content",
+          "settings": {
+            "image": "shopify://shop_images/team06.jpg",
+            "name": "Grimond Ray",
+            "designation": "CEO",
+            "facebook": "#",
+            "twitter": "#",
+            "pinterest": "#",
+            "youtube": "#"
+          }
+        },
+        "c5a0240d-9810-40f2-846b-21f42bb96e1e": {
+          "type": "content",
+          "settings": {
+            "image": "shopify://shop_images/team07.jpg",
+            "name": "Richard Williams",
+            "designation": "Dessert Chef",
+            "facebook": "#",
+            "twitter": "#",
+            "pinterest": "#",
+            "youtube": ""
+          }
+        },
+        "8408551b-a69b-4b39-84bf-e1ec9053474e": {
+          "type": "content",
+          "settings": {
+            "image": "shopify://shop_images/team08.jpg",
+            "name": "Grey",
+            "designation": "Customer support",
+            "facebook": "#",
+            "twitter": "#",
+            "pinterest": "#",
+            "youtube": ""
+          }
+        },
+        "e0f0b124-85a6-4190-bafe-b4c56f3fa879": {
+          "type": "content",
+          "settings": {
+            "image": "shopify://shop_images/team09.jpg",
+            "name": "Sara",
+            "designation": "Founder",
+            "facebook": "#",
+            "twitter": "#",
+            "pinterest": "#",
+            "youtube": ""
+          }
+        }
+      },
+      "block_order": [
+        "f71717fb-25f2-490c-8457-1bfa784e3191",
+        "2be6f31b-52ab-4386-93f6-4017a0c42204",
+        "5cd7289d-1a14-4d2c-a9a7-3b3c061632c1",
+        "08c7680b-11f8-4d97-9ada-ec2bf7ece837",
+        "cf5503d2-287c-423c-a043-bdd572d304e1",
+        "42eafb90-8a05-4adb-8e46-9624f4293633",
+        "c5a0240d-9810-40f2-846b-21f42bb96e1e",
+        "8408551b-a69b-4b39-84bf-e1ec9053474e",
+        "e0f0b124-85a6-4190-bafe-b4c56f3fa879"
+      ],
+      "settings": {
+        "enable": true,
+        "full": false,
+        "spacing_both_ends": false,
+        "padding": "0,70",
+        "margin": "0,0",
+        "background_image": "shopify://shop_images/our_team_bg.png",
+        "show_background_image": true,
+        "background_style": "default",
+        "enable_overlay": true,
+        "background_color": "#ff679a",
+        "overlay_transparency": "1",
+        "after_mask_image": "shopify://shop_images/after_image-orange_top.png",
+        "mask_image_color": "#ff679a",
+        "section_heading": "We’re a family, literally",
+        "section_sub_heading": "Our Team",
+        "section_description": "",
+        "section_button_text": "",
+        "section_button_link": "",
+        "section_heading_color": "#fbdf27",
+        "section_sub_heading_color": "#fbdf27",
+        "section_description_color": "",
+        "section_button_bg_color": "",
+        "section_button_text_color": "",
+        "section_button_hover_bg_color": "",
+        "section_button_hover_text_color": "",
+        "heading_position": "text-center",
+        "column": "three-column",
+        "block_heading_color": "#ffffff",
+        "block_designation_color": "#ffffff",
+        "block_bg": "#343434",
+        "block_social_icon_bg_color": "rgba(0,0,0,0)",
+        "block_social_icon_color": "#ffffff",
+        "block_social_icon_hover_bg_color": "rgba(0,0,0,0)",
+        "block_social_icon_hover_color": "#fbdf27"
+      }
+    },
+    "16546017442111ef3d": {
+      "type": "home-newsletter",
+      "settings": {
+        "full": false,
+        "spacing_both_ends": false,
+        "padding": "200,200",
+        "margin": "0,0",
+        "before_image": "shopify://shop_images/blog_inner_before.png",
+        "background_image": "shopify://shop_images/newsletter-bg.jpg",
+        "show_background_image": true,
+        "background_style": "none",
+        "background_size": "auto",
+        "background_color": "#fbdc1e",
+        "enable_overlay": false,
+        "overlay_transparency": "1",
+        "section_heading": "Do you want to get Special Offer?",
+        "section_sub_heading": "Newsletter",
+        "section_description": "",
+        "section_button_text": "",
+        "section_button_link": "",
+        "section_heading_color": "#343434",
+        "section_sub_heading_color": "#343434",
+        "section_description_color": "#343434",
+        "section_button_bg_color": "",
+        "section_button_text_color": "",
+        "section_button_hover_bg_color": "",
+        "section_button_hover_text_color": "",
+        "heading_position": "text-center",
+        "section_position": "text-center",
+        "newsletter_form_width": "65%",
+        "newsletter_description": "",
+        "news_style": "default",
+        "space_in_between": "10px",
+        "newsletter_box_border_color": "",
+        "newsletter_box_bg_color": "rgba(0,0,0,0)",
+        "newsletter_box_border_focus_color": "",
+        "newsletter_button_bg_color": "",
+        "newsletter_button_text_color": "#343434",
+        "newsletter_button_hover_bg_color": "#ffffff",
+        "newsletter_button_hover_text_color": "#343434",
+        "newsletter_description_color": "#343434",
+        "custom_class_name": "team-newsletter"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "165459686706a0ff6d",
+    "16546017442111ef3d"
+  ]
+}
