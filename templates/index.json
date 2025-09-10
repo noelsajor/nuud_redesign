@@ -159,8 +159,9 @@
         "content_CjX9nt": {
           "type": "content",
           "settings": {
-            "name": "Name",
-            "designation": "Customer support",
+            "image": "shopify://shop_images/For_Both.webp",
+            "name": "For Both",
+            "designation": "",
             "facebook": "#",
             "twitter": "#",
             "pinterest": "#",
