@@ -147,8 +147,9 @@
         "content_8zjxmz": {
           "type": "content",
           "settings": {
-            "name": "Name",
-            "designation": "Customer support",
+            "image": "shopify://shop_images/For_Him.webp",
+            "name": "For Him",
+            "designation": "",
             "facebook": "#",
             "twitter": "#",
             "pinterest": "#",
