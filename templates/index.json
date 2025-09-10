@@ -142,10 +142,34 @@
             "pinterest": "#",
             "youtube": "#"
           }
+        },
+        "content_8zjxmz": {
+          "type": "content",
+          "settings": {
+            "name": "Name",
+            "designation": "Customer support",
+            "facebook": "#",
+            "twitter": "#",
+            "pinterest": "#",
+            "youtube": "#"
+          }
+        },
+        "content_CjX9nt": {
+          "type": "content",
+          "settings": {
+            "name": "Name",
+            "designation": "Customer support",
+            "facebook": "#",
+            "twitter": "#",
+            "pinterest": "#",
+            "youtube": "#"
+          }
         }
       },
       "block_order": [
-        "content_Kc4ePE"
+        "content_Kc4ePE",
+        "content_8zjxmz",
+        "content_CjX9nt"
       ],
       "name": "Team section",
       "settings": {
