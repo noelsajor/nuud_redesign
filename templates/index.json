@@ -1032,6 +1032,7 @@
           "type": "content",
           "settings": {
             "grid_banner_type": "image",
+            "block_image": "shopify://shop_images/Section.webp",
             "block_video": "https://www.w3schools.com/tags/mov_bbb.mp4",
             "video_icon_color": "",
             "video_icon_position": "icon-top-right",
