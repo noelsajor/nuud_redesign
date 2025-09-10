@@ -16,7 +16,8 @@
           "type": "Slider",
           "settings": {
             "slider_type": "image",
-            "image": "shopify://shop_images/hero.webp",
+            "image": "shopify://shop_images/hero_desktop.webp",
+            "mobile_image": "shopify://shop_images/hero_mobile.webp",
             "mobile_bg_clr": "",
             "text_alignment": "text-center",
             "content_position": "bottom-center",
