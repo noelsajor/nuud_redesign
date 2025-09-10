@@ -135,8 +135,9 @@
         "content_Kc4ePE": {
           "type": "content",
           "settings": {
-            "name": "Name",
-            "designation": "Customer support",
+            "image": "shopify://shop_images/For_Her.webp",
+            "name": "For Her",
+            "designation": "",
             "facebook": "#",
             "twitter": "#",
             "pinterest": "#",
