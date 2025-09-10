@@ -925,6 +925,7 @@
         "165434402573d11a68-4",
         "33c564d7-7107-4d1a-96bc-eb7700a48572"
       ],
+      "disabled": true,
       "settings": {
         "full": true,
         "spacing_both_ends": false,
