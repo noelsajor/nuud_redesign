@@ -892,7 +892,7 @@
       ],
       "name": "Product carousel",
       "settings": {
-        "full": true,
+        "full": false,
         "spacing_both_ends": true,
         "padding": "12,12",
         "margin": "0,0",
