@@ -89,6 +89,7 @@
       "settings": {
         "full": true,
         "spacing_both_ends": false,
+        "after_mask_image": "shopify://shop_images/Section.webp",
         "mask_image_color": "#ff679a",
         "margin": "0,0",
         "slider_height": 1100,
@@ -897,6 +898,7 @@
         "padding": "12,12",
         "margin": "0,0",
         "mask_image_color": "#fff64f",
+        "image_1": "shopify://shop_images/Section.webp",
         "show_background_image": false,
         "background_style": "parallax",
         "background_size": "auto",
