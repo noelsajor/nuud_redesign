@@ -892,7 +892,7 @@
       ],
       "name": "Product carousel",
       "settings": {
-        "full": false,
+        "full": true,
         "spacing_both_ends": true,
         "padding": "12,12",
         "margin": "0,0",
@@ -945,7 +945,7 @@
         "items_laptop_view": 4,
         "items_tablet_view": 2,
         "items_mobile_view": 1,
-        "enable_center_mode": true,
+        "enable_center_mode": false,
         "rows": 1,
         "slider_autoplay": 0,
         "enable_auto_height": false,
