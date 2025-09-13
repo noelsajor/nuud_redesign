@@ -947,7 +947,7 @@
         "items_mobile_view": 1,
         "enable_center_mode": true,
         "rows": 1,
-        "slider_autoplay": 3,
+        "slider_autoplay": 0,
         "enable_auto_height": false,
         "dots": false,
         "carousel_pagination_alignment": "center_pagination",
