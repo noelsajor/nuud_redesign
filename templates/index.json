@@ -1730,9 +1730,9 @@
         "enable_overlay": false,
         "background_color": "#ff679a",
         "overlay_transparency": "1",
-        "section_heading": "Featured Product",
-        "section_sub_heading": "Sub Heading",
-        "section_description": "Use this text to share the information which you like!.",
+        "section_heading": "Shop by category",
+        "section_sub_heading": "",
+        "section_description": "",
         "section_button_text": "",
         "section_button_link": "",
         "section_heading_color": "",
@@ -1774,6 +1774,7 @@
   "order": [
     "16484715585d0b75d2",
     "inner_page_team_section_BVE8ig",
+    "home_featured_collection_ePRkBR",
     "home_marquee_section_gzaknE",
     "16541744395d995d24",
     "16481947033cff8e5d",
@@ -1790,7 +1791,6 @@
     "16543298581bb386bd",
     "home_marquee_section_P9T4Vp",
     "1654342738f0510186",
-    "1654344025e2796207",
-    "home_featured_collection_ePRkBR"
+    "1654344025e2796207"
   ]
 }
