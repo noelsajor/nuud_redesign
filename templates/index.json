@@ -1332,7 +1332,7 @@
       "settings": {
         "full": false,
         "spacing_both_ends": true,
-        "padding": "120,120",
+        "padding": "240,120",
         "margin": "0,0",
         "mask_image_color": "#fff64f",
         "show_background_image": false,
