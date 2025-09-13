@@ -152,7 +152,7 @@
   #shopify-section-{{section.id}}.home-featured-collection .dt-sc-featured-collection-section .dt-sc-collection-banner.{{block.type}}-{{block.id}} .with-overlay:before { 
     color: var(--DTTertiaryColor);
       color: {{ block.settings.overlay_color }};
-      background: currentcolor; border-radius: 32px; }
+      background: currentcolor;  }
   #shopify-section-{{section.id}}.home-featured-collection .dt-sc-featured-collection-section .dt-sc-collection-banner.{{block.type}}-{{block.id}} .with-gradient-overlay:before {
 
     background-image: linear-gradient({{ block.settings.rotation_degree}}deg, {{ settings.tertiary_color | color_modify: 'alpha', 0 }}, {{ settings.tertiary_color }});
