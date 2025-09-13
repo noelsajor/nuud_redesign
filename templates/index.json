@@ -1027,7 +1027,6 @@
         "spacing_both_ends": true,
         "padding": "240,240",
         "margin": "0,0",
-        "image_2": "shopify://shop_images/Section.webp",
         "after_image": "shopify://shop_images/Section.webp",
         "show_background_image": true,
         "background_image": "shopify://shop_images/Section.webp",
