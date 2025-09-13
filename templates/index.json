@@ -214,7 +214,7 @@
     "home_featured_collection_ePRkBR": {
       "type": "home-featured-collection",
       "blocks": {
-        "collection_yFXVWi": {
+        "collection_Yj8ixw": {
           "type": "collection",
           "settings": {
             "collection": "for-her",
@@ -231,13 +231,13 @@
             "block_button_text_color": "",
             "block_button_hover_bg_color": "",
             "block_button_hover_text_color": "",
-            "overlay_style": "use_gradient_overlay",
-            "overlay_color": "#efd219",
-            "overlay_opacity": "1",
+            "overlay_style": "use_overlay",
+            "overlay_color": "",
+            "overlay_opacity": "0.5",
             "rotation_degree": "180"
           }
         },
-        "collection_Yj8ixw": {
+        "collection_iMdNr6": {
           "type": "collection",
           "settings": {
             "collection": "fir-him",
@@ -285,8 +285,8 @@
         }
       },
       "block_order": [
-        "collection_yFXVWi",
         "collection_Yj8ixw",
+        "collection_iMdNr6",
         "collection_dyYzxC"
       ],
       "name": "Featured collection",
