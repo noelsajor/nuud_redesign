@@ -97,7 +97,7 @@
   
 
   {% unless section.settings.enable_slider %}
-  #shopify-section-{{section.id}}.home-featured-collection .dt-sc-featured-collection-section { grid-gap: {{ section.settings.column_gap }}px; } 
+  #shopify-section-{{section.id}}.home-featured-collection .dt-sc-featured-collection-section { grid-gap: {{ section.settings.column_gap }}px; border-radius: 32px; } 
   {% endunless %}
 
   #shopify-section-{{section.id}}.home-featured-collection .dt-sc-heading .dt-sc-main-heading { color: var(--DTColor_Heading); color:{{ section.settings.section_heading_color }}; } 
