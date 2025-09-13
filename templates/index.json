@@ -1460,7 +1460,7 @@
         "margin": "0,0",
         "mask_image_color": "#fff64f",
         "show_background_image": false,
-        "background_style": "none",
+        "background_style": "parallax",
         "background_size": "auto",
         "enable_overlay": true,
         "background_color": "#fff64f",
