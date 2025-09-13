@@ -118,7 +118,7 @@
 
   #shopify-section-{{section.id}}.home-featured-collection .dt-sc-featured-collection-section .dt-sc-collection-banner { 
     border-radius: var(--DTRadius); border-radius: {{ section.settings.border_radius }}px; 
-      {% if section.settings.enable_box_shadow %} box-shadow: var(--DTboxShadow); {% endif %} 
+      {% if section.settings.enable_box_shadow %} box-shadow: var(--DTboxShadow); border-radius: 32px; {% endif %} 
         }
 
   {% for block in section.blocks %} 
