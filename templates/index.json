@@ -1027,7 +1027,7 @@
         "padding": "240,240",
         "margin": "0,0",
         "show_background_image": false,
-        "background_style": "none",
+        "background_style": "parallax",
         "background_size": "auto",
         "enable_overlay": true,
         "background_color": "#ff679a",
