@@ -1062,7 +1062,7 @@
         "column_gap": "24",
         "content_width": "30/70",
         "lap_content_width": "20/80",
-        "vertical_position": "vertical-top",
+        "vertical_position": "vertical-center",
         "testimonial_border_color": "",
         "testimonial_background_color": "",
         "testimonial_content_color": "#343434",
