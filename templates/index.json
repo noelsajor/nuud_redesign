@@ -9,66 +9,6 @@
  */
 {
   "sections": {
-    "home_product_banner_9ymY3Y": {
-      "type": "home-product-banner",
-      "blocks": {
-        "image_CYDcxx": {
-          "type": "Image",
-          "disabled": true,
-          "settings": {
-            "block_heading": "Heading",
-            "text_link": "",
-            "image": "shopify://shop_images/Section.webp",
-            "title": "",
-            "title_color": ""
-          }
-        },
-        "image_xJUNYG": {
-          "type": "Image",
-          "disabled": true,
-          "settings": {
-            "block_heading": "Heading",
-            "text_link": "",
-            "image": "shopify://shop_images/Section.webp",
-            "title": "",
-            "title_color": ""
-          }
-        }
-      },
-      "block_order": [
-        "image_CYDcxx",
-        "image_xJUNYG"
-      ],
-      "name": "Home Product banner",
-      "settings": {
-        "full": false,
-        "spacing_both_ends": false,
-        "padding": "120,320",
-        "margin": "0,0",
-        "show_background_image": true,
-        "background_image": "shopify://shop_images/hero_desktop.webp",
-        "background_style": "parallax",
-        "background_size": "auto",
-        "enable_overlay": false,
-        "background_color": "rgba(0,0,0,0)",
-        "overlay_transparency": "0.5",
-        "section_heading": "Enhance Your Pleasure",
-        "section_sub_heading": "",
-        "section_description": "Use this text to share the information which you like!.",
-        "section_button_text": "",
-        "section_button_link": "",
-        "section_heading_color": "",
-        "section_sub_heading_color": "",
-        "section_description_color": "",
-        "section_button_bg_color": "",
-        "section_button_text_color": "",
-        "section_button_hover_bg_color": "",
-        "section_button_hover_text_color": "",
-        "heading_position": "text-start",
-        "column_gap": "30",
-        "custom_class_name": ""
-      }
-    },
     "16484715585d0b75d2": {
       "type": "slideshow",
       "blocks": {
@@ -146,7 +86,6 @@
         "7e33837d-b447-4031-9b6f-97da7a46ad45",
         "1c3ef5d2-7158-4a50-8def-1e1c84b6a9c6"
       ],
-      "disabled": true,
       "settings": {
         "full": true,
         "spacing_both_ends": false,
@@ -188,88 +127,6 @@
         "navigation_dot_color": "rgba(0,0,0,0)",
         "navigation_dot_active_color": "#ffffff",
         "custom_class_name": ""
-      }
-    },
-    "inner_page_team_section_BVE8ig": {
-      "type": "inner-page-team-section",
-      "blocks": {
-        "content_Kc4ePE": {
-          "type": "content",
-          "settings": {
-            "image": "shopify://shop_images/For_Her.webp",
-            "name": "For Her",
-            "designation": "",
-            "facebook": "#",
-            "twitter": "#",
-            "pinterest": "#",
-            "youtube": "#"
-          }
-        },
-        "content_8zjxmz": {
-          "type": "content",
-          "settings": {
-            "image": "shopify://shop_images/For_Him.webp",
-            "name": "For Him",
-            "designation": "",
-            "facebook": "#",
-            "twitter": "#",
-            "pinterest": "#",
-            "youtube": "#"
-          }
-        },
-        "content_CjX9nt": {
-          "type": "content",
-          "settings": {
-            "image": "shopify://shop_images/For_Both.webp",
-            "name": "For Both",
-            "designation": "",
-            "facebook": "#",
-            "twitter": "#",
-            "pinterest": "#",
-            "youtube": "#"
-          }
-        }
-      },
-      "block_order": [
-        "content_Kc4ePE",
-        "content_8zjxmz",
-        "content_CjX9nt"
-      ],
-      "disabled": true,
-      "name": "Team section",
-      "settings": {
-        "enable": true,
-        "full": false,
-        "spacing_both_ends": false,
-        "padding": "120,120",
-        "margin": "0,0",
-        "show_background_image": false,
-        "background_style": "default",
-        "enable_overlay": true,
-        "background_color": "#ff679a",
-        "overlay_transparency": "1",
-        "mask_image_color": "",
-        "section_heading": "Shop by category",
-        "section_sub_heading": "",
-        "section_description": "",
-        "section_button_text": "",
-        "section_button_link": "",
-        "section_heading_color": "#ffffff",
-        "section_sub_heading_color": "#ffffff",
-        "section_description_color": "#ffffff",
-        "section_button_bg_color": "",
-        "section_button_text_color": "",
-        "section_button_hover_bg_color": "",
-        "section_button_hover_text_color": "",
-        "heading_position": "text-center",
-        "column": "three-column",
-        "block_heading_color": "",
-        "block_designation_color": "#ffffff",
-        "block_bg": "",
-        "block_social_icon_bg_color": "",
-        "block_social_icon_color": "",
-        "block_social_icon_hover_bg_color": "",
-        "block_social_icon_hover_color": ""
       }
     },
     "home_featured_collection_ePRkBR": {
@@ -1841,9 +1698,7 @@
     }
   },
   "order": [
-    "home_product_banner_9ymY3Y",
     "16484715585d0b75d2",
-    "inner_page_team_section_BVE8ig",
     "home_featured_collection_ePRkBR",
     "home_marquee_section_gzaknE",
     "16541744395d995d24",
