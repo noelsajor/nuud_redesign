@@ -429,17 +429,14 @@
       "footer": {
         "type": "footer",
         "blocks": {
-          "40cc8690-9f76-4648-82d9-1632b26486a0": {
-            "type": "logo",
+          "menu_BKWFjg": {
+            "type": "menu",
             "settings": {
-              "title": "",
-              "text": "Lectus magna fringilla urna porttitor rhoncus. Ut eu sem integer vitae justo eget magna. Tincidunt nunc pulvinar sapien et ligula ullamcorper",
-              "link_text": "<p>© 2025 NUUD Ascentmgnt</p>",
-              "url": "#",
-              "logo": "shopify://shop_images/Nuud_Pleasures_Logo.svg",
-              "footer_logo_height": 30,
-              "container_width": 25,
-              "column_alignment": "text-start"
+              "title": "Menu",
+              "menu": "footer",
+              "container_width": 20,
+              "column_alignment": "text-start",
+              "footer_menu_style": "vertical"
             }
           },
           "a2c12a31-5695-4c33-9553-e3374eb8af4f": {
@@ -456,18 +453,33 @@
           },
           "5dd59adf-31fd-4091-b764-8a090fa9ab13": {
             "type": "html",
+            "disabled": true,
             "settings": {
               "title": "Opening hours",
               "html": "<table>\n\t<tbody>\n<tr>\n    <td>Monday</td>\n    <td>.................................</td>\n    <td>8am-9pm</td>\n  </tr>\n  <tr>\n    <td>Tuesday</td>\n    <td>.................................</td>\n    <td>8am-9pm</td>\n  </tr>\n  <tr>\n    <td>Wednesday</td>\n    <td>..........................</td>\n    <td>8am-9pm</td>\n  </tr>\n  <tr>\n   <td>Thursday</td>\n    <td>...............................</td>\n    <td>8am-9pm</td>\n  </tr>\n  <tr>\n    <td>Friday</td>\n    <td>.....................................</td>\n    <td>8am-9pm</td>\n  </tr>\n  <tr>\n    <td>Saturday</td>\n    <td>...............................</td>\n    <td>8am-9pm</td>\n  </tr>\n  <tr>\n    <td>Sunday</td>\n    <td>..................................</td>\n    <td>Closed</td>\n  </tr>\n\n</tbody>\n</table>",
               "container_width": 22,
               "column_alignment": "text-start"
             }
+          },
+          "40cc8690-9f76-4648-82d9-1632b26486a0": {
+            "type": "logo",
+            "settings": {
+              "title": "",
+              "text": "Lectus magna fringilla urna porttitor rhoncus. Ut eu sem integer vitae justo eget magna. Tincidunt nunc pulvinar sapien et ligula ullamcorper",
+              "link_text": "<p>© 2025 NUUD Ascentmgnt</p>",
+              "url": "#",
+              "logo": "shopify://shop_images/Nuud_Pleasures_Logo.svg",
+              "footer_logo_height": 36,
+              "container_width": 25,
+              "column_alignment": "text-start"
+            }
           }
         },
         "block_order": [
-          "40cc8690-9f76-4648-82d9-1632b26486a0",
+          "menu_BKWFjg",
           "a2c12a31-5695-4c33-9553-e3374eb8af4f",
-          "5dd59adf-31fd-4091-b764-8a090fa9ab13"
+          "5dd59adf-31fd-4091-b764-8a090fa9ab13",
+          "40cc8690-9f76-4648-82d9-1632b26486a0"
         ],
         "settings": {
           "full": true,
