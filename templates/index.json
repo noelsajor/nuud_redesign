@@ -1206,7 +1206,7 @@
             "block_button_hover_text_color": "",
             "overlay_style": "use_overlay",
             "overlay_color": "",
-            "overlay_opacity": "0.5",
+            "overlay_opacity": "0",
             "rotation_degree": "180"
           }
         }
