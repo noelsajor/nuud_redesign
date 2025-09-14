@@ -1778,61 +1778,98 @@
         "custom_class_name": ""
       }
     },
-    "portfolio_1_XweTEr": {
-      "type": "portfolio-1",
+    "home_grid_banner_PMTBJi": {
+      "type": "home-grid-banner",
       "blocks": {
-        "tab_XAgKj6": {
-          "type": "tab",
+        "content_Y4J4GJ": {
+          "type": "content",
           "settings": {
-            "image": "shopify://shop_images/Strawberrybite.webp",
-            "iframe": "https://www.youtube.com/embed/JJMPKgyCoSY",
-            "tag": "",
-            "title": "Testing testing",
-            "text": "this is a testing text to check how it looks",
-            "link": ""
+            "grid_banner_type": "image",
+            "block_video": "https://www.w3schools.com/tags/mov_bbb.mp4",
+            "video_icon_color": "",
+            "video_icon_position": "icon-top-right",
+            "content_with_icon": false,
+            "video_icon_outer_size": "60px",
+            "video_icon_size": "40px",
+            "show_image": true,
+            "show_content": true,
+            "block_title": "Title",
+            "block_sub_title": "Sub title",
+            "block_description": "Short description",
+            "block_button_text": "",
+            "block_button_link": "",
+            "block_text_align": "text-center",
+            "content_position": "center",
+            "reverse_column": false,
+            "block_banner_bg": "",
+            "block_content_box_bg": "",
+            "block_heading_color": "",
+            "block_sub_heading_color": "",
+            "block_description_color": "",
+            "block_button_bg_color": "",
+            "block_button_text_color": "",
+            "block_button_hover_bg_color": "",
+            "block_button_hover_text_color": "",
+            "overlay_style": "use_overlay",
+            "overlay_color": "",
+            "overlay_opacity": "0.5",
+            "rotation_degree": "180"
           }
         },
-        "tab_AyT7Ux": {
-          "type": "tab",
+        "content_6Bqg9P": {
+          "type": "content",
           "settings": {
-            "image": "shopify://shop_images/Strawberrybite.webp",
-            "iframe": "https://www.youtube.com/embed/JJMPKgyCoSY",
-            "tag": "",
-            "title": "Testing testing",
-            "text": "this is a testing text to check how it looks",
-            "link": ""
-          }
-        },
-        "tab_xkaytc": {
-          "type": "tab",
-          "settings": {
-            "image": "shopify://shop_images/Strawberrybite.webp",
-            "iframe": "https://www.youtube.com/embed/JJMPKgyCoSY",
-            "tag": "",
-            "title": "Testing testing",
-            "text": "this is a testing text to check how it looks",
-            "link": ""
+            "grid_banner_type": "image",
+            "block_video": "https://www.w3schools.com/tags/mov_bbb.mp4",
+            "video_icon_color": "",
+            "video_icon_position": "icon-top-right",
+            "content_with_icon": false,
+            "video_icon_outer_size": "60px",
+            "video_icon_size": "40px",
+            "show_image": true,
+            "show_content": true,
+            "block_title": "Title",
+            "block_sub_title": "Sub title",
+            "block_description": "Short description",
+            "block_button_text": "",
+            "block_button_link": "",
+            "block_text_align": "text-center",
+            "content_position": "center",
+            "reverse_column": false,
+            "block_banner_bg": "",
+            "block_content_box_bg": "",
+            "block_heading_color": "",
+            "block_sub_heading_color": "",
+            "block_description_color": "",
+            "block_button_bg_color": "",
+            "block_button_text_color": "",
+            "block_button_hover_bg_color": "",
+            "block_button_hover_text_color": "",
+            "overlay_style": "use_overlay",
+            "overlay_color": "",
+            "overlay_opacity": "0.5",
+            "rotation_degree": "180"
           }
         }
       },
       "block_order": [
-        "tab_XAgKj6",
-        "tab_AyT7Ux",
-        "tab_xkaytc"
+        "content_Y4J4GJ",
+        "content_6Bqg9P"
       ],
-      "name": "Portfolio 1",
+      "name": "Grid banner",
       "settings": {
         "full": false,
         "spacing_both_ends": false,
-        "padding": "0,0",
+        "padding": "120,0",
         "margin": "0,0",
-        "show_background_image": false,
+        "show_background_image": true,
+        "background_image": "shopify://shop_images/hero_desktop.webp",
         "background_style": "none",
         "background_size": "auto",
         "enable_overlay": false,
         "background_color": "",
         "overlay_transparency": "0.5",
-        "section_heading": "Portfolio",
+        "section_heading": "Grid Banner",
         "section_sub_heading": "Sub Heading",
         "section_description": "Use this text to share the information which you like!.",
         "section_button_text": "",
@@ -1845,17 +1882,17 @@
         "section_button_hover_bg_color": "",
         "section_button_hover_text_color": "",
         "heading_position": "text-center",
-        "enable_filter": "enable",
-        "shop_by_tags_list": "",
-        "grid": "4",
-        "gallery_spacing": 10,
-        "isotope_overlay_color": "",
-        "isotope_title_color": "",
-        "isotope_description_color": "",
-        "isotope_icon_bg_color": "",
-        "isotope_icon_color": "",
-        "isotope_icon_hover_bg_color": "",
-        "isotope_icon_hover_color": "",
+        "block_banner_style": "grid",
+        "column_gap": "30",
+        "grid": "2",
+        "border_radius": "0",
+        "enable_box_shadow": false,
+        "equal_height": false,
+        "content_width": "50/50",
+        "lap_content_width": "40/60",
+        "overlay_style_height": 600,
+        "overlay_style_height_laptop": 500,
+        "overlay_style_height_mobile": 400,
         "custom_class_name": ""
       }
     }
@@ -1881,6 +1918,6 @@
     "home_marquee_section_P9T4Vp",
     "1654342738f0510186",
     "1654344025e2796207",
-    "portfolio_1_XweTEr"
+    "home_grid_banner_PMTBJi"
   ]
 }
