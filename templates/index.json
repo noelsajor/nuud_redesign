@@ -1777,6 +1777,87 @@
         "navigation_dot_active_color": "",
         "custom_class_name": ""
       }
+    },
+    "portfolio_1_XweTEr": {
+      "type": "portfolio-1",
+      "blocks": {
+        "tab_XAgKj6": {
+          "type": "tab",
+          "settings": {
+            "image": "shopify://shop_images/Strawberrybite.webp",
+            "iframe": "https://www.youtube.com/embed/JJMPKgyCoSY",
+            "tag": "",
+            "title": "Testing testing",
+            "text": "this is a testing text to check how it looks",
+            "link": ""
+          }
+        },
+        "tab_AyT7Ux": {
+          "type": "tab",
+          "settings": {
+            "image": "shopify://shop_images/Strawberrybite.webp",
+            "iframe": "https://www.youtube.com/embed/JJMPKgyCoSY",
+            "tag": "",
+            "title": "Testing testing",
+            "text": "this is a testing text to check how it looks",
+            "link": ""
+          }
+        },
+        "tab_xkaytc": {
+          "type": "tab",
+          "settings": {
+            "image": "shopify://shop_images/Strawberrybite.webp",
+            "iframe": "https://www.youtube.com/embed/JJMPKgyCoSY",
+            "tag": "",
+            "title": "Testing testing",
+            "text": "this is a testing text to check how it looks",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "tab_XAgKj6",
+        "tab_AyT7Ux",
+        "tab_xkaytc"
+      ],
+      "name": "Portfolio 1",
+      "settings": {
+        "full": false,
+        "spacing_both_ends": false,
+        "padding": "0,0",
+        "margin": "0,0",
+        "show_background_image": false,
+        "background_style": "none",
+        "background_size": "auto",
+        "enable_overlay": false,
+        "background_color": "",
+        "overlay_transparency": "0.5",
+        "section_heading": "Portfolio",
+        "section_sub_heading": "Sub Heading",
+        "section_description": "Use this text to share the information which you like!.",
+        "section_button_text": "",
+        "section_button_link": "",
+        "section_heading_color": "",
+        "section_sub_heading_color": "",
+        "section_description_color": "",
+        "section_button_bg_color": "",
+        "section_button_text_color": "",
+        "section_button_hover_bg_color": "",
+        "section_button_hover_text_color": "",
+        "heading_position": "text-center",
+        "enable_filter": "enable",
+        "shop_by_tags_list": "",
+        "grid": "4",
+        "gallery_spacing": 10,
+        "isotope_overlay_color": "",
+        "isotope_title_color": "",
+        "isotope_description_color": "",
+        "isotope_icon_bg_color": "",
+        "isotope_icon_color": "",
+        "isotope_icon_hover_bg_color": "",
+        "isotope_icon_hover_color": "",
+        "custom_class_name": ""
+      }
     }
   },
   "order": [
@@ -1799,6 +1880,7 @@
     "16543298581bb386bd",
     "home_marquee_section_P9T4Vp",
     "1654342738f0510186",
-    "1654344025e2796207"
+    "1654344025e2796207",
+    "portfolio_1_XweTEr"
   ]
 }
