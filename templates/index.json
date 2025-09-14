@@ -1790,10 +1790,21 @@
             "title": "",
             "title_color": ""
           }
+        },
+        "image_CYDcxx": {
+          "type": "Image",
+          "settings": {
+            "block_heading": "Heading",
+            "text_link": "",
+            "image": "shopify://shop_images/Section.webp",
+            "title": "",
+            "title_color": ""
+          }
         }
       },
       "block_order": [
-        "image_WKecwA"
+        "image_WKecwA",
+        "image_CYDcxx"
       ],
       "name": "Home Product banner",
       "settings": {
