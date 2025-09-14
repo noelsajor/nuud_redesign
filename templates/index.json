@@ -9,6 +9,64 @@
  */
 {
   "sections": {
+    "home_product_banner_9ymY3Y": {
+      "type": "home-product-banner",
+      "blocks": {
+        "image_CYDcxx": {
+          "type": "Image",
+          "settings": {
+            "block_heading": "Heading",
+            "text_link": "",
+            "image": "shopify://shop_images/Section.webp",
+            "title": "",
+            "title_color": ""
+          }
+        },
+        "image_xJUNYG": {
+          "type": "Image",
+          "settings": {
+            "block_heading": "Heading",
+            "text_link": "",
+            "image": "shopify://shop_images/Section.webp",
+            "title": "",
+            "title_color": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_CYDcxx",
+        "image_xJUNYG"
+      ],
+      "name": "Home Product banner",
+      "settings": {
+        "full": false,
+        "spacing_both_ends": false,
+        "padding": "240,240",
+        "margin": "0,0",
+        "show_background_image": true,
+        "background_image": "shopify://shop_images/hero_desktop.webp",
+        "background_style": "fixed",
+        "background_size": "auto",
+        "enable_overlay": false,
+        "background_color": "",
+        "overlay_transparency": "0.5",
+        "section_heading": "Enhance Your Pleasure",
+        "section_sub_heading": "",
+        "section_description": "Use this text to share the information which you like!.",
+        "section_button_text": "",
+        "section_button_link": "",
+        "section_heading_color": "",
+        "section_sub_heading_color": "",
+        "section_description_color": "",
+        "section_button_bg_color": "",
+        "section_button_text_color": "",
+        "section_button_hover_bg_color": "",
+        "section_button_hover_text_color": "",
+        "heading_position": "text-start",
+        "column_gap": "30",
+        "custom_class_name": ""
+      }
+    },
     "16484715585d0b75d2": {
       "type": "slideshow",
       "blocks": {
@@ -1777,67 +1835,10 @@
         "navigation_dot_active_color": "",
         "custom_class_name": ""
       }
-    },
-    "home_product_banner_9ymY3Y": {
-      "type": "home-product-banner",
-      "blocks": {
-        "image_WKecwA": {
-          "type": "Image",
-          "settings": {
-            "block_heading": "",
-            "text_link": "",
-            "image": "shopify://shop_images/Section.webp",
-            "title": "",
-            "title_color": ""
-          }
-        },
-        "image_CYDcxx": {
-          "type": "Image",
-          "settings": {
-            "block_heading": "Heading",
-            "text_link": "",
-            "image": "shopify://shop_images/Section.webp",
-            "title": "",
-            "title_color": ""
-          }
-        }
-      },
-      "block_order": [
-        "image_WKecwA",
-        "image_CYDcxx"
-      ],
-      "name": "Home Product banner",
-      "settings": {
-        "full": false,
-        "spacing_both_ends": false,
-        "padding": "240,240",
-        "margin": "0,0",
-        "show_background_image": true,
-        "background_image": "shopify://shop_images/hero_desktop.webp",
-        "background_style": "fixed",
-        "background_size": "auto",
-        "enable_overlay": false,
-        "background_color": "",
-        "overlay_transparency": "0.5",
-        "section_heading": "Enhance Your Pleasure",
-        "section_sub_heading": "",
-        "section_description": "Use this text to share the information which you like!.",
-        "section_button_text": "",
-        "section_button_link": "",
-        "section_heading_color": "",
-        "section_sub_heading_color": "",
-        "section_description_color": "",
-        "section_button_bg_color": "",
-        "section_button_text_color": "",
-        "section_button_hover_bg_color": "",
-        "section_button_hover_text_color": "",
-        "heading_position": "text-start",
-        "column_gap": "30",
-        "custom_class_name": ""
-      }
     }
   },
   "order": [
+    "home_product_banner_9ymY3Y",
     "16484715585d0b75d2",
     "inner_page_team_section_BVE8ig",
     "home_featured_collection_ePRkBR",
@@ -1857,7 +1858,6 @@
     "16543298581bb386bd",
     "home_marquee_section_P9T4Vp",
     "1654342738f0510186",
-    "1654344025e2796207",
-    "home_product_banner_9ymY3Y"
+    "1654344025e2796207"
   ]
 }
