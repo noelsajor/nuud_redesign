@@ -1331,9 +1331,9 @@
         "ai_gen_block_8c66ac2_cGadHY": {
           "type": "ai_gen_block_8c66ac2",
           "settings": {
-            "subheading": "FAQ",
+            "subheading": "NUUD Respond",
             "heading": "Frequently Asked Questions",
-            "body": "<p>Find answers to the most common questions about our products and services.</p>",
+            "body": "<p>Find answers to the most common questions about our products and services. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat24<br/><br/><br/></p>",
             "question_1": "What is your return policy?",
             "answer_1": "<p>We offer a 30-day return policy for all unused items in their original packaging.</p>",
             "question_2": "How long does shipping take?",
@@ -1369,10 +1369,10 @@
             "answer_color": "#555555",
             "icon_color": "#666666",
             "subheading_size": 14,
-            "heading_size": 36,
-            "body_size": 16,
-            "question_size": 16,
-            "answer_size": 15
+            "heading_size": 60,
+            "body_size": 18,
+            "question_size": 18,
+            "answer_size": 18
           },
           "blocks": {}
         }
