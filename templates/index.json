@@ -956,29 +956,19 @@
             "job": "Smoothie lover",
             "star": "3"
           }
-        },
-        "6f058149-508e-4e89-a305-4ae708360831": {
-          "type": "content",
-          "settings": {
-            "quote": "<p>Sorem ipsum dolor sit amet, ctetur adipiscing elit, sed do. Lorem ipsum dolor sit amet.</p>",
-            "author": "Denisha Joe",
-            "job": "Juice Lover",
-            "star": "3"
-          }
         }
       },
       "block_order": [
         "165433692522d3ac96-0",
         "d1fa23f4-639a-470a-9f88-509f45f31ef3",
         "7bd69ef4-78eb-421b-9782-9be8d5d46fc2",
-        "a07d22ae-54a5-4835-a825-ddae028cf967",
-        "6f058149-508e-4e89-a305-4ae708360831"
+        "a07d22ae-54a5-4835-a825-ddae028cf967"
       ],
       "custom_css": [],
       "settings": {
         "full": true,
         "spacing_both_ends": true,
-        "padding": "240,240",
+        "padding": "80,80",
         "margin": "0,0",
         "after_image": "shopify://shop_images/stars.webp",
         "show_background_image": true,
@@ -1026,8 +1016,8 @@
         "testimonial_quote_icon_color": "",
         "enable_slider": true,
         "enable_auto_height": true,
-        "items_per_view": 4,
-        "items_laptop_view": 4,
+        "items_per_view": 3,
+        "items_laptop_view": 3,
         "items_tablet_view": 2,
         "items_mobile_view": 1,
         "enable_center_mode": false,
