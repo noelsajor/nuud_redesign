@@ -200,7 +200,7 @@
         "spacing_both_ends": true,
         "padding": "70,50",
         "margin": "0,0",
-        "mask_image_color": "rgba(0,0,0,0)",
+        "mask_image_color": "#ffffff",
         "show_background_image": false,
         "background_style": "none",
         "background_size": "auto",
