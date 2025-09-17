@@ -16,7 +16,7 @@
           "type": "Slider",
           "settings": {
             "slider_type": "image",
-            "image": "shopify://shop_images/hero_BG.webp",
+            "image": "shopify://shop_images/hero_desktop.webp",
             "mobile_image": "shopify://shop_images/hero_mobile.webp",
             "mobile_bg_clr": "#ff679a",
             "text_alignment": "text-start",
@@ -27,7 +27,7 @@
             "subheading_color": "",
             "subheading_size": "",
             "title": "Enhance Your Pleasure",
-            "heading_color": "#1a1a1a",
+            "heading_color": "#ffffff",
             "heading_size": "",
             "desc": "",
             "desc_color": "",
