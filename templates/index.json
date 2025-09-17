@@ -48,7 +48,7 @@
             "shadow_vertical": 4,
             "shadow_blur": 8,
             "shadow_spread": 0,
-            "shadow_color": "rgba(0, 0, 0, 0.1)",
+            "shadow_color": "#0000001a",
             "category_1_enabled": true,
             "category_1_collection": "fir-him",
             "category_1_use_custom_image": false,
@@ -136,13 +136,12 @@
     },
     "16481947033cff8e5d": {
       "type": "home-product-carousel",
-      "disabled": true,
       "settings": {
         "full": true,
         "spacing_both_ends": true,
         "padding": "80,80",
         "margin": "0,0",
-        "mask_image_color": "rgba(0,0,0,0)",
+        "mask_image_color": "#ffffff",
         "show_background_image": false,
         "background_style": "none",
         "background_size": "auto",
