@@ -1489,7 +1489,7 @@
         "blog_show_description": true,
         "block_banner_style": "grid-style",
         "post_limit": 4,
-        "grid": "4",
+        "grid": "5",
         "text_position": "text-start",
         "enable_box_shadow": false,
         "vertical_position": "vertical-center",
