@@ -828,96 +828,6 @@
         "custom_class_name": "orange_bg pink_bg"
       }
     },
-    "home_product_carousel_MNFYGm": {
-      "type": "home-product-carousel",
-      "blocks": {
-        "product_ANXcUU": {
-          "type": "product",
-          "disabled": true,
-          "settings": {
-            "product": "sex-bite-blueberry"
-          }
-        }
-      },
-      "block_order": [
-        "product_ANXcUU"
-      ],
-      "disabled": true,
-      "name": "Product carousel",
-      "settings": {
-        "full": false,
-        "spacing_both_ends": true,
-        "padding": "12,12",
-        "margin": "0,0",
-        "mask_image_color": "#fff64f",
-        "image_1": "shopify://shop_images/stars.webp",
-        "show_background_image": false,
-        "background_style": "parallax",
-        "background_size": "auto",
-        "enable_overlay": true,
-        "background_color": "#fff64f",
-        "overlay_transparency": "1",
-        "section_heading": "Trending products",
-        "section_sub_heading": "",
-        "section_description": "",
-        "section_button_text": "",
-        "section_button_link": "",
-        "section_heading_color": "",
-        "section_sub_heading_color": "",
-        "section_description_color": "",
-        "section_button_bg_color": "",
-        "section_button_text_color": "",
-        "section_button_hover_bg_color": "",
-        "section_button_hover_text_color": "",
-        "heading_position": "text-center",
-        "grouped_content_bg": "",
-        "grouped_column_gap": "30",
-        "grouped_content_padding": "0",
-        "group_border_radius": "",
-        "enable_group_box_shadow": false,
-        "reverse_column": false,
-        "content_width": "30/70",
-        "lap_content_width": "35/65",
-        "additional_block_background_color": "",
-        "additional_block_box_shadow": false,
-        "enable_hover_animation": false,
-        "additional_content_padding": "0",
-        "additional_block_border_radius": "0",
-        "enable_main_content": true,
-        "main_block_background_color": "#fff64f",
-        "enable_main_block_box_shadow": false,
-        "main_block_border_radius": "0",
-        "main_content_padding": "0",
-        "collection": "for-both",
-        "column_gap": "10",
-        "border_radius": "0",
-        "enable_list_view": false,
-        "grid": "4",
-        "post_limit": 3,
-        "enable_slider": true,
-        "items_per_view": 4,
-        "items_laptop_view": 4,
-        "items_tablet_view": 2,
-        "items_mobile_view": 1,
-        "enable_center_mode": false,
-        "rows": 1,
-        "slider_autoplay": 0,
-        "enable_auto_height": false,
-        "dots": false,
-        "carousel_pagination_alignment": "center_pagination",
-        "carousel_pagination_bottom_alignment": "outside_element",
-        "arrows": false,
-        "nav_arrow_position": "navigation-top-right",
-        "center_nav_arrow_alignment": "inside_container",
-        "navigation_button_color": "",
-        "navigation_button_icon_color": "",
-        "navigation_button_hover_color": "",
-        "navigation_button_hover_icon_color": "",
-        "navigation_dot_color": "",
-        "navigation_dot_active_color": "",
-        "custom_class_name": ""
-      }
-    },
     "1654336925c509c587": {
       "type": "home-testimonial",
       "blocks": {
@@ -1404,51 +1314,6 @@
       ],
       "settings": {}
     },
-    "faq_template_2_6FECce": {
-      "type": "faq-template-2",
-      "blocks": {
-        "text_WHUJ8B": {
-          "type": "text",
-          "disabled": true,
-          "settings": {
-            "question": "What’s NUUD?",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam"
-          }
-        }
-      },
-      "block_order": [
-        "text_WHUJ8B"
-      ],
-      "disabled": true,
-      "name": "Faq template 2",
-      "settings": {
-        "full": false,
-        "spacing_both_ends": false,
-        "padding": "240,240",
-        "margin": "0,0",
-        "show_background_image": true,
-        "background_image": "shopify://shop_images/stars.webp",
-        "background_style": "fixed",
-        "background_size": "auto",
-        "enable_overlay": true,
-        "background_color": "#ff679a",
-        "overlay_transparency": "1",
-        "section_heading": "Frecuently Asked Questions",
-        "section_sub_heading": "NUUD Respond",
-        "section_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat24",
-        "section_button_text": "",
-        "section_button_link": "",
-        "section_heading_color": "#ffffff",
-        "section_sub_heading_color": "#ffffff",
-        "section_description_color": "#ffffff",
-        "section_button_bg_color": "",
-        "section_button_text_color": "",
-        "section_button_hover_bg_color": "",
-        "section_button_hover_text_color": "",
-        "heading_position": "text-start",
-        "grid": "4"
-      }
-    },
     "16543298581bb386bd": {
       "type": "home-featured-blog",
       "settings": {
@@ -1544,110 +1409,72 @@
         "custom_class_name": ""
       }
     },
-    "1654342738f0510186": {
-      "type": "home-newsletter",
-      "disabled": true,
-      "settings": {
-        "full": false,
-        "spacing_both_ends": false,
-        "padding": "0,100",
-        "margin": "0,0",
-        "show_background_image": false,
-        "background_style": "none",
-        "background_size": "auto",
-        "background_color": "#f76d3c",
-        "enable_overlay": true,
-        "overlay_transparency": "1",
-        "section_heading": "Do you want to get Special Offer?",
-        "section_sub_heading": "Newsletter",
-        "section_description": "",
-        "section_button_text": "",
-        "section_button_link": "",
-        "section_heading_color": "#ffffff",
-        "section_sub_heading_color": "#ffffff",
-        "section_description_color": "#ffffff",
-        "section_button_bg_color": "",
-        "section_button_text_color": "",
-        "section_button_hover_bg_color": "",
-        "section_button_hover_text_color": "",
-        "heading_position": "text-center",
-        "section_position": "text-center",
-        "newsletter_form_width": "65%",
-        "newsletter_description": "",
-        "news_style": "default",
-        "space_in_between": "10px",
-        "newsletter_box_border_color": "#ffffff",
-        "newsletter_box_bg_color": "rgba(0,0,0,0)",
-        "newsletter_box_border_focus_color": "#343434",
-        "newsletter_button_bg_color": "rgba(0,0,0,0)",
-        "newsletter_button_text_color": "#ffffff",
-        "newsletter_button_hover_bg_color": "#343434",
-        "newsletter_button_hover_text_color": "#ffffff",
-        "newsletter_description_color": "#ffffff",
-        "custom_class_name": "orange_bg"
-      }
-    },
     "1654344025e2796207": {
       "type": "home-image-gallery",
       "blocks": {
         "165434402573d11a68-0": {
           "type": "image_image",
           "settings": {
+            "image": "shopify://shop_images/hero_mobile.webp",
             "icon_class": "fa fa-instagram",
             "overlay_title": "Image Title",
             "link": "shopify://collections"
           }
         },
-        "165434402573d11a68-1": {
+        "image_image_yFRWEG": {
           "type": "image_image",
           "settings": {
+            "image": "shopify://shop_images/hero_mobile.webp",
             "icon_class": "fa fa-instagram",
-            "overlay_title": "",
-            "link": ""
+            "overlay_title": "Image Title",
+            "link": "shopify://collections"
           }
         },
-        "165434402573d11a68-2": {
+        "image_image_DmFkcc": {
           "type": "image_image",
           "settings": {
+            "image": "shopify://shop_images/hero_mobile.webp",
             "icon_class": "fa fa-instagram",
-            "overlay_title": "",
-            "link": ""
+            "overlay_title": "Image Title",
+            "link": "shopify://collections"
           }
         },
-        "165434402573d11a68-3": {
+        "image_image_d6qGr9": {
           "type": "image_image",
           "settings": {
+            "image": "shopify://shop_images/hero_mobile.webp",
             "icon_class": "fa fa-instagram",
-            "overlay_title": "",
-            "link": ""
+            "overlay_title": "Image Title",
+            "link": "shopify://collections"
           }
         },
-        "165434402573d11a68-4": {
+        "image_image_m6RGqC": {
           "type": "image_image",
           "settings": {
+            "image": "shopify://shop_images/hero_mobile.webp",
             "icon_class": "fa fa-instagram",
-            "overlay_title": "",
-            "link": ""
+            "overlay_title": "Image Title",
+            "link": "shopify://collections"
           }
         },
-        "33c564d7-7107-4d1a-96bc-eb7700a48572": {
+        "image_image_qFYzDB": {
           "type": "image_image",
           "settings": {
+            "image": "shopify://shop_images/hero_mobile.webp",
             "icon_class": "fa fa-instagram",
-            "overlay_title": "",
-            "link": ""
+            "overlay_title": "Image Title",
+            "link": "shopify://collections"
           }
         }
       },
       "block_order": [
         "165434402573d11a68-0",
-        "165434402573d11a68-1",
-        "165434402573d11a68-2",
-        "165434402573d11a68-3",
-        "165434402573d11a68-4",
-        "33c564d7-7107-4d1a-96bc-eb7700a48572"
+        "image_image_yFRWEG",
+        "image_image_DmFkcc",
+        "image_image_d6qGr9",
+        "image_image_m6RGqC",
+        "image_image_qFYzDB"
       ],
-      "disabled": true,
       "settings": {
         "full": true,
         "spacing_both_ends": false,
@@ -1676,7 +1503,7 @@
         "column_gap": "0",
         "image_list_text": "",
         "image_list_link": "",
-        "enable_overlay_content": false,
+        "enable_overlay_content": true,
         "item_height": 320,
         "item_height_laptop": 300,
         "item_height_tab": 250,
@@ -1688,139 +1515,19 @@
         "image_overlay_icon_color": "",
         "image_overlay_color": "",
         "icon_size": "24",
-        "enable_slider": false,
+        "enable_slider": true,
         "remove_button_space": false,
         "enable_auto_height": true,
         "items_per_view": 4,
         "items_laptop_view": 3,
         "items_tablet_view": 2,
         "items_mobile_view": 1,
-        "enable_center_mode": false,
+        "enable_center_mode": true,
         "slider_autoplay": 0,
         "dots": false,
         "carousel_pagination_alignment": "center_pagination",
         "arrows": false,
-        "nav_arrow_position": "navigation-bottom-center",
-        "center_nav_arrow_alignment": "outside_container",
-        "navigation_button_color": "",
-        "navigation_button_icon_color": "",
-        "navigation_button_hover_color": "",
-        "navigation_button_hover_icon_color": "",
-        "navigation_dot_color": "",
-        "navigation_dot_active_color": "",
-        "custom_class_name": ""
-      }
-    },
-    "home_image_gallery_dMLJBX": {
-      "type": "home-image-gallery",
-      "blocks": {
-        "image_image_jLexiH": {
-          "type": "image_image",
-          "settings": {
-            "image": "shopify://shop_images/hero_mobile.webp",
-            "icon_class": "fa fa-instagram",
-            "overlay_title": "Shop the Look",
-            "link": ""
-          }
-        },
-        "image_image_mN6zUp": {
-          "type": "image_image",
-          "settings": {
-            "image": "shopify://shop_images/Greenapplebite.webp",
-            "icon_class": "fa fa-instagram",
-            "overlay_title": "Shop the Look",
-            "link": ""
-          }
-        },
-        "image_image_Gptg6d": {
-          "type": "image_image",
-          "settings": {
-            "image": "shopify://shop_images/Section_girl.webp",
-            "icon_class": "fa fa-instagram",
-            "overlay_title": "Shop the Look",
-            "link": ""
-          }
-        },
-        "image_image_KpYXxa": {
-          "type": "image_image",
-          "settings": {
-            "image": "shopify://shop_images/Blueberrybite.webp",
-            "icon_class": "fa fa-instagram",
-            "overlay_title": "Shop the Look",
-            "link": ""
-          }
-        },
-        "image_image_b9HFFg": {
-          "type": "image_image",
-          "settings": {
-            "image": "shopify://shop_images/Cherrybite.webp",
-            "icon_class": "fa fa-instagram",
-            "overlay_title": "Shop the Look",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "image_image_jLexiH",
-        "image_image_mN6zUp",
-        "image_image_Gptg6d",
-        "image_image_KpYXxa",
-        "image_image_b9HFFg"
-      ],
-      "name": "Image list",
-      "settings": {
-        "full": true,
-        "spacing_both_ends": false,
-        "padding": "0,0",
-        "margin": "0,0",
-        "show_background_image": false,
-        "background_style": "none",
-        "background_size": "auto",
-        "enable_overlay": false,
-        "background_color": "",
-        "overlay_transparency": "0.5",
-        "section_heading": "",
-        "section_sub_heading": "",
-        "section_description": "",
-        "section_button_text": "",
-        "section_button_link": "",
-        "section_heading_color": "",
-        "section_sub_heading_color": "",
-        "section_description_color": "",
-        "section_button_bg_color": "",
-        "section_button_text_color": "",
-        "section_button_hover_bg_color": "",
-        "section_button_hover_text_color": "",
-        "heading_position": "text-center",
-        "grid": "5",
-        "column_gap": "0",
-        "image_list_text": "",
-        "image_list_link": "",
-        "enable_overlay_content": false,
-        "item_height": 450,
-        "item_height_laptop": 400,
-        "item_height_tab": 350,
-        "item_height_mobile": 300,
-        "image_link_bg_color": "",
-        "image_link_text_color": "",
-        "image_link_hover_bg_color": "",
-        "image_link_hover_text_color": "",
-        "image_overlay_icon_color": "",
-        "image_overlay_color": "",
-        "icon_size": "24",
-        "enable_slider": false,
-        "remove_button_space": false,
-        "enable_auto_height": true,
-        "items_per_view": 4,
-        "items_laptop_view": 3,
-        "items_tablet_view": 2,
-        "items_mobile_view": 1,
-        "enable_center_mode": false,
-        "slider_autoplay": 0,
-        "dots": true,
-        "carousel_pagination_alignment": "center_pagination",
-        "arrows": true,
-        "nav_arrow_position": "navigation-bottom-center",
+        "nav_arrow_position": "center-navigation",
         "center_nav_arrow_alignment": "outside_container",
         "navigation_button_color": "",
         "navigation_button_icon_color": "",
@@ -1841,17 +1548,13 @@
     "1654174468919269e9",
     "165431715559c7bf91",
     "16543197328863c2ad",
-    "home_product_carousel_MNFYGm",
     "1654336925c509c587",
     "home_product_carousel_KYpYQH",
     "home_grid_banner_jEY783",
     "home_product_carousel_GjdAcq",
     "home_product_carousel_bdndwD",
     "1757879707bba2c8c8",
-    "faq_template_2_6FECce",
     "16543298581bb386bd",
-    "1654342738f0510186",
-    "1654344025e2796207",
-    "home_image_gallery_dMLJBX"
+    "1654344025e2796207"
   ]
 }
