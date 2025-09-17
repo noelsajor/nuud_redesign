@@ -202,7 +202,7 @@
       "settings": {
         "full": true,
         "spacing_both_ends": false,
-        "padding": "240,240",
+        "padding": "120,240",
         "margin": "0,0",
         "show_background_image": true,
         "background_image": "shopify://shop_images/hero_BG.webp",
