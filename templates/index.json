@@ -1715,6 +1715,126 @@
         "navigation_dot_active_color": "",
         "custom_class_name": ""
       }
+    },
+    "home_image_gallery_dMLJBX": {
+      "type": "home-image-gallery",
+      "blocks": {
+        "image_image_jLexiH": {
+          "type": "image_image",
+          "settings": {
+            "image": "shopify://shop_images/hero_mobile.webp",
+            "icon_class": "fa fa-instagram",
+            "overlay_title": "Shop the Look",
+            "link": ""
+          }
+        },
+        "image_image_mN6zUp": {
+          "type": "image_image",
+          "settings": {
+            "image": "shopify://shop_images/Greenapplebite.webp",
+            "icon_class": "fa fa-instagram",
+            "overlay_title": "Shop the Look",
+            "link": ""
+          }
+        },
+        "image_image_Gptg6d": {
+          "type": "image_image",
+          "settings": {
+            "image": "shopify://shop_images/Section_girl.webp",
+            "icon_class": "fa fa-instagram",
+            "overlay_title": "Shop the Look",
+            "link": ""
+          }
+        },
+        "image_image_KpYXxa": {
+          "type": "image_image",
+          "settings": {
+            "image": "shopify://shop_images/Blueberrybite.webp",
+            "icon_class": "fa fa-instagram",
+            "overlay_title": "Shop the Look",
+            "link": ""
+          }
+        },
+        "image_image_b9HFFg": {
+          "type": "image_image",
+          "settings": {
+            "image": "shopify://shop_images/Cherrybite.webp",
+            "icon_class": "fa fa-instagram",
+            "overlay_title": "Shop the Look",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_image_jLexiH",
+        "image_image_mN6zUp",
+        "image_image_Gptg6d",
+        "image_image_KpYXxa",
+        "image_image_b9HFFg"
+      ],
+      "name": "Image list",
+      "settings": {
+        "full": true,
+        "spacing_both_ends": false,
+        "padding": "0,0",
+        "margin": "0,0",
+        "show_background_image": false,
+        "background_style": "none",
+        "background_size": "auto",
+        "enable_overlay": false,
+        "background_color": "",
+        "overlay_transparency": "0.5",
+        "section_heading": "",
+        "section_sub_heading": "",
+        "section_description": "",
+        "section_button_text": "",
+        "section_button_link": "",
+        "section_heading_color": "",
+        "section_sub_heading_color": "",
+        "section_description_color": "",
+        "section_button_bg_color": "",
+        "section_button_text_color": "",
+        "section_button_hover_bg_color": "",
+        "section_button_hover_text_color": "",
+        "heading_position": "text-center",
+        "grid": "5",
+        "column_gap": "0",
+        "image_list_text": "",
+        "image_list_link": "",
+        "enable_overlay_content": false,
+        "item_height": 450,
+        "item_height_laptop": 400,
+        "item_height_tab": 350,
+        "item_height_mobile": 300,
+        "image_link_bg_color": "",
+        "image_link_text_color": "",
+        "image_link_hover_bg_color": "",
+        "image_link_hover_text_color": "",
+        "image_overlay_icon_color": "",
+        "image_overlay_color": "",
+        "icon_size": "24",
+        "enable_slider": false,
+        "remove_button_space": false,
+        "enable_auto_height": true,
+        "items_per_view": 4,
+        "items_laptop_view": 3,
+        "items_tablet_view": 2,
+        "items_mobile_view": 1,
+        "enable_center_mode": false,
+        "slider_autoplay": 0,
+        "dots": true,
+        "carousel_pagination_alignment": "center_pagination",
+        "arrows": true,
+        "nav_arrow_position": "navigation-bottom-center",
+        "center_nav_arrow_alignment": "outside_container",
+        "navigation_button_color": "",
+        "navigation_button_icon_color": "",
+        "navigation_button_hover_color": "",
+        "navigation_button_hover_icon_color": "",
+        "navigation_dot_color": "",
+        "navigation_dot_active_color": "",
+        "custom_class_name": ""
+      }
     }
   },
   "order": [
@@ -1736,6 +1856,7 @@
     "faq_template_2_6FECce",
     "16543298581bb386bd",
     "1654342738f0510186",
-    "1654344025e2796207"
+    "1654344025e2796207",
+    "home_image_gallery_dMLJBX"
   ]
 }
