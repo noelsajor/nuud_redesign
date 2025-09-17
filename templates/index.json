@@ -9,6 +9,67 @@
  */
 {
   "sections": {
+    "17581245162114d6d7": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_52a5bd1_NdFhFc": {
+          "type": "ai_gen_block_52a5bd1",
+          "settings": {
+            "background_image": "shopify://shop_images/hero_BG.webp",
+            "background_alignment": "center center",
+            "background_attachment": "fixed",
+            "background_color": "#ff679a",
+            "section_padding_top": 120,
+            "section_padding_bottom": 200,
+            "heading": "Welcome to our store",
+            "subheading": "Discover amazing products",
+            "description": "Browse our carefully curated collection of premium products designed to enhance your lifestyle.",
+            "text_alignment": "left",
+            "heading_size": 48,
+            "heading_color": "#ffffff",
+            "subheading_size": 24,
+            "subheading_color": "#ffffff",
+            "description_size": 16,
+            "description_color": "#ffffff",
+            "categories_per_row": "2",
+            "categories_per_row_tablet": "2",
+            "categories_per_row_mobile": "1",
+            "category_gap": 20,
+            "category_image_height": 200,
+            "category_border_radius": 8,
+            "category_image_border_radius": 8,
+            "category_padding": 16,
+            "category_background_color": "#ffffff",
+            "category_spacing": 15,
+            "category_title_size": 16,
+            "category_title_color": "#000000",
+            "enable_category_shadow": true,
+            "shadow_horizontal": 0,
+            "shadow_vertical": 4,
+            "shadow_blur": 8,
+            "shadow_spread": 0,
+            "shadow_color": "rgba(0, 0, 0, 0.1)",
+            "category_1_enabled": true,
+            "category_1_collection": "fir-him",
+            "category_1_use_custom_image": false,
+            "category_2_enabled": true,
+            "category_2_collection": "for-her",
+            "category_2_use_custom_image": false,
+            "category_3_enabled": true,
+            "category_3_collection": "for-both",
+            "category_3_use_custom_image": false,
+            "category_4_enabled": true,
+            "category_4_collection": "",
+            "category_4_use_custom_image": false
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_52a5bd1_NdFhFc"
+      ],
+      "settings": {}
+    },
     "16484715585d0b75d2": {
       "type": "slideshow",
       "blocks": {
@@ -1693,6 +1754,7 @@
     }
   },
   "order": [
+    "17581245162114d6d7",
     "16484715585d0b75d2",
     "home_marquee_section_TWP8cC",
     "home_marquee_section_gzaknE",
