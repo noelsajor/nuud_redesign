@@ -120,6 +120,7 @@
         "1c3ef5d2-7158-4a50-8def-1e1c84b6a9c6",
         "slider_xNUanQ"
       ],
+      "disabled": true,
       "settings": {
         "full": true,
         "spacing_both_ends": false,
@@ -160,6 +161,74 @@
         "navigation_button_hover_icon_color": "",
         "navigation_dot_color": "rgba(0,0,0,0)",
         "navigation_dot_active_color": "#ffffff",
+        "custom_class_name": ""
+      }
+    },
+    "home_marquee_section_TWP8cC": {
+      "type": "home-marquee-section",
+      "blocks": {
+        "image_xkpTBm": {
+          "type": "image",
+          "settings": {
+            "block_heading": "",
+            "block_img": "shopify://shop_images/For_Her.webp",
+            "link": ""
+          }
+        },
+        "image_UYdEA6": {
+          "type": "image",
+          "settings": {
+            "block_heading": "",
+            "block_img": "shopify://shop_images/For_Him.webp",
+            "link": ""
+          }
+        },
+        "image_h6XiwA": {
+          "type": "image",
+          "settings": {
+            "block_heading": "",
+            "block_img": "shopify://shop_images/For_Both.webp",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_xkpTBm",
+        "image_UYdEA6",
+        "image_h6XiwA"
+      ],
+      "name": "Home Marquee Section",
+      "settings": {
+        "full": true,
+        "spacing_both_ends": false,
+        "padding": "240,240",
+        "margin": "0,0",
+        "show_background_image": true,
+        "background_image": "shopify://shop_images/hero_BG.webp",
+        "background_style": "fixed",
+        "background_size": "auto",
+        "enable_overlay": true,
+        "background_color": "#ff679a",
+        "overlay_transparency": "1",
+        "section_heading": "Custom section",
+        "section_sub_heading": "Sub Heading",
+        "section_description": "Use this text to share the information which you like!.",
+        "section_button_text": "",
+        "section_button_link": "",
+        "section_heading_color": "",
+        "section_sub_heading_color": "",
+        "section_description_color": "",
+        "section_button_bg_color": "",
+        "section_button_text_color": "",
+        "section_button_hover_bg_color": "",
+        "section_button_hover_text_color": "",
+        "heading_position": "text-start",
+        "column_gap": "30",
+        "layout_style": "style_2",
+        "speed": "1",
+        "enable_reverse_animation": false,
+        "block_background_color": "rgba(0,0,0,0)",
+        "block_heading_color": "#ffffff",
         "custom_class_name": ""
       }
     },
@@ -1624,6 +1693,7 @@
   },
   "order": [
     "16484715585d0b75d2",
+    "home_marquee_section_TWP8cC",
     "home_marquee_section_gzaknE",
     "16481947033cff8e5d",
     "home_featured_collection_ePRkBR",
