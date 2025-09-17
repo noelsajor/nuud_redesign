@@ -224,7 +224,7 @@
         "section_button_hover_text_color": "",
         "heading_position": "text-start",
         "column_gap": "30",
-        "layout_style": "style_2",
+        "layout_style": "style_1",
         "speed": "1",
         "enable_reverse_animation": false,
         "block_background_color": "rgba(0,0,0,0)",
