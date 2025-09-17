@@ -171,7 +171,7 @@
           "type": "image",
           "settings": {
             "block_heading": "",
-            "block_img": "shopify://shop_images/For_Her.webp",
+            "block_img": "shopify://shop_images/Section.webp",
             "link": ""
           }
         },
@@ -179,7 +179,7 @@
           "type": "image",
           "settings": {
             "block_heading": "",
-            "block_img": "shopify://shop_images/For_Him.webp",
+            "block_img": "shopify://shop_images/Section.webp",
             "link": ""
           }
         },
@@ -187,7 +187,7 @@
           "type": "image",
           "settings": {
             "block_heading": "",
-            "block_img": "shopify://shop_images/For_Both.webp",
+            "block_img": "shopify://shop_images/Section.webp",
             "link": ""
           }
         }
