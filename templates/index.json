@@ -672,6 +672,7 @@
     },
     "home_product_carousel_bdndwD": {
       "type": "home-product-carousel",
+      "disabled": true,
       "name": "Product carousel",
       "settings": {
         "full": false,
@@ -889,7 +890,7 @@
         "spacing_both_ends": false,
         "padding": "80,80",
         "margin": "0,0",
-        "mask_image_color": "rgba(0,0,0,0)",
+        "mask_image_color": "#ffd8d8",
         "show_background_image": false,
         "background_style": "fixed",
         "background_size": "auto",
@@ -935,7 +936,7 @@
         "main_banner_style": "grid-style",
         "additional_banner_style": "grid-style",
         "enable_masonry_reverse": false,
-        "blog_bg_color": "",
+        "blog_bg_color": "rgba(0,0,0,0)",
         "blog_link_color": "#343434",
         "blog_link_hover_color": "#ff679a",
         "blog_text_color": "#343434",
