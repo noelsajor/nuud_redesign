@@ -279,7 +279,7 @@
         "full": true,
         "spacing_both_ends": false,
         "padding": "80,80",
-        "margin": "0,0",
+        "margin": "80,80",
         "show_background_image": false,
         "background_style": "none",
         "background_size": "auto",
