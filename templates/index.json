@@ -698,7 +698,7 @@
         "section_button_hover_bg_color": "",
         "section_button_hover_text_color": "",
         "heading_position": "text-center",
-        "grouped_content_bg": "#ffd8d8",
+        "grouped_content_bg": "rgba(0,0,0,0)",
         "grouped_column_gap": "30",
         "grouped_content_padding": "0",
         "group_border_radius": "",
