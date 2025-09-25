@@ -136,6 +136,7 @@
     },
     "16481947033cff8e5d": {
       "type": "home-product-carousel",
+      "name": "Trending Products",
       "settings": {
         "full": true,
         "spacing_both_ends": true,
