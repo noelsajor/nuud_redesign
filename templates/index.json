@@ -1081,7 +1081,7 @@
         "enable_overlay": true,
         "background_color": "#ffd8d8",
         "overlay_transparency": "1",
-        "mask_image_color": "rgba(0,0,0,0)",
+        "mask_image_color": "#ffd8d8",
         "section_heading": "Costumer reviews",
         "section_sub_heading": "",
         "section_description": "",
