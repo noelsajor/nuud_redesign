@@ -110,7 +110,7 @@
         "background_style": "none",
         "background_size": "auto",
         "enable_overlay": true,
-        "background_color": "#ff679a",
+        "background_color": "#ffd8d8",
         "overlay_transparency": "1",
         "section_heading": "",
         "section_sub_heading": "",
@@ -1621,7 +1621,7 @@
       "settings": {
         "full": true,
         "spacing_both_ends": false,
-        "padding": "0,0",
+        "padding": "80,80",
         "margin": "0,0",
         "show_background_image": false,
         "background_style": "none",
