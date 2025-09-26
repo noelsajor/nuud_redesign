@@ -1222,7 +1222,7 @@
         "border_width": 3,
         "card_border_radius": 40,
         "hero_image": "shopify://shop_images/Section_girl.webp",
-        "image_overflow": 40,
+        "image_overflow": 80,
         "show_badge": true,
         "badge_alt": "Brand Badge",
         "badge_size": 120,
