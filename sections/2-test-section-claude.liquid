@@ -21,7 +21,8 @@
     {% endif %}
     
     <!-- Section Header -->
-    <header class="section-header">
+    <header class="section-header" 
+            style="text-align: {{ section.settings.title_alignment }};">
       {% if section.settings.section_title != blank %}
       <h2 id="best-sellers-title" 
           class="section-title"
@@ -30,16 +31,6 @@
                  font-weight: {{ section.settings.title_weight }};">
         {{ section.settings.section_title }}
       </h2>
-      {% endif %}
-      
-      {% if section.settings.show_see_all_button and section.settings.collection != blank %}
-      <a href="{{ collections[section.settings.collection].url }}" 
-         class="see-all-button"
-         style="color: {{ section.settings.button_color }}; 
-                border-color: {{ section.settings.button_color }};"
-         aria-label="View all products in {{ collections[section.settings.collection].title }} collection">
-        {{ section.settings.see_all_text | default: 'See All Products' }}
-      </a>
       {% endif %}
     </header>
     
@@ -158,6 +149,21 @@
         <p>No products found in this collection.</p>
       </div>
       {% endif %}
+      
+      <!-- See All Button (Below Products) -->
+      {% if section.settings.show_see_all_button and section.settings.collection != blank %}
+      <div class="see-all-container" 
+           style="text-align: {{ section.settings.button_alignment }}; margin-top: 40px;">
+        <a href="{{ collections[section.settings.collection].url }}" 
+           class="see-all-button"
+           style="color: {{ section.settings.button_color }}; 
+                  border-color: {{ section.settings.button_color }};"
+           aria-label="View all products in {{ collections[section.settings.collection].title }} collection">
+          {{ section.settings.see_all_text | default: 'See All Products' }}
+        </a>
+      </div>
+      {% endif %}
+      
     {% else %}
     <div class="no-collection-message" 
          style="text-align: center; padding: 40px; color: #666;">
@@ -212,12 +218,7 @@
 
 /* Section Header */
 .section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-bottom: 40px;
-  flex-wrap: wrap;
-  gap: 20px;
 }
 
 .section-title {
@@ -225,7 +226,12 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
+.see-all-container {
+  width: 100%;
+}
+
 .see-all-button {
+  display: inline-block;
   text-decoration: none;
   border-bottom: 2px solid;
   font-weight: 600;
@@ -399,13 +405,15 @@
   }
   
   .section-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
+    margin-bottom: 30px;
   }
   
   .section-title {
     font-size: calc({{ section.settings.title_size | default: 36 }}px * 0.8) !important;
+  }
+  
+  .see-all-container {
+    margin-top: 30px !important;
   }
   
   .products-grid {
@@ -528,6 +536,17 @@
       "default": "700"
     },
     {
+      "type": "select",
+      "id": "title_alignment",
+      "label": "Title Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
       "type": "header",
       "content": "See All Button"
     },
@@ -548,6 +567,17 @@
       "id": "button_color",
       "label": "Button Color",
       "default": "#666666"
+    },
+    {
+      "type": "select",
+      "id": "button_alignment",
+      "label": "Button Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
     },
     {
       "type": "header",
