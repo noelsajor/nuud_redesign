@@ -155,7 +155,7 @@
         "badge_image": "shopify://shop_images/SpicyLove.png",
         "badge_alt": "100% Fun Guaranteed",
         "badge_size": 120,
-        "badge_spin": false,
+        "badge_spin": true,
         "badge_spin_speed": 10,
         "card_background": "#ffffff",
         "card_border_radius": 15,
