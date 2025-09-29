@@ -1131,6 +1131,81 @@
         "navigation_dot_active_color": "",
         "custom_class_name": ""
       }
+    },
+    "wavy_features_MDYa7y": {
+      "type": "wavy-features",
+      "blocks": {
+        "feature_mFcAyj": {
+          "type": "feature",
+          "settings": {
+            "icon_svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewbox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z\"></path><polyline points=\"7.5 4.21 12 6.81 16.5 4.21\"></polyline><polyline points=\"7.5 19.79 7.5 14.6 3 12\"></polyline><polyline points=\"21 12 16.5 14.6 16.5 19.79\"></polyline><polyline points=\"3.27 6.96 12 12.01 20.73 6.96\"></polyline><line x1=\"12\" y1=\"22.08\" x2=\"12\" y2=\"12\"></line></svg>",
+            "icon_label": "Package icon representing free returns",
+            "icon_color": "#8b1538",
+            "feature_text": "FREE RETURNS",
+            "text_color": "#8b1538",
+            "text_size": 18,
+            "text_weight": "600",
+            "feature_subtext": "",
+            "subtext_color": "#666666",
+            "subtext_size": 14
+          }
+        },
+        "feature_WCBeX8": {
+          "type": "feature",
+          "settings": {
+            "icon_svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewbox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"9\" cy=\"21\" r=\"1\"></circle><circle cx=\"20\" cy=\"21\" r=\"1\"></circle><path d=\"M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6\"></path></svg>",
+            "icon_label": "Shopping cart icon representing secure checkout",
+            "icon_color": "#8b1538",
+            "feature_text": "SECURE CHECKOUT",
+            "text_color": "#8b1538",
+            "text_size": 18,
+            "text_weight": "600",
+            "feature_subtext": "",
+            "subtext_color": "#666666",
+            "subtext_size": 14
+          }
+        },
+        "feature_QRqdhh": {
+          "type": "feature",
+          "settings": {
+            "icon_svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewbox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"1\" y=\"3\" width=\"15\" height=\"13\"></rect><polygon points=\"16 8 20 8 23 11 23 16 16 16 16 8\"></polygon><circle cx=\"5.5\" cy=\"18.5\" r=\"2.5\"></circle><circle cx=\"18.5\" cy=\"18.5\" r=\"2.5\"></circle></svg>",
+            "icon_label": "Delivery truck icon representing free shipping",
+            "icon_color": "#8b1538",
+            "feature_text": "FREE SHIPPING OVER $75",
+            "text_color": "#8b1538",
+            "text_size": 18,
+            "text_weight": "600",
+            "feature_subtext": "",
+            "subtext_color": "#666666",
+            "subtext_size": 14
+          }
+        }
+      },
+      "block_order": [
+        "feature_mFcAyj",
+        "feature_WCBeX8",
+        "feature_QRqdhh"
+      ],
+      "name": "Features with Waves",
+      "settings": {
+        "use_gradient": false,
+        "background_color": "#ffc4e1",
+        "background_gradient": "linear-gradient(135deg, rgba(255, 196, 225, 1), rgba(180, 213, 255, 1) 100%)",
+        "section_padding_top": 80,
+        "section_padding_bottom": 80,
+        "container_width": 1200,
+        "section_title": "",
+        "title_color": "#8b1538",
+        "title_size": 32,
+        "title_alignment": "center",
+        "show_top_wave": true,
+        "show_bottom_wave": true,
+        "wave_color": "#ffd4e5",
+        "wave_overlap_top": 60,
+        "wave_overlap_bottom": 60,
+        "enable_scroll_animation": true,
+        "scroll_direction": "left-right"
+      }
     }
   },
   "order": [
@@ -1147,6 +1222,7 @@
     "16543298581bb386bd",
     "blocks_h6XDJV",
     "175812785233e64c2c",
-    "home_product_carousel_KYpYQH"
+    "home_product_carousel_KYpYQH",
+    "wavy_features_MDYa7y"
   ]
 }
