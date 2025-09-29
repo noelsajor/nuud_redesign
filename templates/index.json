@@ -333,8 +333,8 @@
       "settings": {
         "section_aria_label": "Hero section with promotional content",
         "background_color": "#f5f5f5",
-        "section_padding_top": 60,
-        "section_padding_bottom": 60,
+        "section_padding_top": 80,
+        "section_padding_bottom": 80,
         "card_background": "#ffffff",
         "content_background": "rgba(0,0,0,0)",
         "border_color": "#ff69b4",
