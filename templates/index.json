@@ -1202,8 +1202,10 @@
         "show_top_wave": true,
         "show_bottom_wave": true,
         "wave_color": "#ffd8d8",
-        "wave_overlap_top": 30,
-        "wave_overlap_bottom": 30,
+        "wave_overlap_top": 50,
+        "wave_overlap_bottom": 50,
+        "wave_frequency": 4,
+        "wave_amplitude": 40,
         "enable_scroll_animation": true,
         "scroll_direction": "left-right"
       }
