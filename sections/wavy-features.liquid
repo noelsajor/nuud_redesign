@@ -17,21 +17,50 @@
          preserveAspectRatio="none"
          role="presentation"
          focusable="false">
+      {% assign amplitude = section.settings.wave_amplitude %}
+      {% assign base = 100 | minus: amplitude %}
+      {% assign peak = base | minus: amplitude %}
+      {% assign frequency = section.settings.wave_frequency %}
+      {% assign segment = 1440 | divided_by: frequency %}
+      
       {% case section.settings.wave_shape %}
         {% when 'gentle' %}
-          <path d="M0,100 L0,60 Q360,40 720,60 T1440,60 L1440,100 Z" 
+          <path d="M0,100 L0,{{ base | plus: 10 }} 
+                   {% for i in (1..frequency) %}
+                     Q{{ segment | times: i | minus: segment | divided_by: 2 }},{{ peak | plus: 10 }} {{ segment | times: i }},{{ base | plus: 10 }} 
+                   {% endfor %}
+                   L1440,100 Z" 
                 fill="{{ section.settings.wave_color }}"/>
         {% when 'medium' %}
-          <path d="M0,100 L0,50 Q360,30 720,50 T1440,50 L1440,100 Z" 
+          <path d="M0,100 L0,{{ base }} 
+                   {% for i in (1..frequency) %}
+                     Q{{ segment | times: i | minus: segment | divided_by: 2 }},{{ peak }} {{ segment | times: i }},{{ base }} 
+                   {% endfor %}
+                   L1440,100 Z" 
                 fill="{{ section.settings.wave_color }}"/>
         {% when 'dramatic' %}
-          <path d="M0,100 L0,40 Q360,10 720,40 T1440,40 L1440,100 Z" 
+          <path d="M0,100 L0,{{ base | minus: 10 }} 
+                   {% for i in (1..frequency) %}
+                     Q{{ segment | times: i | minus: segment | divided_by: 2 }},{{ peak | minus: 20 }} {{ segment | times: i }},{{ base | minus: 10 }} 
+                   {% endfor %}
+                   L1440,100 Z" 
                 fill="{{ section.settings.wave_color }}"/>
         {% when 'sharp' %}
-          <path d="M0,100 L0,70 L360,30 L720,70 L1080,30 L1440,70 L1440,100 Z" 
+          <path d="M0,100 L0,{{ base }} 
+                   {% for i in (1..frequency) %}
+                     L{{ segment | times: i | minus: segment | divided_by: 2 }},{{ peak }} 
+                     L{{ segment | times: i }},{{ base }} 
+                   {% endfor %}
+                   L1440,100 Z" 
                 fill="{{ section.settings.wave_color }}"/>
         {% when 'rounded' %}
-          <path d="M0,100 L0,55 C240,35 480,35 720,55 C960,75 1200,75 1440,55 L1440,100 Z" 
+          <path d="M0,100 L0,{{ base | plus: 5 }} 
+                   {% for i in (1..frequency) %}
+                     C{{ segment | times: i | minus: segment | times: 0.66 }},{{ peak | plus: 5 }} 
+                      {{ segment | times: i | minus: segment | times: 0.33 }},{{ peak | plus: 5 }} 
+                      {{ segment | times: i }},{{ base | plus: 5 }} 
+                   {% endfor %}
+                   L1440,100 Z" 
                 fill="{{ section.settings.wave_color }}"/>
       {% endcase %}
     </svg>
