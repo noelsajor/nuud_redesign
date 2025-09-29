@@ -238,7 +238,7 @@
       ],
       "name": "Feed with Waves",
       "settings": {
-        "use_gradient": true,
+        "use_gradient": false,
         "background_color": "#ffd8d8",
         "background_gradient": "linear-gradient(0deg, rgba(255, 224, 230, 1), rgba(255, 215, 220, 1) 100%)",
         "section_padding_top": 40,
@@ -248,7 +248,7 @@
         "title_color": "#7b1d2a",
         "title_size": 40,
         "title_alignment": "center",
-        "wave_shape": "medium",
+        "wave_shape": "rounded",
         "show_top_wave": true,
         "show_bottom_wave": true,
         "wave_color": "#ffd8d8",
