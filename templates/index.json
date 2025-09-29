@@ -163,7 +163,7 @@
         "title_size": 40,
         "title_weight": "700",
         "title_alignment": "center",
-        "title_bottom_spacing": 60,
+        "title_bottom_spacing": 80,
         "products_grid_gap": 25,
         "show_see_all_button": true,
         "see_all_text": "See All Products",
