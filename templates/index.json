@@ -766,7 +766,7 @@
         "spacing_both_ends": false,
         "padding": "80,80",
         "margin": "0,0",
-        "mask_image_color": "#ffd8d8",
+        "mask_image_color": "rgba(0,0,0,0)",
         "show_background_image": false,
         "background_style": "fixed",
         "background_size": "auto",
