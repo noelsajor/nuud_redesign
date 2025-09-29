@@ -211,6 +211,7 @@
         "image_card_HQikmB": {
           "type": "image_card",
           "settings": {
+            "image": "shopify://shop_images/hero_mobile.webp",
             "alt_text": "Feed image",
             "link": ""
           }
@@ -218,6 +219,7 @@
         "image_card_k9mAfn": {
           "type": "image_card",
           "settings": {
+            "image": "shopify://shop_images/hero_mobile.webp",
             "alt_text": "Feed image",
             "link": ""
           }
@@ -225,6 +227,7 @@
         "image_card_rg6FWe": {
           "type": "image_card",
           "settings": {
+            "image": "shopify://shop_images/hero_mobile.webp",
             "alt_text": "Feed image",
             "link": ""
           }
