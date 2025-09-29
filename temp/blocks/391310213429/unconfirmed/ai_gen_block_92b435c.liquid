@@ -1,6 +1,514 @@
+{% doc %}
+  @prompt
+    I have just 3 main categories in my shop I would like some kind of animated section to show up this 3 main categories as a clickeable element
+
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-category-showcase-{{ ai_gen_id }} {
+    padding: 60px 20px;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-category-showcase__container-{{ ai_gen_id }} {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .ai-category-showcase__heading-{{ ai_gen_id }} {
+    text-align: center;
+    margin-bottom: 50px;
+    color: {{ block.settings.heading_color }};
+    font-size: {{ block.settings.heading_size }}px;
+  }
+
+  .ai-category-showcase__grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    align-items: center;
+  }
+
+  .ai-category-showcase__item-{{ ai_gen_id }} {
+    position: relative;
+    border-radius: {{ block.settings.border_radius }}px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    background-color: {{ block.settings.card_background }};
+    height: 350px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ai-category-showcase__item-{{ ai_gen_id }}:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  .ai-category-showcase__image-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+  }
+
+  .ai-category-showcase__image-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .ai-category-showcase__item-{{ ai_gen_id }}:hover .ai-category-showcase__image-{{ ai_gen_id }} {
+    transform: scale(1.05);
+  }
+
+  .ai-category-showcase__image-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ai-category-showcase__image-placeholder-{{ ai_gen_id }} svg {
+    width: 80px;
+    height: 80px;
+    color: #ccc;
+  }
+
+  .ai-category-showcase__overlay-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .ai-category-showcase__item-{{ ai_gen_id }}:hover .ai-category-showcase__overlay-{{ ai_gen_id }} {
+    opacity: 1;
+  }
+
+  .ai-category-showcase__content-{{ ai_gen_id }} {
+    padding: 25px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .ai-category-showcase__title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: {{ block.settings.title_color }};
+    transition: color 0.3s ease;
+  }
+
+  .ai-category-showcase__item-{{ ai_gen_id }}:hover .ai-category-showcase__title-{{ ai_gen_id }} {
+    color: {{ block.settings.title_hover_color }};
+  }
+
+  .ai-category-showcase__description-{{ ai_gen_id }} {
+    font-size: {{ block.settings.description_size }}px;
+    color: {{ block.settings.description_color }};
+    line-height: 1.5;
+    margin-bottom: 15px;
+  }
+
+  .ai-category-showcase__cta-{{ ai_gen_id }} {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: {{ block.settings.cta_color }};
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .ai-category-showcase__item-{{ ai_gen_id }}:hover .ai-category-showcase__cta-{{ ai_gen_id }} {
+    color: {{ block.settings.cta_hover_color }};
+  }
+
+  .ai-category-showcase__cta-arrow-{{ ai_gen_id }} {
+    transition: transform 0.3s ease;
+  }
+
+  .ai-category-showcase__item-{{ ai_gen_id }}:hover .ai-category-showcase__cta-arrow-{{ ai_gen_id }} {
+    transform: translateX(5px);
+  }
+
+  .ai-category-showcase__empty-state-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: #999;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-category-showcase__grid-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .ai-category-showcase__item-{{ ai_gen_id }} {
+      height: 300px;
+    }
+
+    .ai-category-showcase__image-wrapper-{{ ai_gen_id }} {
+      height: 200px;
+    }
+  }
+{% endstyle %}
+
+<category-showcase-{{ ai_gen_id }}
+  class="ai-category-showcase-{{ ai_gen_id }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-category-showcase__container-{{ ai_gen_id }}">
+    {% if block.settings.heading != blank %}
+      <h2 class="ai-category-showcase__heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="ai-category-showcase__grid-{{ ai_gen_id }}">
+      {% for i in (1..3) %}
+        {% liquid
+          assign collection_key = 'category_' | append: i | append: '_collection'
+          assign title_key = 'category_' | append: i | append: '_title'
+          assign description_key = 'category_' | append: i | append: '_description'
+          assign image_key = 'category_' | append: i | append: '_image'
+
+          assign collection = block.settings[collection_key]
+          assign title = block.settings[title_key]
+          assign description = block.settings[description_key]
+          assign image = block.settings[image_key]
+
+          if collection != blank
+            assign category_url = collection.url
+            assign category_title = collection.title
+          else
+            assign category_url = '#'
+            assign category_title = title
+          endif
+
+          if title != blank
+            assign display_title = title
+          else
+            assign display_title = category_title
+          endif
+        %}
+
+        <a
+          href="{{ category_url }}"
+          class="ai-category-showcase__item-{{ ai_gen_id }}"
+          data-category="{{ i }}"
+        >
+          <div class="ai-category-showcase__image-wrapper-{{ ai_gen_id }}">
+            {% if image %}
+              <img
+                src="{{ image | image_url: width: 400 }}"
+                alt="{{ image.alt | escape }}"
+                class="ai-category-showcase__image-{{ ai_gen_id }}"
+                loading="lazy"
+                width="{{ image.width }}"
+                height="{{ image.height }}"
+              >
+            {% elsif collection and collection.featured_image %}
+              <img
+                src="{{ collection.featured_image | image_url: width: 400 }}"
+                alt="{{ collection.featured_image.alt | escape }}"
+                class="ai-category-showcase__image-{{ ai_gen_id }}"
+                loading="lazy"
+                width="{{ collection.featured_image.width }}"
+                height="{{ collection.featured_image.height }}"
+              >
+            {% else %}
+              <div class="ai-category-showcase__image-placeholder-{{ ai_gen_id }}">
+                {{ 'collection-1' | placeholder_svg_tag }}
+                {% if collection == blank and title == blank %}
+                  <div class="ai-category-showcase__empty-state-{{ ai_gen_id }}">
+                    Add a collection or title
+                  </div>
+                {% endif %}
+              </div>
+            {% endif %}
+            <div class="ai-category-showcase__overlay-{{ ai_gen_id }}"></div>
+          </div>
+
+          <div class="ai-category-showcase__content-{{ ai_gen_id }}">
+            {% if display_title != blank %}
+              <h3 class="ai-category-showcase__title-{{ ai_gen_id }}">{{ display_title }}</h3>
+            {% endif %}
+
+            {% if description != blank %}
+              <p class="ai-category-showcase__description-{{ ai_gen_id }}">{{ description }}</p>
+            {% endif %}
+
+            <span class="ai-category-showcase__cta-{{ ai_gen_id }}">
+              {{ block.settings.cta_text }}
+              <span class="ai-category-showcase__cta-arrow-{{ ai_gen_id }}">→</span>
+            </span>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</category-showcase-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class CategoryShowcase{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.items = this.querySelectorAll('.ai-category-showcase__item-{{ ai_gen_id }}');
+        this.setupAnimation();
+      }
+
+      setupAnimation() {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              this.animateItems();
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.1
+        });
+
+        observer.observe(this);
+      }
+
+      animateItems() {
+        this.items.forEach((item, index) => {
+          item.style.opacity = '0';
+          item.style.transform = 'translateY(30px)';
+          item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+
+          setTimeout(() => {
+            item.style.opacity = '1';
+            item.style.transform = 'translateY(0)';
+          }, index * 150);
+        });
+      }
+    }
+
+    customElements.define('category-showcase-{{ ai_gen_id }}', CategoryShowcase{{ ai_gen_id }});
+  })();
+</script>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Category showcase",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by category"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Call to action text",
+      "default": "Shop now"
+    },
+    {
+      "type": "header",
+      "content": "Category 1"
+    },
+    {
+      "type": "collection",
+      "id": "category_1_collection",
+      "label": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "category_1_title",
+      "label": "Custom title"
+    },
+    {
+      "type": "text",
+      "id": "category_1_description",
+      "label": "Description"
+    },
+    {
+      "type": "image_picker",
+      "id": "category_1_image",
+      "label": "Custom image"
+    },
+    {
+      "type": "header",
+      "content": "Category 2"
+    },
+    {
+      "type": "collection",
+      "id": "category_2_collection",
+      "label": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "category_2_title",
+      "label": "Custom title"
+    },
+    {
+      "type": "text",
+      "id": "category_2_description",
+      "label": "Description"
+    },
+    {
+      "type": "image_picker",
+      "id": "category_2_image",
+      "label": "Custom image"
+    },
+    {
+      "type": "header",
+      "content": "Category 3"
+    },
+    {
+      "type": "collection",
+      "id": "category_3_collection",
+      "label": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "category_3_title",
+      "label": "Custom title"
+    },
+    {
+      "type": "text",
+      "id": "category_3_description",
+      "label": "Description"
+    },
+    {
+      "type": "image_picker",
+      "id": "category_3_image",
+      "label": "Custom image"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "title_hover_color",
+      "label": "Title hover",
+      "default": "#ff679a"
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "cta_color",
+      "label": "Call to action",
+      "default": "#ff679a"
+    },
+    {
+      "type": "color",
+      "id": "cta_hover_color",
+      "label": "Call to action hover",
+      "default": "#343434"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 16,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Title size",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Description size",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 12
+    }
+  ],
+  "presets": [
+    {
+      "name": "Category showcase"
+    }
+  ]
+}
 {% endschema %}
