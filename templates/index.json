@@ -1198,12 +1198,12 @@
         "title_color": "#8b1538",
         "title_size": 32,
         "title_alignment": "center",
-        "wave_shape": "dramatic",
+        "wave_shape": "rounded",
         "show_top_wave": true,
         "show_bottom_wave": true,
         "wave_color": "#ffd8d8",
-        "wave_overlap_top": 60,
-        "wave_overlap_bottom": 60,
+        "wave_overlap_top": 30,
+        "wave_overlap_bottom": 30,
         "enable_scroll_animation": true,
         "scroll_direction": "left-right"
       }
