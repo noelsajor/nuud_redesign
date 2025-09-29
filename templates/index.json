@@ -203,6 +203,7 @@
         "image_card_RE7c4p": {
           "type": "image_card",
           "settings": {
+            "image": "shopify://shop_images/hero_mobile.webp",
             "alt_text": "Feed image",
             "link": ""
           }
