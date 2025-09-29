@@ -8,15 +8,17 @@
   <!-- Top Wave -->
   {% if section.settings.show_top_wave %}
   <div class="wave-top" 
-       style="top: 0px; height: {{ section.settings.wave_height }}px; max-width: {{ section.settings.container_width }}px;"
+       style="top: -{{ section.settings.wave_overlap_top }}px; 
+              height: {{ section.settings.wave_overlap_top }}px; 
+              max-width: {{ section.settings.container_width }}px;"
        aria-hidden="true">
-    <svg viewBox="0 0 1440 120" 
+    <svg viewBox="0 0 1440 100" 
          fill="none" 
          xmlns="http://www.w3.org/2000/svg"
          preserveAspectRatio="none"
          role="presentation"
          focusable="false">
-      <path d="M0,0L80,5.3C160,11,320,21,480,16C640,11,800,-11,960,-16C1120,-21,1280,-11,1360,-5.3L1440,0L1440,-{{ section.settings.wave_overlap_top }}L1360,-{{ section.settings.wave_overlap_top }}C1280,-{{ section.settings.wave_overlap_top }},1120,-{{ section.settings.wave_overlap_top }},960,-{{ section.settings.wave_overlap_top }}C800,-{{ section.settings.wave_overlap_top }},640,-{{ section.settings.wave_overlap_top }},480,-{{ section.settings.wave_overlap_top }}C320,-{{ section.settings.wave_overlap_top }},160,-{{ section.settings.wave_overlap_top }},80,-{{ section.settings.wave_overlap_top }}L0,-{{ section.settings.wave_overlap_top }}Z" 
+      <path d="M0,100 L0,50 Q360,30 720,50 T1440,50 L1440,100 Z" 
             fill="{{ section.settings.wave_color }}"/>
     </svg>
   </div>
@@ -102,15 +104,17 @@
   <!-- Bottom Wave -->
   {% if section.settings.show_bottom_wave %}
   <div class="wave-bottom" 
-       style="bottom: 0px; height: {{ section.settings.wave_height }}px; max-width: {{ section.settings.container_width }}px;"
+       style="bottom: -{{ section.settings.wave_overlap_bottom }}px; 
+              height: {{ section.settings.wave_overlap_bottom }}px; 
+              max-width: {{ section.settings.container_width }}px;"
        aria-hidden="true">
-    <svg viewBox="0 0 1440 120" 
+    <svg viewBox="0 0 1440 100" 
          fill="none" 
          xmlns="http://www.w3.org/2000/svg"
          preserveAspectRatio="none"
          role="presentation"
          focusable="false">
-      <path d="M0,0L80,5.3C160,11,320,21,480,16C640,11,800,-11,960,-16C1120,-21,1280,-11,1360,-5.3L1440,0L1440,{{ section.settings.wave_overlap_bottom }}L1360,{{ section.settings.wave_overlap_bottom }}C1280,{{ section.settings.wave_overlap_bottom }},1120,{{ section.settings.wave_overlap_bottom }},960,{{ section.settings.wave_overlap_bottom }}C800,{{ section.settings.wave_overlap_bottom }},640,{{ section.settings.wave_overlap_bottom }},480,{{ section.settings.wave_overlap_bottom }}C320,{{ section.settings.wave_overlap_bottom }},160,{{ section.settings.wave_overlap_bottom }},80,{{ section.settings.wave_overlap_bottom }}L0,{{ section.settings.wave_overlap_bottom }}Z" 
+      <path d="M0,0 L0,50 Q360,70 720,50 T1440,50 L1440,0 Z" 
             fill="{{ section.settings.wave_color }}"/>
     </svg>
   </div>
@@ -502,34 +506,24 @@
     },
     {
       "type": "range",
-      "id": "wave_height",
-      "label": "Wave Height",
-      "min": 40,
+      "id": "wave_overlap_top",
+      "label": "Top Wave Height",
+      "info": "How much the top wave extends upward",
+      "min": 20,
       "max": 150,
       "step": 10,
-      "default": 80,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "wave_overlap_top",
-      "label": "Top Wave Overlap",
-      "info": "How much the top wave extends into the section above",
-      "min": 0,
-      "max": 100,
-      "step": 10,
-      "default": 40,
+      "default": 60,
       "unit": "px"
     },
     {
       "type": "range",
       "id": "wave_overlap_bottom",
-      "label": "Bottom Wave Overlap",
-      "info": "How much the bottom wave extends into the section below",
-      "min": 0,
-      "max": 100,
+      "label": "Bottom Wave Height",
+      "info": "How much the bottom wave extends downward",
+      "min": 20,
+      "max": 150,
       "step": 10,
-      "default": 40,
+      "default": 60,
       "unit": "px"
     },
     {
