@@ -149,7 +149,7 @@
       }
     },
     "2_test_section_claude_9VyBTH": {
-      "type": "2-test-section-claude",
+      "type": "best-sellers-collections",
       "name": "Best Sellers Collection",
       "settings": {
         "collection": "fir-him",
