@@ -22,7 +22,7 @@
     
     <!-- Section Header -->
     <header class="section-header" 
-            style="text-align: {{ section.settings.title_alignment }};">
+            style="text-align: {{ section.settings.title_alignment }}; margin-bottom: {{ section.settings.title_bottom_spacing }}px;">
       {% if section.settings.section_title != blank %}
       <h2 id="best-sellers-title" 
           class="section-title"
@@ -39,7 +39,7 @@
       {% assign collection = collections[section.settings.collection] %}
       {% if collection.products.size > 0 %}
       <div class="products-grid" 
-           style="grid-template-columns: repeat(auto-fit, minmax({{ section.settings.min_product_width }}px, 1fr));">
+           style="grid-template-columns: repeat(auto-fit, minmax({{ section.settings.min_product_width }}px, 1fr)); gap: {{ section.settings.products_grid_gap }}px;">
         
         {% for product in collection.products limit: section.settings.products_to_show %}
         <article class="product-card" 
@@ -153,7 +153,7 @@
       <!-- See All Button (Below Products) -->
       {% if section.settings.show_see_all_button and section.settings.collection != blank %}
       <div class="see-all-container" 
-           style="text-align: {{ section.settings.button_alignment }}; margin-top: 40px;">
+           style="text-align: {{ section.settings.button_alignment }}; margin-top: {{ section.settings.button_top_spacing }}px;">
         <a href="{{ collections[section.settings.collection].url }}" 
            class="see-all-button"
            style="color: {{ section.settings.button_color }}; 
@@ -218,7 +218,7 @@
 
 /* Section Header */
 .section-header {
-  margin-bottom: 40px;
+  /* Spacing controlled via inline style */
 }
 
 .section-title {
@@ -228,6 +228,7 @@
 
 .see-all-container {
   width: 100%;
+  /* Spacing controlled via inline style */
 }
 
 .see-all-button {
@@ -248,7 +249,7 @@
 /* Products Grid */
 .products-grid {
   display: grid;
-  gap: 30px;
+  /* Gap controlled via inline style */
   margin-bottom: 20px;
 }
 
@@ -547,6 +548,32 @@
       "default": "center"
     },
     {
+      "type": "range",
+      "id": "title_bottom_spacing",
+      "label": "Space Below Title",
+      "info": "Vertical spacing between title and products",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Product Grid Spacing"
+    },
+    {
+      "type": "range",
+      "id": "products_grid_gap",
+      "label": "Gap Between Products",
+      "info": "Horizontal and vertical spacing between product cards",
+      "min": 15,
+      "max": 60,
+      "step": 5,
+      "default": 30,
+      "unit": "px"
+    },
+    {
       "type": "header",
       "content": "See All Button"
     },
@@ -578,6 +605,17 @@
         { "value": "right", "label": "Right" }
       ],
       "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "button_top_spacing",
+      "label": "Space Above Button",
+      "info": "Vertical spacing between products and 'See All' button",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "default": 40,
+      "unit": "px"
     },
     {
       "type": "header",
