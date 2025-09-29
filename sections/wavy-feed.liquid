@@ -1,31 +1,71 @@
-<!-- Wavy Feed Section -->
-<section class="wavy-feed"
+<!-- Feed Gallery with Overlapping Waves (reuses your wave system) -->
+<section class="features-wave-section"
          role="region"
-         aria-labelledby="wavy-feed-title"
+         aria-labelledby="feed-title"
          style="background: {% if section.settings.use_gradient %}{{ section.settings.background_gradient }}{% else %}{{ section.settings.background_color }}{% endif %};
                 padding: {{ section.settings.section_padding_top }}px 20px {{ section.settings.section_padding_bottom }}px 20px;">
 
-  <!-- Top Wave -->
+  {%- comment -%} ---------- TOP WAVE ---------- {%- endcomment -%}
   {% if section.settings.show_top_wave %}
-    <div class="wave-top"
-         style="top: -{{ section.settings.wave_overlap_top }}px; height: {{ section.settings.wave_overlap_top }}px;"
-         aria-hidden="true">
-      <svg viewBox="0 0 1440 100"
-           fill="none"
-           xmlns="http://www.w3.org/2000/svg"
-           preserveAspectRatio="none"
-           role="presentation"
-           focusable="false">
-        <path d="M0,100 Q720,0 1440,100 Z" fill="{{ section.settings.wave_color }}"/>
-      </svg>
-    </div>
+  <div class="wave-top"
+       style="top: -{{ section.settings.wave_overlap_top }}px;
+              height: {{ section.settings.wave_overlap_top }}px;"
+       aria-hidden="true">
+    <svg viewBox="0 0 1440 100"
+         fill="none"
+         xmlns="http://www.w3.org/2000/svg"
+         preserveAspectRatio="none"
+         role="presentation"
+         focusable="false">
+      {% assign freq = section.settings.wave_frequency %}
+      {% assign amp = section.settings.wave_amplitude %}
+      {% if freq == 1 %}
+        {% case section.settings.wave_shape %}
+          {% when 'gentle' %}<path d="M0,100 L0,{{ 100 | minus: amp | plus: 10 }} Q720,{{ 100 | minus: amp | minus: amp | plus: 10 }} 1440,{{ 100 | minus: amp | plus: 10 }} L1440,100 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'medium' %}<path d="M0,100 L0,{{ 100 | minus: amp }} Q720,{{ 100 | minus: amp | minus: amp }} 1440,{{ 100 | minus: amp }} L1440,100 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'dramatic' %}<path d="M0,100 L0,{{ 100 | minus: amp | minus: 10 }} Q720,{{ 100 | minus: amp | minus: amp | minus: 20 }} 1440,{{ 100 | minus: amp | minus: 10 }} L1440,100 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'sharp' %}<path d="M0,100 L0,{{ 100 | minus: amp }} L720,{{ 100 | minus: amp | minus: amp }} L1440,{{ 100 | minus: amp }} L1440,100 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'rounded' %}<path d="M0,100 L0,{{ 100 | minus: amp | plus: 5 }} C480,{{ 100 | minus: amp | minus: amp | plus: 5 }} 960,{{ 100 | minus: amp | minus: amp | plus: 5 }} 1440,{{ 100 | minus: amp | plus: 5 }} L1440,100 Z" fill="{{ section.settings.wave_color }}"/>
+        {% endcase %}
+      {% elsif freq == 2 %}
+        {% case section.settings.wave_shape %}
+          {% when 'gentle' %}<path d="M0,100 L0,{{ 100 | minus: amp | plus: 10 }} Q360,{{ 100 | minus: amp | minus: amp | plus: 10 }} 720,{{ 100 | minus: amp | plus: 10 }} T1440,{{ 100 | minus: amp | plus: 10 }} L1440,100 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'medium' %}<path d="M0,100 L0,{{ 100 | minus: amp }} Q360,{{ 100 | minus: amp | minus: amp }} 720,{{ 100 | minus: amp }} T1440,{{ 100 | minus: amp }} L1440,100 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'dramatic' %}<path d="M0,100 L0,{{ 100 | minus: amp | minus: 10 }} Q360,{{ 100 | minus: amp | minus: amp | minus: 20 }} 720,{{ 100 | minus: amp | minus: 10 }} T1440,{{ 100 | minus: amp | minus: 10 }} L1440,100 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'sharp' %}<path d="M0,100 L0,{{ 100 | minus: amp }} L360,{{ 100 | minus: amp | minus: amp }} L720,{{ 100 | minus: amp }} L1080,{{ 100 | minus: amp | minus: amp }} L1440,{{ 100 | minus: amp }} L1440,100 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'rounded' %}<path d="M0,100 L0,{{ 100 | minus: amp | plus: 5 }} C240,{{ 100 | minus: amp | minus: amp | plus: 5 }} 480,{{ 100 | minus: amp | minus: amp | plus: 5 }} 720,{{ 100 | minus: amp | plus: 5 }} C960,{{ 100 | minus: amp | plus: amp | plus: 5 }} 1200,{{ 100 | minus: amp | plus: amp | plus: 5 }} 1440,{{ 100 | minus: amp | plus: 5 }} L1440,100 Z" fill="{{ section.settings.wave_color }}"/>
+        {% endcase %}
+      {% elsif freq == 3 %}
+        {% case section.settings.wave_shape %}
+          {% when 'gentle' %}<path d="M0,100 L0,{{ 100 | minus: amp | plus: 10 }} Q240,{{ 100 | minus: amp | minus: amp | plus: 10 }} 480,{{ 100 | minus: amp | plus: 10 }} T960,{{ 100 | minus: amp | plus: 10 }} T1440,{{ 100 | minus: amp | plus: 10 }} L1440,100 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'medium' %}<path d="M0,100 L0,{{ 100 | minus: amp }} Q240,{{ 100 | minus: amp | minus: amp }} 480,{{ 100 | minus: amp }} T960,{{ 100 | minus: amp }} T1440,{{ 100 | minus: amp }} L1440,100 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'dramatic' %}<path d="M0,100 L0,{{ 100 | minus: amp | minus: 10 }} Q240,{{ 100 | minus: amp | minus: amp | minus: 20 }} 480,{{ 100 | minus: amp | minus: 10 }} T960,{{ 100 | minus: amp | minus: 10 }} T1440,{{ 100 | minus: amp | minus: 10 }} L1440,100 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'sharp' %}<path d="M0,100 L0,{{ 100 | minus: amp }} L240,{{ 100 | minus: amp | minus: amp }} L480,{{ 100 | minus: amp }} L720,{{ 100 | minus: amp | minus: amp }} L960,{{ 100 | minus: amp }} L1200,{{ 100 | minus: amp | minus: amp }} L1440,{{ 100 | minus: amp }} L1440,100 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'rounded' %}<path d="M0,100 L0,{{ 100 | minus: amp | plus: 5 }} C160,{{ 100 | minus: amp | minus: amp | plus: 5 }} 320,{{ 100 | minus: amp | minus: amp | plus: 5 }} 480,{{ 100 | minus: amp | plus: 5 }} C640,{{ 100 | minus: amp | plus: amp | plus: 5 }} 800,{{ 100 | minus: amp | plus: amp | plus: 5 }} 960,{{ 100 | minus: amp | plus: 5 }} C1120,{{ 100 | minus: amp | minus: amp | plus: 5 }} 1280,{{ 100 | minus: amp | minus: amp | plus: 5 }} 1440,{{ 100 | minus: amp | plus: 5 }} L1440,100 Z" fill="{{ section.settings.wave_color }}"/>
+        {% endcase %}
+      {% elsif freq == 4 %}
+        {% case section.settings.wave_shape %}
+          {% when 'gentle' %}<path d="M0,100 L0,{{ 100 | minus: amp | plus: 10 }} Q180,{{ 100 | minus: amp | minus: amp | plus: 10 }} 360,{{ 100 | minus: amp | plus: 10 }} T720,{{ 100 | minus: amp | plus: 10 }} T1080,{{ 100 | minus: amp | plus: 10 }} T1440,{{ 100 | minus: amp | plus: 10 }} L1440,100 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'medium' %}<path d="M0,100 L0,{{ 100 | minus: amp }} Q180,{{ 100 | minus: amp | minus: amp }} 360,{{ 100 | minus: amp }} T720,{{ 100 | minus: amp }} T1080,{{ 100 | minus: amp }} T1440,{{ 100 | minus: amp }} L1440,100 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'dramatic' %}<path d="M0,100 L0,{{ 100 | minus: amp | minus: 10 }} Q180,{{ 100 | minus: amp | minus: amp | minus: 20 }} 360,{{ 100 | minus: amp | minus: 10 }} T720,{{ 100 | minus: amp | minus: 10 }} T1080,{{ 100 | minus: amp | minus: 10 }} T1440,{{ 100 | minus: amp | minus: 10 }} L1440,100 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'sharp' %}<path d="M0,100 L0,{{ 100 | minus: amp }} L180,{{ 100 | minus: amp | minus: amp }} L360,{{ 100 | minus: amp }} L540,{{ 100 | minus: amp | minus: amp }} L720,{{ 100 | minus: amp }} L900,{{ 100 | minus: amp | minus: amp }} L1080,{{ 100 | minus: amp }} L1260,{{ 100 | minus: amp | minus: amp }} L1440,{{ 100 | minus: amp }} L1440,100 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'rounded' %}<path d="M0,100 L0,{{ 100 | minus: amp | plus: 5 }} C120,{{ 100 | minus: amp | minus: amp | plus: 5 }} 240,{{ 100 | minus: amp | minus: amp | plus: 5 }} 360,{{ 100 | minus: amp | plus: 5 }} C480,{{ 100 | minus: amp | plus: amp | plus: 5 }} 600,{{ 100 | minus: amp | plus: amp | plus: 5 }} 720,{{ 100 | minus: amp | plus: 5 }} C840,{{ 100 | minus: amp | minus: amp | plus: 5 }} 960,{{ 100 | minus: amp | minus: amp | plus: 5 }} 1080,{{ 100 | minus: amp | plus: 5 }} C1200,{{ 100 | minus: amp | plus: amp | plus: 5 }} 1320,{{ 100 | minus: amp | plus: amp | plus: 5 }} 1440,{{ 100 | minus: amp | plus: 5 }} L1440,100 Z" fill="{{ section.settings.wave_color }}"/>
+        {% endcase %}
+      {% else %}
+        <path d="M0,100 L0,50 Q360,30 720,50 T1440,50 L1440,100 Z" fill="{{ section.settings.wave_color }}"/>
+      {% endif %}
+    </svg>
+  </div>
   {% endif %}
 
-  <!-- Content -->
-  <div class="feed-container" style="max-width: {{ section.settings.container_width }}px;">
+  {%- comment -%} ---------- CONTENT ---------- {%- endcomment -%}
+  <div class="features-container" style="max-width: {{ section.settings.container_width }}px;">
     {% if section.settings.section_title != blank %}
-      <h2 id="wavy-feed-title"
-          style="color: {{ section.settings.title_color }}; font-size: {{ section.settings.title_size }}px; text-align: {{ section.settings.title_alignment }};">
+      <h2 id="feed-title"
+          class="section-title"
+          style="color: {{ section.settings.title_color }};
+                 font-size: {{ section.settings.title_size }}px;
+                 text-align: {{ section.settings.title_alignment }};">
         {{ section.settings.section_title }}
       </h2>
     {% endif %}
@@ -37,11 +77,11 @@
            {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% else %}role="link" aria-disabled="true"{% endif %}
            {{ block.shopify_attributes }}>
           <div class="feed-thumb" style="--ratio: {{ section.settings.aspect_ratio | default: 1 }}">
-            {% if img != blank %}
-              {% assign img_url = img | image_url: width: 1200 %}
-              {{ img_url | image_tag:
+            {% if img %}
+              {{ img | image_tag:
                 alt: block.settings.alt_text,
                 loading: 'lazy',
+                decoding: 'async',
                 widths: '360, 600, 900, 1200',
                 sizes: '(max-width: 749px) 45vw, (max-width: 989px) 30vw, 260px',
                 class: 'feed-img'
@@ -55,219 +95,128 @@
     </div>
   </div>
 
-  <!-- Bottom Wave -->
+  {%- comment -%} ---------- BOTTOM WAVE (same engine) ---------- {%- endcomment -%}
   {% if section.settings.show_bottom_wave %}
-    <div class="wave-bottom"
-         style="bottom: -{{ section.settings.wave_overlap_bottom }}px; height: {{ section.settings.wave_overlap_bottom }}px;"
-         aria-hidden="true">
-      <svg viewBox="0 0 1440 100"
-           fill="none"
-           xmlns="http://www.w3.org/2000/svg"
-           preserveAspectRatio="none"
-           role="presentation"
-           focusable="false">
-        <path d="M0,0 Q720,100 1440,0 Z" fill="{{ section.settings.wave_color }}"/>
-      </svg>
-    </div>
+  <div class="wave-bottom"
+       style="bottom: -{{ section.settings.wave_overlap_bottom }}px;
+              height: {{ section.settings.wave_overlap_bottom }}px;"
+       aria-hidden="true">
+    <svg viewBox="0 0 1440 100"
+         fill="none"
+         xmlns="http://www.w3.org/2000/svg"
+         preserveAspectRatio="none"
+         role="presentation"
+         focusable="false">
+      {% assign freq = section.settings.wave_frequency %}
+      {% assign amp = section.settings.wave_amplitude %}
+      {% if freq == 1 %}
+        {% case section.settings.wave_shape %}
+          {% when 'gentle' %}<path d="M0,0 L0,{{ amp | minus: 10 }} Q720,{{ amp | plus: amp | minus: 10 }} 1440,{{ amp | minus: 10 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'medium' %}<path d="M0,0 L0,{{ amp }} Q720,{{ amp | plus: amp }} 1440,{{ amp }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'dramatic' %}<path d="M0,0 L0,{{ amp | plus: 10 }} Q720,{{ amp | plus: amp | plus: 20 }} 1440,{{ amp | plus: 10 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'sharp' %}<path d="M0,0 L0,{{ amp }} L720,{{ amp | plus: amp }} L1440,{{ amp }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'rounded' %}<path d="M0,0 L0,{{ amp | minus: 5 }} C480,{{ amp | plus: amp | minus: 5 }} 960,{{ amp | plus: amp | minus: 5 }} 1440,{{ amp | minus: 5 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
+        {% endcase %}
+      {% elsif freq == 2 %}
+        {% case section.settings.wave_shape %}
+          {% when 'gentle' %}<path d="M0,0 L0,{{ amp | minus: 10 }} Q360,{{ amp | plus: amp | minus: 10 }} 720,{{ amp | minus: 10 }} T1440,{{ amp | minus: 10 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'medium' %}<path d="M0,0 L0,{{ amp }} Q360,{{ amp | plus: amp }} 720,{{ amp }} T1440,{{ amp }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'dramatic' %}<path d="M0,0 L0,{{ amp | plus: 10 }} Q360,{{ amp | plus: amp | plus: 20 }} 720,{{ amp | plus: 10 }} T1440,{{ amp | plus: 10 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'sharp' %}<path d="M0,0 L0,{{ amp }} L360,{{ amp | plus: amp }} L720,{{ amp }} L1080,{{ amp | plus: amp }} L1440,{{ amp }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'rounded' %}<path d="M0,0 L0,{{ amp | minus: 5 }} C240,{{ amp | plus: amp | minus: 5 }} 480,{{ amp | plus: amp | minus: 5 }} 720,{{ amp | minus: 5 }} C960,{{ amp | minus: amp | minus: 5 }} 1200,{{ amp | minus: amp | minus: 5 }} 1440,{{ amp | minus: 5 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
+        {% endcase %}
+      {% elsif freq == 3 %}
+        {% case section.settings.wave_shape %}
+          {% when 'gentle' %}<path d="M0,0 L0,{{ amp | minus: 10 }} Q240,{{ amp | plus: amp | minus: 10 }} 480,{{ amp | minus: 10 }} T960,{{ amp | minus: 10 }} T1440,{{ amp | minus: 10 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'medium' %}<path d="M0,0 L0,{{ amp }} Q240,{{ amp | plus: amp }} 480,{{ amp }} T960,{{ amp }} T1440,{{ amp }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'dramatic' %}<path d="M0,0 L0,{{ amp | plus: 10 }} Q240,{{ amp | plus: amp | plus: 20 }} 480,{{ amp | plus: 10 }} T960,{{ amp | plus: 10 }} T1440,{{ amp | plus: 10 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'sharp' %}<path d="M0,0 L0,{{ amp }} L240,{{ amp | plus: amp }} L480,{{ amp }} L720,{{ amp | plus: amp }} L960,{{ amp }} L1200,{{ amp | plus: amp }} L1440,{{ amp }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'rounded' %}<path d="M0,0 L0,{{ amp | minus: 5 }} C160,{{ amp | plus: amp | minus: 5 }} 320,{{ amp | plus: amp | minus: 5 }} 480,{{ amp | minus: 5 }} C640,{{ amp | minus: amp | minus: 5 }} 800,{{ amp | minus: amp | minus: 5 }} 960,{{ amp | minus: 5 }} C1120,{{ amp | plus: amp | minus: 5 }} 1280,{{ amp | plus: amp | minus: 5 }} 1440,{{ amp | minus: 5 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
+        {% endcase %}
+      {% elsif freq == 4 %}
+        {% case section.settings.wave_shape %}
+          {% when 'gentle' %}<path d="M0,0 L0,{{ amp | minus: 10 }} Q180,{{ amp | plus: amp | minus: 10 }} 360,{{ amp | minus: 10 }} T720,{{ amp | minus: 10 }} T1080,{{ amp | minus: 10 }} T1440,{{ amp | minus: 10 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'medium' %}<path d="M0,0 L0,{{ amp }} Q180,{{ amp | plus: amp }} 360,{{ amp }} T720,{{ amp }} T1080,{{ amp }} T1440,{{ amp }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'dramatic' %}<path d="M0,0 L0,{{ amp | plus: 10 }} Q180,{{ amp | plus: amp | plus: 20 }} 360,{{ amp | plus: 10 }} T720,{{ amp | plus: 10 }} T1080,{{ amp | plus: 10 }} T1440,{{ amp | plus: 10 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'sharp' %}<path d="M0,0 L0,{{ amp }} L180,{{ amp | plus: amp }} L360,{{ amp }} L540,{{ amp | plus: amp }} L720,{{ amp }} L900,{{ amp | plus: amp }} L1080,{{ amp }} L1260,{{ amp | plus: amp }} L1440,{{ amp }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
+          {% when 'rounded' %}<path d="M0,0 L0,{{ amp | minus: 5 }} C120,{{ amp | plus: amp | minus: 5 }} 240,{{ amp | plus: amp | minus: 5 }} 360,{{ amp | minus: 5 }} C480,{{ amp | minus: amp | minus: 5 }} 600,{{ amp | minus: amp | minus: 5 }} 720,{{ amp | minus: 5 }} C840,{{ amp | plus: amp | minus: 5 }} 960,{{ amp | plus: amp | minus: 5 }} 1080,{{ amp | minus: 5 }} C1200,{{ amp | minus: amp | minus: 5 }} 1320,{{ amp | minus: amp | minus: 5 }} 1440,{{ amp | minus: 5 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
+        {% endcase %}
+      {% else %}
+        <path d="M0,0 L0,50 Q360,70 720,50 T1440,50 L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
+      {% endif %}
+    </svg>
+  </div>
   {% endif %}
 </section>
 
 <style>
-.wavy-feed {
-  position: relative;
-  overflow: visible;
-  z-index: 1;
-}
-.wave-top,
-.wave-bottom {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  line-height: 0;
-  pointer-events: none;
-  z-index: 2;
-}
-.wave-top svg,
-.wave-bottom svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-.feed-container {
-  position: relative;
-  z-index: 3;
-  margin: 0 auto;
-  width: 100%;
-}
-.feed-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-}
-.feed-card {
-  display: block;
-  text-decoration: none;
-}
-.feed-thumb {
-  position: relative;
-  width: 100%;
-  padding-top: calc(var(--ratio) * 100%);
-  overflow: hidden;
-}
-.feed-img {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+.features-wave-section { position: relative; overflow: visible; z-index: 1; }
+.wave-top, .wave-bottom { position: absolute; left: 0; width: 100%; line-height: 0; pointer-events: none; z-index: 2; overflow: visible; }
+.wave-top svg, .wave-bottom svg { width: 100%; height: 100%; display: block; }
+.features-container { position: relative; z-index: 3; margin: 0 auto; width: 100%; }
+.section-title { margin: 0 0 32px 0; line-height: 1.2; font-weight: 800; }
+
+/* Grid & cards */
+.feed-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: {{ section.settings.card_gap }}px; align-items: stretch; }
+@media (max-width: 990px) { .feed-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 749px) { .feed-grid { grid-template-columns: repeat(2, 1fr); } }
+.feed-card { display: block; background: {{ section.settings.card_bg }}; border-radius: {{ section.settings.card_radius }}px; overflow: hidden; transition: transform .25s ease, box-shadow .25s ease; box-shadow: 0 10px 18px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.06); }
+.feed-card:hover { transform: translateY(-4px); box-shadow: 0 16px 28px rgba(0,0,0,.12), 0 4px 10px rgba(0,0,0,.08); }
+
+/* Image ratio */
+.feed-thumb { position: relative; aspect-ratio: var(--ratio, 1); }
+.feed-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) { .feed-card { transition: none !important; } }
 </style>
 
 {% schema %}
 {
-  "name": "Wavy Feed",
+  "name": "Feed with Waves",
   "settings": [
-    {
-      "type": "checkbox",
-      "id": "use_gradient",
-      "label": "Use Gradient Background",
-      "default": true
-    },
-    {
-      "type": "color",
-      "id": "background_color",
-      "label": "Background Color",
-      "default": "#ffc4e1"
-    },
-    {
-      "type": "color_background",
-      "id": "background_gradient",
-      "label": "Background Gradient",
-      "default": "linear-gradient(135deg, #ffc4e1 0%, #b4d5ff 100%)"
-    },
-    {
-      "type": "range",
-      "id": "section_padding_top",
-      "label": "Padding Top",
-      "min": 0,
-      "max": 250,
-      "step": 10,
-      "default": 80,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "section_padding_bottom",
-      "label": "Padding Bottom",
-      "min": 0,
-      "max": 250,
-      "step": 10,
-      "default": 80,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "container_width",
-      "label": "Container Max Width",
-      "min": 800,
-      "max": 1400,
-      "step": 100,
-      "default": 1200,
-      "unit": "px"
-    },
-    {
-      "type": "text",
-      "id": "section_title",
-      "label": "Section Title"
-    },
-    {
-      "type": "color",
-      "id": "title_color",
-      "label": "Title Color",
-      "default": "#8b1538"
-    },
-    {
-      "type": "range",
-      "id": "title_size",
-      "label": "Title Font Size",
-      "min": 20,
-      "max": 48,
-      "step": 2,
-      "default": 32,
-      "unit": "px"
-    },
-    {
-      "type": "select",
-      "id": "title_alignment",
-      "label": "Title Alignment",
-      "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "center", "label": "Center" },
-        { "value": "right", "label": "Right" }
-      ],
-      "default": "center"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_top_wave",
-      "label": "Show Top Wave",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_bottom_wave",
-      "label": "Show Bottom Wave",
-      "default": true
-    },
-    {
-      "type": "color",
-      "id": "wave_color",
-      "label": "Wave Color",
-      "default": "#ffd4e5"
-    },
-    {
-      "type": "range",
-      "id": "wave_overlap_top",
-      "label": "Top Wave Height",
-      "min": 20,
-      "max": 200,
-      "step": 10,
-      "default": 100,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "wave_overlap_bottom",
-      "label": "Bottom Wave Height",
-      "min": 20,
-      "max": 200,
-      "step": 10,
-      "default": 100,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "aspect_ratio",
-      "label": "Image Aspect Ratio",
-      "min": 0.5,
-      "max": 2.0,
-      "step": 0.1,
-      "default": 1.0
-    }
+    { "type": "checkbox", "id": "use_gradient", "label": "Use Gradient Background", "default": true },
+    { "type": "color", "id": "background_color", "label": "Background Color", "default": "#FFE9ED" },
+    { "type": "color_background", "id": "background_gradient", "label": "Background Gradient", "default": "linear-gradient(0deg, #ffe0e6 0%, #ffd7dc 100%)" },
+
+    { "type": "range", "id": "section_padding_top", "label": "Padding Top", "min": 0, "max": 250, "step": 10, "default": 80 },
+    { "type": "range", "id": "section_padding_bottom", "label": "Padding Bottom", "min": 0, "max": 250, "step": 10, "default": 80 },
+    { "type": "range", "id": "container_width", "label": "Container Max Width", "min": 800, "max": 1600, "step": 50, "default": 1200 },
+
+    { "type": "text", "id": "section_title", "label": "Heading", "default": "Check our Feed" },
+    { "type": "color", "id": "title_color", "label": "Heading Color", "default": "#7b1d2a" },
+    { "type": "range", "id": "title_size", "label": "Heading Size", "min": 20, "max": 48, "step": 2, "default": 36 },
+    { "type": "select", "id": "title_alignment", "label": "Heading Alignment", "options": [{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}], "default": "center" },
+
+    { "type": "header", "content": "Wave Settings" },
+    { "type": "select", "id": "wave_shape", "label": "Wave Shape", "options": [{"value":"gentle","label":"Gentle"},{"value":"medium","label":"Medium"},{"value":"dramatic","label":"Dramatic"},{"value":"sharp","label":"Sharp"},{"value":"rounded","label":"Rounded"}], "default": "medium" },
+    { "type": "checkbox", "id": "show_top_wave", "label": "Show Top Wave", "default": true },
+    { "type": "checkbox", "id": "show_bottom_wave", "label": "Show Bottom Wave", "default": true },
+    { "type": "color", "id": "wave_color", "label": "Wave Color", "default": "#FFD4E5" },
+    { "type": "range", "id": "wave_overlap_top", "label": "Top Wave Height", "min": 20, "max": 200, "step": 10, "default": 120 },
+    { "type": "range", "id": "wave_overlap_bottom", "label": "Bottom Wave Height", "min": 20, "max": 200, "step": 10, "default": 120 },
+    { "type": "range", "id": "wave_frequency", "label": "Wave Frequency", "min": 1, "max": 4, "step": 1, "default": 2 },
+    { "type": "range", "id": "wave_amplitude", "label": "Wave Amplitude", "min": 10, "max": 40, "step": 5, "default": 25 },
+
+    { "type": "header", "content": "Cards" },
+    { "type": "range", "id": "aspect_ratio", "label": "Image Aspect Ratio", "min": 0.5, "max": 1.5, "step": 0.1, "default": 1 },
+    { "type": "color", "id": "card_bg", "label": "Card Background", "default": "#FFFFFF" },
+    { "type": "range", "id": "card_radius", "label": "Card Corner Radius", "min": 8, "max": 36, "step": 1, "default": 18 },
+    { "type": "range", "id": "card_gap", "label": "Grid Gap", "min": 8, "max": 36, "step": 1, "default": 20 }
   ],
   "blocks": [
     {
-      "type": "image",
-      "name": "Feed Image",
+      "type": "image_card",
+      "name": "Image card",
       "settings": [
         { "type": "image_picker", "id": "image", "label": "Image" },
-        { "type": "text", "id": "alt_text", "label": "Alt Text" },
-        { "type": "url", "id": "link", "label": "Link URL" }
+        { "type": "text", "id": "alt_text", "label": "Alt text", "default": "Feed image" },
+        { "type": "url", "id": "link", "label": "Optional link" }
       ]
     }
   ],
   "presets": [
-    { "name": "Wavy Feed" }
+    { "name": "Feed with Waves", "blocks": [{ "type": "image_card" }, { "type": "image_card" }, { "type": "image_card" }, { "type": "image_card" }] }
   ]
 }
 {% endschema %}
