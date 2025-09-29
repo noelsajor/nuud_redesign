@@ -73,6 +73,7 @@
             <path d="M0,100 L0,{{ 100 | minus: amp | plus: 5 }} C120,{{ 100 | minus: amp | minus: amp | plus: 5 }} 240,{{ 100 | minus: amp | minus: amp | plus: 5 }} 360,{{ 100 | minus: amp | plus: 5 }} C480,{{ 100 | minus: amp | plus: amp | plus: 5 }} 600,{{ 100 | minus: amp | plus: amp | plus: 5 }} 720,{{ 100 | minus: amp | plus: 5 }} C840,{{ 100 | minus: amp | minus: amp | plus: 5 }} 960,{{ 100 | minus: amp | minus: amp | plus: 5 }} 1080,{{ 100 | minus: amp | plus: 5 }} C1200,{{ 100 | minus: amp | plus: amp | plus: 5 }} 1320,{{ 100 | minus: amp | plus: amp | plus: 5 }} 1440,{{ 100 | minus: amp | plus: 5 }} L1440,100 Z" fill="{{ section.settings.wave_color }}"/>
         {% endcase %}
       {% else %}
+        <!-- Fallback to medium 2 waves -->
         <path d="M0,100 L0,50 Q360,30 720,50 T1440,50 L1440,100 Z" fill="{{ section.settings.wave_color }}"/>
       {% endif %}
     </svg>
@@ -96,108 +97,16 @@
     <h2 id="features-title" class="sr-only">Store Features and Benefits</h2>
     {% endif %}
     
-    <!-- Scrolling Wrapper -->
-    {% if section.settings.enable_continuous_scroll %}
-    <div class="scrolling-wrapper {% if section.settings.scroll_direction == 'right-left' %}scroll-rtl{% else %}scroll-ltr{% endif %}"
-         style="--scroll-speed: {{ section.settings.scroll_speed }}s;">
-      <ul class="features-scroll-track" role="list">
-        {% for block in section.blocks %}
-          <li class="feature-item" {{ block.shopify_attributes }}>
-            <!-- Icon -->
-            <div class="feature-icon-wrapper" 
-                 {% if block.settings.icon_svg != blank or block.settings.icon_image %}
-                 role="img" 
-                 aria-label="{{ block.settings.icon_label | default: block.settings.feature_text }}"
-                 {% endif %}>
-              {% if block.settings.icon_svg != blank %}
-              <div class="feature-icon" 
-                   style="color: {{ block.settings.icon_color }};"
-                   aria-hidden="true">
-                {{ block.settings.icon_svg }}
-              </div>
-              {% elsif block.settings.icon_image %}
-              <div class="feature-icon-image" aria-hidden="true">
-                <img src="{{ block.settings.icon_image | image_url: width: 120 }}"
-                     srcset="{{ block.settings.icon_image | image_url: width: 60 }} 60w,
-                             {{ block.settings.icon_image | image_url: width: 120 }} 120w"
-                     sizes="60px"
-                     alt="{{ block.settings.icon_label | default: '' }}"
-                     width="60"
-                     height="60"
-                     loading="lazy"
-                     decoding="async">
-              </div>
-              {% endif %}
-            </div>
-            
-            <!-- Text Content -->
-            {% if block.settings.feature_text != blank %}
-            <div class="feature-text-wrapper">
-              <p class="feature-text" 
-                 style="color: {{ block.settings.text_color }}; 
-                        font-size: {{ block.settings.text_size }}px;
-                        font-weight: {{ block.settings.text_weight }};">
-                {{ block.settings.feature_text }}
-              </p>
-              {% if block.settings.feature_subtext != blank %}
-              <p class="feature-subtext"
-                 style="color: {{ block.settings.subtext_color }}; 
-                        font-size: {{ block.settings.subtext_size }}px;">
-                {{ block.settings.feature_subtext }}
-              </p>
-              {% endif %}
-            </div>
-            {% endif %}
-          </li>
-        {% endfor %}
-        
-        <!-- Duplicate for seamless loop -->
-        {% for block in section.blocks %}
-          <li class="feature-item" aria-hidden="true">
-            <div class="feature-icon-wrapper">
-              {% if block.settings.icon_svg != blank %}
-              <div class="feature-icon" style="color: {{ block.settings.icon_color }};">
-                {{ block.settings.icon_svg }}
-              </div>
-              {% elsif block.settings.icon_image %}
-              <div class="feature-icon-image">
-                <img src="{{ block.settings.icon_image | image_url: width: 120 }}"
-                     alt=""
-                     width="60"
-                     height="60"
-                     loading="lazy">
-              </div>
-              {% endif %}
-            </div>
-            {% if block.settings.feature_text != blank %}
-            <div class="feature-text-wrapper">
-              <p class="feature-text" 
-                 style="color: {{ block.settings.text_color }}; 
-                        font-size: {{ block.settings.text_size }}px;
-                        font-weight: {{ block.settings.text_weight }};">
-                {{ block.settings.feature_text }}
-              </p>
-              {% if block.settings.feature_subtext != blank %}
-              <p class="feature-subtext"
-                 style="color: {{ block.settings.subtext_color }}; 
-                        font-size: {{ block.settings.subtext_size }}px;">
-                {{ block.settings.feature_subtext }}
-              </p>
-              {% endif %}
-            </div>
-            {% endif %}
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-    {% else %}
-    <!-- Static Grid (original layout) -->
-    <ul class="features-grid {% if section.settings.enable_scroll_animation %}animate-scroll-{{ section.settings.fade_direction }}{% endif %}"
+    <!-- Features Grid -->
+    <ul class="features-grid {% if section.settings.enable_scroll_animation %}animate-scroll-{{ section.settings.scroll_direction }}{% endif %}"
         role="list">
+      
       {% for block in section.blocks %}
         <li class="feature-item" 
             {{ block.shopify_attributes }}
             style="animation-delay: {{ forloop.index0 | times: 0.1 }}s;">
+          
+          <!-- Icon -->
           <div class="feature-icon-wrapper" 
                {% if block.settings.icon_svg != blank or block.settings.icon_image %}
                role="img" 
@@ -223,6 +132,8 @@
             </div>
             {% endif %}
           </div>
+          
+          <!-- Text Content -->
           {% if block.settings.feature_text != blank %}
           <div class="feature-text-wrapper">
             <p class="feature-text" 
@@ -242,8 +153,8 @@
           {% endif %}
         </li>
       {% endfor %}
+      
     </ul>
-    {% endif %}
   </div>
   
   <!-- Bottom Wave -->
@@ -314,6 +225,7 @@
             <path d="M0,0 L0,{{ amp | minus: 5 }} C120,{{ amp | plus: amp | minus: 5 }} 240,{{ amp | plus: amp | minus: 5 }} 360,{{ amp | minus: 5 }} C480,{{ amp | minus: amp | minus: 5 }} 600,{{ amp | minus: amp | minus: 5 }} 720,{{ amp | minus: 5 }} C840,{{ amp | plus: amp | minus: 5 }} 960,{{ amp | plus: amp | minus: 5 }} 1080,{{ amp | minus: 5 }} C1200,{{ amp | minus: amp | minus: 5 }} 1320,{{ amp | minus: amp | minus: 5 }} 1440,{{ amp | minus: 5 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
         {% endcase %}
       {% else %}
+        <!-- Fallback to medium 2 waves -->
         <path d="M0,0 L0,50 Q360,70 720,50 T1440,50 L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
       {% endif %}
     </svg>
@@ -373,63 +285,547 @@
   line-height: 1.2;
 }
 
-/* ===== CONTINUOUS SCROLLING STYLES ===== */
-.scrolling-wrapper {
-  overflow: hidden;
-  width: 100%;
-  position: relative;
-}
-
-.features-scroll-track {
-  display: flex;
-  gap: 60px;
+/* Features Grid */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 40px;
+  align-items: start;
+  justify-items: center;
   list-style: none;
   margin: 0;
   padding: 0;
-  width: fit-content;
-  animation: scroll var(--scroll-speed, 20s) linear infinite;
 }
 
-/* Pause animation on hover */
-.scrolling-wrapper:hover .features-scroll-track {
-  animation-play-state: paused;
-}
-
-/* Left to Right scrolling */
-.scroll-ltr .features-scroll-track {
-  animation-name: scrollLTR;
-}
-
-@keyframes scrollLTR {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-/* Right to Left scrolling */
-.scroll-rtl .features-scroll-track {
-  animation-name: scrollRTL;
-}
-
-@keyframes scrollRTL {
-  0% {
-    transform: translateX(-50%);
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-
-.scrolling-wrapper .feature-item {
-  flex-shrink: 0;
-  opacity: 1;
-  animation: none;
+/* Feature Item */
+.feature-item {
   display: flex;
   align-items: center;
   gap: 15px;
-  width: auto;
-  min-width: 250px;
+  width: 100%;
+  max-width: 400px;
+  opacity: 0;
+  animation: fadeIn 0.6s ease-out forwards;
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scroll Animations */
+.animate-scroll-left-right .feature-item {
+  animation: slideInLeft 0.8s ease-out forwards;
+}
+
+.animate-scroll-right-left .feature-item {
+  animation: slideInRight 0.8s ease-out forwards;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Respect Motion Preferences */
+@media (prefers-reduced-motion: reduce) {
+  .feature-item {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Feature Icon */
+.feature-icon-wrapper {
+  flex-shrink: 0;
+}
+
+.feature-icon {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature-icon svg {
+  width: 100%;
+  height: 100%;
+  max-width: 60px;
+  max-height: 60px;
+  display: block;
+}
+
+.feature-icon-image {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature-icon-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Feature Text */
+.feature-text-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+.feature-text {
+  margin: 0;
+  line-height: 1.4;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  text-align: left;
+}
+
+.feature-subtext {
+  margin: 5px 0 0 0;
+  line-height: 1.4;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  text-align: left;
+}
+
+/* Screen Reader Only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .feature-item {
+    border: 2px solid currentColor;
+    padding: 15px;
+    border-radius: 8px;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .feature-item {
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+  }
+  
+  .feature-text,
+  .feature-subtext {
+    text-align: center !important;
+  }
+  
+  .section-title {
+    margin-bottom: 30px;
+    font-size: calc({{ section.settings.title_size | default: 32 }}px * 0.8) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .features-grid {
+    gap: 25px;
+  }
+  
+  .feature-icon,
+  .feature-icon-image {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .section-title {
+    font-size: calc({{ section.settings.title_size | default: 32 }}px * 0.7) !important;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .features-wave-section {
+    background: white !important;
+  }
+  
+  .wave-top,
+  .wave-bottom {
+    display: none;
+  }
+  
+  .feature-item {
+    animation: none !important;
+    opacity: 1 !important;
+    break-inside: avoid;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Features with Waves",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_gradient",
+      "label": "Use Gradient Background",
+      "info": "Toggle between solid color and gradient",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "info": "Used when gradient is disabled",
+      "default": "#ffc4e1"
+    },
+    {
+      "type": "color_background",
+      "id": "background_gradient",
+      "label": "Background Gradient",
+      "info": "Used when gradient is enabled",
+      "default": "linear-gradient(135deg, #ffc4e1 0%, #b4d5ff 100%)"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 250,
+      "step": 10,
+      "default": 80,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 250,
+      "step": 10,
+      "default": 80,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "label": "Container Max Width",
+      "min": 800,
+      "max": 1400,
+      "step": 100,
+      "default": 1200,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Section Title (Optional)"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "info": "Leave blank to hide title (screen readers will still see 'Store Features')"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color",
+      "default": "#8b1538"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title Font Size",
+      "min": 20,
+      "max": 48,
+      "step": 2,
+      "default": 32,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "title_alignment",
+      "label": "Title Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Wave Settings"
+    },
+    {
+      "type": "select",
+      "id": "wave_shape",
+      "label": "Wave Shape",
+      "options": [
+        { "value": "gentle", "label": "Gentle - Subtle curves" },
+        { "value": "medium", "label": "Medium - Balanced waves" },
+        { "value": "dramatic", "label": "Dramatic - Deep curves" },
+        { "value": "sharp", "label": "Sharp - Angular peaks" },
+        { "value": "rounded", "label": "Rounded - Smooth arcs" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_top_wave",
+      "label": "Show Top Wave",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_bottom_wave",
+      "label": "Show Bottom Wave",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "wave_color",
+      "label": "Wave Color",
+      "default": "#ffd4e5"
+    },
+    {
+      "type": "range",
+      "id": "wave_overlap_top",
+      "label": "Top Wave Height",
+      "info": "How much the top wave extends upward",
+      "min": 20,
+      "max": 200,
+      "step": 10,
+      "default": 100,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "wave_overlap_bottom",
+      "label": "Bottom Wave Height",
+      "info": "How much the bottom wave extends downward",
+      "min": 20,
+      "max": 200,
+      "step": 10,
+      "default": 100,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "wave_frequency",
+      "label": "Wave Frequency",
+      "info": "Number of wave curves across the width",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "wave_amplitude",
+      "label": "Wave Amplitude",
+      "info": "How deep/tall the wave curves are (higher = more pronounced)",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "default": 25,
+      "unit": "%"
+    },
+    {
+      "type": "header",
+      "content": "Animation Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_scroll_animation",
+      "label": "Enable Scroll Animation",
+      "info": "Animates items on page load. Respects user motion preferences.",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "scroll_direction",
+      "label": "Animation Direction",
+      "options": [
+        { "value": "left-right", "label": "Left to Right" },
+        { "value": "right-left", "label": "Right to Left" }
+      ],
+      "default": "left-right"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature Item",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Icon Settings"
+        },
+        {
+          "type": "html",
+          "id": "icon_svg",
+          "label": "Icon SVG Code",
+          "info": "Paste SVG code here (e.g., from icons library)"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "OR Upload Icon Image",
+          "info": "Used if no SVG is provided"
+        },
+        {
+          "type": "text",
+          "id": "icon_label",
+          "label": "Icon Description",
+          "info": "For screen readers. Defaults to feature text if empty.",
+          "default": "Feature icon"
+        },
+        {
+          "type": "color",
+          "id": "icon_color",
+          "label": "Icon Color",
+          "info": "Only works with SVG icons",
+          "default": "#8b1538"
+        },
+        {
+          "type": "header",
+          "content": "Text Settings"
+        },
+        {
+          "type": "text",
+          "id": "feature_text",
+          "label": "Feature Text",
+          "default": "Feature description"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color",
+          "default": "#8b1538"
+        },
+        {
+          "type": "range",
+          "id": "text_size",
+          "label": "Text Size",
+          "min": 14,
+          "max": 24,
+          "step": 1,
+          "default": 18,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "text_weight",
+          "label": "Text Weight",
+          "options": [
+            { "value": "400", "label": "Normal" },
+            { "value": "500", "label": "Medium" },
+            { "value": "600", "label": "Semi Bold" },
+            { "value": "700", "label": "Bold" }
+          ],
+          "default": "600"
+        },
+        {
+          "type": "header",
+          "content": "Subtext (Optional)"
+        },
+        {
+          "type": "text",
+          "id": "feature_subtext",
+          "label": "Feature Subtext",
+          "info": "Optional smaller text below main feature text"
+        },
+        {
+          "type": "color",
+          "id": "subtext_color",
+          "label": "Subtext Color",
+          "default": "#666666"
+        },
+        {
+          "type": "range",
+          "id": "subtext_size",
+          "label": "Subtext Size",
+          "min": 12,
+          "max": 18,
+          "step": 1,
+          "default": 14,
+          "unit": "px"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Features with Waves",
+      "category": "Custom",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "icon_svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z'/><polyline points='7.5 4.21 12 6.81 16.5 4.21'/><polyline points='7.5 19.79 7.5 14.6 3 12'/><polyline points='21 12 16.5 14.6 16.5 19.79'/><polyline points='3.27 6.96 12 12.01 20.73 6.96'/><line x1='12' y1='22.08' x2='12' y2='12'/></svg>",
+            "icon_label": "Package icon representing free returns",
+            "feature_text": "FREE RETURNS"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon_svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='9' cy='21' r='1'/><circle cx='20' cy='21' r='1'/><path d='M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6'/></svg>",
+            "icon_label": "Shopping cart icon representing secure checkout",
+            "feature_text": "SECURE CHECKOUT"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon_svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='1' y='3' width='15' height='13'/><polygon points='16 8 20 8 23 11 23 16 16 16 16 8'/><circle cx='5.5' cy='18.5' r='2.5'/><circle cx='18.5' cy='18.5' r='2.5'/></svg>",
+            "icon_label": "Delivery truck icon representing free shipping",
+            "feature_text": "FREE SHIPPING OVER $75"
+          }
+        }
+      ]
+    }
+  ],
+  "templates": ["index", "collection", "page", "product"]
+}
+{% endschema %}
