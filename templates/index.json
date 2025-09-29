@@ -175,7 +175,7 @@
         "badge_spin_speed": 10,
         "card_background": "#ffffff",
         "card_border_radius": 15,
-        "card_padding": 20,
+        "card_padding": 30,
         "placeholder_color": "#f0f0f0",
         "sale_badge_color": "#ff4444",
         "show_ratings": true,
