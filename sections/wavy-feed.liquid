@@ -78,7 +78,8 @@
            {{ block.shopify_attributes }}>
           <div class="feed-thumb" style="--ratio: {{ section.settings.aspect_ratio | default: 1 }}">
             {% if img %}
-              {{ img | image_tag:
+              {% assign img_url = img | image_url: width: 1200 %}
+              {{ img_url | image_tag:
                 alt: block.settings.alt_text,
                 loading: 'lazy',
                 decoding: 'async',
