@@ -1,13 +1,17 @@
-<!-- SEO & Accessibility Optimized Features Section with Waves -->
+<!-- SEO & Accessibility Optimized Features Section with Overlapping Waves -->
 <section class="features-wave-section" 
          role="region"
          aria-labelledby="features-title"
          style="background: {{ section.settings.background_gradient }}; 
-                padding: {{ section.settings.section_padding_top }}px 20px {{ section.settings.section_padding_bottom }}px 20px;">
+                padding: {{ section.settings.section_padding_top }}px 20px {{ section.settings.section_padding_bottom }}px 20px;
+                margin-top: {{ section.settings.wave_overlap_top }}px;
+                margin-bottom: {{ section.settings.wave_overlap_bottom }}px;">
   
   <!-- Top Wave -->
   {% if section.settings.show_top_wave %}
-  <div class="wave-top" aria-hidden="true">
+  <div class="wave-top" 
+       style="top: -{{ section.settings.wave_overlap_top }}px; height: {{ section.settings.wave_height }}px;"
+       aria-hidden="true">
     <svg viewBox="0 0 1440 120" 
          fill="none" 
          xmlns="http://www.w3.org/2000/svg"
@@ -99,7 +103,9 @@
   
   <!-- Bottom Wave -->
   {% if section.settings.show_bottom_wave %}
-  <div class="wave-bottom" aria-hidden="true">
+  <div class="wave-bottom" 
+       style="bottom: -{{ section.settings.wave_overlap_bottom }}px; height: {{ section.settings.wave_height }}px;"
+       aria-hidden="true">
     <svg viewBox="0 0 1440 120" 
          fill="none" 
          xmlns="http://www.w3.org/2000/svg"
@@ -118,28 +124,27 @@
 /* Base Section */
 .features-wave-section {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+  z-index: 1;
 }
 
 /* Waves */
 .wave-top {
   position: absolute;
-  top: 0;
   left: 0;
   width: 100%;
-  height: 60px;
   line-height: 0;
   pointer-events: none;
+  z-index: 2;
 }
 
 .wave-bottom {
   position: absolute;
-  bottom: 0;
   left: 0;
   width: 100%;
-  height: 60px;
   line-height: 0;
   pointer-events: none;
+  z-index: 2;
 }
 
 .wave-top svg,
