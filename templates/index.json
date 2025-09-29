@@ -197,6 +197,70 @@
         "cart_button_text_size": 14
       }
     },
+    "wavy_feed_AgMWDx": {
+      "type": "wavy-feed",
+      "blocks": {
+        "image_card_RE7c4p": {
+          "type": "image_card",
+          "settings": {
+            "alt_text": "Feed image",
+            "link": ""
+          }
+        },
+        "image_card_HQikmB": {
+          "type": "image_card",
+          "settings": {
+            "alt_text": "Feed image",
+            "link": ""
+          }
+        },
+        "image_card_k9mAfn": {
+          "type": "image_card",
+          "settings": {
+            "alt_text": "Feed image",
+            "link": ""
+          }
+        },
+        "image_card_rg6FWe": {
+          "type": "image_card",
+          "settings": {
+            "alt_text": "Feed image",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_card_RE7c4p",
+        "image_card_HQikmB",
+        "image_card_k9mAfn",
+        "image_card_rg6FWe"
+      ],
+      "name": "Feed with Waves",
+      "settings": {
+        "use_gradient": true,
+        "background_color": "#ffd8d8",
+        "background_gradient": "linear-gradient(0deg, rgba(255, 224, 230, 1), rgba(255, 215, 220, 1) 100%)",
+        "section_padding_top": 80,
+        "section_padding_bottom": 80,
+        "container_width": 1200,
+        "section_title": "Check our Feed",
+        "title_color": "#7b1d2a",
+        "title_size": 36,
+        "title_alignment": "center",
+        "wave_shape": "medium",
+        "show_top_wave": true,
+        "show_bottom_wave": true,
+        "wave_color": "#ffd8d8",
+        "wave_overlap_top": 50,
+        "wave_overlap_bottom": 50,
+        "wave_frequency": 4,
+        "wave_amplitude": 40,
+        "aspect_ratio": 1,
+        "card_bg": "#FFFFFF",
+        "card_radius": 18,
+        "card_gap": 20
+      }
+    },
     "1654344025e2796207": {
       "type": "home-image-gallery",
       "blocks": {
@@ -263,6 +327,7 @@
         "image_image_m6RGqC",
         "image_image_qFYzDB"
       ],
+      "disabled": true,
       "name": "Instagram feed",
       "settings": {
         "full": true,
@@ -1154,6 +1219,7 @@
     "17581245162114d6d7",
     "wavy_features_MDYa7y",
     "2_test_section_claude_9VyBTH",
+    "wavy_feed_AgMWDx",
     "1654344025e2796207",
     "test_section_claude_rPAKbF",
     "home_featured_collection_ePRkBR",
