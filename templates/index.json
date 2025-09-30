@@ -511,46 +511,31 @@
     "1654336925c509c587": {
       "type": "home-testimonial",
       "blocks": {
-        "165433692522d3ac96-0": {
-          "type": "content",
-          "settings": {
-            "quote": "<p>Lorem ipsum dolor sit amet, ctetur adipiscing elit, sed do. Lorem ipsum dolor sit amet.</p>",
-            "author": "Sakira Kent K. John",
-            "job": "Smoothie lover",
-            "star": "4"
-          }
-        },
-        "d1fa23f4-639a-470a-9f88-509f45f31ef3": {
-          "type": "content",
-          "settings": {
-            "quote": "<p>Torem ipsum dolor sit amet, ctetur adipiscing elit, sed do. Lorem ipsum dolor sit amet.</p>",
-            "author": "Hemanta M.Gomes",
-            "job": "Smoothie lover",
-            "star": "5"
-          }
-        },
         "7bd69ef4-78eb-421b-9782-9be8d5d46fc2": {
           "type": "content",
           "settings": {
             "quote": "<p>Porem ipsum dolor sit amet, ctetur adipiscing elit, sed do. Lorem ipsum dolor sit amet.</p>",
+            "icon": "shopify://shop_images/SpicyLove.png",
             "author": "Author Name",
             "job": "Author Designation",
             "star": "3"
           }
         },
-        "a07d22ae-54a5-4835-a825-ddae028cf967": {
+        "content_d99CYk": {
           "type": "content",
           "settings": {
-            "quote": "<p>Gorem ipsum dolor sit amet, ctetur adipiscing elit, sed do.Lorem ipsum dolor sit amet.</p>",
-            "author": "Alexnder N. Flowers",
-            "job": "Smoothie lover",
+            "quote": "<p>Porem ipsum dolor sit amet, ctetur adipiscing elit, sed do. Lorem ipsum dolor sit amet.</p>",
+            "icon": "shopify://shop_images/SpicyLove.png",
+            "author": "Author Name",
+            "job": "Author Designation",
             "star": "3"
           }
         },
-        "content_7maVr8": {
+        "content_CNPyjX": {
           "type": "content",
           "settings": {
-            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type.</p>",
+            "quote": "<p>Porem ipsum dolor sit amet, ctetur adipiscing elit, sed do. Lorem ipsum dolor sit amet.</p>",
+            "icon": "shopify://shop_images/SpicyLove.png",
             "author": "Author Name",
             "job": "Author Designation",
             "star": "3"
@@ -558,11 +543,9 @@
         }
       },
       "block_order": [
-        "165433692522d3ac96-0",
-        "d1fa23f4-639a-470a-9f88-509f45f31ef3",
         "7bd69ef4-78eb-421b-9782-9be8d5d46fc2",
-        "a07d22ae-54a5-4835-a825-ddae028cf967",
-        "content_7maVr8"
+        "content_d99CYk",
+        "content_CNPyjX"
       ],
       "custom_css": [],
       "settings": {
@@ -585,7 +568,7 @@
         "section_heading_color": "#1a1a1a",
         "section_sub_heading_color": "#1a1a1a",
         "section_description_color": "",
-        "section_button_bg_color": "",
+        "section_button_bg_color": "rgba(0,0,0,0)",
         "section_button_text_color": "",
         "section_button_hover_bg_color": "",
         "section_button_hover_text_color": "",
@@ -599,13 +582,13 @@
         "quote_style": "no-quote-icon",
         "author_info_style": "style_2",
         "border_radius": "50%",
-        "boxed_border_radius": "24",
-        "column_gap": "24",
+        "boxed_border_radius": "32",
+        "column_gap": "32",
         "content_width": "30/70",
         "lap_content_width": "20/80",
         "vertical_position": "vertical-center",
         "testimonial_border_color": "rgba(0,0,0,0)",
-        "testimonial_background_color": "rgba(0,0,0,0)",
+        "testimonial_background_color": "#ffffff",
         "testimonial_content_color": "#343434",
         "testimonial_review_color": "#f5ba2d",
         "testimonial_author_text_color": "#343434",
