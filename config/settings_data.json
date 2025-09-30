@@ -486,7 +486,7 @@
           "spacing_both_ends": true,
           "padding": "100,100",
           "top_space": 0,
-          "footer_bg_clr": "#ffffff",
+          "footer_bg_clr": "#881d3e",
           "color_opacity": 1,
           "show_footer_title": true,
           "footer_heading_clr": "#343434",
