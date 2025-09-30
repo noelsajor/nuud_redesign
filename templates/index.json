@@ -625,7 +625,7 @@
       "settings": {
         "collection": "fir-him",
         "products_to_show": 3,
-        "min_product_width": 350,
+        "min_product_width": 300,
         "background_color": "#f8f8f8",
         "section_padding_top": 100,
         "section_padding_bottom": 100,
