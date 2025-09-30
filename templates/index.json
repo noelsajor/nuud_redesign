@@ -738,7 +738,7 @@
         "background_style": "fixed",
         "background_size": "auto",
         "enable_overlay": true,
-        "background_color": "#fff64f",
+        "background_color": "#ffffff",
         "overlay_transparency": "1",
         "section_heading": "Latest news",
         "section_sub_heading": "Latest news",
