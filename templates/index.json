@@ -249,7 +249,7 @@
         "background_gradient": "linear-gradient(0deg, rgba(255, 224, 230, 1), rgba(255, 215, 220, 1) 100%)",
         "section_padding_top": 40,
         "section_padding_bottom": 40,
-        "container_width": 1200,
+        "container_width": 1600,
         "section_title": "Check our feed",
         "title_color": "#7b1d2a",
         "title_size": 40,
@@ -265,7 +265,7 @@
         "aspect_ratio": 1,
         "card_bg": "#ffffff",
         "card_radius": 18,
-        "card_gap": 20
+        "card_gap": 32
       }
     },
     "1654344025e2796207": {
