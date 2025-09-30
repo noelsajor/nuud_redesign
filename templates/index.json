@@ -741,7 +741,7 @@
         "background_color": "#ffffff",
         "overlay_transparency": "1",
         "section_heading": "Latest news",
-        "section_sub_heading": "Latest news",
+        "section_sub_heading": "",
         "section_description": "",
         "section_button_text": "See all",
         "section_button_link": "shopify://blogs/news",
