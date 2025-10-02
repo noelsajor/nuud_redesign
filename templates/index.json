@@ -600,7 +600,7 @@
             "author": "Author Name",
             "job": "Author Designation",
             "star": "3",
-            "photo": "shopify://shop_images/Section_girl.webp"
+            "photo": "shopify://shop_images/Rectangle_96_e03b2b75-8d2a-4e0d-994b-12bed3406c3f.png"
           }
         },
         "content_d99CYk": {
@@ -622,7 +622,7 @@
             "author": "Author Name",
             "job": "Author Designation",
             "star": "3",
-            "photo": "shopify://shop_images/Section_girl.webp"
+            "photo": "shopify://shop_images/Rectangle_97.png"
           }
         },
         "content_CNPyjX": {
@@ -636,7 +636,7 @@
             "star": "3"
           }
         },
-        "content_3Jxe6U": {
+        "content_pFdJJD": {
           "type": "content",
           "settings": {
             "review_type": "photo",
@@ -644,7 +644,7 @@
             "author": "Author Name",
             "job": "Author Designation",
             "star": "3",
-            "photo": "shopify://shop_images/Section_girl.webp"
+            "photo": "shopify://shop_images/Rectangle_97.png"
           }
         }
       },
@@ -654,7 +654,7 @@
         "content_d99CYk",
         "content_CBwdHX",
         "content_CNPyjX",
-        "content_3Jxe6U"
+        "content_pFdJJD"
       ],
       "custom_css": [],
       "settings": {
