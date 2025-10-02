@@ -741,8 +741,8 @@
         "cart_button_text_color": "#ffffff",
         "cart_button_radius": 25,
         "cart_button_text_size": 14,
-        "enable_image_pop": true,
-        "image_pop_amount": 40
+        "enable_image_pop": false,
+        "image_pop_amount": 0
       }
     },
     "faq_section_8ifTKi": {
