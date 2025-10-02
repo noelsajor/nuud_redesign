@@ -59,37 +59,22 @@
 
         {% render 'section-heading', class: section.id %}
 
-        {%- assign use_slider = section.settings.enable_slider -%}
-
-        {% if use_slider %}
+        {% if section.settings.enable_slider %}
           <div class="dt-sc-swiper-slider swiper-container {% if section.settings.dots %} {{ section.settings.carousel_pagination_bottom_alignment }} {{ section.settings.carousel_pagination_alignment }} {% endif %} {% if section.settings.arrows %} {{ section.settings.nav_arrow_position }} {{ section.settings.center_nav_arrow_alignment }} {% endif %}">
         {% endif %}
 
-        {% if use_slider %}
+        {% if section.settings.enable_slider %}
           <div id="swiper-{{section.id}}-slider">
         {% endif %}
 
-        <div class="dt-sc-testimonial-section {{ section.settings.boxed_styles }} {% if use_slider %}swiper-wrapper{% endif %} {% unless use_slider %}dt-sc-column{% endunless %}{% unless use_slider %} {{column}}{% endunless %}"
-             data-load-more="{{ section.settings.load_more_enabled }}"
-             data-initial="{{ section.settings.load_more_initial }}"
-             data-step="{{ section.settings.load_more_step }}">
+        <div class="dt-sc-testimonial-section {{ section.settings.boxed_styles }} {% if section.settings.enable_slider %}swiper-wrapper{% endif %} {% unless section.settings.enable_slider %}dt-sc-column{% endunless %}{% unless section.settings.enable_slider %} {{column}}{% endunless %}">
 
           {% for block in section.blocks %}
             {% assign review_type = block.settings.review_type | default: 'full' %}
 
-            {% comment %} Per-block aspect ratio override → expose CSS var on this card {% endcomment %}
-            {% assign block_aspect = block.settings.card_aspect_ratio_override | default: 'inherit' %}
-            {% if block_aspect != 'inherit' %}
-              {% assign card_aspect_style = '--card-aspect: ' | append: block_aspect | append: ';' %}
-            {% else %}
-              {% assign card_aspect_style = '' %}
-            {% endif %}
-
             {% if review_type == 'photo' %}
-              {%- comment -%} PHOTO REVIEW CARD (image-only, no inner padding, inherits border/radius) {%- endcomment -%}
-              <div class="dt-sc-testimonial {% if use_slider %}swiper-slide{% endif %} review-type-photo {{section.settings.block_style}} {{section.settings.vertical_position}}"
-                   style="{{ card_aspect_style }}"
-                   data-idx="{{ forloop.index0 }}">
+              {%- comment -%} PHOTO REVIEW CARD (flush image, inherits card border/radius) {%- endcomment -%}
+              <div class="dt-sc-testimonial {% if section.settings.enable_slider %}swiper-slide{% endif %} review-type-photo {{section.settings.block_style}} {{section.settings.vertical_position}}">
                 <div class="dt-sc-testimonial-content {{section.settings.text_position}}">
                   <div class="dt-sc-testimonial-content-inner">
                     <div class="dt-sc-testimonial-photo">
@@ -107,12 +92,10 @@
               </div>
 
             {% else %}
-              {%- comment -%} FULL REVIEW CARD {%- endcomment -%}
+              {%- comment -%} FULL REVIEW CARD (existing styles) {%- endcomment -%}
 
               {% if section.settings.block_style == 'style_1' %}
-                <div class="dt-sc-testimonial {% if use_slider %}swiper-slide{% endif %} {% if section.settings.reverse_column %}reverse{% endif %} {{section.settings.quote_style}} {{section.settings.block_style}} {{section.settings.vertical_position}}"
-                     style="{{ card_aspect_style }}"
-                     data-idx="{{ forloop.index0 }}">
+                <div class="dt-sc-testimonial {% if section.settings.enable_slider %}swiper-slide{% endif %} {% if section.settings.reverse_column %}reverse{% endif %} {{section.settings.quote_style}} {{section.settings.block_style}} {{section.settings.vertical_position}}">
                   {% if block.settings.icon != blank %}
                     <div class="dt-sc-testimonial-image">
                       <img src="{{ block.settings.icon | img_url: 'large' }}"
@@ -128,43 +111,20 @@
                       <div class="dt-sc-testimonial-quote">{% if block.settings.quote != blank %}{{ block.settings.quote }}{% endif %}</div>
 
                       {% unless block.settings.star == '0' %}
-                        {% comment %} Inline SVG rating (no Font Awesome) {% endcomment %}
-                        {% assign star_value = block.settings.star %}
-                        {% case star_value %}
-                          {% when '0' %}{% assign full = 0 %}{% assign half = 0 %}
-                          {% when '0.5' %}{% assign full = 0 %}{% assign half = 1 %}
-                          {% when '1' %}{% assign full = 1 %}{% assign half = 0 %}
-                          {% when '1.5' %}{% assign full = 1 %}{% assign half = 1 %}
-                          {% when '2' %}{% assign full = 2 %}{% assign half = 0 %}
-                          {% when '2.5' %}{% assign full = 2 %}{% assign half = 1 %}
-                          {% when '3' %}{% assign full = 3 %}{% assign half = 0 %}
-                          {% when '3.5' %}{% assign full = 3 %}{% assign half = 1 %}
-                          {% when '4' %}{% assign full = 4 %}{% assign half = 0 %}
-                          {% when '4.5' %}{% assign full = 4 %}{% assign half = 1 %}
-                          {% when '5' %}{% assign full = 5 %}{% assign half = 0 %}
-                        {% endcase %}
-                        {% assign empty = 5 | minus: full | minus: half %}
-                        <div class="dt-sc-author-rating dt-sc-rating" aria-label="{{ star_value }} out of 5">
-                          {% for i in (1..full) %}
-                            <span class="rating-star rating-star--full" aria-hidden="true">
-                              <svg viewBox="0 0 24 24"><path class="fill" d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            </span>
-                          {% endfor %}
-                          {% if half == 1 %}
-                            <span class="rating-star rating-star--half" aria-hidden="true">
-                              <span class="bg">
-                                <svg viewBox="0 0 24 24"><path class="fill" d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                              </span>
-                              <span class="fg">
-                                <svg viewBox="0 0 24 24"><path class="fill" d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                              </span>
-                            </span>
-                          {% endif %}
-                          {% for i in (1..empty) %}
-                            <span class="rating-star rating-star--empty" aria-hidden="true">
-                              <svg viewBox="0 0 24 24"><path class="fill" d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            </span>
-                          {% endfor %}
+                        <div class="dt-sc-author-rating">
+                          {% case block.settings.star %}
+                            {% when '0' %}<div class="no-star-rating"></div>
+                            {% when '0.5' %}<div class="half-star-rating"></div>
+                            {% when '1' %}<div class="one-star-rating"></div>
+                            {% when '1.5' %}<div class="one-half-star-rating"></div>
+                            {% when '2' %}<div class="two-star-rating"></div>
+                            {% when '2.5' %}<div class="two-half-star-rating"></div>
+                            {% when '3' %}<div class="three-star-rating"></div>
+                            {% when '3.5' %}<div class="three-half-star-rating"></div>
+                            {% when '4' %}<div class="four-star-rating"></div>
+                            {% when '4.5' %}<div class="four-half-star-rating"></div>
+                            {% when '5' %}<div class="five-star-rating"></div>
+                          {% endcase %}
                         </div>
                       {% endunless %}
 
@@ -178,50 +138,26 @@
                 </div>
 
               {% elsif section.settings.block_style == 'style_2' %}
-                <div class="dt-sc-testimonial {% if use_slider %}swiper-slide{% endif %} {% if section.settings.reverse_column %}reverse{% endif %} {{section.settings.quote_style}} {{section.settings.block_style}}"
-                     style="{{ card_aspect_style }}"
-                     data-idx="{{ forloop.index0 }}">
+                <div class="dt-sc-testimonial {% if section.settings.enable_slider %}swiper-slide{% endif %} {% if section.settings.reverse_column %}reverse{% endif %} {{section.settings.quote_style}} {{section.settings.block_style}}">
                   <div class="dt-sc-testimonial-content {{section.settings.text_position}}">
                     <div class="dt-sc-testimonial-content-inner">
 
                       <div class="dt-sc-testimonial-quote-content">
                         <div class="dt-sc-testimonial-quote">{% if block.settings.quote != blank %}{{ block.settings.quote }}{% endif %}</div>
-                        {% assign star_value = block.settings.star %}
-                        {% case star_value %}
-                          {% when '0' %}{% assign full = 0 %}{% assign half = 0 %}
-                          {% when '0.5' %}{% assign full = 0 %}{% assign half = 1 %}
-                          {% when '1' %}{% assign full = 1 %}{% assign half = 0 %}
-                          {% when '1.5' %}{% assign full = 1 %}{% assign half = 1 %}
-                          {% when '2' %}{% assign full = 2 %}{% assign half = 0 %}
-                          {% when '2.5' %}{% assign full = 2 %}{% assign half = 1 %}
-                          {% when '3' %}{% assign full = 3 %}{% assign half = 0 %}
-                          {% when '3.5' %}{% assign full = 3 %}{% assign half = 1 %}
-                          {% when '4' %}{% assign full = 4 %}{% assign half = 0 %}
-                          {% when '4.5' %}{% assign full = 4 %}{% assign half = 1 %}
-                          {% when '5' %}{% assign full = 5 %}{% assign half = 0 %}
-                        {% endcase %}
-                        {% assign empty = 5 | minus: full | minus: half %}
-                        <div class="dt-sc-author-rating dt-sc-rating" aria-label="{{ star_value }} out of 5">
-                          {% for i in (1..full) %}
-                            <span class="rating-star rating-star--full" aria-hidden="true">
-                              <svg viewBox="0 0 24 24"><path class="fill" d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            </span>
-                          {% endfor %}
-                          {% if half == 1 %}
-                            <span class="rating-star rating-star--half" aria-hidden="true">
-                              <span class="bg">
-                                <svg viewBox="0 0 24 24"><path class="fill" d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                              </span>
-                              <span class="fg">
-                                <svg viewBox="0 0 24 24"><path class="fill" d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                              </span>
-                            </span>
-                          {% endif %}
-                          {% for i in (1..empty) %}
-                            <span class="rating-star rating-star--empty" aria-hidden="true">
-                              <svg viewBox="0 0 24 24"><path class="fill" d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            </span>
-                          {% endfor %}
+                        <div class="dt-sc-author-rating">
+                          {% case block.settings.star %}
+                            {% when '0' %}<div class="no-star-rating"></div>
+                            {% when '0.5' %}<div class="half-star-rating"></div>
+                            {% when '1' %}<div class="one-star-rating"></div>
+                            {% when '1.5' %}<div class="one-half-star-rating"></div>
+                            {% when '2' %}<div class="two-star-rating"></div>
+                            {% when '2.5' %}<div class="two-half-star-rating"></div>
+                            {% when '3' %}<div class="three-star-rating"></div>
+                            {% when '3.5' %}<div class="three-half-star-rating"></div>
+                            {% when '4' %}<div class="four-star-rating"></div>
+                            {% when '4.5' %}<div class="four-half-star-rating"></div>
+                            {% when '5' %}<div class="five-star-rating"></div>
+                          {% endcase %}
                         </div>
                       </div>
 
@@ -249,9 +185,7 @@
                 </div>
 
               {% elsif section.settings.block_style == 'style_3' %}
-                <div class="dt-sc-testimonial {{section.settings.text_position}} {% if use_slider %}swiper-slide{% endif %} {% if section.settings.reverse_column %}reverse{% endif %} {{section.settings.quote_style}} {{section.settings.block_style}}"
-                     style="{{ card_aspect_style }}"
-                     data-idx="{{ forloop.index0 }}">
+                <div class="dt-sc-testimonial {{section.settings.text_position}} {% if section.settings.enable_slider %}swiper-slide{% endif %} {% if section.settings.reverse_column %}reverse{% endif %} {{section.settings.quote_style}} {{section.settings.block_style}}">
                   {% if block.settings.icon != blank %}
                     <div class="dt-sc-testimonial-image">
                       <img class="lazyload"
@@ -278,42 +212,20 @@
                         </div>
                       {% endif %}
 
-                      {% assign star_value = block.settings.star %}
-                      {% case star_value %}
-                        {% when '0' %}{% assign full = 0 %}{% assign half = 0 %}
-                        {% when '0.5' %}{% assign full = 0 %}{% assign half = 1 %}
-                        {% when '1' %}{% assign full = 1 %}{% assign half = 0 %}
-                        {% when '1.5' %}{% assign full = 1 %}{% assign half = 1 %}
-                        {% when '2' %}{% assign full = 2 %}{% assign half = 0 %}
-                        {% when '2.5' %}{% assign full = 2 %}{% assign half = 1 %}
-                        {% when '3' %}{% assign full = 3 %}{% assign half = 0 %}
-                        {% when '3.5' %}{% assign full = 3 %}{% assign half = 1 %}
-                        {% when '4' %}{% assign full = 4 %}{% assign half = 0 %}
-                        {% when '4.5' %}{% assign full = 4 %}{% assign half = 1 %}
-                        {% when '5' %}{% assign full = 5 %}{% assign half = 0 %}
-                      {% endcase %}
-                      {% assign empty = 5 | minus: full | minus: half %}
-                      <div class="dt-sc-author-rating dt-sc-rating" aria-label="{{ star_value }} out of 5">
-                        {% for i in (1..full) %}
-                          <span class="rating-star rating-star--full" aria-hidden="true">
-                            <svg viewBox="0 0 24 24"><path class="fill" d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                          </span>
-                        {% endfor %}
-                        {% if half == 1 %}
-                          <span class="rating-star rating-star--half" aria-hidden="true">
-                            <span class="bg">
-                              <svg viewBox="0 0 24 24"><path class="fill" d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            </span>
-                            <span class="fg">
-                              <svg viewBox="0 0 24 24"><path class="fill" d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            </span>
-                          </span>
-                        {% endif %}
-                        {% for i in (1..empty) %}
-                          <span class="rating-star rating-star--empty" aria-hidden="true">
-                            <svg viewBox="0 0 24 24"><path class="fill" d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                          </span>
-                        {% endfor %}
+                      <div class="dt-sc-author-rating">
+                        {% case block.settings.star %}
+                          {% when '0' %}<div class="no-star-rating"></div>
+                          {% when '0.5' %}<div class="half-star-rating"></div>
+                          {% when '1' %}<div class="one-star-rating"></div>
+                          {% when '1.5' %}<div class="one-half-star-rating"></div>
+                          {% when '2' %}<div class="two-star-rating"></div>
+                          {% when '2.5' %}<div class="two-half-star-rating"></div>
+                          {% when '3' %}<div class="three-star-rating"></div>
+                          {% when '3.5' %}<div class="three-half-star-rating"></div>
+                          {% when '4' %}<div class="four-star-rating"></div>
+                          {% when '4.5' %}<div class="four-half-star-rating"></div>
+                          {% when '5' %}<div class="five-star-rating"></div>
+                        {% endcase %}
                       </div>
                     </div>
                   </div>
@@ -324,9 +236,9 @@
           {% endfor %}
         </div>
 
-        {% if use_slider %}</div>{% endif %}
+        {% if section.settings.enable_slider %}</div>{% endif %}
 
-        {% if use_slider %}
+        {% if section.settings.enable_slider %}
           {% if section.settings.arrows %}
             <div class="swiper-{{ section.id}}-arrows swiper-arrows">
               <div id="swiper-{{ section.id}}-next" class="swiper-button-next dt-sc-btn"></div>
@@ -338,17 +250,7 @@
           {% endif %}
         {% endif %}
 
-        {% unless use_slider %}
-          {% if section.settings.load_more_enabled and section.blocks.size > section.settings.load_more_initial %}
-            <div class="dt-sc-load-more-wrap" style="text-align:center; margin-top: 20px;">
-              <button class="dt-sc-load-more-btn" data-target="#shopify-section-{{section.id}}" type="button">
-                {{ section.settings.load_more_button_text }}
-              </button>
-            </div>
-          {% endif %}
-        {% endunless %}
-
-        {% if use_slider %}</div>{% endif %}
+        {% if section.settings.enable_slider %}</div>{% endif %}
 
       </div>
     </div>
@@ -375,13 +277,12 @@
 {% assign padding_top = padding[0] %}
 {% assign padding_bottom = padding[1] %}
 
-/* ---------- Global card aspect ratio variable ---------- */
+/* ---------- Global card aspect ratio variable (auto when not set) ---------- */
 #shopify-section-{{section.id}}.home-testimonial-block{
   --card-aspect: {% if section.settings.card_aspect_ratio == blank or section.settings.card_aspect_ratio == 'none' %}auto{% else %}{{ section.settings.card_aspect_ratio }}{% endif %};
-  --star-color: {{ section.settings.testimonial_review_color | default: '#f5a623' }};
 }
 
-/* Apply aspect ratio to the element that visually looks like "the card" per boxed style */
+/* Apply aspect ratio to full-review cards when user sets one */
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.overall_boxed .dt-sc-testimonial{
   aspect-ratio: var(--card-aspect);
 }
@@ -390,14 +291,19 @@
   aspect-ratio: var(--card-aspect);
 }
 
-/* Photo reviews: enforce cropping to the card frame */
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial.review-type-photo{ overflow:hidden; }
+/* Photo reviews: always have a solid aspect (fallback to 4/5 if editor setting is 'none') */
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial.review-type-photo{
+  position: relative;
+  display: block;
+  aspect-ratio: {% if section.settings.card_aspect_ratio == blank or section.settings.card_aspect_ratio == 'none' %}4/5{% else %}{{ section.settings.card_aspect_ratio }}{% endif %};
+  overflow:hidden;
+}
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.overall_boxed .dt-sc-testimonial.review-type-photo{ padding:0; }
 
 /* If using content/quote boxed on photo cards, keep border/radius but remove padding and clip */
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.content_boxed .dt-sc-testimonial.review-type-photo .dt-sc-testimonial-content .dt-sc-testimonial-content-inner,
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.quote_boxed .dt-sc-testimonial.review-type-photo .dt-sc-testimonial-content .dt-sc-testimonial-content-inner{
-  padding:0; overflow:hidden;
+  padding:0; overflow:hidden; height:100%;
 }
 
 /* Ensure quote_boxed photo card has a card shell (border/radius) */
@@ -423,7 +329,7 @@
 }
 
 #shopify-section-{{section.id}}.home-testimonial-block .rightimage {
-  animation: bounce 5s infinite linear;
+  animation: bounce 5s infinite linear; /* keep original */
   top: 120px; bottom:auto; right:70px; background-size: contain;
 }
 
@@ -519,17 +425,7 @@
   font-family: var(--DTFontTypo_Body); font-size:18px; letter-spacing:0;
 }
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content { color: {{ section.settings.testimonial_content_color }}; }
-
-/* NEW: SVG rating styles */
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-rating { display:flex; gap:6px; align-items:center; margin-top: 8px; }
-#shopify-section-{{section.id}}.home-testimonial-block .rating-star { width:18px; height:18px; position:relative; display:inline-block; }
-#shopify-section-{{section.id}}.home-testimonial-block .rating-star svg { width:100%; height:100%; display:block; }
-#shopify-section-{{section.id}}.home-testimonial-block .rating-star .fill { stroke: var(--star-color); stroke-width: 1.2; fill: none; }
-#shopify-section-{{section.id}}.home-testimonial-block .rating-star--full .fill { fill: var(--star-color); }
-#shopify-section-{{section.id}}.home-testimonial-block .rating-star--empty .fill { fill: none; }
-#shopify-section-{{section.id}}.home-testimonial-block .rating-star--half .bg .fill { fill: none; }
-#shopify-section-{{section.id}}.home-testimonial-block .rating-star--half .fg { position:absolute; inset:0 auto 0 0; width:50%; overflow:hidden; }
-#shopify-section-{{section.id}}.home-testimonial-block .rating-star--half .fg .fill { fill: var(--star-color); }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="star-rating"] { color: {{ section.settings.testimonial_review_color }}; }
 
 /* Quote icon masks */
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial[class*="quote-icon-in-"] .dt-sc-testimonial-content .dt-sc-testimonial-content-inner:before,
@@ -554,6 +450,8 @@
   mask-size: 100%; mask-repeat: no-repeat; mask-position: center;
   -webkit-mask-size: 100%; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;
 }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial[class*="quote-icon-in-content"] .dt-sc-testimonial-content.text-center .dt-sc-testimonial-content-inner:before { justify-content:center; margin:auto; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial[class*="quote-icon-in-content"] .dt-sc-testimonial-content.text-end .dt-sc-testimonial-content-inner:before { justify-content:flex-end; margin-left:auto; }
 
 /* Boxed styles (base) */
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.content_boxed .dt-sc-testimonial:not(.style_2) .dt-sc-testimonial-content .dt-sc-testimonial-content-inner,
@@ -593,9 +491,9 @@
 }
 
 /* Photo fills the card */
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-photo { width: 100%; height: 100%; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-photo { position:absolute; inset:0; width: 100%; height: 100%; }
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-photo img {
-  display:block; width:100%; height:100%; object-fit: cover; border-radius: inherit;
+  display:block; width:100%; height:100%; object-fit: cover; object-position:center; border-radius: inherit;
 }
 
 /* Author layout + separators */
@@ -634,7 +532,6 @@
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content.text-center .dt-sc-author-info.style_2 cite span:before { right:0; margin:auto; }
 
 /* Style 2 specifics */
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2 { gap: calc(.5*{{section.settings.column_gap}}px); }
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2 .dt-sc-testimonial-content { width:100%; }
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2 .dt-sc-testimonial-content .dt-sc-testimonial-content-inner {
   margin:auto; width:100%; display:grid; gap: calc(.5*{{section.settings.column_gap}}px);
@@ -671,8 +568,11 @@
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-end,
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-end cite { justify-content:flex-end; }
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-center .dt-sc-testimonial-content .dt-sc-author-info cite span { justify-content:center; }
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-center .dt-sc-testimonial-content .dt-sc-author-info style_2 cite span:before,
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-center .dt-sc-testimonial-content .dt-sc-author-info cite span:before,
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-end .dt-sc-testimonial-content .dt-sc-author-info cite span:before { right:0; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-end .dt-sc-testimonial-content .dt-sc-author-info cite span { justify-content:flex-end; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-center .dt-sc-testimonial-content .dt-sc-author-info.style_2 cite span:before { right:0; left:0; margin:auto; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-end .dt-sc-testimonial-content .dt-sc-author-info.style_2 cite span:before { right:0; left:auto; }
 
 /* Swiper spacing */
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-swiper-slider.swiper-container[class*=navigation-bottom] { padding-bottom: 50px; }
@@ -694,7 +594,34 @@
   #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content{padding:0 30px;}
 }
 
-/* Mobile grid & aspect fallback if you prefer auto */
+/* Mobile */
+@media (max-width:767px){
+  #shopify-section-{{section.id}}.home-testimonial-block:after{width:150px; height:500px;}
+}
+@media (max-width: 576px){
+  #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial { display:grid; gap: {{section.settings.column_gap}}px; }
+  #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-image,
+  #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content { width:100%; }
+}
+
+/* Rating glyphs (Font Awesome dependency) */
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content div[class*="no-star-rating"] { display:none !important; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating { width:100%; margin:0; letter-spacing:5px; display:flex; justify-content:flex-start; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content.text-center .dt-sc-author-rating { justify-content:center; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content.text-end .dt-sc-author-rating { justify-content:flex-end; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="star-rating"] { position:relative; width:100%; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="star-rating"]:after { content:"\f005" "\f005" "\f005" "\f005" "\f005"; display:block; position:relative; font-family: FontAwesome; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="half-star-rating"]:after { content:"\f123" "\f006" "\f006" "\f006" "\f006"; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="one-star-rating"]:after { content:"\f005" "\f006" "\f006" "\f006" "\f006"; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="one-half-star-rating"]:after { content:"\f005" "\f123" "\f006" "\f006" "\f006"; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="two-star-rating"]:after { content:"\f005" "\f005" "\f006" "\f006" "\f006"; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="two-half-star-rating"]:after { content:"\f005" "\f005" "\f123" "\f006" "\f006"; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="three-star-rating"]:after { content:"\f005" "\f005" "\f005" "\f006" "\f006"; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="three-half-star-rating"]:after { content:"\f005" "\f005" "\f005" "\f123" "\f006"; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="four-star-rating"]:after { content:"\f005" "\f005" "\f005" "\f005" "\f006"; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="four-half-star-rating"]:after { content:"\f005" "\f005" "\f005" "\f005" "\f123"; }
+
+/* Mobile stack for grid cards */
 @media (max-width: 576px){
   #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial { display:grid; gap: {{section.settings.column_gap}}px; }
   #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-image,
@@ -710,50 +637,7 @@
   0%,100% { transform: translateY(0); }
   50% { transform: translateY(-12px); }
 }
-
-/* Load more button */
-#shopify-section-{{section.id}} .dt-sc-load-more-btn{
-  cursor:pointer; border:1px solid {{ section.settings.navigation_button_color | default: '#333' }};
-  background: transparent; padding:10px 18px; border-radius: 8px;
-  transition: all .25s ease; font: inherit;
-}
-#shopify-section-{{section.id}} .dt-sc-load-more-btn:hover{
-  background: {{ section.settings.navigation_button_color | default: '#333' }};
-  color:#fff;
-}
 </style>
-
-{% javascript %}
-(function(){
-  var root = document.querySelector('#shopify-section-{{section.id}} .dt-sc-testimonial-section');
-  if(!root) return;
-
-  var useSlider = {{ section.settings.enable_slider | json }};
-  if(useSlider) return;
-
-  var loadMoreEnabled = root.getAttribute('data-load-more') === 'true';
-  if(!loadMoreEnabled) return;
-
-  var initial = parseInt(root.getAttribute('data-initial') || '0', 10);
-  var step = parseInt(root.getAttribute('data-step') || '0', 10);
-  var cards = root.querySelectorAll('.dt-sc-testimonial');
-  if(cards.length <= initial){ return; }
-
-  // Hide beyond initial
-  for(var i = initial; i < cards.length; i++){ cards[i].style.display = 'none'; }
-
-  var btn = document.querySelector('#shopify-section-{{section.id}} .dt-sc-load-more-btn');
-  if(!btn) return;
-
-  var revealed = initial;
-  btn.addEventListener('click', function(){
-    var next = Math.min(revealed + step, cards.length);
-    for(var i = revealed; i < next; i++){ cards[i].style.display = ''; }
-    revealed = next;
-    if(revealed >= cards.length){ btn.parentElement.style.display = 'none'; }
-  });
-})();
-{% endjavascript %}
 
 {% schema %}
 {
@@ -898,12 +782,6 @@
       ]
     },
 
-    { "type": "header", "content": "Grid Load More (applies when slider is disabled)" },
-    { "type": "checkbox", "id": "load_more_enabled", "label": "Enable \"Load more\"", "default": false },
-    { "type": "range", "id": "load_more_initial", "label": "Initially visible cards", "min": 1, "max": 12, "step": 1, "default": 6 },
-    { "type": "range", "id": "load_more_step", "label": "Reveal per click", "min": 1, "max": 6, "step": 1, "default": 3 },
-    { "type": "text", "id": "load_more_button_text", "label": "Button label", "default": "Load more" },
-
     { "type": "header", "content": "Testimonial Color settings" },
     { "type": "color", "id": "testimonial_border_color", "label": "Border color (Only for Boxed Styles)" },
     { "type": "color", "id": "testimonial_background_color", "label": "Background color (Only for Boxed Styles)" },
@@ -979,19 +857,6 @@
           "options": [
             { "value": "full", "label": "Full review card" },
             { "value": "photo", "label": "Photo review (image only)" }
-          ]
-        },
-
-        { "type": "select", "id": "card_aspect_ratio_override", "label": "Card aspect ratio (override)", "default": "inherit",
-          "options": [
-            { "value": "inherit", "label": "Inherit from section" },
-            { "value": "1/1", "label": "1:1 (square)" },
-            { "value": "4/5", "label": "4:5 (tall portrait)" },
-            { "value": "3/4", "label": "3:4" },
-            { "value": "2/3", "label": "2:3" },
-            { "value": "3/2", "label": "3:2" },
-            { "value": "4/3", "label": "4:3" },
-            { "value": "16/9", "label": "16:9 (landscape)" }
           ]
         },
 
