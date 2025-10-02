@@ -228,6 +228,9 @@
         "background_color": "#f8f8f8",
         "section_padding_top": 100,
         "section_padding_bottom": 100,
+        "container_background_color": "#ffffff",
+        "container_border_radius": 0,
+        "container_padding": 0,
         "section_title": "Our Best Sellers",
         "title_color": "#8b1538",
         "title_size": 40,
@@ -264,7 +267,9 @@
         "cart_button_background": "#ff4881",
         "cart_button_text_color": "#ffffff",
         "cart_button_radius": 25,
-        "cart_button_text_size": 14
+        "cart_button_text_size": 14,
+        "enable_image_pop": true,
+        "image_pop_amount": 40
       }
     },
     "wavy_feed_AgMWDx": {
@@ -693,9 +698,12 @@
         "collection": "fir-him",
         "products_to_show": 3,
         "min_product_width": 300,
-        "background_color": "#f8f8f8",
-        "section_padding_top": 100,
+        "background_color": "rgba(0,0,0,0)",
+        "section_padding_top": 80,
         "section_padding_bottom": 100,
+        "container_background_color": "#ffffff",
+        "container_border_radius": 0,
+        "container_padding": 0,
         "section_title": "Our best rated bundles",
         "title_color": "#8b1538",
         "title_size": 40,
@@ -732,7 +740,9 @@
         "cart_button_background": "#ff4881",
         "cart_button_text_color": "#ffffff",
         "cart_button_radius": 25,
-        "cart_button_text_size": 14
+        "cart_button_text_size": 14,
+        "enable_image_pop": true,
+        "image_pop_amount": 40
       }
     },
     "faq_section_8ifTKi": {
