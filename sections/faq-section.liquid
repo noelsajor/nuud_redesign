@@ -155,10 +155,11 @@
   border-color: transparent !important;
   background-clip: padding-box;
   margin-top: 0 !important;
-
+  border-radius: {{ top_left }}px {{ top_right }}px {{ bottom_right }}px {{ bottom_left }}px;
+  transition: background-color .2s ease, color .2s ease;
 }
 .faq-question-text-{{ faq_uid }}{ flex: 1 1 auto; min-width: 0; }
-.faq-icon-{{ faq_uid }}{ flex: 0 0 auto; margin-left: auto; width:20px; height:20px; transition: transform .25s ease; color: {{ section.settings.icon_color }}; }
+.faq-icon-{{ faq_uid }}{ flex: 0 0 auto; margin-left: auto; width:20px; height:20px; transition: transform .25s ease, color .2s ease; color: {{ section.settings.icon_color }}; }
 .faq-item-{{ faq_uid }}.active .faq-icon-{{ faq_uid }}{ transform: rotate(180deg); }
 
 .faq-question-button-{{ faq_uid }}:focus-visible{
@@ -167,32 +168,33 @@
   border-radius: {{ top_left }}px {{ top_right }}px {{ bottom_right }}px {{ bottom_left }}px;
 }
 
-/* ====== Hover + Active visual styles ====== */
+/* ====== Hover + Active styles — BUTTON ONLY stays #ff679a ====== */
 {% if section.settings.enable_hover_color %}
-.faq-item-{{ faq_uid }}:hover{
-  background-color: {{ section.settings.active_background_color }};
-  border-color: {{ section.settings.active_background_color }};
+/* Hover: only the button changes */
+.faq-item-{{ faq_uid }}:hover .faq-question-button-{{ faq_uid }}{
+  background-color: #ff679a !important;
+  color: {{ section.settings.active_text_color }} !important;
 }
-/* Make text & icon white (or chosen active_text_color) on hover */
-.faq-item-{{ faq_uid }}:hover .faq-question-button-{{ faq_uid }},
-.faq-item-{{ faq_uid }}:hover .faq-question-text-{{ faq_uid }},
 .faq-item-{{ faq_uid }}:hover .faq-icon-{{ faq_uid }}{
   color: {{ section.settings.active_text_color }} !important;
-  
 }
 {% endif %}
 
-/* Keep the same hover background on all selected (active) questions */
-.faq-item-{{ faq_uid }}.active,
-.faq-item-{{ faq_uid }}.active:hover{
-  background-color: {{ section.settings.active_background_color }};
-  border-color: {{ section.settings.active_background_color }};
+/* Active (open): keep the same #ff679a on the button only */
+.faq-item-{{ faq_uid }}.active .faq-question-button-{{ faq_uid }}{
+  background-color: #ff679a !important;
+  color: {{ section.settings.active_text_color }} !important;
 }
-/* Active text & icon = white (or chosen) even when not hovering */
-.faq-item-{{ faq_uid }}.active .faq-question-button-{{ faq_uid }},
 .faq-item-{{ faq_uid }}.active .faq-question-text-{{ faq_uid }},
 .faq-item-{{ faq_uid }}.active .faq-icon-{{ faq_uid }}{
   color: {{ section.settings.active_text_color }} !important;
+}
+
+/* Do NOT recolor the LI container on hover/active */
+.faq-item-{{ faq_uid }}:hover,
+.faq-item-{{ faq_uid }}.active{
+  background-color: {{ section.settings.question_background }} !important;
+  border-color: {{ section.settings.question_border_color }} !important;
 }
 
 /* Answer panel — height animation when enabled */
@@ -427,7 +429,7 @@
     {
       "type": "color",
       "id": "active_background_color",
-      "label": "Active/Hover background color",
+      "label": "Active/Hover background color (container, unused in this variant)",
       "default": "#111111"
     },
     {
