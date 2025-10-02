@@ -1,4 +1,4 @@
-<!-- SEO & Accessibility Optimized FAQ Section (SECTION MODE) -->
+<!-- SEO & Accessibility Optimized FAQ Section (SECTION MODE, Animation Toggle) -->
 <section class="faq-section {{ 'faq-root-' | append: section.id | replace: '_', '' | downcase }}"
          role="region"
          aria-labelledby="faq-title-{{ section.id | replace: '_', '' | downcase }}"
@@ -146,6 +146,8 @@
   gap: {{ section.settings.question_gap }}px;
   list-style:none; margin:0; padding:0;
 }
+
+/* Button (no hover effects) */
 .faq-question-button-{{ faq_uid }}{
   width:100%; background:transparent; border:0; text-align:left;
   display:flex; justify-content:space-between; align-items:center; gap:1rem;
@@ -156,15 +158,28 @@
   outline-offset: 2px;
   border-radius: {{ top_left }}px {{ top_right }}px {{ bottom_right }}px {{ bottom_left }}px;
 }
+
+/* Icon rotation on open */
 .faq-icon-{{ faq_uid }}{ width:20px; height:20px; transition: transform .25s ease; flex:0 0 auto; color: {{ section.settings.icon_color }}; }
 .faq-item-{{ faq_uid }}.active .faq-icon-{{ faq_uid }}{ transform: rotate(180deg); }
+
+/* Answer panel — animation via height when enabled.
+   We do not rely on max-height hacks anymore. */
 .faq-answer-{{ faq_uid }}{
-  max-height:0; overflow:hidden; transition: max-height .25s ease, padding .25s ease;
+  overflow: hidden;
+  height: 0; /* closed state */
 }
-.faq-answer-content-{{ faq_uid }}{ line-height:1.65; }
-.faq-item-{{ faq_uid }}.active .faq-answer-{{ faq_uid }}{
-  max-height:500px; padding-top: {{ section.settings.answer_padding }}px; padding-bottom: {{ section.settings.answer_padding }}px;
+{% if section.settings.enable_animation %}
+.faq-answer-{{ faq_uid }}{
+  transition: height .25s ease;
 }
+@media (prefers-reduced-motion: reduce){
+  .faq-answer-{{ faq_uid }}{ transition: none !important; }
+  .faq-icon-{{ faq_uid }}{ transition: none !important; }
+}
+{% endif %}
+
+/* Responsive */
 @media screen and (max-width: {{ settings.lap_container_width }}px){
   .faq-container-{{ faq_uid }}{ max-width: {{ settings.lap_container_width }}px; }
 }
@@ -174,9 +189,6 @@
     padding-left: calc({{ settings.gutter_width }}px * .8);
     padding-right: calc({{ settings.gutter_width }}px * .8);
   }
-}
-@media (prefers-reduced-motion: reduce){
-  .faq-icon-{{ faq_uid }}, .faq-answer-{{ faq_uid }}{ transition: none !important; }
 }
 @media (max-width: 768px){
   .faq-container-{{ faq_uid }}{
@@ -200,79 +212,103 @@
     padding-right: calc({{ section.settings.question_padding }}px * .85);
     font-size: calc({{ section.settings.answer_size }}px * .95);
   }
-  .faq-item-{{ faq_uid }}.active .faq-answer-{{ faq_uid }}{
-    padding-top: calc({{ section.settings.answer_padding }}px * .85);
-    padding-bottom: calc({{ section.settings.answer_padding }}px * .85);
-  }
 }
 /* SR-only utility */
 .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 </style>
 
+<!-- Guarded script + smooth height animation (toggleable) -->
 <script>
   (function() {
-    class FaqSection{{ faq_uid }} extends HTMLElement {
-      connectedCallback(){ this.setup(); }
-      setup(){
-        const items = this.querySelectorAll('.faq-item-{{ faq_uid }}');
-        items.forEach(item => {
-          const btn = item.querySelector('.faq-question-button-{{ faq_uid }}');
-          const panel = item.querySelector('.faq-answer-{{ faq_uid }}');
-          if(!btn || !panel) return;
-          btn.addEventListener('click', () => {
-            const open = item.classList.contains('active');
-            if(open){ this.close(item, btn, panel); } else { this.open(item, btn, panel); }
+    const tagName = 'faq-section-{{ section.id | replace: "_", "" | downcase }}';
+    const ANIM_ENABLED = {{ section.settings.enable_animation | json }};
+    const RESPECTS_REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Define once
+    if (!customElements.get(tagName)) {
+      class FaqSectionElement extends HTMLElement {
+        connectedCallback(){ this._bind(); }
+
+        _bind(){
+          const rootId = '{{ section.id | replace: "_", "" | downcase }}';
+          const items = this.querySelectorAll('.faq-item-' + rootId);
+          const shouldAnimate = ANIM_ENABLED && !RESPECTS_REDUCED;
+
+          items.forEach(item => {
+            const btn   = item.querySelector('.faq-question-button-' + rootId);
+            const panel = item.querySelector('.faq-answer-' + rootId);
+            if (!btn || !panel) return;
+
+            // Ensure closed baseline
+            panel.hidden = panel.getAttribute('aria-hidden') !== 'false';
+            if (panel.hidden) panel.style.height = '0px';
+
+            btn.addEventListener('click', () => {
+              const isOpen = item.classList.contains('active');
+              if (isOpen) {
+                this._close(item, btn, panel, shouldAnimate);
+              } else {
+                this._open(item, btn, panel, shouldAnimate);
+              }
+            });
           });
-        });
+        }
+
+        _open(item, btn, panel, animate){
+          item.classList.add('active');
+          btn.setAttribute('aria-expanded','true');
+          panel.removeAttribute('hidden');
+          panel.setAttribute('aria-hidden','false');
+
+          if (!animate) {
+            panel.style.height = 'auto';
+            return;
+          }
+
+          // Animate from 0 -> content height
+          panel.style.height = '0px';
+          // Force reflow
+          panel.offsetHeight; // eslint-disable-line no-unused-expressions
+          const target = panel.scrollHeight + 'px';
+          panel.style.height = target;
+
+          const onEnd = (e) => {
+            if (e.propertyName !== 'height') return;
+            panel.style.height = 'auto'; // allow content to reflow
+            panel.removeEventListener('transitionend', onEnd);
+          };
+          panel.addEventListener('transitionend', onEnd);
+        }
+
+        _close(item, btn, panel, animate){
+          item.classList.remove('active');
+          btn.setAttribute('aria-expanded','false');
+          panel.setAttribute('aria-hidden','true');
+
+          if (!animate) {
+            panel.style.height = '0px';
+            panel.setAttribute('hidden','');
+            return;
+          }
+
+          // Animate from current height -> 0
+          panel.style.height = panel.scrollHeight + 'px';
+          // Force reflow
+          panel.offsetHeight; // eslint-disable-line no-unused-expressions
+          panel.style.height = '0px';
+
+          const onEnd = (e) => {
+            if (e.propertyName !== 'height') return;
+            panel.setAttribute('hidden','');
+            panel.removeEventListener('transitionend', onEnd);
+          };
+          panel.addEventListener('transitionend', onEnd);
+        }
       }
-      open(item, btn, panel){
-        item.classList.add('active');
-        btn.setAttribute('aria-expanded','true');
-        panel.removeAttribute('hidden');
-        panel.setAttribute('aria-hidden','false');
-      }
-      close(item, btn, panel){
-        item.classList.remove('active');
-        btn.setAttribute('aria-expanded','false');
-        panel.setAttribute('aria-hidden','true');
-        panel.setAttribute('hidden','');
-      }
+      customElements.define(tagName, FaqSectionElement);
     }
-    customElements.define('faq-section-{{ faq_uid }}', FaqSection{{ faq_uid }});
   })();
 </script>
-
-{%- comment -%} SEO: FAQPage JSON-LD {%- endcomment -%}
-{% assign faq_entities = '' %}
-{% capture faq_entities %}
-[
-  {% assign comma = '' %}
-  {% for i in (1..6) %}
-    {% assign q_key = 'question_' | append: i %}
-    {% assign a_key = 'answer_'   | append: i %}
-    {% assign q = section.settings[q_key] %}
-    {% assign a = section.settings[a_key] %}
-    {% if q != blank and a != blank %}
-      {{ comma }}
-      {
-        "@type": "Question",
-        "name": {{ q | strip_html | json }},
-        "acceptedAnswer": { "@type": "Answer", "text": {{ a | json }} }
-      }
-      {% assign comma = ',' %}
-    {% endif %}
-  {% endfor %}
-]
-{% endcapture %}
-{% if faq_entities contains '"Question"' %}
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": {{ faq_entities | strip }}
-}
-</script>
-{% endif %}
 
 {% schema %}
 {
@@ -336,16 +372,34 @@
     },
 
     { "type": "header", "content": "Colors" },
-    { "type": "color", "id": "subheading_color", "label": "Subheading", "default": "#666666" },
-    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#000000" },
-    { "type": "color", "id": "body_color", "label": "Body text", "default": "#333333" },
-    { "type": "color", "id": "question_background", "label": "Question background", "default": "#f8f8f8" },
-    { "type": "color", "id": "question_color", "label": "Question text", "default": "#000000" },
-    { "type": "color", "id": "question_border_color", "label": "Question border", "default": "#e0e0e0" },
-    { "type": "color", "id": "answer_background", "label": "Answer background", "default": "#ffffff" },
-    { "type": "color", "id": "answer_color", "label": "Answer text", "default": "#555555" },
-    { "type": "color", "id": "icon_color", "label": "Icon", "default": "#666666" }
+    { "type": "color", "id": "subheading_color", "label": "Subheading color", "default": "#777777" },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#111111" },
+    { "type": "color", "id": "body_color", "label": "Body text color", "default": "#333333" },
+    { "type": "color", "id": "question_color", "label": "Question text color", "default": "#000000" },
+    { "type": "color", "id": "answer_color", "label": "Answer text color", "default": "#333333" },
+    { "type": "color", "id": "question_background", "label": "Question background", "default": "#ffffff" },
+    { "type": "color", "id": "answer_background", "label": "Answer background", "default": "#fafafa" },
+    { "type": "color", "id": "question_border_color", "label": "Question border color", "default": "#dddddd" },
+    { "type": "color", "id": "icon_color", "label": "Icon color", "default": "#333333" },
+
+    { "type": "header", "content": "Typography" },
+    { "type": "range", "id": "subheading_size", "label": "Subheading font size", "min": 12, "max": 24, "step": 1, "unit": "px", "default": 16 },
+    { "type": "range", "id": "heading_size", "label": "Heading font size", "min": 20, "max": 48, "step": 2, "unit": "px", "default": 32 },
+    { "type": "range", "id": "body_size", "label": "Body font size", "min": 14, "max": 20, "step": 1, "unit": "px", "default": 16 },
+    { "type": "range", "id": "question_size", "label": "Question font size", "min": 14, "max": 24, "step": 1, "unit": "px", "default": 18 },
+    { "type": "range", "id": "answer_size", "label": "Answer font size", "min": 14, "max": 20, "step": 1, "unit": "px", "default": 16 },
+
+    { "type": "header", "content": "Animation" },
+    {
+      "type": "checkbox",
+      "id": "enable_animation",
+      "label": "Enable animation",
+      "default": true,
+      "info": "Smoothly expands/collapses answers. Automatically disabled for users who prefer reduced motion."
+    }
   ],
-  "presets": [{ "name": "FAQ section" }]
+  "presets": [
+    { "name": "FAQ Section", "category": "Custom" }
+  ]
 }
 {% endschema %}
