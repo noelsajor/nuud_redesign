@@ -735,6 +735,49 @@
         "cart_button_text_size": 14
       }
     },
+    "faq_section_8ifTKi": {
+      "type": "faq-section",
+      "name": "FAQ section",
+      "settings": {
+        "subheading": "NUUD Respond",
+        "heading": "Frequently Asked Questions",
+        "body": "<p>Find answers to the most common questions about our products and services.</p>",
+        "question_1": "What is your return policy?",
+        "answer_1": "<p>We offer a 30-day return policy for all unused items in their original packaging.</p>",
+        "question_2": "How long does shipping take?",
+        "answer_2": "<p>Standard shipping takes 3-5 business days. Express shipping is available for 1-2 business days.</p>",
+        "question_3": "Do you offer international shipping?",
+        "answer_3": "<p>Yes, we ship to most countries worldwide. Shipping costs and delivery times vary by location.</p>",
+        "question_4": "",
+        "answer_4": "",
+        "question_5": "",
+        "answer_5": "",
+        "question_6": "",
+        "answer_6": "",
+        "section_background_color": "rgba(0,0,0,0)",
+        "overlay_color": "#000000",
+        "overlay_opacity": 0,
+        "background_color": "rgba(0,0,0,0)",
+        "section_padding": 80,
+        "section_gap": 40,
+        "mobile_gap": 30,
+        "mobile_text_alignment": "left",
+        "question_gap": 12,
+        "question_padding": 20,
+        "answer_padding": 20,
+        "border_radius": 8,
+        "question_border_radius_custom": "6,6,6,6",
+        "subheading_color": "#666666",
+        "heading_color": "#000000",
+        "body_color": "#333333",
+        "question_background": "#f8f8f8",
+        "question_color": "#000000",
+        "question_border_color": "#e0e0e0",
+        "answer_background": "#ffffff",
+        "answer_color": "#555555",
+        "icon_color": "#666666"
+      }
+    },
     "1757879707bba2c8c8": {
       "type": "_blocks",
       "blocks": {
@@ -964,49 +1007,6 @@
         "navigation_dot_active_color": "",
         "custom_class_name": ""
       }
-    },
-    "faq_section_8ifTKi": {
-      "type": "faq-section",
-      "name": "FAQ section",
-      "settings": {
-        "subheading": "FAQ",
-        "heading": "Frequently Asked Questions",
-        "body": "<p>Find answers to the most common questions about our products and services.</p>",
-        "question_1": "What is your return policy?",
-        "answer_1": "<p>We offer a 30-day return policy for all unused items in their original packaging.</p>",
-        "question_2": "How long does shipping take?",
-        "answer_2": "<p>Standard shipping takes 3-5 business days. Express shipping is available for 1-2 business days.</p>",
-        "question_3": "Do you offer international shipping?",
-        "answer_3": "<p>Yes, we ship to most countries worldwide. Shipping costs and delivery times vary by location.</p>",
-        "question_4": "",
-        "answer_4": "",
-        "question_5": "",
-        "answer_5": "",
-        "question_6": "",
-        "answer_6": "",
-        "section_background_color": "#f8f8f8",
-        "overlay_color": "#000000",
-        "overlay_opacity": 0,
-        "background_color": "#ffffff",
-        "section_padding": 40,
-        "section_gap": 40,
-        "mobile_gap": 30,
-        "mobile_text_alignment": "left",
-        "question_gap": 12,
-        "question_padding": 20,
-        "answer_padding": 20,
-        "border_radius": 8,
-        "question_border_radius_custom": "6,6,6,6",
-        "subheading_color": "#666666",
-        "heading_color": "#000000",
-        "body_color": "#333333",
-        "question_background": "#f8f8f8",
-        "question_color": "#000000",
-        "question_border_color": "#e0e0e0",
-        "answer_background": "#ffffff",
-        "answer_color": "#555555",
-        "icon_color": "#666666"
-      }
     }
   },
   "order": [
@@ -1020,9 +1020,9 @@
     "17591746797c193bc7",
     "1654336925c509c587",
     "best_sellers_collections_4dwEN8",
+    "faq_section_8ifTKi",
     "1757879707bba2c8c8",
     "16543298581bb386bd",
-    "home_product_carousel_KYpYQH",
-    "faq_section_8ifTKi"
+    "home_product_carousel_KYpYQH"
   ]
 }
