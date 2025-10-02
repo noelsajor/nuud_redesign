@@ -7,7 +7,7 @@
   {% else %}{%- assign column = 'three-column' -%}
 {% endcase %}
 
-{%- comment -%} Fix: proper case for boxed_styles (the old version compared inside `case`) {%- endcomment -%}
+{%- comment -%} Proper boxed_styles handling {%- endcomment -%}
 {% case section.settings.boxed_styles %}
   {% when 'overall_boxed' %}{%- assign boxed_styles = 'overall_boxed' -%}
   {% when 'content_boxed' %}{%- assign boxed_styles = 'content_boxed' -%}
@@ -70,57 +70,152 @@
         <div class="dt-sc-testimonial-section {{ section.settings.boxed_styles }} {% if section.settings.enable_slider %}swiper-wrapper{% endif %} {% unless section.settings.enable_slider %}dt-sc-column{% endunless %}{% unless section.settings.enable_slider %} {{column}}{% endunless %}">
 
           {% for block in section.blocks %}
+            {% assign review_type = block.settings.review_type | default: 'full' %}
 
-            {% if section.settings.block_style == 'style_1' %}
-              <div class="dt-sc-testimonial {% if section.settings.enable_slider %}swiper-slide{% endif %} {% if section.settings.reverse_column %}reverse{% endif %} {{section.settings.quote_style}} {{section.settings.block_style}} {{section.settings.vertical_position}}">
-                {% if block.settings.icon != blank %}
-                  <div class="dt-sc-testimonial-image">
-                    <img src="{{ block.settings.icon | img_url: 'large' }}"
-                         alt="{{ block.settings.author | default: 'Testimonial author' | escape }}"
-                         loading="lazy" decoding="async" />
-                  </div>
-                {% else %}
-                  {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
-                {% endif %}
-
+            {% if review_type == 'photo' %}
+              {%- comment -%}
+                PHOTO REVIEW CARD
+                - Inherits the same container + border/radius from boxed styles
+                - Internal padding is removed so the image sits flush
+              {%- endcomment -%}
+              <div class="dt-sc-testimonial {% if section.settings.enable_slider %}swiper-slide{% endif %} review-type-photo {{section.settings.block_style}} {{section.settings.vertical_position}}">
                 <div class="dt-sc-testimonial-content {{section.settings.text_position}}">
                   <div class="dt-sc-testimonial-content-inner">
-                    <div class="dt-sc-testimonial-quote">{% if block.settings.quote != blank %}{{ block.settings.quote }}{% endif %}</div>
-
-                    {% unless block.settings.star == '0' %}
-                      <div class="dt-sc-author-rating">
-                        {% case block.settings.star %}
-                          {% when '0' %}<div class="no-star-rating"></div>
-                          {% when '0.5' %}<div class="half-star-rating"></div>
-                          {% when '1' %}<div class="one-star-rating"></div>
-                          {% when '1.5' %}<div class="one-half-star-rating"></div>
-                          {% when '2' %}<div class="two-star-rating"></div>
-                          {% when '2.5' %}<div class="two-half-star-rating"></div>
-                          {% when '3' %}<div class="three-star-rating"></div>
-                          {% when '3.5' %}<div class="three-half-star-rating"></div>
-                          {% when '4' %}<div class="four-star-rating"></div>
-                          {% when '4.5' %}<div class="four-half-star-rating"></div>
-                          {% when '5' %}<div class="five-star-rating"></div>
-                        {% endcase %}
-                      </div>
-                    {% endunless %}
-
-                    {% if block.settings.author != blank or block.settings.job != blank %}
-                      <div class="dt-sc-author-info {{ section.settings.author_info_style }}">
-                        <cite><i>{{ block.settings.author }}</i><span>{{ block.settings.job }}</span></cite>
-                      </div>
-                    {% endif %}
+                    <div class="dt-sc-testimonial-photo">
+                      {% if block.settings.photo != blank %}
+                        <img
+                          src="{{ block.settings.photo | img_url: '1000x' }}"
+                          alt="{{ block.settings.photo.alt | default: 'Customer photo' | escape }}"
+                          loading="lazy" decoding="async">
+                      {% else %}
+                        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                      {% endif %}
+                    </div>
                   </div>
                 </div>
               </div>
 
-            {% elsif section.settings.block_style == 'style_2' %}
-              <div class="dt-sc-testimonial {% if section.settings.enable_slider %}swiper-slide{% endif %} {% if section.settings.reverse_column %}reverse{% endif %} {{section.settings.quote_style}} {{section.settings.block_style}}">
-                <div class="dt-sc-testimonial-content {{section.settings.text_position}}">
-                  <div class="dt-sc-testimonial-content-inner">
+            {% else %}
+              {%- comment -%} FULL REVIEW CARD (existing styles) {%- endcomment -%}
 
-                    <div class="dt-sc-testimonial-quote-content">
+              {% if section.settings.block_style == 'style_1' %}
+                <div class="dt-sc-testimonial {% if section.settings.enable_slider %}swiper-slide{% endif %} {% if section.settings.reverse_column %}reverse{% endif %} {{section.settings.quote_style}} {{section.settings.block_style}} {{section.settings.vertical_position}}">
+                  {% if block.settings.icon != blank %}
+                    <div class="dt-sc-testimonial-image">
+                      <img src="{{ block.settings.icon | img_url: 'large' }}"
+                           alt="{{ block.settings.author | default: 'Testimonial author' | escape }}"
+                           loading="lazy" decoding="async" />
+                    </div>
+                  {% else %}
+                    {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                  {% endif %}
+
+                  <div class="dt-sc-testimonial-content {{section.settings.text_position}}">
+                    <div class="dt-sc-testimonial-content-inner">
                       <div class="dt-sc-testimonial-quote">{% if block.settings.quote != blank %}{{ block.settings.quote }}{% endif %}</div>
+
+                      {% unless block.settings.star == '0' %}
+                        <div class="dt-sc-author-rating">
+                          {% case block.settings.star %}
+                            {% when '0' %}<div class="no-star-rating"></div>
+                            {% when '0.5' %}<div class="half-star-rating"></div>
+                            {% when '1' %}<div class="one-star-rating"></div>
+                            {% when '1.5' %}<div class="one-half-star-rating"></div>
+                            {% when '2' %}<div class="two-star-rating"></div>
+                            {% when '2.5' %}<div class="two-half-star-rating"></div>
+                            {% when '3' %}<div class="three-star-rating"></div>
+                            {% when '3.5' %}<div class="three-half-star-rating"></div>
+                            {% when '4' %}<div class="four-star-rating"></div>
+                            {% when '4.5' %}<div class="four-half-star-rating"></div>
+                            {% when '5' %}<div class="five-star-rating"></div>
+                          {% endcase %}
+                        </div>
+                      {% endunless %}
+
+                      {% if block.settings.author != blank or block.settings.job != blank %}
+                        <div class="dt-sc-author-info {{ section.settings.author_info_style }}">
+                          <cite><i>{{ block.settings.author }}</i><span>{{ block.settings.job }}</span></cite>
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+
+              {% elsif section.settings.block_style == 'style_2' %}
+                <div class="dt-sc-testimonial {% if section.settings.enable_slider %}swiper-slide{% endif %} {% if section.settings.reverse_column %}reverse{% endif %} {{section.settings.quote_style}} {{section.settings.block_style}}">
+                  <div class="dt-sc-testimonial-content {{section.settings.text_position}}">
+                    <div class="dt-sc-testimonial-content-inner">
+
+                      <div class="dt-sc-testimonial-quote-content">
+                        <div class="dt-sc-testimonial-quote">{% if block.settings.quote != blank %}{{ block.settings.quote }}{% endif %}</div>
+                        <div class="dt-sc-author-rating">
+                          {% case block.settings.star %}
+                            {% when '0' %}<div class="no-star-rating"></div>
+                            {% when '0.5' %}<div class="half-star-rating"></div>
+                            {% when '1' %}<div class="one-star-rating"></div>
+                            {% when '1.5' %}<div class="one-half-star-rating"></div>
+                            {% when '2' %}<div class="two-star-rating"></div>
+                            {% when '2.5' %}<div class="two-half-star-rating"></div>
+                            {% when '3' %}<div class="three-star-rating"></div>
+                            {% when '3.5' %}<div class="three-half-star-rating"></div>
+                            {% when '4' %}<div class="four-star-rating"></div>
+                            {% when '4.5' %}<div class="four-half-star-rating"></div>
+                            {% when '5' %}<div class="five-star-rating"></div>
+                          {% endcase %}
+                        </div>
+                      </div>
+
+                      {% if block.settings.author != blank or block.settings.job != blank %}
+                        <div class="dt-sc-author-info {{ section.settings.author_info_style }}">
+                          {% if block.settings.icon != blank %}
+                            <div class="dt-sc-testimonial-image">
+                              <img class="lazyload"
+                                   data-src="{{ block.settings.icon | img_url: '200x200' }}"
+                                   data-aspectratio="{{ block.settings.icon.aspect_ratio }}"
+                                   data-sizes="auto"
+                                   alt="{{ block.settings.author | default: 'Testimonial author' | escape }}">
+                              <noscript>
+                                {{ block.settings.icon | img_url: '480x480', scale: 2 | img_tag: block.settings.icon.alt, 'dt-sc-noscript-image' }}
+                              </noscript>
+                            </div>
+                          {% else %}
+                            {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                          {% endif %}
+                          <cite>{{ block.settings.author }}<span>{{ block.settings.job }}</span></cite>
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+
+              {% elsif section.settings.block_style == 'style_3' %}
+                <div class="dt-sc-testimonial {{section.settings.text_position}} {% if section.settings.enable_slider %}swiper-slide{% endif %} {% if section.settings.reverse_column %}reverse{% endif %} {{section.settings.quote_style}} {{section.settings.block_style}}">
+                  {% if block.settings.icon != blank %}
+                    <div class="dt-sc-testimonial-image">
+                      <img class="lazyload"
+                           data-src="{{ block.settings.icon | img_url: '200x200' }}"
+                           data-aspectratio="{{ block.settings.icon.aspect_ratio }}"
+                           data-sizes="auto"
+                           alt="{{ block.settings.author | default: 'Testimonial author' | escape }}">
+                      <noscript>
+                        {{ block.settings.icon | img_url: '480x480', scale: 2 | img_tag: block.settings.icon.alt, 'dt-sc-noscript-image' }}
+                      </noscript>
+                    </div>
+                  {% else %}
+                    {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+                    {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg dark' }}
+                  {% endif %}
+
+                  <div class="dt-sc-testimonial-content {{section.settings.text_position}}">
+                    <div class="dt-sc-testimonial-content-inner">
+                      <div class="dt-sc-testimonial-quote">{% if block.settings.quote != blank %}{{ block.settings.quote }}{% endif %}</div>
+
+                      {% if block.settings.author != blank or block.settings.job != blank %}
+                        <div class="dt-sc-author-info {{ section.settings.author_info_style }}">
+                          <cite>{{ block.settings.author }}<span>{{ block.settings.job }}</span></cite>
+                        </div>
+                      {% endif %}
+
                       <div class="dt-sc-author-rating">
                         {% case block.settings.star %}
                           {% when '0' %}<div class="no-star-rating"></div>
@@ -137,76 +232,9 @@
                         {% endcase %}
                       </div>
                     </div>
-
-                    {% if block.settings.author != blank or block.settings.job != blank %}
-                      <div class="dt-sc-author-info {{ section.settings.author_info_style }}">
-                        {% if block.settings.icon != blank %}
-                          <div class="dt-sc-testimonial-image">
-                            <img class="lazyload"
-                                 data-src="{{ block.settings.icon | img_url: '200x200' }}"
-                                 data-aspectratio="{{ block.settings.icon.aspect_ratio }}"
-                                 data-sizes="auto"
-                                 alt="{{ block.settings.author | default: 'Testimonial author' | escape }}">
-                            <noscript>
-                              {{ block.settings.icon | img_url: '480x480', scale: 2 | img_tag: block.settings.icon.alt, 'dt-sc-noscript-image' }}
-                            </noscript>
-                          </div>
-                        {% else %}
-                          {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
-                        {% endif %}
-                        <cite>{{ block.settings.author }}<span>{{ block.settings.job }}</span></cite>
-                      </div>
-                    {% endif %}
                   </div>
                 </div>
-              </div>
-
-            {% elsif section.settings.block_style == 'style_3' %}
-              <div class="dt-sc-testimonial {{section.settings.text_position}} {% if section.settings.enable_slider %}swiper-slide{% endif %} {% if section.settings.reverse_column %}reverse{% endif %} {{section.settings.quote_style}} {{section.settings.block_style}}">
-                {% if block.settings.icon != blank %}
-                  <div class="dt-sc-testimonial-image">
-                    <img class="lazyload"
-                         data-src="{{ block.settings.icon | img_url: '200x200' }}"
-                         data-aspectratio="{{ block.settings.icon.aspect_ratio }}"
-                         data-sizes="auto"
-                         alt="{{ block.settings.author | default: 'Testimonial author' | escape }}">
-                    <noscript>
-                      {{ block.settings.icon | img_url: '480x480', scale: 2 | img_tag: block.settings.icon.alt, 'dt-sc-noscript-image' }}
-                    </noscript>
-                  </div>
-                {% else %}
-                  {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
-                  {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg dark' }}
-                {% endif %}
-
-                <div class="dt-sc-testimonial-content {{section.settings.text_position}}">
-                  <div class="dt-sc-testimonial-content-inner">
-                    <div class="dt-sc-testimonial-quote">{% if block.settings.quote != blank %}{{ block.settings.quote }}{% endif %}</div>
-
-                    {% if block.settings.author != blank or block.settings.job != blank %}
-                      <div class="dt-sc-author-info {{ section.settings.author_info_style }}">
-                        <cite>{{ block.settings.author }}<span>{{ block.settings.job }}</span></cite>
-                      </div>
-                    {% endif %}
-
-                    <div class="dt-sc-author-rating">
-                      {% case block.settings.star %}
-                        {% when '0' %}<div class="no-star-rating"></div>
-                        {% when '0.5' %}<div class="half-star-rating"></div>
-                        {% when '1' %}<div class="one-star-rating"></div>
-                        {% when '1.5' %}<div class="one-half-star-rating"></div>
-                        {% when '2' %}<div class="two-star-rating"></div>
-                        {% when '2.5' %}<div class="two-half-star-rating"></div>
-                        {% when '3' %}<div class="three-star-rating"></div>
-                        {% when '3.5' %}<div class="three-half-star-rating"></div>
-                        {% when '4' %}<div class="four-star-rating"></div>
-                        {% when '4.5' %}<div class="four-half-star-rating"></div>
-                        {% when '5' %}<div class="five-star-rating"></div>
-                      {% endcase %}
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {% endif %}
             {% endif %}
 
           {% endfor %}
@@ -268,7 +296,7 @@
 }
 
 #shopify-section-{{section.id}}.home-testimonial-block .rightimage {
-  animation: bounce 5s infinite linear; /* Fix: add keyframes below */
+  animation: bounce 5s infinite linear;
   top: 120px; bottom:auto; right:70px; background-size: contain;
 }
 
@@ -392,7 +420,7 @@
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial[class*="quote-icon-in-content"] .dt-sc-testimonial-content.text-center .dt-sc-testimonial-content-inner:before { justify-content:center; margin:auto; }
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial[class*="quote-icon-in-content"] .dt-sc-testimonial-content.text-end .dt-sc-testimonial-content-inner:before { justify-content:flex-end; margin-left:auto; }
 
-/* Boxed styles */
+/* Boxed styles (base) */
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.content_boxed .dt-sc-testimonial:not(.style_2) .dt-sc-testimonial-content .dt-sc-testimonial-content-inner,
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.quote_boxed .dt-sc-testimonial-content .dt-sc-testimonial-content-inner .dt-sc-testimonial-quote,
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.overall_boxed .dt-sc-testimonial {
@@ -427,6 +455,32 @@
   padding: 25px;
   border-radius: {{section.settings.boxed_border_radius }}px;
   {% if section.settings.enable_box_shadow %} box-shadow: var(--DTboxShadow); {% endif %}
+}
+
+/* --- NEW: Photo review overrides (no padding, full-bleed image) --- */
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial.review-type-photo { overflow: hidden; }
+
+/* If using overall_boxed, remove the inside spacing so image is flush */
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.overall_boxed .dt-sc-testimonial.review-type-photo { padding: 0; }
+
+/* If using content/quote boxed, keep the same border/radius but drop padding and clip */
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.content_boxed .dt-sc-testimonial.review-type-photo .dt-sc-testimonial-content .dt-sc-testimonial-content-inner,
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.quote_boxed .dt-sc-testimonial.review-type-photo .dt-sc-testimonial-content .dt-sc-testimonial-content-inner {
+  padding: 0; overflow: hidden;
+}
+
+/* Ensure quote_boxed still gets a card look on photo type (since original border targets the quote element) */
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.quote_boxed .dt-sc-testimonial.review-type-photo .dt-sc-testimonial-content .dt-sc-testimonial-content-inner {
+  background: {{ section.settings.testimonial_background_color }};
+  color: {{ section.settings.testimonial_border_color }};
+  border: 1px solid currentcolor;
+  border-radius: {{section.settings.boxed_border_radius}}px;
+}
+
+/* Photo fills the card */
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-photo { width: 100%; height: 100%; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-photo img {
+  display:block; width:100%; height:100%; object-fit: cover; border-radius: inherit;
 }
 
 /* Author layout + separators */
@@ -557,7 +611,7 @@
   #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content { width:100%; }
 }
 
-/* Keyframes (Fixes) */
+/* Keyframes (unchanged) */
 @keyframes dt-swing2 {
   0% { transform: translateY(20px); }
   100% { transform: translateY(-20px); }
@@ -768,11 +822,18 @@
       "type": "content",
       "name": "Content",
       "settings": [
-        { "type": "richtext", "id": "quote", "label": "Text", "info": "Best results if text does not exceed 400 characters", "default": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type.</p>" },
-        { "type": "image_picker", "id": "icon", "label": "Author Image" },
+        { "type": "select", "id": "review_type", "label": "Card Type", "default": "full",
+          "options": [
+            { "value": "full", "label": "Full review card" },
+            { "value": "photo", "label": "Photo review (image only)" }
+          ]
+        },
+
+        { "type": "richtext", "id": "quote", "label": "Text", "info": "Used for Full review card", "default": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>" },
+        { "type": "image_picker", "id": "icon", "label": "Author Image (Full review)" },
         { "type": "text", "id": "author", "label": "Author", "default": "Author Name" },
         { "type": "text", "id": "job", "label": "Designation", "default": "Author Designation" },
-        { "type": "select", "id": "star", "label": "rating", "default": "3",
+        { "type": "select", "id": "star", "label": "Rating", "default": "3",
           "options": [
             { "value": "0", "label": "0" },
             { "value": "0.5", "label": "0.5" },
@@ -786,7 +847,9 @@
             { "value": "4.5", "label": "4.5" },
             { "value": "5", "label": "5" }
           ]
-        }
+        },
+
+        { "type": "image_picker", "id": "photo", "label": "Customer Photo (Photo review)", "info": "Shown when Card Type = Photo" }
       ]
     }
   ],
