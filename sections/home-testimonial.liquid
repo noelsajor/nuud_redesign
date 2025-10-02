@@ -73,11 +73,7 @@
             {% assign review_type = block.settings.review_type | default: 'full' %}
 
             {% if review_type == 'photo' %}
-              {%- comment -%}
-                PHOTO REVIEW CARD
-                - Inherits the same container + border/radius from boxed styles
-                - Internal padding is removed so the image sits flush
-              {%- endcomment -%}
+              {%- comment -%} PHOTO REVIEW CARD (flush image, inherits card border/radius) {%- endcomment -%}
               <div class="dt-sc-testimonial {% if section.settings.enable_slider %}swiper-slide{% endif %} review-type-photo {{section.settings.block_style}} {{section.settings.vertical_position}}">
                 <div class="dt-sc-testimonial-content {{section.settings.text_position}}">
                   <div class="dt-sc-testimonial-content-inner">
@@ -281,6 +277,38 @@
 {% assign padding_top = padding[0] %}
 {% assign padding_bottom = padding[1] %}
 
+/* ---------- Global card aspect ratio variable ---------- */
+#shopify-section-{{section.id}}.home-testimonial-block{
+  --card-aspect: {% if section.settings.card_aspect_ratio == blank or section.settings.card_aspect_ratio == 'none' %}auto{% else %}{{ section.settings.card_aspect_ratio }}{% endif %};
+}
+
+/* Apply aspect ratio to the element that visually looks like "the card" per boxed style */
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.overall_boxed .dt-sc-testimonial{
+  aspect-ratio: var(--card-aspect);
+}
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.content_boxed .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-testimonial-content-inner,
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.quote_boxed .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-testimonial-content-inner{
+  aspect-ratio: var(--card-aspect);
+}
+
+/* Photo reviews: enforce cropping to the card frame */
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial.review-type-photo{ overflow:hidden; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.overall_boxed .dt-sc-testimonial.review-type-photo{ padding:0; }
+
+/* If using content/quote boxed on photo cards, keep border/radius but remove padding and clip */
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.content_boxed .dt-sc-testimonial.review-type-photo .dt-sc-testimonial-content .dt-sc-testimonial-content-inner,
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.quote_boxed .dt-sc-testimonial.review-type-photo .dt-sc-testimonial-content .dt-sc-testimonial-content-inner{
+  padding:0; overflow:hidden;
+}
+
+/* Ensure quote_boxed photo card has a card shell (border/radius) */
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.quote_boxed .dt-sc-testimonial.review-type-photo .dt-sc-testimonial-content .dt-sc-testimonial-content-inner{
+  background: {{ section.settings.testimonial_background_color }};
+  color: {{ section.settings.testimonial_border_color }};
+  border: 1px solid currentcolor;
+  border-radius: {{section.settings.boxed_border_radius}}px;
+}
+
 /* Section wrapper + decorative pieces */
 #shopify-section-{{section.id}}.home-testimonial-block{position:relative;}
 #shopify-section-{{section.id}}.home-testimonial-block:after{
@@ -457,26 +485,6 @@
   {% if section.settings.enable_box_shadow %} box-shadow: var(--DTboxShadow); {% endif %}
 }
 
-/* --- NEW: Photo review overrides (no padding, full-bleed image) --- */
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial.review-type-photo { overflow: hidden; }
-
-/* If using overall_boxed, remove the inside spacing so image is flush */
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.overall_boxed .dt-sc-testimonial.review-type-photo { padding: 0; }
-
-/* If using content/quote boxed, keep the same border/radius but drop padding and clip */
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.content_boxed .dt-sc-testimonial.review-type-photo .dt-sc-testimonial-content .dt-sc-testimonial-content-inner,
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.quote_boxed .dt-sc-testimonial.review-type-photo .dt-sc-testimonial-content .dt-sc-testimonial-content-inner {
-  padding: 0; overflow: hidden;
-}
-
-/* Ensure quote_boxed still gets a card look on photo type (since original border targets the quote element) */
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.quote_boxed .dt-sc-testimonial.review-type-photo .dt-sc-testimonial-content .dt-sc-testimonial-content-inner {
-  background: {{ section.settings.testimonial_background_color }};
-  color: {{ section.settings.testimonial_border_color }};
-  border: 1px solid currentcolor;
-  border-radius: {{section.settings.boxed_border_radius}}px;
-}
-
 /* Photo fills the card */
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-photo { width: 100%; height: 100%; }
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-photo img {
@@ -560,26 +568,6 @@
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-end .dt-sc-testimonial-content .dt-sc-author-info cite span { justify-content:flex-end; }
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-center .dt-sc-testimonial-content .dt-sc-author-info.style_2 cite span:before { right:0; left:0; margin:auto; }
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-end .dt-sc-testimonial-content .dt-sc-author-info.style_2 cite span:before { right:0; left:auto; }
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-center.reverse .dt-sc-testimonial-image { margin:auto; }
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-start.reverse .dt-sc-testimonial-image { margin-right:auto; }
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-end.reverse .dt-sc-testimonial-image { margin-left:auto; }
-
-/* Rating glyphs (Font Awesome dependency) */
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content div[class*="no-star-rating"] { display:none !important; }
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating { width:100%; margin:0; letter-spacing:5px; display:flex; justify-content:flex-start; }
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content.text-center .dt-sc-author-rating { justify-content:center; }
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content.text-end .dt-sc-author-rating { justify-content:flex-end; }
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="star-rating"] { position:relative; width:100%; }
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="star-rating"]:after { content:"\f005" "\f005" "\f005" "\f005" "\f005"; display:block; position:relative; font-family: FontAwesome; }
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="half-star-rating"]:after { content:"\f123" "\f006" "\f006" "\f006" "\f006"; }
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="one-star-rating"]:after { content:"\f005" "\f006" "\f006" "\f006" "\f006"; }
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="one-half-star-rating"]:after { content:"\f005" "\f123" "\f006" "\f006" "\f006"; }
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="two-star-rating"]:after { content:"\f005" "\f005" "\f006" "\f006" "\f006"; }
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="two-half-star-rating"]:after { content:"\f005" "\f005" "\f123" "\f006" "\f006"; }
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="three-star-rating"]:after { content:"\f005" "\f005" "\f005" "\f006" "\f006"; }
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="three-half-star-rating"]:after { content:"\f005" "\f005" "\f005" "\f123" "\f006"; }
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="four-star-rating"]:after { content:"\f005" "\f005" "\f005" "\f005" "\f006"; }
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="four-half-star-rating"]:after { content:"\f005" "\f005" "\f005" "\f005" "\f123"; }
 
 /* Swiper spacing */
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-swiper-slider.swiper-container[class*=navigation-bottom] { padding-bottom: 50px; }
@@ -748,6 +736,20 @@
         { "value": "vertical-top", "label": "Top" },
         { "value": "vertical-center", "label": "Center" },
         { "value": "vertical-bottom", "label": "Bottom" }
+      ]
+    },
+
+    { "type": "header", "content": "Card shape" },
+    { "type": "select", "id": "card_aspect_ratio", "label": "Card aspect ratio", "default": "none",
+      "options": [
+        { "value": "none", "label": "Auto (no fixed ratio)" },
+        { "value": "1/1", "label": "1:1 (square)" },
+        { "value": "4/5", "label": "4:5 (tall portrait)" },
+        { "value": "3/4", "label": "3:4" },
+        { "value": "2/3", "label": "2:3" },
+        { "value": "3/2", "label": "3:2" },
+        { "value": "4/3", "label": "4:3" },
+        { "value": "16/9", "label": "16:9 (landscape)" }
       ]
     },
 
