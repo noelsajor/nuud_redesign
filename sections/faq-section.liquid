@@ -151,8 +151,20 @@
 .faq-question-button-{{ faq_uid }}{
   width:100%; background:transparent; border:0; text-align:left;
   display:flex; justify-content:space-between; align-items:center; gap:1rem;
-  line-height:1.4; font-weight:700; cursor:pointer;
+  line-height:1.4; font-weight:700; cursor:pointer; width: 100%;
 }
+
+
+.faq-question-text-{{ faq_uid }}{
+  flex: 1 1 auto;   
+  min-width: 0;     
+}
+
+.faq-icon-{{ faq_uid }}{
+  flex: 0 0 auto;   
+  margin-left: auto;
+}
+
 .faq-question-button-{{ faq_uid }}:focus-visible{
   outline: 2px solid rgba(0,0,0,.6);
   outline-offset: 2px;
