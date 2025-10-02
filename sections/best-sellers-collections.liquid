@@ -168,8 +168,8 @@
              class="see-all-button dt-sc-btn{% if section.settings.section_button_bg_color != blank %} ctm-btn-padding{% endif %}"
              aria-label="View all products in {{ collections[section.settings.collection].title }} collection">
             {{ section.settings.see_all_text | default: 'See all' }}
-            <!-- same arrow SVG used in blog -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" aria-hidden="true" focusable="false" width="36" height="36" style="vertical-align:middle; margin-left:8px;">
+            <!-- Arrow SVG identical to blog section -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" aria-hidden="true" focusable="false" width="36" height="36">
               <path d="M8,45h72L66.4,31.4c-1.9-1.9-1.9-5.1,0-7c1.9-1.9,5.1-1.9,7,0l22.1,22.1c0,0,0,0,0.1,0.1c0.2,0.2,0.4,0.4,0.6,0.7
                        c0.1,0.1,0.1,0.2,0.1,0.3c0.1,0.2,0.2,0.4,0.3,0.6c0,0.1,0.1,0.2,0.1,0.3c0.1,0.2,0.1,0.4,0.2,0.6c0.1,0.3,0.1,0.6,0.1,1
                        s0,0.7-0.1,1c0,0.2-0.1,0.4-0.2,0.6c0,0.1-0.1,0.2-0.1,0.3c-0.1,0.2-0.2,0.4-0.3,0.6c0,0.1-0.1,0.2-0.1,0.3
@@ -210,7 +210,7 @@
 @keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
 @media (prefers-reduced-motion: reduce){ .badge-spin{ animation: none; } }
 
-/* Typography (match your previous component) */
+/* Typography (consistent with your other section) */
 .section-title,
 .product-title,
 .see-all-button,
@@ -243,7 +243,6 @@
   aspect-ratio: 1/1;
   overflow: hidden;
   background-color: #f8f8f8;
-  /* when inner has .image-overflow, pull images upward by --image-overflow */
   margin-top: 0;
 }
 .best-sellers-inner.image-overflow .product-image-container {
@@ -283,22 +282,33 @@
 .add-to-cart-btn:focus { outline: 2px solid currentColor; outline-offset: 2px; }
 .add-to-cart-btn.sold-out { opacity: .6; cursor: not-allowed; }
 
-/* See All Button (match blog dt-sc-btn) */
-.see-all-container { width:100%; }
-.see-all-button.dt-sc-btn svg { display: inline-block; }
-.see-all-button.dt-sc-btn svg path { fill: currentColor; }
+/* ===== See All Button (match blog .dt-sc-btn) ===== */
+.see-all-container { width: 100%; }
 
-/* Scoped colors for the See All button (like blog styles) */
-#shopify-section-{{ section.id }} .see-all-button.dt-sc-btn {
+/* Use the same class and SVG behavior; path follows currentColor */
+.see-all-button.dt-sc-btn { 
+  display: inline-flex; align-items: center; gap: 8px;
+  border: none; text-decoration: none; line-height: 1; 
+  font-weight: 600; /* similar to blog */
+  padding: 0; /* same as blog heading button */
+  transition: background .3s ease, color .3s ease, opacity .3s ease, transform .2s ease;
   background: {{ section.settings.section_button_bg_color }};
   color: {{ section.settings.section_button_text_color }};
-  border: none;
 }
-#shopify-section-{{ section.id }} .see-all-button.dt-sc-btn:hover,
-#shopify-section-{{ section.id }} .see-all-button.dt-sc-btn:focus {
+.see-all-button.dt-sc-btn.ctm-btn-padding { padding: 6px 15px; } /* same helper used in blog */
+
+.see-all-button.dt-sc-btn svg { display: inline-block; width: 36px; height: 36px; }
+.see-all-button.dt-sc-btn svg path { fill: currentColor; }
+
+/* Hover/focus to mirror blog behavior */
+.see-all-button.dt-sc-btn:hover,
+.see-all-button.dt-sc-btn:focus {
   background: {{ section.settings.section_button_hover_bg_color }};
   color: {{ section.settings.section_button_hover_text_color }};
+  text-decoration: none;
 }
+.see-all-button.dt-sc-btn:hover svg,
+.see-all-button.dt-sc-btn:focus svg { transform: translateX(3px); }
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -322,6 +332,7 @@
 {% schema %}
 {
   "name": "Best Sellers Collection",
+  "class": "index-section best-sellers-section-wrapper",
   "settings": [
     {
       "type": "header",
