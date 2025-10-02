@@ -1,11 +1,21 @@
-<!-- Best Sellers Collection Section -->
-<section class="best-sellers-section"
-         role="region"
-         aria-labelledby="best-sellers-title"
-         style="background-color: {{ section.settings.background_color }}; 
-                padding: {{ section.settings.section_padding_top }}px 20px {{ section.settings.section_padding_bottom }}px 20px;">
+{% comment %}
+Best Sellers Collection – SEO/A11y optimized
+- Typography consistent with blog section
+- Optional image overflow (float up out of the card)
+- Container background color
+- Blog-style "See all" button (dt-sc-btn + SVG)
+{% endcomment %}
 
-  <div class="best-sellers-container">
+{%- assign bs_uid = section.id | replace: '_','' | downcase -%}
+
+<!-- Best Sellers Collection Section -->
+<section class="best-sellers-section best-sellers-{{ bs_uid }}" 
+         style="background-color: {{ section.settings.background_color }}; 
+                padding: {{ section.settings.section_padding_top }}px 20px {{ section.settings.section_padding_bottom }}px 20px;"
+         aria-labelledby="best-sellers-title-{{ bs_uid }}">
+  
+  <div class="best-sellers-container"
+       style="max-width: 960px; width: 100%; margin: 100px auto; background-color: {{ section.settings.container_background_color }};">
     
     <!-- Badge -->
     {% if section.settings.show_badge and section.settings.badge_image %}
@@ -20,214 +30,194 @@
            decoding="async">
     </div>
     {% endif %}
-
-    <!-- Inner container (background + radius + padding) -->
-    <div class="best-sellers-inner{% if section.settings.enable_image_overflow %} image-overflow{% endif %}"
-         style="
-           background-color: {{ section.settings.container_background_color }};
-           border-radius: {{ section.settings.container_border_radius }}px;
-           padding: {{ section.settings.container_padding }}px;
-           --image-overflow: {{ section.settings.image_overflow_amount }}px;
-         ">
-
-      <!-- Section Header -->
-      <header class="section-header" 
-              style="text-align: {{ section.settings.title_alignment }}; margin-bottom: {{ section.settings.title_bottom_spacing }}px;">
-        {% if section.settings.section_title != blank %}
-        <h2 id="best-sellers-title" 
-            class="section-title"
-            style="color: {{ section.settings.title_color }}; 
-                   font-size: {{ section.settings.title_size }}px;
-                   font-weight: {{ section.settings.title_weight }};">
-          {{ section.settings.section_title }}
-        </h2>
-        {% endif %}
-      </header>
-      
-      <!-- Products Grid -->
-      {% if section.settings.collection != blank %}
-        {% assign collection = collections[section.settings.collection] %}
-        {% if collection.products.size > 0 %}
-        <div class="products-grid" 
-             style="grid-template-columns: repeat(auto-fit, minmax({{ section.settings.min_product_width }}px, 1fr)); gap: {{ section.settings.products_grid_gap }}px;">
-          
-          {% for product in collection.products limit: section.settings.products_to_show %}
-          <article class="product-card" 
-                   style="background-color: {{ section.settings.card_background }}; 
-                          border-radius: {{ section.settings.card_border_radius }}px;">
-            
-            <!-- Product Image -->
-            <div class="product-image-container">
-              <a href="{{ product.url }}" 
-                 aria-label="View {{ product.title }}"
-                 class="product-link">
-                {% if product.featured_image %}
-                  <img src="{{ product.featured_image | image_url: width: 400 }}"
-                       srcset="{{ product.featured_image | image_url: width: 200 }} 200w,
-                               {{ product.featured_image | image_url: width: 300 }} 300w,
-                               {{ product.featured_image | image_url: width: 400 }} 400w"
-                       sizes="(max-width: 480px) 200px, (max-width: 768px) 300px, 400px"
-                       alt="{{ product.featured_image.alt | default: product.title }}"
-                       class="product-image"
-                       width="400"
-                       height="300"
-                       loading="lazy"
-                       decoding="async">
-                {% else %}
-                  <div class="product-image-placeholder" 
-                       style="background-color: {{ section.settings.placeholder_color }};"
-                       aria-label="No image available for {{ product.title }}">
-                    <span aria-hidden="true">No Image</span>
-                  </div>
-                {% endif %}
-                
-                <!-- Product Badge/Sale -->
-                {% if product.compare_at_price > product.price %}
-                <span class="sale-badge" 
-                      style="background-color: {{ section.settings.sale_badge_color }};"
-                      aria-label="On sale">
-                  Sale
-                </span>
-                {% endif %}
-              </a>
-            </div>
-            
-            <!-- Product Info -->
-            <div class="product-info" style="padding: {{ section.settings.card_padding }}px;">
-              
-              <!-- Star Rating -->
-              {% if section.settings.show_ratings %}
-              <div class="product-rating" aria-label="5 out of 5 stars">
-                {% for i in (1..5) %}
-                  <span class="star" 
-                        style="color: {{ section.settings.star_color }};"
-                        aria-hidden="true">★</span>
-                {% endfor %}
-              </div>
-              {% endif %}
-              
-              <!-- Brand Name -->
-              {% if section.settings.show_vendor and product.vendor %}
-              <p class="product-vendor" 
-                 style="color: {{ section.settings.vendor_color }}; 
-                        font-size: {{ section.settings.vendor_size }}px;">
-                {{ product.vendor | upcase }}
-              </p>
-              {% endif %}
-              
-              <!-- Product Title -->
-              <h3 class="product-title">
-                <a href="{{ product.url }}" 
-                   style="color: {{ section.settings.product_title_color }}; 
-                          font-size: {{ section.settings.product_title_size }}px;
-                          font-weight: {{ section.settings.product_title_weight }};">
-                  {{ product.title }}
-                </a>
-              </h3>
-              
-              <!-- Add to Cart Button -->
-              <form action="/cart/add" method="post" enctype="multipart/form-data" class="product-form">
-                {% unless product.has_only_default_variant %}
-                  <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-                {% else %}
-                  <input type="hidden" name="id" value="{{ product.variants.first.id }}">
-                {% endunless %}
-                
-                <button type="submit" 
-                        class="add-to-cart-btn {% unless product.available %}sold-out{% endunless %}"
-                        style="background-color: {{ section.settings.cart_button_background }}; 
-                               color: {{ section.settings.cart_button_text_color }};
-                               border-radius: {{ section.settings.cart_button_radius }}px;
-                               font-size: {{ section.settings.cart_button_text_size }}px;"
-                        {% unless product.available %}disabled{% endunless %}
-                        aria-label="Add {{ product.title }} to cart">
-                  {% if product.available %}
-                    {{ section.settings.add_to_cart_text | default: 'ADD TO CART' }}
-                  {% else %}
-                    {{ section.settings.sold_out_text | default: 'SOLD OUT' }}
-                  {% endif %}
-                </button>
-              </form>
-            </div>
-          </article>
-          {% endfor %}
-          
-        </div>
-        {% else %}
-        <div class="no-products-message" 
-             style="text-align: center; padding: 40px; color: #666;">
-          <p>No products found in this collection.</p>
-        </div>
-        {% endif %}
-        
-        <!-- See All Button (Below Products) -->
-        {% if section.settings.show_see_all_button and section.settings.collection != blank %}
-        <div class="see-all-container" 
-             style="text-align: {{ section.settings.button_alignment }}; margin-top: {{ section.settings.button_top_spacing }}px;">
-          <a href="{{ collections[section.settings.collection].url }}" 
-             class="see-all-button dt-sc-btn{% if section.settings.section_button_bg_color != blank %} ctm-btn-padding{% endif %}"
-             aria-label="View all products in {{ collections[section.settings.collection].title }} collection">
-            {{ section.settings.see_all_text | default: 'See all' }}
-            <!-- Arrow SVG identical to blog section -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" aria-hidden="true" focusable="false" width="36" height="36">
-              <path d="M8,45h72L66.4,31.4c-1.9-1.9-1.9-5.1,0-7c1.9-1.9,5.1-1.9,7,0l22.1,22.1c0,0,0,0,0.1,0.1c0.2,0.2,0.4,0.4,0.6,0.7
-                       c0.1,0.1,0.1,0.2,0.1,0.3c0.1,0.2,0.2,0.4,0.3,0.6c0,0.1,0.1,0.2,0.1,0.3c0.1,0.2,0.1,0.4,0.2,0.6c0.1,0.3,0.1,0.6,0.1,1
-                       s0,0.7-0.1,1c0,0.2-0.1,0.4-0.2,0.6c0,0.1-0.1,0.2-0.1,0.3c-0.1,0.2-0.2,0.4-0.3,0.6c0,0.1-0.1,0.2-0.1,0.3
-                       c-0.2,0.2-0.4,0.5-0.6,0.7c0,0,0,0,0,0.1L73.4,75.6c-1,1-2.2,1.5-3.5,1.5s-2.5-0.5-3.5-1.5c-1.9-1.9-1.9-5.1,0-7L80,55H8
-                       c-2.7,0-5-2.2-5-5C3.1,47.3,5.3,45,8,45z"></path>
-            </svg>
-          </a>
-        </div>
-        {% endif %}
-        
+    
+    <!-- Section Header -->
+    <header class="section-header" 
+            style="text-align: {{ section.settings.title_alignment }}; margin-bottom: {{ section.settings.title_bottom_spacing }}px;">
+      {% if section.settings.section_title != blank %}
+      <h2 id="best-sellers-title-{{ bs_uid }}" 
+          class="section-title"
+          style="color: {{ section.settings.title_color }}; 
+                 font-size: {{ section.settings.title_size }}px;
+                 font-weight: {{ section.settings.title_weight }};">
+        {{ section.settings.section_title }}
+      </h2>
       {% else %}
-      <div class="no-collection-message" 
+      <h2 id="best-sellers-title-{{ bs_uid }}" class="sr-only">Best Sellers</h2>
+      {% endif %}
+    </header>
+    
+    <!-- Products Grid -->
+    {% if section.settings.collection != blank %}
+      {% assign collection = collections[section.settings.collection] %}
+      {% if collection.products.size > 0 %}
+      <div class="products-grid {% if section.settings.enable_image_float %}enable-image-float-{{ bs_uid }}{% endif %}" 
+           style="grid-template-columns: repeat(auto-fit, minmax({{ section.settings.min_product_width }}px, 1fr)); gap: {{ section.settings.products_grid_gap }}px;">
+        
+        {% for product in collection.products limit: section.settings.products_to_show %}
+        <article class="product-card"
+                 style="background-color: {{ section.settings.card_background }}; 
+                        border-radius: {{ section.settings.card_border_radius }}px;">
+          
+          <!-- Product Image -->
+          <div class="product-image-container{% if section.settings.enable_image_float %} image-float{% endif %}"
+               style="--float-offset: {{ section.settings.image_float_offset }}px;">
+            <a href="{{ product.url }}" 
+               aria-label="View {{ product.title }}"
+               class="product-link">
+              {% if product.featured_image %}
+                <img src="{{ product.featured_image | image_url: width: 400 }}"
+                     srcset="{{ product.featured_image | image_url: width: 200 }} 200w,
+                             {{ product.featured_image | image_url: width: 300 }} 300w,
+                             {{ product.featured_image | image_url: width: 400 }} 400w"
+                     sizes="(max-width: 480px) 200px, (max-width: 768px) 300px, 400px"
+                     alt="{{ product.featured_image.alt | default: product.title }}"
+                     class="product-image"
+                     width="400"
+                     height="400"
+                     loading="lazy"
+                     decoding="async">
+              {% else %}
+                <div class="product-image-placeholder" 
+                     style="background-color: {{ section.settings.placeholder_color }};"
+                     aria-label="No image available for {{ product.title }}">
+                  <span aria-hidden="true">No Image</span>
+                </div>
+              {% endif %}
+              
+              <!-- Product Badge/Sale -->
+              {% if product.compare_at_price > product.price %}
+              <span class="sale-badge" 
+                    style="background-color: {{ section.settings.sale_badge_color }};"
+                    aria-label="On sale">
+                Sale
+              </span>
+              {% endif %}
+            </a>
+          </div>
+          
+          <!-- Product Info -->
+          <div class="product-info" style="padding: {{ section.settings.card_padding }}px;">
+            
+            <!-- Star Rating -->
+            {% if section.settings.show_ratings %}
+            <div class="product-rating" aria-label="5 out of 5 stars">
+              {% for i in (1..5) %}
+                <span class="star" 
+                      style="color: {{ section.settings.star_color }};"
+                      aria-hidden="true">★</span>
+              {% endfor %}
+            </div>
+            {% endif %}
+            
+            <!-- Brand Name -->
+            {% if section.settings.show_vendor and product.vendor %}
+            <p class="product-vendor" 
+               style="color: {{ section.settings.vendor_color }}; 
+                      font-size: {{ section.settings.vendor_size }}px;">
+              {{ product.vendor | upcase }}
+            </p>
+            {% endif %}
+            
+            <!-- Product Title -->
+            <h3 class="product-title">
+              <a href="{{ product.url }}" 
+                 style="color: {{ section.settings.product_title_color }}; 
+                        font-size: {{ section.settings.product_title_size }}px;
+                        font-weight: {{ section.settings.product_title_weight }};">
+                {{ product.title }}
+              </a>
+            </h3>
+            
+            <!-- Add to Cart Button -->
+            <form action="/cart/add" method="post" enctype="multipart/form-data" class="product-form">
+              {% unless product.has_only_default_variant %}
+                <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+              {% else %}
+                <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+              {% endunless %}
+              
+              <button type="submit" 
+                      class="add-to-cart-btn {% unless product.available %}sold-out{% endunless %}"
+                      style="background-color: {{ section.settings.cart_button_background }}; 
+                             color: {{ section.settings.cart_button_text_color }};
+                             border-radius: {{ section.settings.cart_button_radius }}px;
+                             font-size: {{ section.settings.cart_button_text_size }}px;"
+                      {% unless product.available %}disabled{% endunless %}
+                      aria-label="Add {{ product.title }} to cart">
+                {% if product.available %}
+                  {{ section.settings.add_to_cart_text | default: 'ADD TO CART' }}
+                {% else %}
+                  {{ section.settings.sold_out_text | default: 'SOLD OUT' }}
+                {% endif %}
+              </button>
+            </form>
+          </div>
+        </article>
+        {% endfor %}
+        
+      </div>
+      {% else %}
+      <div class="no-products-message" 
            style="text-align: center; padding: 40px; color: #666;">
-        <p>Please select a collection to display products.</p>
+        <p>No products found in this collection.</p>
       </div>
       {% endif %}
-
-    </div><!-- /.best-sellers-inner -->
+      
+      <!-- See All Button (Below Products) -->
+      {% if section.settings.show_see_all_button and section.settings.collection != blank %}
+      <div class="see-all-container" 
+           style="text-align: {{ section.settings.button_alignment }}; margin-top: {{ section.settings.button_top_spacing }}px;">
+        <a href="{{ collections[section.settings.collection].url }}" 
+           class="see-all-button dt-sc-btn{% if section.settings.see_all_add_padding %} ctm-btn-padding{% endif %}"
+           aria-label="See all products in {{ collections[section.settings.collection].title }} collection">
+          {{ section.settings.see_all_text | default: 'See all' }}
+          <!-- same SVG used in blog button; path follows currentColor -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+            <path d="M8,45h72L66.4,31.4c-1.9-1.9-1.9-5.1,0-7c1.9-1.9,5.1-1.9,7,0l22.1,22.1c0,0,0,0,0.1,0.1c0.2,0.2,0.4,0.4,0.6,0.7
+                     c0.1,0.1,0.1,0.2,0.1,0.3c0.1,0.2,0.2,0.4,0.3,0.6c0,0.1,0.1,0.2,0.1,0.3c0.1,0.2,0.1,0.4,0.2,0.6c0.1,0.3,0.1,0.6,0.1,1
+                     s0,0.7-0.1,1c0,0.2-0.1,0.4-0.2,0.6c0,0.1-0.1,0.2-0.1,0.3c-0.1,0.2-0.2,0.4-0.3,0.6c0,0.1-0.1,0.2-0.1,0.3
+                     c-0.2,0.2-0.4,0.5-0.6,0.7c0,0,0,0,0,0.1L73.4,75.6c-1,1-2.2,1.5-3.5,1.5s-2.5-0.5-3.5-1.5c-1.9-1.9-1.9-5.1,0-7L80,55H8
+                     c-2.7,0-5-2.2-5-5C3.1,47.3,5.3,45,8,45z"></path>
+          </svg>
+        </a>
+      </div>
+      {% endif %}
+      
+    {% else %}
+    <div class="no-collection-message" 
+         style="text-align: center; padding: 40px; color: #666;">
+      <p>Please select a collection to display products.</p>
+    </div>
+    {% endif %}
     
   </div>
 </section>
 
 <style>
-/* Base */
-.best-sellers-section { position: relative; }
-.best-sellers-container {
-  position: relative;
-  max-width: 960px;
-  width: 100%;
-  margin: 100px auto;
-}
-.best-sellers-inner { position: relative; overflow: visible; }
-
-/* Badge */
-.collection-badge { position: absolute; top: -30px; right: 20px; z-index: 10; }
-.badge-image { border-radius: 50%; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); display: block; }
-.badge-spin { animation: spin {{ section.settings.badge_spin_speed | default: 10 }}s linear infinite; }
-@keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
-@media (prefers-reduced-motion: reduce){ .badge-spin{ animation: none; } }
-
-/* Typography (consistent with your other section) */
-.section-title,
-.product-title,
-.see-all-button,
-.add-to-cart-btn,
-.product-vendor {
+/* ===== Base & Typography (match blog look) ===== */
+.best-sellers-{{ bs_uid }} .section-title,
+.best-sellers-{{ bs_uid }} .product-title {
+  margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
-/* Header */
-.section-header { /* spacing via inline style */ }
-.section-title { margin: 0; line-height: 1.2; font-weight: {{ section.settings.title_weight }}; }
+/* Container position hooks */
+.best-sellers-{{ bs_uid }} .best-sellers-section { position: relative; }
+.best-sellers-{{ bs_uid }} .best-sellers-container { position: relative; }
 
-/* Products Grid */
-.products-grid { display: grid; margin-bottom: 20px; }
+/* ===== Badge ===== */
+.best-sellers-{{ bs_uid }} .collection-badge { position: absolute; top: -30px; right: 20px; z-index: 10; }
+.best-sellers-{{ bs_uid }} .badge-image { border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,.1); display: block; }
+.best-sellers-{{ bs_uid }} .badge-spin { animation: spin {{ section.settings.badge_spin_speed | default: 10 }}s linear infinite; }
+@keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+@media (prefers-reduced-motion: reduce) { .best-sellers-{{ bs_uid }} .badge-spin { animation: none; } }
 
-/* Product Card */
-.product-card {
+/* ===== Grid ===== */
+.best-sellers-{{ bs_uid }} .products-grid { display: grid; margin-bottom: 20px; }
+
+/* ===== Product Card ===== */
+.best-sellers-{{ bs_uid }} .product-card {
   position: relative;
   overflow: visible;
   transition: transform .3s ease, box-shadow .3s ease;
@@ -235,104 +225,80 @@
   display: flex;
   flex-direction: column;
 }
-.product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,.15); }
+.best-sellers-{{ bs_uid }} .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,.15); }
 
-/* Image container with optional overflow above inner container */
-.product-image-container {
-  position: relative;
-  aspect-ratio: 1/1;
-  overflow: hidden;
-  background-color: #f8f8f8;
-  margin-top: 0;
-}
-.best-sellers-inner.image-overflow .product-image-container {
-  margin-top: calc(var(--image-overflow, 0px) * -1);
-}
+/* ===== Product Image (with optional float/overflow) ===== */
+.best-sellers-{{ bs_uid }} .product-image-container { position: relative; aspect-ratio: 1/1; overflow: hidden; background-color: #f8f8f8; }
+.best-sellers-{{ bs_uid }} .product-image-container.image-float { transform: translateY(calc(var(--float-offset) * -1)); margin-bottom: calc(var(--float-offset) * -1); }
+.best-sellers-{{ bs_uid }} .product-link { display:block; width:100%; height:100%; }
+.best-sellers-{{ bs_uid }} .product-image { width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform .3s ease; }
+.best-sellers-{{ bs_uid }} .product-card:hover .product-image { transform: scale(1.05); }
+.best-sellers-{{ bs_uid }} .product-image-placeholder { width: 100%; height: 100%; display:flex; align-items:center; justify-content:center; color:#999; font-size:14px; }
 
-.product-link { display: block; width: 100%; height: 100%; }
-.product-image { width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform .3s ease; }
-.product-card:hover .product-image { transform: scale(1.05); }
-.product-image-placeholder {
-  width: 100%; height: 100%; display:flex; align-items:center; justify-content:center;
-  color:#999; font-size:14px;
-}
-.sale-badge {
-  position: absolute; top: 10px; left: 10px; color: #fff; padding: 5px 10px;
-  border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase;
+.best-sellers-{{ bs_uid }} .sale-badge {
+  position:absolute; top:10px; left:10px;
+  color:#fff; padding:5px 10px; border-radius:4px; font-size:12px; font-weight:600; text-transform:uppercase;
 }
 
-/* Product Info */
-.product-info { flex: 1; display: flex; flex-direction: column; gap: 10px; }
-.product-rating { display:flex; gap:2px; font-size:14px; margin-bottom:5px; }
-.product-vendor { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: .5px; }
-.product-title { margin: 0; flex: 1; }
-.product-title a {
-  text-decoration: none; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-  overflow: hidden; line-height: 1.3;
+/* ===== Info area ===== */
+.best-sellers-{{ bs_uid }} .product-info { flex:1; display:flex; flex-direction:column; gap:10px; }
+.best-sellers-{{ bs_uid }} .product-rating { display:flex; gap:2px; font-size:14px; margin-bottom:5px; }
+.best-sellers-{{ bs_uid }} .product-vendor { margin:0; font-size:12px; font-weight:600; letter-spacing:.5px; }
+.best-sellers-{{ bs_uid }} .product-title { margin:0; flex:1; }
+.best-sellers-{{ bs_uid }} .product-title a { text-decoration:none; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; line-height:1.3; }
+.best-sellers-{{ bs_uid }} .product-title a:hover,
+.best-sellers-{{ bs_uid }} .product-title a:focus { text-decoration: underline; }
+
+/* ===== Add to Cart ===== */
+.best-sellers-{{ bs_uid }} .product-form { margin-top:auto; }
+.best-sellers-{{ bs_uid }} .add-to-cart-btn {
+  width:100%; border:0; padding:12px 20px; font-weight:600; text-transform:uppercase; cursor:pointer; transition: all .3s ease; letter-spacing:.5px;
 }
-.product-title a:hover, .product-title a:focus { text-decoration: underline; }
+.best-sellers-{{ bs_uid }} .add-to-cart-btn:hover:not(.sold-out) { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.2); }
+.best-sellers-{{ bs_uid }} .add-to-cart-btn:focus { outline:2px solid currentColor; outline-offset:2px; }
+.best-sellers-{{ bs_uid }} .add-to-cart-btn.sold-out { opacity:.6; cursor:not-allowed; }
 
-/* Add to Cart */
-.product-form { margin-top: auto; }
-.add-to-cart-btn {
-  width: 100%; border: none; padding: 12px 20px; font-weight: 600; text-transform: uppercase;
-  cursor: pointer; transition: all .3s ease; letter-spacing: .5px;
-}
-.add-to-cart-btn:hover:not(.sold-out) { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.2); }
-.add-to-cart-btn:focus { outline: 2px solid currentColor; outline-offset: 2px; }
-.add-to-cart-btn.sold-out { opacity: .6; cursor: not-allowed; }
-
-/* ===== See All Button (match blog .dt-sc-btn) ===== */
-.see-all-container { width: 100%; }
-
-/* Use the same class and SVG behavior; path follows currentColor */
-.see-all-button.dt-sc-btn { 
+/* ===== See All (blog-style button) ===== */
+.best-sellers-{{ bs_uid }} .see-all-container { width:100%; }
+.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn {
   display: inline-flex; align-items: center; gap: 8px;
-  border: none; text-decoration: none; line-height: 1; 
-  font-weight: 600; /* similar to blog */
-  padding: 0; /* same as blog heading button */
+  background: none; border: none; text-decoration: none; line-height: 1;
+  font-weight: 600; padding: 0; color: #2D0288;
   transition: background .3s ease, color .3s ease, opacity .3s ease, transform .2s ease;
-  background: none;
-  color: #2D0288;
 }
-.see-all-button.dt-sc-btn.ctm-btn-padding { padding: 6px 15px; } /* same helper used in blog */
+.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn.ctm-btn-padding { padding: 6px 15px; }
+.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn:visited { color: #2D0288; }
+.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn:hover,
+.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn:focus { background: none; color: #FF4881; text-decoration: none; }
+.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: 6px; }
+.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn svg { width: 36px; height: 36px; display: inline-block; }
+.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn svg path { fill: currentColor; }
 
-.see-all-button.dt-sc-btn svg { display: inline-block; width: 36px; height: 36px; }
-.see-all-button.dt-sc-btn svg path { fill: currentColor; }
-
-/* Hover/focus to mirror blog behavior */
-.see-all-button.dt-sc-btn:hover,
-.see-all-button.dt-sc-btn:focus {
-  background: none;
-  color: #FF4881;
-  text-decoration: none;
-}
-.see-all-button.dt-sc-btn:hover svg,
-.see-all-button.dt-sc-btn:focus svg { transform: translateX(3px); }
-
-/* Responsive */
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
-  .best-sellers-container { padding: 0 15px; }
-  .collection-badge { top: -20px; right: 15px; }
-  .badge-image {
+  .best-sellers-{{ bs_uid }} .best-sellers-container { padding: 0 15px; }
+  .best-sellers-{{ bs_uid }} .collection-badge { top:-20px; right:15px; }
+  .best-sellers-{{ bs_uid }} .badge-image {
     width: calc({{ section.settings.badge_size | default: 120 }}px * .8) !important;
     height: calc({{ section.settings.badge_size | default: 120 }}px * .8) !important;
   }
-  .section-header { margin-bottom: 30px; }
-  .section-title { font-size: calc({{ section.settings.title_size | default: 36 }}px * .8) !important; }
-  .see-all-container { margin-top: 30px !important; }
-  .products-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important; gap: 20px; }
+  .best-sellers-{{ bs_uid }} .section-header { margin-bottom: 30px; }
+  .best-sellers-{{ bs_uid }} .section-title { font-size: calc({{ section.settings.title_size | default: 36 }}px * .8) !important; }
+  .best-sellers-{{ bs_uid }} .see-all-container { margin-top: 30px !important; }
+  .best-sellers-{{ bs_uid }} .products-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important; gap: 20px !important; }
 }
-@media (max-width: 480px) {
-  .products-grid { grid-template-columns: 1fr !important; }
-  .section-title { font-size: calc({{ section.settings.title_size | default: 36 }}px * .7) !important; }
+@media (max-width: 480px) { 
+  .best-sellers-{{ bs_uid }} .products-grid { grid-template-columns: 1fr !important; }
+  .best-sellers-{{ bs_uid }} .section-title { font-size: calc({{ section.settings.title_size | default: 36 }}px * .7) !important; }
 }
+
+/* SR-only utility */
+.best-sellers-{{ bs_uid }} .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 </style>
 
 {% schema %}
 {
   "name": "Best Sellers Collection",
-  "class": "index-section best-sellers-section-wrapper",
   "settings": [
     {
       "type": "header",
@@ -364,7 +330,6 @@
       "default": 275,
       "unit": "px"
     },
-
     {
       "type": "header",
       "content": "Section Layout"
@@ -374,6 +339,12 @@
       "id": "background_color",
       "label": "Section Background Color",
       "default": "#f8f8f8"
+    },
+    {
+      "type": "color",
+      "id": "container_background_color",
+      "label": "Inner Container Background",
+      "default": "transparent"
     },
     {
       "type": "range",
@@ -395,54 +366,6 @@
       "default": 60,
       "unit": "px"
     },
-
-    {
-      "type": "header",
-      "content": "Inner Container"
-    },
-    {
-      "type": "color",
-      "id": "container_background_color",
-      "label": "Container Background",
-      "default": "#ffffff"
-    },
-    {
-      "type": "range",
-      "id": "container_border_radius",
-      "label": "Container Border Radius",
-      "min": 0,
-      "max": 40,
-      "step": 2,
-      "default": 20,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "container_padding",
-      "label": "Container Padding",
-      "min": 0,
-      "max": 60,
-      "step": 5,
-      "default": 20,
-      "unit": "px"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_image_overflow",
-      "label": "Enable image overflow above container",
-      "default": true
-    },
-    {
-      "type": "range",
-      "id": "image_overflow_amount",
-      "label": "Overflow amount",
-      "min": 0,
-      "max": 150,
-      "step": 5,
-      "default": 30,
-      "unit": "px"
-    },
-
     {
       "type": "header",
       "content": "Section Title"
@@ -496,13 +419,13 @@
       "type": "range",
       "id": "title_bottom_spacing",
       "label": "Space Below Title",
+      "info": "Vertical spacing between title and products",
       "min": 20,
       "max": 80,
       "step": 5,
       "default": 40,
       "unit": "px"
     },
-
     {
       "type": "header",
       "content": "Product Grid Spacing"
@@ -511,13 +434,33 @@
       "type": "range",
       "id": "products_grid_gap",
       "label": "Gap Between Products",
+      "info": "Horizontal and vertical spacing between product cards",
       "min": 15,
       "max": 60,
       "step": 5,
       "default": 30,
       "unit": "px"
     },
-
+    {
+      "type": "header",
+      "content": "Image Float (Overflow)"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_image_float",
+      "label": "Allow product images to overflow above card",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "image_float_offset",
+      "label": "Overflow amount (px)",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "default": 25,
+      "unit": "px"
+    },
     {
       "type": "header",
       "content": "See All Button"
@@ -556,30 +499,11 @@
       "unit": "px"
     },
     {
-      "type": "color",
-      "id": "section_button_bg_color",
-      "label": "Button BG Color",
-      "default": "#8b1538"
+      "type": "checkbox",
+      "id": "see_all_add_padding",
+      "label": "Use blog-style padding (ctm-btn-padding)",
+      "default": false
     },
-    {
-      "type": "color",
-      "id": "section_button_text_color",
-      "label": "Button Text Color",
-      "default": "#ffffff"
-    },
-    {
-      "type": "color",
-      "id": "section_button_hover_bg_color",
-      "label": "Button Hover BG Color",
-      "default": "#6f0f2c"
-    },
-    {
-      "type": "color",
-      "id": "section_button_hover_text_color",
-      "label": "Button Hover Text Color",
-      "default": "#ffffff"
-    },
-
     {
       "type": "header",
       "content": "Badge Settings"
@@ -627,7 +551,6 @@
       "default": 10,
       "unit": "s"
     },
-
     {
       "type": "header",
       "content": "Product Cards"
@@ -670,7 +593,6 @@
       "label": "Sale Badge Color",
       "default": "#ff4444"
     },
-
     {
       "type": "header",
       "content": "Product Information"
@@ -737,7 +659,6 @@
       ],
       "default": "600"
     },
-
     {
       "type": "header",
       "content": "Add to Cart Button"
