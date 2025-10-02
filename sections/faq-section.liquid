@@ -1,4 +1,4 @@
-<!-- SEO & Accessibility Optimized FAQ Section (Animation + Answer Padding + Active State Colors) -->
+<!-- SEO & Accessibility Optimized FAQ Section (Animation + Answer Padding + Active/Hover Colors) -->
 <section class="faq-section {{ 'faq-root-' | append: section.id | replace: '_', '' | downcase }}"
          role="region"
          aria-labelledby="faq-title-{{ section.id | replace: '_', '' | downcase }}"
@@ -163,20 +163,27 @@
   border-radius: {{ top_left }}px {{ top_right }}px {{ bottom_right }}px {{ bottom_left }}px;
 }
 
-/* ====== NEW: Hover + Active visual style ====== */
-/* Use the same color for hover (optional) and active */
+/* ====== Hover + Active visual styles ====== */
 {% if section.settings.enable_hover_color %}
 .faq-item-{{ faq_uid }}:hover{
   background-color: {{ section.settings.active_background_color }};
   border-color: {{ section.settings.active_background_color }};
 }
+/* Make text & icon white (or chosen active_text_color) on hover */
+.faq-item-{{ faq_uid }}:hover .faq-question-button-{{ faq_uid }},
+.faq-item-{{ faq_uid }}:hover .faq-question-text-{{ faq_uid }},
+.faq-item-{{ faq_uid }}:hover .faq-icon-{{ faq_uid }}{
+  color: {{ section.settings.active_text_color }} !important;
+}
 {% endif %}
-.faq-item-{{ faq_uid }}.active{
+
+/* Keep the same hover background on all selected (active) questions */
+.faq-item-{{ faq_uid }}.active,
+.faq-item-{{ faq_uid }}.active:hover{
   background-color: {{ section.settings.active_background_color }};
   border-color: {{ section.settings.active_background_color }};
 }
-
-/* When active, force text & icon to white (or chosen color) */
+/* Active text & icon = white (or chosen) even when not hovering */
 .faq-item-{{ faq_uid }}.active .faq-question-button-{{ faq_uid }},
 .faq-item-{{ faq_uid }}.active .faq-question-text-{{ faq_uid }},
 .faq-item-{{ faq_uid }}.active .faq-icon-{{ faq_uid }}{
@@ -421,7 +428,7 @@
     {
       "type": "color",
       "id": "active_text_color",
-      "label": "Active text & icon color",
+      "label": "Active & Hover text/icon color",
       "default": "#ffffff"
     }
   ],
