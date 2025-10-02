@@ -175,6 +175,11 @@
 .faq-icon-{{ faq_uid }}{ width:20px; height:20px; transition: transform .25s ease; flex:0 0 auto; color: {{ section.settings.icon_color }}; }
 .faq-item-{{ faq_uid }}.active .faq-icon-{{ faq_uid }}{ transform: rotate(180deg); }
 
+.faq-item-{{ faq_uid }}{
+  border: 1px solid transparent; /* keeps radius but removes line */
+  background-clip: padding-box;         /* prevents background from bleeding under border */
+}
+
 /* Answer panel — animation via height when enabled.
    We do not rely on max-height hacks anymore. */
 .faq-answer-{{ faq_uid }}{
