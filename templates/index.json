@@ -781,7 +781,10 @@
         "body_size": 16,
         "question_size": 18,
         "answer_size": 16,
-        "enable_animation": true
+        "enable_animation": true,
+        "enable_hover_color": true,
+        "active_background_color": "#111111",
+        "active_text_color": "#ffffff"
       }
     },
     "1757879707bba2c8c8": {
@@ -839,7 +842,7 @@
         "split_blog_layout": false,
         "split_gap": "30",
         "enable_masonry_grid": false,
-        "main_banner_style": "grid-style",
+        "main_banner_style": "list-style",
         "additional_banner_style": "grid-style",
         "enable_masonry_reverse": false,
         "blog_bg_color": "rgba(0,0,0,0)",
@@ -865,7 +868,7 @@
         "enable_auto_height": true,
         "items_per_view": 4,
         "items_laptop_view": 4,
-        "items_tablet_view": 2,
+        "items_tablet_view": 3,
         "items_mobile_view": 1,
         "enable_center_mode": false,
         "column_gap": "30",
