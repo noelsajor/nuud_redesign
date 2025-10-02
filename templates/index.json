@@ -768,7 +768,7 @@
             "question_padding": 20,
             "answer_padding": 20,
             "border_radius": 8,
-            "question_border_radius_custom": "6,48,48,6",
+            "question_border_radius_custom": "",
             "subheading_color": "#343434",
             "heading_color": "#881d3e",
             "body_color": "#1a1a1a",
