@@ -236,10 +236,13 @@
         "title_alignment": "center",
         "title_bottom_spacing": 80,
         "products_grid_gap": 15,
+        "enable_image_float": true,
+        "image_float_offset": 25,
         "show_see_all_button": true,
         "see_all_text": "See All Products",
         "button_alignment": "center",
         "button_top_spacing": 80,
+        "see_all_add_padding": false,
         "show_badge": true,
         "badge_image": "shopify://shop_images/SpicyLove.png",
         "badge_alt": "100% Fun Guaranteed",
@@ -581,6 +584,7 @@
         "7bd69ef4-78eb-421b-9782-9be8d5d46fc2": {
           "type": "content",
           "settings": {
+            "review_type": "full",
             "quote": "<p>Porem ipsum dolor sit amet, ctetur adipiscing elit, sed do. Lorem ipsum dolor sit amet.</p>",
             "icon": "shopify://shop_images/SpicyLove.png",
             "author": "Author Name",
@@ -591,6 +595,7 @@
         "content_d99CYk": {
           "type": "content",
           "settings": {
+            "review_type": "full",
             "quote": "<p>Porem ipsum dolor sit amet, ctetur adipiscing elit, sed do. Lorem ipsum dolor sit amet.</p>",
             "icon": "shopify://shop_images/SpicyLove.png",
             "author": "Author Name",
@@ -601,18 +606,31 @@
         "content_CNPyjX": {
           "type": "content",
           "settings": {
+            "review_type": "full",
             "quote": "<p>Porem ipsum dolor sit amet, ctetur adipiscing elit, sed do. Lorem ipsum dolor sit amet.</p>",
             "icon": "shopify://shop_images/SpicyLove.png",
             "author": "Author Name",
             "job": "Author Designation",
             "star": "3"
           }
+        },
+        "content_ATGPYr": {
+          "type": "content",
+          "settings": {
+            "review_type": "photo",
+            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
+            "author": "Author Name",
+            "job": "Author Designation",
+            "star": "3",
+            "photo": "shopify://shop_images/Section_girl.webp"
+          }
         }
       },
       "block_order": [
         "7bd69ef4-78eb-421b-9782-9be8d5d46fc2",
         "content_d99CYk",
-        "content_CNPyjX"
+        "content_CNPyjX",
+        "content_ATGPYr"
       ],
       "custom_css": [],
       "settings": {
@@ -704,10 +722,13 @@
         "title_alignment": "center",
         "title_bottom_spacing": 80,
         "products_grid_gap": 15,
+        "enable_image_float": true,
+        "image_float_offset": 25,
         "show_see_all_button": true,
         "see_all_text": "See All Products",
         "button_alignment": "center",
         "button_top_spacing": 80,
+        "see_all_add_padding": false,
         "show_badge": true,
         "badge_image": "shopify://shop_images/SpicyLove.png",
         "badge_alt": "100% Fun Guaranteed",
