@@ -152,6 +152,10 @@
   width:100%; background:transparent; border:0; text-align:left;
   display:flex; justify-content: space-between; align-items:center; gap:1rem;
   line-height:1.4; font-weight:700; cursor:pointer;
+  border-color: transparent !important;
+  background-clip: padding-box;
+  margin-top: 0 !important;
+
 }
 .faq-question-text-{{ faq_uid }}{ flex: 1 1 auto; min-width: 0; }
 .faq-icon-{{ faq_uid }}{ flex: 0 0 auto; margin-left: auto; width:20px; height:20px; transition: transform .25s ease; color: {{ section.settings.icon_color }}; }
