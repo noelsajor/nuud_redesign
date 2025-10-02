@@ -592,6 +592,17 @@
             "star": "3"
           }
         },
+        "content_ATGPYr": {
+          "type": "content",
+          "settings": {
+            "review_type": "photo",
+            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
+            "author": "Author Name",
+            "job": "Author Designation",
+            "star": "3",
+            "photo": "shopify://shop_images/Section_girl.webp"
+          }
+        },
         "content_d99CYk": {
           "type": "content",
           "settings": {
@@ -601,6 +612,17 @@
             "author": "Author Name",
             "job": "Author Designation",
             "star": "3"
+          }
+        },
+        "content_CBwdHX": {
+          "type": "content",
+          "settings": {
+            "review_type": "photo",
+            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
+            "author": "Author Name",
+            "job": "Author Designation",
+            "star": "3",
+            "photo": "shopify://shop_images/Section_girl.webp"
           }
         },
         "content_CNPyjX": {
@@ -614,7 +636,7 @@
             "star": "3"
           }
         },
-        "content_ATGPYr": {
+        "content_3Jxe6U": {
           "type": "content",
           "settings": {
             "review_type": "photo",
@@ -628,9 +650,11 @@
       },
       "block_order": [
         "7bd69ef4-78eb-421b-9782-9be8d5d46fc2",
+        "content_ATGPYr",
         "content_d99CYk",
+        "content_CBwdHX",
         "content_CNPyjX",
-        "content_ATGPYr"
+        "content_3Jxe6U"
       ],
       "custom_css": [],
       "settings": {
