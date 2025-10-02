@@ -1,4 +1,4 @@
-<!-- SEO & Accessibility Optimized FAQ Section (SECTION MODE, Animation Toggle, Answer Padding) -->
+<!-- SEO & Accessibility Optimized FAQ Section (Animation + Answer Padding + Active State Colors) -->
 <section class="faq-section {{ 'faq-root-' | append: section.id | replace: '_', '' | downcase }}"
          role="region"
          aria-labelledby="faq-title-{{ section.id | replace: '_', '' | downcase }}"
@@ -152,9 +152,6 @@
   width:100%; background:transparent; border:0; text-align:left;
   display:flex; justify-content: space-between; align-items:center; gap:1rem;
   line-height:1.4; font-weight:700; cursor:pointer;
-  border-color: transparent !important;
-  background-clip: padding-box;
-  margin-top: 0 !important;
 }
 .faq-question-text-{{ faq_uid }}{ flex: 1 1 auto; min-width: 0; }
 .faq-icon-{{ faq_uid }}{ flex: 0 0 auto; margin-left: auto; width:20px; height:20px; transition: transform .25s ease; color: {{ section.settings.icon_color }}; }
@@ -164,6 +161,26 @@
   outline: 2px solid rgba(0,0,0,.6);
   outline-offset: 2px;
   border-radius: {{ top_left }}px {{ top_right }}px {{ bottom_right }}px {{ bottom_left }}px;
+}
+
+/* ====== NEW: Hover + Active visual style ====== */
+/* Use the same color for hover (optional) and active */
+{% if section.settings.enable_hover_color %}
+.faq-item-{{ faq_uid }}:hover{
+  background-color: {{ section.settings.active_background_color }};
+  border-color: {{ section.settings.active_background_color }};
+}
+{% endif %}
+.faq-item-{{ faq_uid }}.active{
+  background-color: {{ section.settings.active_background_color }};
+  border-color: {{ section.settings.active_background_color }};
+}
+
+/* When active, force text & icon to white (or chosen color) */
+.faq-item-{{ faq_uid }}.active .faq-question-button-{{ faq_uid }},
+.faq-item-{{ faq_uid }}.active .faq-question-text-{{ faq_uid }},
+.faq-item-{{ faq_uid }}.active .faq-icon-{{ faq_uid }}{
+  color: {{ section.settings.active_text_color }} !important;
 }
 
 /* Answer panel — height animation when enabled */
@@ -386,6 +403,26 @@
       "label": "Enable animation",
       "default": true,
       "info": "Smoothly expands/collapses answers. Automatically disabled for users who prefer reduced motion."
+    },
+
+    { "type": "header", "content": "States" },
+    {
+      "type": "checkbox",
+      "id": "enable_hover_color",
+      "label": "Enable hover color on questions",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "active_background_color",
+      "label": "Active/Hover background color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "active_text_color",
+      "label": "Active text & icon color",
+      "default": "#ffffff"
     }
   ],
   "presets": [
