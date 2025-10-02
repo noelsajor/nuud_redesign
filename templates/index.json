@@ -768,12 +768,12 @@
         "border_radius": 8,
         "question_border_radius_custom": "6,6,6,6",
         "subheading_color": "#666666",
-        "heading_color": "#000000",
+        "heading_color": "#881d3e",
         "body_color": "#333333",
-        "question_background": "#f8f8f8",
+        "question_background": "#a7e4b2",
         "question_color": "#000000",
-        "question_border_color": "#e0e0e0",
-        "answer_background": "#ffffff",
+        "question_border_color": "rgba(0,0,0,0)",
+        "answer_background": "rgba(0,0,0,0)",
         "answer_color": "#555555",
         "icon_color": "#666666"
       }
