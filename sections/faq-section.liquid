@@ -15,6 +15,8 @@
          ">
 
   {%- assign faq_uid = section.id | replace: '_', '' | downcase -%}
+  {%- comment -%} Use hover color if provided; otherwise fall back to active color {%- endcomment -%}
+  {%- assign state_bg = section.settings.hover_background_color | default: section.settings.active_background_color -%}
 
   {%- comment -%} Parse per-corner border radius CSV (tl,tr,br,bl) {%- endcomment -%}
   {%- assign br_vals = section.settings.question_border_radius_custom | split: ',' -%}
@@ -155,7 +157,6 @@
   border-color: transparent !important;
   background-clip: padding-box;
   margin-top: 0 !important;
-
 }
 .faq-question-text-{{ faq_uid }}{ flex: 1 1 auto; min-width: 0; }
 .faq-icon-{{ faq_uid }}{ flex: 0 0 auto; margin-left: auto; width:20px; height:20px; transition: transform .25s ease; color: {{ section.settings.icon_color }}; }
@@ -167,28 +168,39 @@
   border-radius: {{ top_left }}px {{ top_right }}px {{ bottom_right }}px {{ bottom_left }}px;
 }
 
-/* ====== Hover + Active visual styles ====== */
+/* ====== Hover + Active visual styles (use Hover color for both) ====== */
 {% if section.settings.enable_hover_color %}
+/* Hover: item + button adopt the hover color */
 .faq-item-{{ faq_uid }}:hover{
-  background-color: {{ section.settings.active_background_color }};
-  border-color: {{ section.settings.active_background_color }};
+  background-color: {{ state_bg }} !important;
+  border-color: {{ state_bg }} !important;
 }
-/* Make text & icon white (or chosen active_text_color) on hover */
+.faq-item-{{ faq_uid }}:hover .faq-question-button-{{ faq_uid }}{
+  background-color: {{ state_bg }} !important;
+  border-radius: {{ top_left }}px {{ top_right }}px {{ bottom_right }}px {{ bottom_left }}px;
+  background-clip: padding-box;
+}
+/* Hover: text & icon turn white (or chosen) */
 .faq-item-{{ faq_uid }}:hover .faq-question-button-{{ faq_uid }},
 .faq-item-{{ faq_uid }}:hover .faq-question-text-{{ faq_uid }},
 .faq-item-{{ faq_uid }}:hover .faq-icon-{{ faq_uid }}{
   color: {{ section.settings.active_text_color }} !important;
-  
 }
 {% endif %}
 
-/* Keep the same hover background on all selected (active) questions */
+/* Active: keep EXACT same color as hover for item + button */
 .faq-item-{{ faq_uid }}.active,
 .faq-item-{{ faq_uid }}.active:hover{
-  background-color: {{ section.settings.active_background_color }};
-  border-color: {{ section.settings.active_background_color }};
+  background-color: {{ state_bg }} !important;
+  border-color: {{ state_bg }} !important;
 }
-/* Active text & icon = white (or chosen) even when not hovering */
+.faq-item-{{ faq_uid }}.active .faq-question-button-{{ faq_uid }},
+.faq-item-{{ faq_uid }}.active:hover .faq-question-button-{{ faq_uid }}{
+  background-color: {{ state_bg }} !important;
+  border-radius: {{ top_left }}px {{ top_right }}px {{ bottom_right }}px {{ bottom_left }}px;
+  background-clip: padding-box;
+}
+/* Active: text & icon stay white */
 .faq-item-{{ faq_uid }}.active .faq-question-button-{{ faq_uid }},
 .faq-item-{{ faq_uid }}.active .faq-question-text-{{ faq_uid }},
 .faq-item-{{ faq_uid }}.active .faq-icon-{{ faq_uid }}{
@@ -426,8 +438,14 @@
     },
     {
       "type": "color",
+      "id": "hover_background_color",
+      "label": "Hover background color (also used for Active)",
+      "default": "#ff4da6"
+    },
+    {
+      "type": "color",
       "id": "active_background_color",
-      "label": "Active/Hover background color",
+      "label": "Fallback Active background color",
       "default": "#111111"
     },
     {
