@@ -1,4 +1,4 @@
-<!-- FAQ Section -->
+<!-- SEO & Accessibility Optimized FAQ Section (Animation + Answer Padding + Active/Hover Colors) -->
 <section class="faq-section {{ 'faq-root-' | append: section.id | replace: '_', '' | downcase }}"
          role="region"
          aria-labelledby="faq-title-{{ section.id | replace: '_', '' | downcase }}"
@@ -147,7 +147,7 @@
   list-style:none; margin:0; padding:0;
 }
 
-/* Button layout: space between */
+/* Button layout: space between, text grows, icon pinned right */
 .faq-question-button-{{ faq_uid }}{
   width:100%; background:transparent; border:0; text-align:left;
   display:flex; justify-content: space-between; align-items:center; gap:1rem;
@@ -163,13 +163,13 @@
   border-radius: {{ top_left }}px {{ top_right }}px {{ bottom_right }}px {{ bottom_left }}px;
 }
 
-/* ====== Unified Hover & Active Colors (hover color reused for active) ====== */
-{% assign state_bg = section.settings.hover_background_color | default: section.settings.active_background_color %}
+/* ====== Hover + Active visual styles ====== */
 {% if section.settings.enable_hover_color %}
 .faq-item-{{ faq_uid }}:hover{
-  background-color: {{ state_bg }} !important;
-  border-color: {{ state_bg }} !important;
+  background-color: {{ section.settings.active_background_color }};
+  border-color: {{ section.settings.active_background_color }};
 }
+/* Make text & icon white (or chosen active_text_color) on hover */
 .faq-item-{{ faq_uid }}:hover .faq-question-button-{{ faq_uid }},
 .faq-item-{{ faq_uid }}:hover .faq-question-text-{{ faq_uid }},
 .faq-item-{{ faq_uid }}:hover .faq-icon-{{ faq_uid }}{
@@ -177,12 +177,13 @@
 }
 {% endif %}
 
-/* Keep the same hover color on selected (active) items, even when not hovering */
+/* Keep the same hover background on all selected (active) questions */
 .faq-item-{{ faq_uid }}.active,
 .faq-item-{{ faq_uid }}.active:hover{
-  background-color: {{ state_bg }} !important;
-  border-color: {{ state_bg }} !important;
+  background-color: {{ section.settings.active_background_color }};
+  border-color: {{ section.settings.active_background_color }};
 }
+/* Active text & icon = white (or chosen) even when not hovering */
 .faq-item-{{ faq_uid }}.active .faq-question-button-{{ faq_uid }},
 .faq-item-{{ faq_uid }}.active .faq-question-text-{{ faq_uid }},
 .faq-item-{{ faq_uid }}.active .faq-icon-{{ faq_uid }}{
@@ -259,6 +260,7 @@
             const panel = item.querySelector('.faq-answer-' + rootId);
             if (!btn || !panel) return;
 
+            // closed baseline
             panel.hidden = panel.getAttribute('aria-hidden') !== 'false';
             if (panel.hidden) panel.style.height = '0px';
 
@@ -419,9 +421,9 @@
     },
     {
       "type": "color",
-      "id": "hover_background_color",
-      "label": "Hover background color (also used for Active)",
-      "default": "#ff4da6"
+      "id": "active_background_color",
+      "label": "Active/Hover background color",
+      "default": "#111111"
     },
     {
       "type": "color",
