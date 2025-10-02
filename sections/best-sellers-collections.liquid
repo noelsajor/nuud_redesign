@@ -1,4 +1,4 @@
-<!-- Best Sellers Collection Section (Typography aligned to reference) -->
+<!-- Best Sellers Collection Section (Typography aligned to reference + uppercase title) -->
 <section class="best-sellers-section"
          aria-labelledby="best-sellers-title"
          style="
@@ -207,7 +207,8 @@
   margin:0;
   font-family:var(--font-family-sys);
   line-height:var(--lh-tight);
-  letter-spacing:var(--letter-tight);
+  letter-spacing:1px;          /* NEW: match FAQ subheading */
+  text-transform:uppercase;    /* NEW: match FAQ subheading */
 }
 
 /* ===== “See All” Button ===== */
