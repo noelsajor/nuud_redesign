@@ -1,103 +1,92 @@
-<!-- SEO & Accessibility Optimized FAQ Section -->
-<section class="faq-section {{ 'faq-root-' | append: block.id | replace: '_', '' | downcase }}"
+<!-- SEO & Accessibility Optimized FAQ Section (SECTION MODE) -->
+<section class="faq-section {{ 'faq-root-' | append: section.id | replace: '_', '' | downcase }}"
          role="region"
-         aria-labelledby="faq-title-{{ block.id | replace: '_', '' | downcase }}"
+         aria-labelledby="faq-title-{{ section.id | replace: '_', '' | downcase }}"
          style="
-           {% if block.settings.section_background_image %}
-             background-image: url('{{ block.settings.section_background_image | image_url: width: 2000 }}');
+           {% if section.settings.section_background_image %}
+             background-image: url('{{ section.settings.section_background_image | image_url: width: 2000 }}');
              background-size: cover;
              background-position: center;
              background-repeat: no-repeat;
            {% else %}
-             background: {{ block.settings.section_background_color }};
+             background: {{ section.settings.section_background_color }};
            {% endif %}
            padding: 60px {{ settings.gutter_width }}px 60px {{ settings.gutter_width }}px;
-         "
-         {{ block.shopify_attributes }}>
+         ">
 
-  {%- assign faq_uid = block.id | replace: '_', '' | downcase -%}
+  {%- assign faq_uid = section.id | replace: '_', '' | downcase -%}
 
-  {%- comment -%} Parse per-corner border radius CSV (tl,tr,br,bl) with sane fallbacks {%- endcomment -%}
-  {%- assign br_vals = block.settings.question_border_radius_custom | split: ',' -%}
+  {%- comment -%} Parse per-corner border radius CSV (tl,tr,br,bl) {%- endcomment -%}
+  {%- assign br_vals = section.settings.question_border_radius_custom | split: ',' -%}
   {%- assign top_left     = br_vals[0] | default: '6' | strip -%}
   {%- assign top_right    = br_vals[1] | default: top_left  | strip -%}
   {%- assign bottom_right = br_vals[2] | default: top_left  | strip -%}
   {%- assign bottom_left  = br_vals[3] | default: top_right | strip -%}
 
-  <!-- Optional Section Overlay (kept off by default via opacity=0) -->
-  {% if block.settings.section_background_image and block.settings.overlay_opacity > 0 %}
+  {% if section.settings.section_background_image and section.settings.overlay_opacity > 0 %}
     <div class="faq-section-overlay-{{ faq_uid }}"
          aria-hidden="true"
-         style="
-           position:absolute; inset:0;
-           background-color: {{ block.settings.overlay_color }};
-           opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};
-           pointer-events:none;
-         ">
+         style="position:absolute; inset:0; background-color: {{ section.settings.overlay_color }}; opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }}; pointer-events:none;">
     </div>
   {% endif %}
 
-  <!-- FAQ Container (matches theme container width & internal padding) -->
   <faq-section-{{ faq_uid }}
       class="faq-container-{{ faq_uid }}"
       style="
         max-width: {{ settings.container_width }}px;
         margin: 0 auto;
-        padding-top: {{ block.settings.section_padding }}px;
-        padding-bottom: {{ block.settings.section_padding }}px;
-        {% if block.settings.container_background_image %}
-          background-image: url('{{ block.settings.container_background_image | image_url: width: 1500 }}');
-          background-size: cover;
-          background-position: center;
-          background-repeat: no-repeat;
+        padding-top: {{ section.settings.section_padding }}px;
+        padding-bottom: {{ section.settings.section_padding }}px;
+        {% if section.settings.container_background_image %}
+          background-image: url('{{ section.settings.container_background_image | image_url: width: 1500 }}');
+          background-size: cover; background-position: center; background-repeat: no-repeat;
         {% else %}
-          background-color: {{ block.settings.background_color }};
+          background-color: {{ section.settings.background_color }};
         {% endif %}
-        border-radius: {{ block.settings.border_radius }}px;
+        border-radius: {{ section.settings.border_radius }}px;
       ">
 
-    <!-- Left Column: Subheading, Heading, Body -->
+    <!-- Left Column -->
     <div class="faq-content-{{ faq_uid }}">
-      {% if block.settings.subheading != blank %}
+      {% if section.settings.subheading != blank %}
         <p class="faq-subheading-{{ faq_uid }}"
-           style="color: {{ block.settings.subheading_color }}; font-size: {{ block.settings.subheading_size }}px;">
-          {{ block.settings.subheading }}
+           style="color: {{ section.settings.subheading_color }}; font-size: {{ section.settings.subheading_size }}px;">
+          {{ section.settings.subheading }}
         </p>
       {% endif %}
 
-      {% if block.settings.heading != blank %}
+      {% if section.settings.heading != blank %}
         <h2 id="faq-title-{{ faq_uid }}"
             class="faq-heading-{{ faq_uid }}"
-            style="color: {{ block.settings.heading_color }}; font-size: {{ block.settings.heading_size }}px;">
-          {{ block.settings.heading }}
+            style="color: {{ section.settings.heading_color }}; font-size: {{ section.settings.heading_size }}px;">
+          {{ section.settings.heading }}
         </h2>
       {% else %}
-        <!-- SR-only fallback title to ensure region is labelled -->
         <h2 id="faq-title-{{ faq_uid }}" class="sr-only">Frequently Asked Questions</h2>
       {% endif %}
 
-      {% if block.settings.body != blank %}
+      {% if section.settings.body != blank %}
         <div class="faq-body-{{ faq_uid }}"
-             style="color: {{ block.settings.body_color }}; font-size: {{ block.settings.body_size }}px;">
-          {{ block.settings.body }}
+             style="color: {{ section.settings.body_color }}; font-size: {{ section.settings.body_size }}px;">
+          {{ section.settings.body }}
         </div>
       {% endif %}
     </div>
 
-    <!-- Right Column: Questions List -->
+    <!-- Right Column: Questions -->
     <ul class="faq-questions-{{ faq_uid }}" role="list">
       {% for i in (1..6) %}
         {% assign q_key = 'question_' | append: i %}
         {% assign a_key = 'answer_'   | append: i %}
-        {% assign q = block.settings[q_key] %}
-        {% assign a = block.settings[a_key] %}
+        {% assign q = section.settings[q_key] %}
+        {% assign a = section.settings[a_key] %}
         {% if q != blank and a != blank %}
           <li class="faq-item-{{ faq_uid }}"
               data-faq-item="{{ i }}"
               style="
-                border: 1px solid {{ block.settings.question_border_color }};
+                border: 1px solid {{ section.settings.question_border_color }};
                 border-radius: {{ top_left }}px {{ top_right }}px {{ bottom_right }}px {{ bottom_left }}px;
-                background-color: {{ block.settings.question_background }};
+                background-color: {{ section.settings.question_background }};
               ">
             <button class="faq-question-button-{{ faq_uid }}"
                     type="button"
@@ -105,18 +94,15 @@
                     aria-controls="faq-answer-{{ faq_uid }}-{{ i }}"
                     id="faq-question-{{ faq_uid }}-{{ i }}"
                     style="
-                      color: {{ block.settings.question_color }};
-                      font-size: {{ block.settings.question_size }}px;
-                      padding: {{ block.settings.question_padding }}px;
+                      color: {{ section.settings.question_color }};
+                      font-size: {{ section.settings.question_size }}px;
+                      padding: {{ section.settings.question_padding }}px;
                     ">
               <span class="faq-question-text-{{ faq_uid }}">{{ q }}</span>
               <svg class="faq-icon-{{ faq_uid }}"
                    viewBox="0 0 24 24"
-                   fill="none"
-                   stroke="currentColor"
-                   stroke-width="2"
-                   aria-hidden="true"
-                   focusable="false">
+                   fill="none" stroke="currentColor" stroke-width="2"
+                   aria-hidden="true" focusable="false">
                 <polyline points="6,9 12,15 18,9"></polyline>
               </svg>
             </button>
@@ -127,13 +113,13 @@
                  aria-labelledby="faq-question-{{ faq_uid }}-{{ i }}"
                  aria-hidden="true"
                  hidden
-                 style="background-color: {{ block.settings.answer_background }};">
+                 style="background-color: {{ section.settings.answer_background }};">
               <div class="faq-answer-content-{{ faq_uid }}"
                    style="
-                     color: {{ block.settings.answer_color }};
-                     font-size: {{ block.settings.answer_size }}px;
-                     padding-left: {{ block.settings.question_padding }}px;
-                     padding-right: {{ block.settings.question_padding }}px;
+                     color: {{ section.settings.answer_color }};
+                     font-size: {{ section.settings.answer_size }}px;
+                     padding-left: {{ section.settings.question_padding }}px;
+                     padding-right: {{ section.settings.question_padding }}px;
                    ">
                 {{ a }}
               </div>
@@ -146,26 +132,20 @@
 </section>
 
 <style>
-/* Base Section */
 .faq-section { position: relative; z-index: 1; }
-
-/* Grid container: 2 cols → 1 col on mobile */
 .faq-container-{{ faq_uid }}{
   position: relative; z-index: 2;
   display: grid; grid-template-columns: 1fr 1fr;
-  gap: {{ block.settings.section_gap }}px;
+  gap: {{ section.settings.section_gap }}px;
   padding-left: {{ settings.gutter_width }}px;
   padding-right: {{ settings.gutter_width }}px;
 }
 .faq-content-{{ faq_uid }}{ display:flex; flex-direction:column; gap:16px; }
-
 .faq-questions-{{ faq_uid }}{
   display:flex; flex-direction:column;
-  gap: {{ block.settings.question_gap }}px;
+  gap: {{ section.settings.question_gap }}px;
   list-style:none; margin:0; padding:0;
 }
-
-/* Question button: keyboard-visible focus; no hover effects */
 .faq-question-button-{{ faq_uid }}{
   width:100%; background:transparent; border:0; text-align:left;
   display:flex; justify-content:space-between; align-items:center; gap:1rem;
@@ -176,21 +156,15 @@
   outline-offset: 2px;
   border-radius: {{ top_left }}px {{ top_right }}px {{ bottom_right }}px {{ bottom_left }}px;
 }
-
-/* Icon rotation on open */
-.faq-icon-{{ faq_uid }}{ width:20px; height:20px; transition: transform .25s ease; flex:0 0 auto; color: {{ block.settings.icon_color }}; }
+.faq-icon-{{ faq_uid }}{ width:20px; height:20px; transition: transform .25s ease; flex:0 0 auto; color: {{ section.settings.icon_color }}; }
 .faq-item-{{ faq_uid }}.active .faq-icon-{{ faq_uid }}{ transform: rotate(180deg); }
-
-/* Answer panel animation */
 .faq-answer-{{ faq_uid }}{
   max-height:0; overflow:hidden; transition: max-height .25s ease, padding .25s ease;
 }
 .faq-answer-content-{{ faq_uid }}{ line-height:1.65; }
 .faq-item-{{ faq_uid }}.active .faq-answer-{{ faq_uid }}{
-  max-height:500px; padding-top: {{ block.settings.answer_padding }}px; padding-bottom: {{ block.settings.answer_padding }}px;
+  max-height:500px; padding-top: {{ section.settings.answer_padding }}px; padding-bottom: {{ section.settings.answer_padding }}px;
 }
-
-/* Responsiveness (match theme breakpoints) */
 @media screen and (max-width: {{ settings.lap_container_width }}px){
   .faq-container-{{ faq_uid }}{ max-width: {{ settings.lap_container_width }}px; }
 }
@@ -207,39 +181,34 @@
 @media (max-width: 768px){
   .faq-container-{{ faq_uid }}{
     grid-template-columns: 1fr;
-    gap: {{ block.settings.mobile_gap }}px;
-    padding-top: calc({{ block.settings.section_padding }}px * .8);
-    padding-bottom: calc({{ block.settings.section_padding }}px * .8);
+    gap: {{ section.settings.mobile_gap }}px;
+    padding-top: calc({{ section.settings.section_padding }}px * .8);
+    padding-bottom: calc({{ section.settings.section_padding }}px * .8);
     padding-left: calc({{ settings.gutter_width }}px * .6);
     padding-right: calc({{ settings.gutter_width }}px * .6);
   }
-  .faq-content-{{ faq_uid }}{ text-align: {{ block.settings.mobile_text_alignment }}; }
-  .faq-subheading-{{ faq_uid }}{ font-size: calc({{ block.settings.subheading_size }}px * .9); }
-  .faq-heading-{{ faq_uid }}{ font-size: calc({{ block.settings.heading_size }}px * .85); }
-  .faq-body-{{ faq_uid }}{ font-size: calc({{ block.settings.body_size }}px * .95); }
+  .faq-content-{{ faq_uid }}{ text-align: {{ section.settings.mobile_text_alignment }}; }
+  .faq-subheading-{{ faq_uid }}{ font-size: calc({{ section.settings.subheading_size }}px * .9); }
+  .faq-heading-{{ faq_uid }}{ font-size: calc({{ section.settings.heading_size }}px * .85); }
+  .faq-body-{{ faq_uid }}{ font-size: calc({{ section.settings.body_size }}px * .95); }
   .faq-question-button-{{ faq_uid }}{
-    padding: calc({{ block.settings.question_padding }}px * .85);
-    font-size: calc({{ block.settings.question_size }}px * .95);
+    padding: calc({{ section.settings.question_padding }}px * .85);
+    font-size: calc({{ section.settings.question_size }}px * .95);
   }
   .faq-answer-content-{{ faq_uid }}{
-    padding-left: calc({{ block.settings.question_padding }}px * .85);
-    padding-right: calc({{ block.settings.question_padding }}px * .85);
-    font-size: calc({{ block.settings.answer_size }}px * .95);
+    padding-left: calc({{ section.settings.question_padding }}px * .85);
+    padding-right: calc({{ section.settings.question_padding }}px * .85);
+    font-size: calc({{ section.settings.answer_size }}px * .95);
   }
   .faq-item-{{ faq_uid }}.active .faq-answer-{{ faq_uid }}{
-    padding-top: calc({{ block.settings.answer_padding }}px * .85);
-    padding-bottom: calc({{ block.settings.answer_padding }}px * .85);
+    padding-top: calc({{ section.settings.answer_padding }}px * .85);
+    padding-bottom: calc({{ section.settings.answer_padding }}px * .85);
   }
 }
-
-/* Screen Reader Only (matches your example utility) */
-.sr-only{
-  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
-  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
-}
+/* SR-only utility */
+.sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 </style>
 
-<!-- Behavior: custom element (unchanged functionality) -->
 <script>
   (function() {
     class FaqSection{{ faq_uid }} extends HTMLElement {
@@ -273,7 +242,7 @@
   })();
 </script>
 
-{%- comment -%} SEO: FAQPage JSON-LD (unchanged logic) {%- endcomment -%}
+{%- comment -%} SEO: FAQPage JSON-LD {%- endcomment -%}
 {% assign faq_entities = '' %}
 {% capture faq_entities %}
 [
@@ -281,8 +250,8 @@
   {% for i in (1..6) %}
     {% assign q_key = 'question_' | append: i %}
     {% assign a_key = 'answer_'   | append: i %}
-    {% assign q = block.settings[q_key] %}
-    {% assign a = block.settings[a_key] %}
+    {% assign q = section.settings[q_key] %}
+    {% assign a = section.settings[a_key] %}
     {% if q != blank and a != blank %}
       {{ comma }}
       {
@@ -375,14 +344,7 @@
     { "type": "color", "id": "question_border_color", "label": "Question border", "default": "#e0e0e0" },
     { "type": "color", "id": "answer_background", "label": "Answer background", "default": "#ffffff" },
     { "type": "color", "id": "answer_color", "label": "Answer text", "default": "#555555" },
-    { "type": "color", "id": "icon_color", "label": "Icon", "default": "#666666" },
-
-    { "type": "header", "content": "Typography" },
-    { "type": "range", "id": "subheading_size", "label": "Subheading size", "min": 12, "max": 24, "step": 1, "unit": "px", "default": 14 },
-    { "type": "range", "id": "heading_size", "label": "Heading size", "min": 20, "max": 60, "step": 2, "unit": "px", "default": 36 },
-    { "type": "range", "id": "body_size", "label": "Body text size", "min": 14, "max": 24, "step": 1, "unit": "px", "default": 16 },
-    { "type": "range", "id": "question_size", "label": "Question text size", "min": 14, "max": 24, "step": 1, "unit": "px", "default": 16 },
-    { "type": "range", "id": "answer_size", "label": "Answer text size", "min": 14, "max": 20, "step": 1, "unit": "px", "default": 15 }
+    { "type": "color", "id": "icon_color", "label": "Icon", "default": "#666666" }
   ],
   "presets": [{ "name": "FAQ section" }]
 }
