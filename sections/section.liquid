@@ -1,11 +1,10 @@
-<!-- SEO & Accessibility Optimized Hero Section (functionality unchanged) -->
+<!-- SEO & Accessibility Optimized Hero Section with Switchable Image Position -->
 <section class="hero-section"
          role="banner"
          aria-label="{{ section.settings.section_aria_label | default: 'Hero section with promotional content' }}"
          style="background-color: {{ section.settings.background_color }};
                 padding: {{ section.settings.section_padding_top }}px 20px {{ section.settings.section_padding_bottom }}px 20px;">
   <div class="hero-container">
-    <!-- Brand Badge -->
     {% if section.settings.show_badge and section.settings.badge_image %}
     <div class="brand-badge">
       <img src="{{ section.settings.badge_image | image_url: width: 200 }}"
@@ -19,15 +18,18 @@
     </div>
     {% endif %}
 
-    <!-- Main Content Card -->
-    <article class="hero-card"
-             style="border-color: {{ section.settings.border_color }};
-                    border-width: {{ section.settings.border_width }}px;
-                    border-radius: {{ section.settings.card_border_radius }}px;
-                    background-color: {{ section.settings.card_background }};
-                    margin-left: {{ section.settings.image_overflow | default: 40 }}px;">
+    {% assign pos = section.settings.image_position | default: 'left' %}
+    <article class="hero-card image-{{ pos }}"
+             style="
+               --overflow: {{ section.settings.image_overflow | default: 40 }}px;
+               --radius: {{ section.settings.card_border_radius }}px;
+               border-color: {{ section.settings.border_color }};
+               border-width: {{ section.settings.border_width }}px;
+               border-radius: {{ section.settings.card_border_radius }}px;
+               background-color: {{ section.settings.card_background }};
+             ">
 
-      <!-- Left Side - Hero Image -->
+      <!-- Hero Image -->
       <div class="hero-image-container">
         {% if section.settings.hero_image %}
         <img
@@ -39,9 +41,6 @@
           sizes="(max-width: 768px) 100vw, 50vw"
           alt="{{ section.settings.hero_image.alt | default: section.settings.hero_title | default: 'Hero promotional image' }}"
           class="hero-image"
-          style="margin-left: -{{ section.settings.image_overflow | default: 40 }}px;
-                 width: calc(100% + {{ section.settings.image_overflow | default: 40 }}px);
-                 border-radius: {{ section.settings.card_border_radius }}px 0 0 {{ section.settings.card_border_radius }}px;"
           width="800"
           height="500"
           loading="eager"
@@ -49,10 +48,6 @@
           fetchpriority="high">
         {% else %}
         <div class="hero-image-placeholder"
-             style="background-color: #f0f0f0;
-                    margin-left: -{{ section.settings.image_overflow | default: 40 }}px;
-                    width: calc(100% + {{ section.settings.image_overflow | default: 40 }}px);
-                    border-radius: {{ section.settings.card_border_radius }}px 0 0 {{ section.settings.card_border_radius }}px;"
              role="img"
              aria-label="Placeholder for hero image">
           <span aria-hidden="true">Add your hero image</span>
@@ -60,7 +55,7 @@
         {% endif %}
       </div>
 
-      <!-- Right Side - Content -->
+      <!-- Content -->
       <header class="hero-content" style="background-color: {{ section.settings.content_background }};">
         {% if section.settings.hero_title != blank %}
         <h1 id="hero-title"
@@ -102,7 +97,7 @@
 </section>
 
 <style>
-/* Base Styles */
+/* Base */
 .hero-section {
   position: relative;
   min-height: 600px;
@@ -118,184 +113,112 @@
   margin: 100px auto;
 }
 
-/* Brand Badge */
-.brand-badge {
-  position: absolute;
-  top: -30px;
-  right: 20px;
-  z-index: 10;
-}
-
+/* Badge */
+.brand-badge { position: absolute; top: -30px; right: 20px; z-index: 10; }
 .badge-image {
   border-radius: 50%;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0,0,0,.1);
   display: block;
 }
+.badge-spin { animation: spin {{ section.settings.badge_spin_speed | default: 10 }}s linear infinite; }
+@keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+@media (prefers-reduced-motion: reduce) { .badge-spin{animation:none} .hero-cta-button{transition:none} }
 
-/* Badge Animation with Accessibility */
-.badge-spin {
-  animation: spin {{ section.settings.badge_spin_speed | default: 10 }}s linear infinite;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-/* Respect user motion preferences */
-@media (prefers-reduced-motion: reduce) {
-  .badge-spin { animation: none; }
-  .hero-cta-button { transition: none; }
-}
-
-/* Hero Card */
+/* Card Layout */
 .hero-card {
   border-style: solid;
   overflow: visible;
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-template-areas: "image content";
   min-height: 500px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0,0,0,.1);
 }
 
-.hero-image-container { position: relative; overflow: visible; }
+/* Flip areas when image is on the right */
+.hero-card.image-right { grid-template-areas: "content image"; }
 
-.hero-image {
+/* Offset the card to make room for the overflowing image */
+.hero-card.image-left  { margin-left:  var(--overflow); }
+.hero-card.image-right { margin-right: var(--overflow); }
+
+.hero-image-container { grid-area: image; position: relative; overflow: visible; }
+.hero-content         { grid-area: content; padding: 60px 50px; display: flex; flex-direction: column; justify-content: center; }
+
+/* Image overflow & corners, adapt to side */
+.hero-image,
+.hero-image-placeholder {
   height: 100%;
+  width: calc(100% + var(--overflow));
   object-fit: cover;
   object-position: center;
   display: block;
 }
 
-.hero-image-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #666;
-  font-size: 1.1rem;
-}
+.hero-card.image-left  .hero-image,
+.hero-card.image-left  .hero-image-placeholder  { margin-left:  calc(-1 * var(--overflow)); border-radius: var(--radius) 0 0 var(--radius); }
 
-.hero-content {
-  padding: 60px 50px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.hero-card.image-right .hero-image,
+.hero-card.image-right .hero-image-placeholder { margin-right: calc(-1 * var(--overflow)); border-radius: 0 var(--radius) var(--radius) 0; }
+
+.hero-image-placeholder {
+  background-color: #f0f0f0; color:#666; font-size:1.1rem;
+  display:flex; align-items:center; justify-content:center;
 }
 
 /* Typography */
-.hero-title {
-  margin: 0 0 24px 0;
-  line-height: 1.1;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-}
+.hero-title { margin: 0 0 24px; line-height: 1.1; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
+.hero-description { margin: 0 0 30px; line-height: 1.6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
 
-.hero-description {
-  margin: 0 0 30px 0;
-  line-height: 1.6;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-}
-
-/* CTA Button */
+/* CTA */
 .hero-cta-button {
-  display: inline-block;
-  padding: 16px 32px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  align-self: flex-start;
-  border: 2px solid transparent;
-  cursor: pointer;
+  display: inline-block; padding: 16px 32px; text-decoration: none; font-weight: 600;
+  transition: transform .3s ease, box-shadow .3s ease; align-self: flex-start;
+  border: 2px solid transparent; cursor: pointer;
 }
-
-.hero-cta-button:hover,
-.hero-cta-button:focus {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  text-decoration: none;
-  outline: none;
+.hero-cta-button:hover, .hero-cta-button:focus {
+  transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.2); text-decoration: none; outline: none;
 }
+.hero-cta-button:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; border-color: currentColor; }
 
-.hero-cta-button:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 3px;
-  border-color: currentColor;
-}
+/* Screen-reader only */
+.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 
-/* Screen Reader Only Content */
-.sr-only {
-  position: absolute;
-  width: 1px; height: 1px;
-  padding: 0; margin: -1px;
-  overflow: hidden; clip: rect(0, 0, 0, 0);
-  white-space: nowrap; border: 0;
-}
-
-/* High Contrast Mode Support */
+/* High contrast */
 @media (prefers-contrast: high) {
   .hero-card { border-width: 3px; }
   .hero-cta-button { border: 2px solid currentColor; }
 }
 
-/* Responsive Design */
+/* Responsive */
 @media (max-width: 768px) {
   .hero-section { padding-left: 15px !important; padding-right: 15px !important; }
-
-  .hero-card { grid-template-columns: 1fr; margin-left: 0 !important; }
-
+  .hero-card { grid-template-columns: 1fr; grid-template-areas: "image" "content"; margin-left:0 !important; margin-right:0 !important; }
   .hero-content { padding: 40px 30px; }
-
-  .hero-title {
-    font-size: calc({{ section.settings.title_size | default: 48 }}px * 0.7) !important;
-    margin-bottom: 20px;
-  }
-
-  .hero-description {
-    font-size: calc({{ section.settings.description_size | default: 18 }}px * 0.9) !important;
-    margin-bottom: 25px;
-  }
-
+  .hero-title { font-size: calc({{ section.settings.title_size | default: 48 }}px * 0.7) !important; margin-bottom: 20px; }
+  .hero-description { font-size: calc({{ section.settings.description_size | default: 18 }}px * 0.9) !important; margin-bottom: 25px; }
   .brand-badge { top: -20px; right: 15px; }
-
   .badge-image {
     width: calc({{ section.settings.badge_size | default: 120 }}px * 0.8) !important;
     height: calc({{ section.settings.badge_size | default: 120 }}px * 0.8) !important;
   }
-
-  .hero-image {
-    margin-left: 0 !important;
-    width: 100% !important;
-    border-radius: {{ section.settings.card_border_radius }}px {{ section.settings.card_border_radius }}px 0 0 !important;
-  }
-
+  .hero-image,
   .hero-image-placeholder {
-    margin-left: 0 !important;
-    width: 100% !important;
+    margin-left: 0 !important; margin-right: 0 !important; width: 100% !important;
     border-radius: {{ section.settings.card_border_radius }}px {{ section.settings.card_border_radius }}px 0 0 !important;
   }
 }
 
 @media (max-width: 480px) {
   .hero-content { padding: 30px 20px; }
-
-  .hero-title {
-    font-size: calc({{ section.settings.title_size | default: 48 }}px * 0.5) !important;
-  }
-
-  .hero-description {
-    font-size: calc({{ section.settings.description_size | default: 18 }}px * 0.8) !important;
-  }
-
-  .hero-cta-button {
-    padding: 14px 28px;
-    font-size: calc({{ section.settings.button_text_size | default: 18 }}px * 0.9) !important;
-  }
+  .hero-title { font-size: calc({{ section.settings.title_size | default: 48 }}px * 0.5) !important; }
+  .hero-description { font-size: calc({{ section.settings.description_size | default: 18 }}px * 0.8) !important; }
+  .hero-cta-button { padding: 14px 28px; font-size: calc({{ section.settings.button_text_size | default: 18 }}px * 0.9) !important; }
 }
 
-/* Print Styles */
+/* Print */
 @media print {
-  .hero-section { background: white !important; box-shadow: none !important; }
+  .hero-section { background: #fff !important; box-shadow: none !important; }
   .badge-spin { animation: none !important; }
 }
 </style>
@@ -322,6 +245,12 @@
     { "type": "header", "content": "Hero Image" },
     { "type": "image_picker", "id": "hero_image", "label": "Hero Image", "info": "Recommended size: 800x500px or larger. Add descriptive alt text in the image settings." },
     { "type": "range", "id": "image_overflow", "label": "Image Overflow Amount", "info": "How much the image extends outside the card border", "min": 0, "max": 80, "step": 10, "default": 40, "unit": "px" },
+    { "type": "select", "id": "image_position", "label": "Image position (desktop)", "options": [
+        { "value": "left", "label": "Image left, text right" },
+        { "value": "right", "label": "Image right, text left" }
+      ],
+      "default": "left"
+    },
 
     { "type": "header", "content": "Brand Badge" },
     { "type": "checkbox", "id": "show_badge", "label": "Show Brand Badge", "default": true },
