@@ -500,7 +500,7 @@
       "settings": {
         "full": true,
         "spacing_both_ends": false,
-        "padding": "0,0",
+        "padding": "0,100",
         "margin": "0,0",
         "image_2": "shopify://shop_images/SpicyLove.png",
         "show_background_image": false,
