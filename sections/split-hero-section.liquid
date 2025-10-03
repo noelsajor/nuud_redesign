@@ -158,9 +158,11 @@
 }
 .ai-split-section-bg-{{ uid }}--parallax{ transform: translateZ(0); will-change: transform; }
 
-/* Foreground content */
+/* Foreground content with adjustable padding */
 .ai-split-section-content-{{ uid }}{
-  position: relative; z-index:2; padding:60px 20px; min-height:500px;
+  position: relative; z-index:2;
+  padding: {{ section.settings.padding_top }}px 20px {{ section.settings.padding_bottom }}px 20px;
+  min-height:500px;
 }
 .ai-split-section-container-{{ uid }}{
   max-width: 1200px; margin:0 auto;
@@ -311,11 +313,16 @@
 /* Responsive */
 @media (max-width: 768px){
   .ai-split-section-container-{{ uid }}{ grid-template-columns:1fr; gap:40px; }
+
+  /* keep your chosen paddings on mobile, gently reduced */
+  .ai-split-section-content-{{ uid }}{
+    padding: {{ section.settings.padding_top | times: 0.7 }}px 15px {{ section.settings.padding_bottom | times: 0.7 }}px 15px;
+  }
+
   .ai-split-section-categories-{{ uid }}{
     grid-template-columns: repeat({{ section.settings.categories_per_row_mobile }}, 1fr);
     gap:12px;
   }
-  .ai-split-section-content-{{ uid }}{ padding:40px 15px; }
   .ai-split-section-heading-{{ uid }}{ font-size: {{ section.settings.heading_size | times: 0.8 }}px; }
   .ai-split-section-subheading-{{ uid }}{ font-size: {{ section.settings.subheading_size | times: 0.9 }}px; }
   .ai-split-section-bg-{{ uid }}--fixed{ background-attachment: scroll; }
@@ -370,7 +377,6 @@
     }
   }
 
-  // Safe, unique tag per section
   const tagName = 'split-section-{{ uid }}';
   if(!customElements.get(tagName)){
     customElements.define(tagName, SplitSection{{ uid | replace: '-', '_' }});
@@ -382,6 +388,10 @@
 {
   "name": "Split hero section",
   "settings": [
+    { "type": "header", "content": "Section spacing" },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 200, "step": 5, "default": 60, "unit": "px" },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 200, "step": 5, "default": 60, "unit": "px" },
+
     { "type": "header", "content": "Background" },
     { "type": "image_picker", "id": "background_image", "label": "Background image" },
     { "type": "select", "id": "image_alignment", "label": "Background image alignment",
