@@ -871,7 +871,7 @@
         "vertical_position": "vertical-center",
         "content_width": "50/50",
         "lap_content_width": "40/60",
-        "overlay_style_height": 320,
+        "overlay_style_height": 200,
         "overlay_style": "use_overlay",
         "overlay_color": "rgba(0,0,0,0)",
         "overlay_opacity": "0.5",
