@@ -430,10 +430,23 @@
             "job": "Author Designation",
             "star": "3"
           }
+        },
+        "content_y4DdTr": {
+          "type": "content",
+          "settings": {
+            "review_type": "photo",
+            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
+            "icon": "shopify://shop_images/Rectangle_97.png",
+            "author": "Author Name",
+            "job": "Author Designation",
+            "star": "3",
+            "photo": "shopify://shop_images/Rectangle_97.png"
+          }
         }
       },
       "block_order": [
-        "content_cykCyq"
+        "content_cykCyq",
+        "content_y4DdTr"
       ],
       "name": "Testimonial",
       "settings": {
@@ -462,8 +475,8 @@
         "section_button_hover_text_color": "",
         "heading_position": "text-center",
         "grid": "1",
-        "block_style": "style_1",
-        "boxed_styles": "default",
+        "block_style": "style_3",
+        "boxed_styles": "overall_boxed",
         "enable_box_shadow": false,
         "reverse_column": false,
         "text_position": "text-start",
@@ -490,12 +503,12 @@
         "items_laptop_view": 3,
         "items_tablet_view": 2,
         "items_mobile_view": 1,
-        "enable_center_mode": false,
+        "enable_center_mode": true,
         "slider_autoplay": 0,
-        "dots": true,
+        "dots": false,
         "carousel_pagination_alignment": "center_pagination",
         "carousel_pagination_bottom_alignment": "outside_element",
-        "arrows": true,
+        "arrows": false,
         "nav_arrow_position": "center-navigation",
         "center_nav_arrow_alignment": "outside_container",
         "navigation_button_color": "",
