@@ -2,14 +2,7 @@
 Categories Showcase – 3 clickable category cards with hover-only overlay,
 image overflow, adjustable padding/background, and optional fixed aspect ratio.
 Structured similar to other sections: wrapper → container → row → content.
-FAQ-style hover: accent outline, title underline grow, arrow slide, subtle "shine" sweep.
 {% endcomment %}
-
-{%- comment -%} Global CTA fallback (uses your remembered text if present) {%- endcomment -%}
-{% assign cta_all = settings.global_cta_text
-  | default: settings.remembered_all_products_cta
-  | default: settings.all_products_cta
-  | default: section.settings.see_all_text %}
 
 <div
   data-section-id="{{ section.id }}"
@@ -147,10 +140,10 @@ FAQ-style hover: accent outline, title underline grow, arrow slide, subtle "shin
           {% endfor %}
         </div>
 
-        {% if section.settings.see_all_link != blank %}
+        {% if section.settings.see_all_text != blank and section.settings.see_all_link != blank %}
           <div class="category-showcase__footer" data-align="{{ section.settings.text_alignment }}">
             <a href="{{ section.settings.see_all_link }}" class="category-showcase__see-all-button">
-              {{ cta_all }}
+              {{ section.settings.see_all_text }}
               <span class="category-showcase__button-arrow">→</span>
             </a>
           </div>
@@ -177,7 +170,6 @@ FAQ-style hover: accent outline, title underline grow, arrow slide, subtle "shin
   --btn-text-hover: {{ section.settings.button_text_hover_color }};
   --btn-border: {{ section.settings.button_border_color }};
   --btn-border-hover: {{ section.settings.button_border_hover_color }};
-  --hover-accent: {{ section.settings.hover_accent_color }};
 
   /* Card aspect ratio */
   --card-aspect: {% if section.settings.card_aspect_ratio == 'none' %}auto{% else %}{{ section.settings.card_aspect_ratio }}{% endif %};
@@ -226,33 +218,23 @@ FAQ-style hover: accent outline, title underline grow, arrow slide, subtle "shin
   position:relative; display:flex; flex-direction:column; text-decoration:none;
   background: {{ section.settings.card_background }};
   border-radius: var(--radius); overflow:visible; cursor:pointer;
-  transition: transform .35s ease, box-shadow .35s ease, outline-color .35s ease;
+  transition: transform .4s ease, box-shadow .4s ease;
   margin-top: var(--overflow);
-  outline: 2px solid transparent;
   {% if section.settings.card_aspect_ratio != 'none' %}
     aspect-ratio: var(--card-aspect);
   {% else %}
     height: 350px;
   {% endif %}
 }
-/* FAQ-like hover: lift + accent outline + shine sweep */
 #shopify-section-{{ section.id }}.home-category-block .category-card:hover{
-  transform: translateY(-6px); box-shadow: 0 16px 36px rgba(0,0,0,.14);
-  outline-color: var(--hover-accent);
+  transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,.15);
 }
-#shopify-section-{{ section.id }}.home-category-block .category-card::after{
-  content:""; position:absolute; inset:0; border-radius: var(--radius);
-  background: linear-gradient(60deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.35) 50%, rgba(255,255,255,0) 100%);
-  transform: translateX(-140%); transition: transform .6s ease; pointer-events:none; mix-blend-mode: screen;
-  z-index:3;
-}
-#shopify-section-{{ section.id }}.home-category-block .category-card:hover::after{ transform: translateX(140%); }
 
 /* Image wrapper & image */
 #shopify-section-{{ section.id }}.home-category-block .category-card__image-wrap{
   position:relative; height: calc(100% + var(--overflow));
   margin-top: calc(-1 * var(--overflow));
-  overflow:hidden; border-radius: var(--radius); z-index:1;
+  overflow:hidden; border-radius: var(--radius); z-index:2;
 }
 #shopify-section-{{ section.id }}.home-category-block .category-card__image{
   width:100%; height:100%; display:block;
@@ -274,10 +256,9 @@ FAQ-style hover: accent outline, title underline grow, arrow slide, subtle "shin
 #shopify-section-{{ section.id }}.home-category-block .category-card__overlay{
   position:absolute; inset:0;
   background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.6) 100%);
-  opacity:0; transition: opacity .35s ease;
+  opacity:0; transition: opacity .4s ease;
   display:flex; flex-direction:column; justify-content:center; align-items:center;
   text-align:center; padding:25px; border-radius: var(--radius);
-  z-index:2;
 }
 #shopify-section-{{ section.id }}.home-category-block .category-card:hover .category-card__overlay,
 #shopify-section-{{ section.id }}.home-category-block .category-card:focus-visible .category-card__overlay{
@@ -286,32 +267,27 @@ FAQ-style hover: accent outline, title underline grow, arrow slide, subtle "shin
 
 /* Overlay content */
 #shopify-section-{{ section.id }}.home-category-block .category-card__title{
-  font-size: {{ section.settings.title_size }}px; font-weight:600; margin-bottom:12px;
-  color: var(--title-color); transform: translateY(12px); transition: transform .35s ease; position:relative;
-}
-#shopify-section-{{ section.id }}.home-category-block .category-card__title::after{
-  content:""; position:absolute; left:50%; bottom:-6px; height:2px; width:0;
-  background: var(--hover-accent); transform: translateX(-50%); transition: width .35s ease;
+  font-size: {{ section.settings.title_size }}px; font-weight:600; margin-bottom:10px;
+  color: var(--title-color); transform: translateY(20px); transition: transform .4s ease;
 }
 #shopify-section-{{ section.id }}.home-category-block .category-card:hover .category-card__title{ transform: translateY(0); }
-#shopify-section-{{ section.id }}.home-category-block .category-card:hover .category-card__title::after{ width:60%; }
 
 #shopify-section-{{ section.id }}.home-category-block .category-card__description{
   font-size: {{ section.settings.description_size }}px; color: var(--desc-color); line-height:1.5;
-  margin-bottom:15px; transform: translateY(12px); transition: transform .35s ease .05s;
+  margin-bottom:15px; transform: translateY(20px); transition: transform .4s ease .1s;
 }
 #shopify-section-{{ section.id }}.home-category-block .category-card:hover .category-card__description{ transform: translateY(0); }
 
 #shopify-section-{{ section.id }}.home-category-block .category-card__cta{
   display:inline-flex; align-items:center; gap:8px; color: var(--cta-color);
-  font-size:14px; font-weight:500; text-decoration:none; transform: translateY(12px);
-  transition: transform .35s ease .1s, color .25s ease;
+  font-size:14px; font-weight:500; text-decoration:none; transform: translateY(20px);
+  transition: transform .4s ease .2s, color .3s ease;
 }
 #shopify-section-{{ section.id }}.home-category-block .category-card:hover .category-card__cta{
   transform: translateY(0); color: var(--cta-hover);
 }
 #shopify-section-{{ section.id }}.home-category-block .category-card__cta-arrow{ transition: transform .3s ease; }
-#shopify-section-{{ section.id }}.home-category-block .category-card:hover .category-card__cta-arrow{ transform: translateX(6px); }
+#shopify-section-{{ section.id }}.home-category-block .category-card:hover .category-card__cta-arrow{ transform: translateX(5px); }
 
 /* Footer button */
 #shopify-section-{{ section.id }}.home-category-block .category-showcase__footer{
@@ -460,7 +436,7 @@ FAQ-style hover: accent outline, title underline grow, arrow slide, subtle "shin
     { "type": "range", "id": "header_spacing", "min": 20, "max": 80, "step": 5, "unit": "px", "label": "Header bottom spacing", "default": 50 },
 
     { "type": "header", "content": "See all button" },
-    { "type": "text", "id": "see_all_text", "label": "Button text (fallback)", "default": "See all products" },
+    { "type": "text", "id": "see_all_text", "label": "Button text", "default": "See all products" },
     { "type": "url", "id": "see_all_link", "label": "Button link" },
 
     { "type": "header", "content": "Category 1" },
@@ -535,9 +511,6 @@ FAQ-style hover: accent outline, title underline grow, arrow slide, subtle "shin
         { "value": "contain", "label": "Contain (letterbox if needed)" }
       ]
     },
-
-    { "type": "header", "content": "Hover accent" },
-    { "type": "color", "id": "hover_accent_color", "label": "Accent color on hover", "default": "#ff679a" },
 
     { "type": "header", "content": "Custom class" },
     { "type": "text", "id": "custom_class_name", "label": "Add your custom class name here" }
