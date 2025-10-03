@@ -210,12 +210,19 @@
   {% if section.settings.categories_alignment == 'center' %}max-width:fit-content;{% endif %}
 }
 
-/* Category card */
+/* Category card — smoother hover */
 .ai-split-section-category-{{ uid }}{
   background-color: {{ section.settings.category_bg_color }};
   border-radius: {{ section.settings.category_border_radius }}px;
   padding:16px; text-decoration:none; color: {{ section.settings.category_text_color }};
-  transition: transform .3s ease, box-shadow .3s ease; display:block; text-align:center; position:relative;
+  /* CHANGED: smoother transitions + perf hint */
+  transition:
+    transform .45s cubic-bezier(.22,1,.36,1),
+    box-shadow .45s cubic-bezier(.22,1,.36,1),
+    background-color .45s cubic-bezier(.22,1,.36,1),
+    color .45s cubic-bezier(.22,1,.36,1);
+  will-change: transform, box-shadow;
+  display:block; text-align:center; position:relative;
   {% if section.settings.enable_image_overflow %}overflow:visible;{% endif %}
 }
 .ai-split-section-category-{{ uid }}:hover{
@@ -224,6 +231,7 @@
   transform: translateY(-2px);
 }
 .ai-split-section-category-{{ uid }}--shadow{ box-shadow: 0 4px 12px rgba(0,0,0,.1); }
+/* CHANGED: shadow transition pairs with easing above */
 .ai-split-section-category-{{ uid }}--shadow:hover{ box-shadow: 0 8px 24px rgba(0,0,0,.15); }
 
 /* Category image box */
@@ -233,9 +241,11 @@
   background-color: {{ section.settings.category_image_bg_color }};
   {% if section.settings.enable_image_overflow %}overflow:visible; position:relative;{% else %}overflow:hidden;{% endif %}
 }
+/* CHANGED: give images a smooth transform pipeline (no visual change unless you already scale via overflow) */
 .ai-split-section-category-image-{{ uid }} img{
   width:100%; height:100%; object-fit: {{ section.settings.image_fit }};
   border-radius: {{ section.settings.category_image_radius }}px;
+  transition: transform .45s cubic-bezier(.22,1,.36,1);
   {% if section.settings.enable_image_overflow %}
     transform: scale({{ section.settings.image_overflow_scale }});
     {% case section.settings.image_overflow_direction %}
@@ -313,6 +323,7 @@
 @media (prefers-reduced-motion: reduce){
   .ai-split-section-right-image-{{ uid }} img,
   .ai-split-section-right-placeholder-{{ uid }} svg{ animation:none !important; }
+  .ai-split-section-category-{{ uid }}{ transition: none !important; }
 }
 
 /* Responsive */
@@ -343,6 +354,7 @@
   }
 }
 </style>
+
 
 <script>
 (function(){
