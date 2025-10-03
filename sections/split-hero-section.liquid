@@ -1,0 +1,489 @@
+{% assign uid = section.id | replace: '_', '' | downcase %}
+
+<section
+  id="split-hero-{{ uid }}"
+  class="ai-split-section-{{ uid }}"
+  data-bg-effect="{{ section.settings.background_effect }}"
+  style="background-color: {{ section.settings.background_color }};"
+>
+  {% if section.settings.background_image %}
+    <div class="ai-split-section-bg-{{ uid }} ai-split-section-bg-{{ uid }}--{{ section.settings.background_effect }}">
+      {% if section.settings.background_effect == 'fixed' %}
+        <div
+          style="
+            background-image: url('{{ section.settings.background_image | image_url: width: 2000 }}');
+            background-attachment: fixed;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: {{ section.settings.image_alignment }};
+            width: 100%;
+            height: 100%;
+          "
+        ></div>
+      {% else %}
+        <img
+          src="{{ section.settings.background_image | image_url: width: 2000 }}"
+          alt="{{ section.settings.background_image.alt | escape }}"
+          loading="lazy"
+          width="{{ section.settings.background_image.width }}"
+          height="{{ section.settings.background_image.height }}"
+        >
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <div class="ai-split-section-content-{{ uid }}">
+    <div class="ai-split-section-container-{{ uid }}">
+      <!-- Left column -->
+      <div class="ai-split-section-left-{{ uid }}">
+        {% if section.settings.heading != blank %}
+          <h1 class="ai-split-section-heading-{{ uid }}">{{ section.settings.heading }}</h1>
+        {% endif %}
+
+        {% if section.settings.subheading != blank %}
+          <h2 class="ai-split-section-subheading-{{ uid }}">{{ section.settings.subheading }}</h2>
+        {% endif %}
+
+        {% if section.settings.description != blank %}
+          <div class="ai-split-section-description-{{ uid }}">{{ section.settings.description }}</div>
+        {% endif %}
+
+        {% if section.settings.show_categories %}
+          <div class="ai-split-section-categories-wrapper-{{ uid }}">
+            <div class="ai-split-section-categories-{{ uid }}">
+              {% for i in (1..4) %}
+                {% liquid
+                  assign category_enabled_key = 'enable_category_' | append: i
+                  assign category_key         = 'category_' | append: i
+                  assign category_image_key   = 'category_' | append: i | append: '_image'
+                  assign category_title_key   = 'category_' | append: i | append: '_title'
+
+                  assign category_enabled = section.settings[category_enabled_key]
+                  assign category         = section.settings[category_key]
+                  assign category_image   = section.settings[category_image_key]
+                  assign category_title   = section.settings[category_title_key]
+                %}
+
+                {% if category_enabled %}
+                  {% if category != blank or category_image != blank or category_title != blank %}
+                    <a
+                      href="{% if category != blank %}{{ category.url }}{% else %}#{% endif %}"
+                      class="ai-split-section-category-{{ uid }}{% if section.settings.enable_category_shadow %} ai-split-section-category-{{ uid }}--shadow{% endif %}"
+                    >
+                      <div class="ai-split-section-category-image-{{ uid }}">
+                        {% if category_image %}
+                          <img
+                            src="{{ category_image | image_url: width: 400 }}"
+                            alt="{{ category_image.alt | escape }}"
+                            loading="lazy"
+                            width="400"
+                            height="200"
+                          >
+                        {% elsif category != blank and category.featured_image %}
+                          <img
+                            src="{{ category.featured_image | image_url: width: 400 }}"
+                            alt="{{ category.featured_image.alt | escape }}"
+                            loading="lazy"
+                            width="400"
+                            height="200"
+                          >
+                        {% else %}
+                          <div class="ai-split-section-category-placeholder-{{ uid }}">
+                            {{ 'collection-apparel-1' | placeholder_svg_tag }}
+                          </div>
+                        {% endif %}
+                      </div>
+                      <h3 class="ai-split-section-category-title-{{ uid }}">
+                        {% if category_title != blank %}
+                          {{ category_title }}
+                        {% elsif category != blank %}
+                          {{ category.title }}
+                        {% else %}
+                          Category {{ i }}
+                        {% endif %}
+                      </h3>
+                    </a>
+                  {% else %}
+                    <div class="ai-split-section-empty-category-{{ uid }}">
+                      Configure category {{ i }}
+                    </div>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Right column -->
+      <div class="ai-split-section-right-{{ uid }}">
+        <div class="ai-split-section-right-image-{{ uid }}">
+          {% if section.settings.right_image %}
+            <img
+              src="{{ section.settings.right_image | image_url: width: 800 }}"
+              alt="{{ section.settings.right_image.alt | escape }}"
+              loading="lazy"
+              width="{{ section.settings.right_image.width }}"
+              height="{{ section.settings.right_image.height }}"
+            >
+          {% else %}
+            <div class="ai-split-section-right-placeholder-{{ uid }}">
+              {{ 'image' | placeholder_svg_tag }}
+              <div class="ai-split-section-empty-state-{{ uid }}">
+                Add an image for the right side
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+/* Wrapper */
+.ai-split-section-{{ uid }}{
+  position: relative;
+  min-height: 500px;
+  overflow: hidden;
+}
+
+/* Background layer */
+.ai-split-section-bg-{{ uid }}{
+  position:absolute; inset:0; z-index:1;
+}
+.ai-split-section-bg-{{ uid }} img{
+  width:100%; height:100%;
+  object-fit:cover; object-position: {{ section.settings.image_alignment }};
+}
+.ai-split-section-bg-{{ uid }}--parallax{ transform: translateZ(0); will-change: transform; }
+
+/* Foreground content */
+.ai-split-section-content-{{ uid }}{
+  position: relative; z-index:2; padding:60px 20px; min-height:500px;
+}
+.ai-split-section-container-{{ uid }}{
+  max-width: 1200px; margin:0 auto;
+  display:grid; grid-template-columns: 1fr 1fr; gap:60px; align-items:center; min-height:400px;
+}
+
+/* Left column text alignment */
+.ai-split-section-left-{{ uid }}{
+  display:flex; flex-direction:column; gap:24px; text-align: {{ section.settings.content_alignment }};
+}
+
+/* Typography */
+.ai-split-section-heading-{{ uid }}{
+  font-size: {{ section.settings.heading_size }}px; color: {{ section.settings.heading_color }};
+  margin:0; line-height:1.2;
+}
+.ai-split-section-subheading-{{ uid }}{
+  font-size: {{ section.settings.subheading_size }}px; color: {{ section.settings.subheading_color }};
+  margin:0; line-height:1.4;
+}
+.ai-split-section-description-{{ uid }}{
+  font-size: {{ section.settings.description_size }}px; color: {{ section.settings.description_color }};
+  margin:0; line-height:1.6;
+}
+
+/* Categories alignment wrapper */
+.ai-split-section-categories-wrapper-{{ uid }}{
+  display:flex;
+  {% if section.settings.categories_alignment == 'left' %}justify-content:flex-start;{% endif %}
+  {% if section.settings.categories_alignment == 'center' %}justify-content:center;{% endif %}
+  {% if section.settings.categories_alignment == 'right' %}justify-content:flex-end;{% endif %}
+}
+
+/* Categories grid */
+.ai-split-section-categories-{{ uid }}{
+  display:grid;
+  grid-template-columns: repeat({{ section.settings.categories_per_row }}, 1fr);
+  gap:16px;
+  {% if section.settings.enable_image_overflow %}overflow:visible;{% endif %}
+  {% if section.settings.categories_alignment == 'center' %}max-width:fit-content;{% endif %}
+}
+
+/* Category card */
+.ai-split-section-category-{{ uid }}{
+  background-color: {{ section.settings.category_bg_color }};
+  border-radius: {{ section.settings.category_border_radius }}px;
+  padding:16px; text-decoration:none; color: {{ section.settings.category_text_color }};
+  transition: transform .3s ease, box-shadow .3s ease; display:block; text-align:center; position:relative;
+  {% if section.settings.enable_image_overflow %}overflow:visible;{% endif %}
+}
+.ai-split-section-category-{{ uid }}:hover{
+  color: {{ section.settings.category_hover_text_color }};
+  background-color: {{ section.settings.category_hover_bg_color }};
+  transform: translateY(-2px);
+}
+.ai-split-section-category-{{ uid }}--shadow{ box-shadow: 0 4px 12px rgba(0,0,0,.1); }
+.ai-split-section-category-{{ uid }}--shadow:hover{ box-shadow: 0 8px 24px rgba(0,0,0,.15); }
+
+/* Category image box */
+.ai-split-section-category-image-{{ uid }}{
+  width:100%; aspect-ratio: {{ section.settings.category_aspect_ratio }};
+  margin-bottom:8px; border-radius: {{ section.settings.category_image_radius }}px;
+  background-color: {{ section.settings.category_image_bg_color }};
+  {% if section.settings.enable_image_overflow %}overflow:visible; position:relative;{% else %}overflow:hidden;{% endif %}
+}
+.ai-split-section-category-image-{{ uid }} img{
+  width:100%; height:100%; object-fit: {{ section.settings.image_fit }};
+  border-radius: {{ section.settings.category_image_radius }}px;
+  {% if section.settings.enable_image_overflow %}
+    transform: scale({{ section.settings.image_overflow_scale }});
+    {% case section.settings.image_overflow_direction %}
+      {% when 'top' %}transform-origin:center bottom;
+      {% when 'bottom' %}transform-origin:center top;
+      {% when 'left' %}transform-origin:right center;
+      {% when 'right' %}transform-origin:left center;
+      {% when 'top-left' %}transform-origin:right bottom;
+      {% when 'top-right' %}transform-origin:left bottom;
+      {% when 'bottom-left' %}transform-origin:right top;
+      {% when 'bottom-right' %}transform-origin:left top;
+      {% else %}transform-origin:center center;
+    {% endcase %}
+    z-index:2; position:relative;
+  {% endif %}
+}
+
+/* Placeholder inside category image */
+.ai-split-section-category-placeholder-{{ uid }}{
+  width:100%; height:100%; background-color: {{ section.settings.category_image_bg_color }};
+  display:flex; align-items:center; justify-content:center; border-radius: {{ section.settings.category_image_radius }}px;
+  {% if section.settings.enable_image_overflow %}
+    transform: scale({{ section.settings.image_overflow_scale }});
+    {% case section.settings.image_overflow_direction %}
+      {% when 'top' %}transform-origin:center bottom;
+      {% when 'bottom' %}transform-origin:center top;
+      {% when 'left' %}transform-origin:right center;
+      {% when 'right' %}transform-origin:left center;
+      {% when 'top-left' %}transform-origin:right bottom;
+      {% when 'top-right' %}transform-origin:left bottom;
+      {% when 'bottom-left' %}transform-origin:right top;
+      {% when 'bottom-right' %}transform-origin:left top;
+      {% else %}transform-origin:center center;
+    {% endcase %}
+    z-index:2; position:relative;
+  {% endif %}
+}
+.ai-split-section-category-placeholder-{{ uid }} svg{ width:30px; height:30px; opacity:.5; }
+
+.ai-split-section-category-title-{{ uid }}{ font-size:14px; font-weight:600; margin:0; position:relative; z-index:3; }
+
+.ai-split-section-empty-category-{{ uid }}{
+  padding:16px; text-align:center; color:#666; font-style:italic;
+  background:#f9f9f9; border-radius: {{ section.settings.category_border_radius }}px; border:2px dashed #ddd; font-size:12px;
+}
+
+/* Right image (floating) */
+.ai-split-section-right-{{ uid }}{ position:relative; }
+.ai-split-section-right-image-{{ uid }}{
+  width:100%; height:100%; min-height:400px; border-radius: {{ section.settings.right_image_radius }}px; overflow:hidden;
+}
+.ai-split-section-right-image-{{ uid }} img{
+  width:100%; height:100%; object-fit:cover;
+  animation: ai-float-{{ uid }} {{ section.settings.float_duration }}s ease-in-out infinite;
+}
+.ai-split-section-right-placeholder-{{ uid }}{
+  width:100%; height:100%; min-height:400px; background:#f4f4f4;
+  display:flex; align-items:center; justify-content:center; border-radius: {{ section.settings.right_image_radius }}px; position:relative;
+}
+.ai-split-section-right-placeholder-{{ uid }} svg{
+  width:100px; height:100px; opacity:.3; animation: ai-float-{{ uid }} {{ section.settings.float_duration }}s ease-in-out infinite;
+}
+.ai-split-section-empty-state-{{ uid }}{
+  position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
+  padding:8px 16px; background:rgba(255,255,255,.9); border-radius:4px; font-size:12px; color:#666; text-align:center; pointer-events:none;
+}
+
+/* Float keyframes */
+@keyframes ai-float-{{ uid }}{
+  0%,100%{ transform: translateY(0); }
+  50%{ transform: translateY(-{{ section.settings.float_intensity }}px); }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .ai-split-section-right-image-{{ uid }} img,
+  .ai-split-section-right-placeholder-{{ uid }} svg{ animation:none !important; }
+}
+
+/* Responsive */
+@media (max-width: 768px){
+  .ai-split-section-container-{{ uid }}{ grid-template-columns:1fr; gap:40px; }
+  .ai-split-section-categories-{{ uid }}{
+    grid-template-columns: repeat({{ section.settings.categories_per_row_mobile }}, 1fr);
+    gap:12px;
+  }
+  .ai-split-section-content-{{ uid }}{ padding:40px 15px; }
+  .ai-split-section-heading-{{ uid }}{ font-size: {{ section.settings.heading_size | times: 0.8 }}px; }
+  .ai-split-section-subheading-{{ uid }}{ font-size: {{ section.settings.subheading_size | times: 0.9 }}px; }
+  .ai-split-section-bg-{{ uid }}--fixed{ background-attachment: scroll; }
+  .ai-split-section-right-image-{{ uid }}, .ai-split-section-right-placeholder-{{ uid }}{ min-height:300px; }
+
+  {% if section.settings.enable_image_overflow %}
+    .ai-split-section-category-image-{{ uid }} img,
+    .ai-split-section-category-placeholder-{{ uid }}{ transform: scale({{ section.settings.image_overflow_scale | times: 0.8 }}); }
+  {% endif %}
+
+  @keyframes ai-float-{{ uid }}{
+    0%,100%{ transform: translateY(0); }
+    50%{ transform: translateY(-{{ section.settings.float_intensity | times: 0.7 }}px); }
+  }
+}
+</style>
+
+<script>
+(function(){
+  class SplitSection{{ uid | replace: '-', '_' }} extends HTMLElement{
+    constructor(){
+      super();
+      this.bgEffect = this.dataset.bgEffect;
+      this._onParallax = this.handleParallax.bind(this);
+      this.parallaxElement = null;
+    }
+
+    connectedCallback(){
+      if(this.bgEffect === 'parallax'){
+        this.parallaxElement = this.querySelector('.ai-split-section-bg-{{ uid }}');
+        if(this.parallaxElement){
+          window.addEventListener('scroll', this._onParallax, { passive: true });
+          this.handleParallax();
+        }
+      }
+    }
+
+    handleParallax(){
+      if(!this.parallaxElement) return;
+      const rect = this.getBoundingClientRect();
+      const scrolled = window.pageYOffset || document.documentElement.scrollTop || 0;
+      const rate = scrolled * -0.5;
+      if(rect.bottom >= 0 && rect.top <= window.innerHeight){
+        this.parallaxElement.style.transform = `translateY(${rate}px)`;
+      }
+    }
+
+    disconnectedCallback(){
+      if(this.bgEffect === 'parallax'){
+        window.removeEventListener('scroll', this._onParallax);
+      }
+    }
+  }
+
+  // Safe, unique tag per section
+  const tagName = 'split-section-{{ uid }}';
+  if(!customElements.get(tagName)){
+    customElements.define(tagName, SplitSection{{ uid | replace: '-', '_' }});
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Split hero section",
+  "settings": [
+    { "type": "header", "content": "Background" },
+    { "type": "image_picker", "id": "background_image", "label": "Background image" },
+    { "type": "select", "id": "image_alignment", "label": "Background image alignment",
+      "options": [{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}],
+      "default": "center"
+    },
+    { "type": "select", "id": "background_effect", "label": "Background effect",
+      "options": [{"value":"none","label":"None"},{"value":"fixed","label":"Fixed"},{"value":"parallax","label":"Parallax"}],
+      "default": "none"
+    },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#ffffff" },
+
+    { "type": "header", "content": "Content" },
+    { "type": "select", "id": "content_alignment", "label": "Content alignment",
+      "options": [{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}],
+      "default": "left"
+    },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Welcome to our store" },
+    { "type": "range", "id": "heading_size", "min": 20, "max": 80, "step": 2, "unit": "px", "label": "Heading size", "default": 48 },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#000000" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Discover our amazing products" },
+    { "type": "range", "id": "subheading_size", "min": 14, "max": 40, "step": 1, "unit": "px", "label": "Subheading size", "default": 24 },
+    { "type": "color", "id": "subheading_color", "label": "Subheading color", "default": "#333333" },
+    { "type": "textarea", "id": "description", "label": "Description", "default": "Browse through our carefully curated collection of products designed to meet your needs." },
+    { "type": "range", "id": "description_size", "min": 12, "max": 24, "step": 1, "unit": "px", "label": "Description size", "default": 16 },
+    { "type": "color", "id": "description_color", "label": "Description color", "default": "#666666" },
+
+    { "type": "header", "content": "Right side image" },
+    { "type": "image_picker", "id": "right_image", "label": "Right side image" },
+    { "type": "range", "id": "right_image_radius", "min": 0, "max": 30, "step": 1, "unit": "px", "label": "Image border radius", "default": 8 },
+    { "type": "checkbox", "id": "enable_float_animation", "label": "Enable floating animation", "default": true },
+    { "type": "range", "id": "float_intensity", "min": 5, "max": 30, "step": 1, "unit": "px", "label": "Float intensity", "default": 15 },
+    { "type": "range", "id": "float_duration", "min": 2, "max": 8, "step": 1, "unit": "s", "label": "Float duration", "default": 4 },
+
+    { "type": "header", "content": "Categories" },
+    { "type": "checkbox", "id": "show_categories", "label": "Show categories", "default": true },
+    { "type": "select", "id": "categories_alignment", "label": "Categories alignment",
+      "options": [{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}],
+      "default": "left"
+    },
+    { "type": "select", "id": "categories_per_row", "label": "Categories per row",
+      "options": [{"value":"1","label":"1"},{"value":"2","label":"2"},{"value":"3","label":"3"},{"value":"4","label":"4"}],
+      "default": "2"
+    },
+    { "type": "select", "id": "categories_per_row_mobile", "label": "Categories per row on mobile",
+      "options": [{"value":"1","label":"1"},{"value":"2","label":"2"}],
+      "default": "2"
+    },
+    { "type": "checkbox", "id": "enable_category_shadow", "label": "Enable category shadow", "default": true },
+
+    { "type": "header", "content": "Category image settings" },
+    { "type": "text", "id": "category_aspect_ratio", "label": "Image aspect ratio", "default": "4/3",
+      "info": "Examples: 1/1 (square), 4/3 (landscape), 3/4 (portrait), 16/9 (wide)" },
+    { "type": "select", "id": "image_fit", "label": "Image fit",
+      "options": [{"value":"cover","label":"Cover (fill container)"},{"value":"contain","label":"Contain (fit within container)"},{"value":"fill","label":"Fill (stretch to fit)"}],
+      "default": "cover"
+    },
+    { "type": "checkbox", "id": "enable_image_overflow", "label": "Enable image overflow", "default": false },
+    { "type": "range", "id": "image_overflow_scale", "min": 1, "max": 2, "step": 0.1, "label": "Image overflow scale", "default": 1.3 },
+    { "type": "select", "id": "image_overflow_direction", "label": "Overflow direction",
+      "options": [
+        {"value":"center","label":"Center"},{"value":"top","label":"Top"},{"value":"bottom","label":"Bottom"},
+        {"value":"left","label":"Left"},{"value":"right","label":"Right"},
+        {"value":"top-left","label":"Top left"},{"value":"top-right","label":"Top right"},
+        {"value":"bottom-left","label":"Bottom left"},{"value":"bottom-right","label":"Bottom right"}
+      ],
+      "default": "center"
+    },
+
+    { "type": "header", "content": "Category 1" },
+    { "type": "checkbox", "id": "enable_category_1", "label": "Enable category 1", "default": true },
+    { "type": "collection", "id": "category_1", "label": "Collection" },
+    { "type": "image_picker", "id": "category_1_image", "label": "Custom image" },
+    { "type": "text", "id": "category_1_title", "label": "Custom title" },
+
+    { "type": "header", "content": "Category 2" },
+    { "type": "checkbox", "id": "enable_category_2", "label": "Enable category 2", "default": true },
+    { "type": "collection", "id": "category_2", "label": "Collection" },
+    { "type": "image_picker", "id": "category_2_image", "label": "Custom image" },
+    { "type": "text", "id": "category_2_title", "label": "Custom title" },
+
+    { "type": "header", "content": "Category 3" },
+    { "type": "checkbox", "id": "enable_category_3", "label": "Enable category 3", "default": false },
+    { "type": "collection", "id": "category_3", "label": "Collection" },
+    { "type": "image_picker", "id": "category_3_image", "label": "Custom image" },
+    { "type": "text", "id": "category_3_title", "label": "Custom title" },
+
+    { "type": "header", "content": "Category 4" },
+    { "type": "checkbox", "id": "enable_category_4", "label": "Enable category 4", "default": false },
+    { "type": "collection", "id": "category_4", "label": "Collection" },
+    { "type": "image_picker", "id": "category_4_image", "label": "Custom image" },
+    { "type": "text", "id": "category_4_title", "label": "Custom title" },
+
+    { "type": "header", "content": "Category style" },
+    { "type": "color", "id": "category_bg_color", "label": "Card background color", "default": "#f8f8f8" },
+    { "type": "color", "id": "category_hover_bg_color", "label": "Card hover background color", "default": "#e8e8e8" },
+    { "type": "color", "id": "category_image_bg_color", "label": "Image background color", "default": "#f0f0f0" },
+    { "type": "color", "id": "category_text_color", "label": "Text color", "default": "#000000" },
+    { "type": "color", "id": "category_hover_text_color", "label": "Hover text color", "default": "#000000" },
+    { "type": "range", "id": "category_border_radius", "min": 0, "max": 20, "step": 1, "unit": "px", "label": "Card border radius", "default": 8 },
+    { "type": "range", "id": "category_image_radius", "min": 0, "max": 20, "step": 1, "unit": "px", "label": "Image border radius", "default": 4 }
+  ],
+  "presets": [{ "name": "Split hero section" }]
+}
+{% endschema %}
