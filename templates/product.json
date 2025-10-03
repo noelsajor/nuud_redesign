@@ -47,6 +47,7 @@
         "spacing_both_ends": false,
         "padding": "100,100",
         "margin": "0,0",
+        "section_bg_color": "#ff679a",
         "inner_bg_enable": true,
         "inner_bg_color": "#ffd8d8",
         "inner_bg_radius": 32,
