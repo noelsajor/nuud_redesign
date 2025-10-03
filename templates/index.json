@@ -149,8 +149,11 @@
         "wave_overlap_bottom": 70,
         "wave_frequency": 4,
         "wave_amplitude": 40,
+        "animate_waves": true,
+        "wave_speed": 20,
+        "wave_bob": 20,
         "enable_scroll_animation": true,
-        "scroll_direction": "left-right"
+        "scroll_direction": "right-left"
       }
     },
     "2_test_section_claude_9VyBTH": {
