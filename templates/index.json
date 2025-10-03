@@ -1023,7 +1023,7 @@
         "background_style": "scroll",
         "background_overlay_color": "#000000",
         "background_overlay_opacity": 0,
-        "image_overflow": 60,
+        "image_overflow": 70,
         "heading": "Shop by Category",
         "subheading": "Discover our collections",
         "body_text": "",
