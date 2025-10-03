@@ -834,7 +834,7 @@
       "settings": {
         "full": false,
         "spacing_both_ends": false,
-        "padding": "80,80",
+        "padding": "40,80",
         "margin": "0,0",
         "mask_image_color": "rgba(0,0,0,0)",
         "show_background_image": false,
