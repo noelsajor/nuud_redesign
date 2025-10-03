@@ -361,7 +361,7 @@
           "icon_bg": "rgba(0,0,0,0)",
           "icon_hover_bg": "rgba(0,0,0,0)",
           "enable_menu_indicator": true,
-          "pick_menu": "main-menu",
+          "pick_menu": "customer-account-main-menu",
           "show_secondary_menu": false,
           "secondary_menu": "",
           "header_bg": "#ff679a",
