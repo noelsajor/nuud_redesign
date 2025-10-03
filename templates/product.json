@@ -49,7 +49,7 @@
         "margin": "0,0",
         "section_bg_color": "#ffe3ec",
         "gallery_type": "thumbnails_horizontal",
-        "vertical_style": "dt-sc-product-vertical-thumb-right",
+        "vertical_style": "dt-sc-product-vertical-thumb-left",
         "enable_zoom": true,
         "zoom_type": "inner",
         "enable_video_looping": false,
