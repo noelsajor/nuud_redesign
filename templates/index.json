@@ -160,7 +160,7 @@
       "type": "best-sellers-collections",
       "name": "Best Sellers Collection",
       "settings": {
-        "collection": "fir-him",
+        "collection": "frontpage",
         "products_to_show": 3,
         "min_product_width": 225,
         "background_color": "rgba(0,0,0,0)",
