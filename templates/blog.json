@@ -92,7 +92,7 @@
     "home_testimonial_VKGNVF": {
       "type": "home-testimonial",
       "blocks": {
-        "content_FmMUH4": {
+        "content_jcDQDc": {
           "type": "content",
           "settings": {
             "review_type": "full",
@@ -112,11 +112,34 @@
             "star": "3",
             "photo": "shopify://shop_images/Rectangle_97.png"
           }
+        },
+        "content_FmMUH4": {
+          "type": "content",
+          "settings": {
+            "review_type": "full",
+            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
+            "author": "Author Name",
+            "job": "Author Designation",
+            "star": "3"
+          }
+        },
+        "content_EiQr7D": {
+          "type": "content",
+          "settings": {
+            "review_type": "photo",
+            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
+            "author": "Author Name",
+            "job": "Author Designation",
+            "star": "3",
+            "photo": "shopify://shop_images/Rectangle_96_e03b2b75-8d2a-4e0d-994b-12bed3406c3f.png"
+          }
         }
       },
       "block_order": [
+        "content_jcDQDc",
+        "content_Jbi9TM",
         "content_FmMUH4",
-        "content_Jbi9TM"
+        "content_EiQr7D"
       ],
       "name": "Testimonial",
       "settings": {
