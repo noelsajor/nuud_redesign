@@ -48,6 +48,7 @@
         "padding": "100,100",
         "margin": "0,0",
         "section_bg_color": "#ffe3ec",
+        "after_image": "shopify://shop_images/SpicyLove.png",
         "gallery_type": "thumbnails_horizontal",
         "vertical_style": "dt-sc-product-vertical-thumb-left",
         "enable_zoom": true,
