@@ -879,7 +879,7 @@
         "split_blog_layout": false,
         "split_gap": "30",
         "enable_masonry_grid": true,
-        "main_banner_style": "grid-style",
+        "main_banner_style": "list-style",
         "additional_banner_style": "list-style",
         "enable_masonry_reverse": true,
         "blog_bg_color": "rgba(0,0,0,0)",
