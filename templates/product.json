@@ -379,11 +379,11 @@
         "background_color": "#fdf8e1",
         "section_padding_top": 60,
         "section_padding_bottom": 60,
-        "card_background": "#ffffff",
-        "content_background": "#ffffff",
+        "card_background": "rgba(0,0,0,0)",
+        "content_background": "rgba(0,0,0,0)",
         "border_color": "#ff69b4",
         "border_width": 0,
-        "card_border_radius": 20,
+        "card_border_radius": 0,
         "hero_image": "shopify://shop_images/Nutrifacts_1.png",
         "image_overflow": 40,
         "image_position": "right",
@@ -407,7 +407,7 @@
         "button_border_radius": 0
       }
     },
-    "section_t9dj3V": {
+    "section_PQTKwy": {
       "type": "section",
       "name": "Hero Section",
       "settings": {
@@ -415,20 +415,20 @@
         "background_color": "#fdf8e1",
         "section_padding_top": 60,
         "section_padding_bottom": 60,
-        "card_background": "#ffffff",
-        "content_background": "#ffffff",
+        "card_background": "rgba(0,0,0,0)",
+        "content_background": "rgba(0,0,0,0)",
         "border_color": "#ff69b4",
-        "border_width": 3,
-        "card_border_radius": 20,
+        "border_width": 0,
+        "card_border_radius": 0,
         "hero_image": "shopify://shop_images/Rectangle_184.png",
         "image_overflow": 40,
         "image_position": "left",
-        "show_badge": true,
+        "show_badge": false,
         "badge_alt": "Brand Badge",
         "badge_size": 120,
-        "badge_spin": false,
+        "badge_spin": true,
         "badge_spin_speed": 10,
-        "hero_title": "Happy costumers",
+        "hero_title": "Happy Costumers",
         "title_color": "#8b1538",
         "title_size": 48,
         "title_weight": "700",
@@ -439,8 +439,8 @@
         "button_url": "",
         "button_background": "#ff69b4",
         "button_text_color": "#ffffff",
-        "button_text_size": 18,
-        "button_border_radius": 30
+        "button_text_size": 14,
+        "button_border_radius": 0
       }
     },
     "home_testimonial_LPfNKM": {
@@ -588,7 +588,7 @@
     "gallery_wqjam9",
     "17128268426b408274",
     "section_D8hWVF",
-    "section_t9dj3V",
+    "section_PQTKwy",
     "home_testimonial_LPfNKM",
     "product-recommendations"
   ]
