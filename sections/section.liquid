@@ -1,95 +1,110 @@
-<!-- SEO & Accessibility Optimized Hero Section with Switchable Image Position -->
+<!-- Hero Section (image left/right + optional shadow) -->
 <section class="hero-section"
          role="banner"
          aria-label="{{ section.settings.section_aria_label | default: 'Hero section with promotional content' }}"
          style="background-color: {{ section.settings.background_color }};
                 padding: {{ section.settings.section_padding_top }}px 20px {{ section.settings.section_padding_bottom }}px 20px;">
+  {% assign pos = section.settings.image_position | default: 'left' %}
+  {% assign ov = section.settings.image_overflow | default: 40 %}
+  {% assign r = section.settings.card_border_radius | default: 20 %}
+
   <div class="hero-container">
     {% if section.settings.show_badge and section.settings.badge_image %}
-    <div class="brand-badge">
-      <img src="{{ section.settings.badge_image | image_url: width: 200 }}"
-           alt="{{ section.settings.badge_alt | default: 'Brand Badge' }}"
-           class="badge-image {% if section.settings.badge_spin %}badge-spin{% endif %}"
-           style="width: {{ section.settings.badge_size }}px; height: {{ section.settings.badge_size }}px;"
-           width="{{ section.settings.badge_size }}"
-           height="{{ section.settings.badge_size }}"
-           loading="lazy"
-           decoding="async">
-    </div>
+      <div class="brand-badge">
+        <img src="{{ section.settings.badge_image | image_url: width: 200 }}"
+             alt="{{ section.settings.badge_alt | default: 'Brand Badge' }}"
+             class="badge-image {% if section.settings.badge_spin %}badge-spin{% endif %}"
+             style="width: {{ section.settings.badge_size }}px; height: {{ section.settings.badge_size }}px;"
+             width="{{ section.settings.badge_size }}"
+             height="{{ section.settings.badge_size }}"
+             loading="lazy"
+             decoding="async">
+      </div>
     {% endif %}
 
-    {% assign pos = section.settings.image_position | default: 'left' %}
-    <article class="hero-card image-{{ pos }}"
-             style="
-               --overflow: {{ section.settings.image_overflow | default: 40 }}px;
-               --radius: {{ section.settings.card_border_radius }}px;
-               border-color: {{ section.settings.border_color }};
-               border-width: {{ section.settings.border_width }}px;
-               border-radius: {{ section.settings.card_border_radius }}px;
-               background-color: {{ section.settings.card_background }};
-             ">
+    <article class="hero-card image-{{ pos }} {% if section.settings.enable_card_shadow %}has-shadow{% endif %}"
+             style="border-color: {{ section.settings.border_color }};
+                    border-width: {{ section.settings.border_width }}px;
+                    border-radius: {{ r }}px;
+                    background-color: {{ section.settings.card_background }};
+                    {% if pos == 'left' %}margin-left: {{ ov }}px;{% else %}margin-right: {{ ov }}px;{% endif %}">
 
-      <!-- Hero Image -->
+      <!-- Image -->
       <div class="hero-image-container">
         {% if section.settings.hero_image %}
-        <img
-          src="{{ section.settings.hero_image | image_url: width: 800 }}"
-          srcset="{{ section.settings.hero_image | image_url: width: 400 }} 400w,
-                  {{ section.settings.hero_image | image_url: width: 600 }} 600w,
-                  {{ section.settings.hero_image | image_url: width: 800 }} 800w,
-                  {{ section.settings.hero_image | image_url: width: 1000 }} 1000w"
-          sizes="(max-width: 768px) 100vw, 50vw"
-          alt="{{ section.settings.hero_image.alt | default: section.settings.hero_title | default: 'Hero promotional image' }}"
-          class="hero-image"
-          width="800"
-          height="500"
-          loading="eager"
-          decoding="async"
-          fetchpriority="high">
+          <img
+            src="{{ section.settings.hero_image | image_url: width: 800 }}"
+            srcset="{{ section.settings.hero_image | image_url: width: 400 }} 400w,
+                    {{ section.settings.hero_image | image_url: width: 600 }} 600w,
+                    {{ section.settings.hero_image | image_url: width: 800 }} 800w,
+                    {{ section.settings.hero_image | image_url: width: 1000 }} 1000w"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            alt="{{ section.settings.hero_image.alt | default: section.settings.hero_title | default: 'Hero promotional image' }}"
+            class="hero-image"
+            style="{% if pos == 'left' %}
+                     margin-left: -{{ ov }}px; width: calc(100% + {{ ov }}px);
+                     border-radius: {{ r }}px 0 0 {{ r }}px;
+                   {% else %}
+                     margin-right: -{{ ov }}px; width: calc(100% + {{ ov }}px);
+                     border-radius: 0 {{ r }}px {{ r }}px 0;
+                   {% endif %}"
+            width="800"
+            height="500"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high">
         {% else %}
-        <div class="hero-image-placeholder"
-             role="img"
-             aria-label="Placeholder for hero image">
-          <span aria-hidden="true">Add your hero image</span>
-        </div>
+          <div class="hero-image-placeholder"
+               style="{% if pos == 'left' %}
+                        margin-left: -{{ ov }}px; width: calc(100% + {{ ov }}px);
+                        border-radius: {{ r }}px 0 0 {{ r }}px;
+                      {% else %}
+                        margin-right: -{{ ov }}px; width: calc(100% + {{ ov }}px);
+                        border-radius: 0 {{ r }}px {{ r }}px 0;
+                      {% endif %}
+                      background-color: #f0f0f0;"
+               role="img"
+               aria-label="Placeholder for hero image">
+            <span aria-hidden="true">Add your hero image</span>
+          </div>
         {% endif %}
       </div>
 
       <!-- Content -->
       <header class="hero-content" style="background-color: {{ section.settings.content_background }};">
         {% if section.settings.hero_title != blank %}
-        <h1 id="hero-title"
-            class="hero-title"
-            style="color: {{ section.settings.title_color }};
-                   font-size: {{ section.settings.title_size }}px;
-                   font-weight: {{ section.settings.title_weight }};">
-          {{ section.settings.hero_title }}
-        </h1>
+          <h1 id="hero-title"
+              class="hero-title"
+              style="color: {{ section.settings.title_color }};
+                     font-size: {{ section.settings.title_size }}px;
+                     font-weight: {{ section.settings.title_weight }};">
+            {{ section.settings.hero_title }}
+          </h1>
         {% endif %}
 
         {% if section.settings.hero_description != blank %}
-        <p class="hero-description"
-           style="color: {{ section.settings.description_color }};
-                  font-size: {{ section.settings.description_size }}px;">
-          {{ section.settings.hero_description }}
-        </p>
+          <p class="hero-description"
+             style="color: {{ section.settings.description_color }};
+                    font-size: {{ section.settings.description_size }}px;">
+            {{ section.settings.hero_description }}
+          </p>
         {% endif %}
 
         {% if section.settings.button_text != blank %}
-        <a href="{{ section.settings.button_url | default: '/collections/all' }}"
-           class="hero-cta-button"
-           style="background: {{ section.settings.button_background }};
-                  color: {{ section.settings.button_text_color }};
-                  border-radius: {{ section.settings.button_border_radius }}px;
-                  font-size: {{ section.settings.button_text_size }}px;"
-           {% if section.settings.button_url == blank %}aria-describedby="button-warning"{% endif %}
-           rel="noopener">
-          {{ section.settings.button_text }}
-          <span class="sr-only"> - {{ section.settings.hero_title | default: 'Learn more' }}</span>
-        </a>
-        {% if section.settings.button_url == blank %}
-        <div id="button-warning" class="sr-only">Button URL not set - links to collections page</div>
-        {% endif %}
+          <a href="{{ section.settings.button_url | default: '/collections/all' }}"
+             class="hero-cta-button"
+             style="background: {{ section.settings.button_background }};
+                    color: {{ section.settings.button_text_color }};
+                    border-radius: {{ section.settings.button_border_radius }}px;
+                    font-size: {{ section.settings.button_text_size }}px;"
+             {% if section.settings.button_url == blank %}aria-describedby="button-warning"{% endif %}
+             rel="noopener">
+            {{ section.settings.button_text }}
+            <span class="sr-only"> - {{ section.settings.hero_title | default: 'Learn more' }}</span>
+          </a>
+          {% if section.settings.button_url == blank %}
+            <div id="button-warning" class="sr-only">Button URL not set - links to collections page</div>
+          {% endif %}
         {% endif %}
       </header>
     </article>
@@ -105,26 +120,16 @@
   align-items: center;
   justify-content: center;
 }
-
-.hero-container {
-  position: relative;
-  max-width: 960px;
-  width: 100%;
-  margin: 100px auto;
-}
+.hero-container { position: relative; max-width: 960px; width: 100%; margin: 100px auto; }
 
 /* Badge */
 .brand-badge { position: absolute; top: -30px; right: 20px; z-index: 10; }
-.badge-image {
-  border-radius: 50%;
-  box-shadow: 0 4px 15px rgba(0,0,0,.1);
-  display: block;
-}
+.badge-image { border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,.1); display: block; }
 .badge-spin { animation: spin {{ section.settings.badge_spin_speed | default: 10 }}s linear infinite; }
-@keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
-@media (prefers-reduced-motion: reduce) { .badge-spin{animation:none} .hero-cta-button{transition:none} }
+@keyframes spin { from { transform: rotate(0deg);} to { transform: rotate(360deg);} }
+@media (prefers-reduced-motion: reduce){ .badge-spin{ animation:none; } .hero-cta-button{ transition:none; } }
 
-/* Card Layout */
+/* Card */
 .hero-card {
   border-style: solid;
   overflow: visible;
@@ -132,84 +137,52 @@
   grid-template-columns: 1fr 1fr;
   grid-template-areas: "image content";
   min-height: 500px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.1);
+  box-shadow: none; /* shadow controlled by .has-shadow */
 }
-
-/* Flip areas when image is on the right */
+.hero-card.has-shadow { box-shadow: 0 10px 30px rgba(0,0,0,.1); }
 .hero-card.image-right { grid-template-areas: "content image"; }
 
-/* Offset the card to make room for the overflowing image */
-.hero-card.image-left  { margin-left:  var(--overflow); }
-.hero-card.image-right { margin-right: var(--overflow); }
-
 .hero-image-container { grid-area: image; position: relative; overflow: visible; }
-.hero-content         { grid-area: content; padding: 60px 50px; display: flex; flex-direction: column; justify-content: center; }
+.hero-image { height: 100%; object-fit: cover; object-position: center; display: block; }
+.hero-image-placeholder { width: 100%; height: 100%; display:flex; align-items:center; justify-content:center; color:#666; font-size:1.1rem; }
 
-/* Image overflow & corners, adapt to side */
-.hero-image,
-.hero-image-placeholder {
-  height: 100%;
-  width: calc(100% + var(--overflow));
-  object-fit: cover;
-  object-position: center;
-  display: block;
-}
-
-.hero-card.image-left  .hero-image,
-.hero-card.image-left  .hero-image-placeholder  { margin-left:  calc(-1 * var(--overflow)); border-radius: var(--radius) 0 0 var(--radius); }
-
-.hero-card.image-right .hero-image,
-.hero-card.image-right .hero-image-placeholder { margin-right: calc(-1 * var(--overflow)); border-radius: 0 var(--radius) var(--radius) 0; }
-
-.hero-image-placeholder {
-  background-color: #f0f0f0; color:#666; font-size:1.1rem;
-  display:flex; align-items:center; justify-content:center;
-}
+.hero-content { grid-area: content; padding: 60px 50px; display:flex; flex-direction:column; justify-content:center; }
 
 /* Typography */
-.hero-title { margin: 0 0 24px; line-height: 1.1; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
-.hero-description { margin: 0 0 30px; line-height: 1.6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
+.hero-title { margin: 0 0 24px 0; line-height: 1.1; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
+.hero-description { margin: 0 0 30px 0; line-height: 1.6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
 
 /* CTA */
 .hero-cta-button {
   display: inline-block; padding: 16px 32px; text-decoration: none; font-weight: 600;
-  transition: transform .3s ease, box-shadow .3s ease; align-self: flex-start;
-  border: 2px solid transparent; cursor: pointer;
+  transition: transform .3s ease, box-shadow .3s ease; align-self: flex-start; border: 2px solid transparent; cursor: pointer;
 }
 .hero-cta-button:hover, .hero-cta-button:focus {
-  transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.2); text-decoration: none; outline: none;
+  transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.2); text-decoration:none; outline:none;
 }
 .hero-cta-button:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; border-color: currentColor; }
 
-/* Screen-reader only */
-.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+/* a11y helpers */
+.sr-only{ position: absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 
 /* High contrast */
-@media (prefers-contrast: high) {
-  .hero-card { border-width: 3px; }
-  .hero-cta-button { border: 2px solid currentColor; }
-}
+@media (prefers-contrast: high){ .hero-card{ border-width:3px; } .hero-cta-button{ border:2px solid currentColor; } }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 768px){
   .hero-section { padding-left: 15px !important; padding-right: 15px !important; }
   .hero-card { grid-template-columns: 1fr; grid-template-areas: "image" "content"; margin-left:0 !important; margin-right:0 !important; }
   .hero-content { padding: 40px 30px; }
   .hero-title { font-size: calc({{ section.settings.title_size | default: 48 }}px * 0.7) !important; margin-bottom: 20px; }
   .hero-description { font-size: calc({{ section.settings.description_size | default: 18 }}px * 0.9) !important; margin-bottom: 25px; }
   .brand-badge { top: -20px; right: 15px; }
-  .badge-image {
-    width: calc({{ section.settings.badge_size | default: 120 }}px * 0.8) !important;
-    height: calc({{ section.settings.badge_size | default: 120 }}px * 0.8) !important;
-  }
-  .hero-image,
-  .hero-image-placeholder {
+  .badge-image { width: calc({{ section.settings.badge_size | default: 120 }}px * 0.8) !important; height: calc({{ section.settings.badge_size | default: 120 }}px * 0.8) !important; }
+  .hero-image, .hero-image-placeholder {
     margin-left: 0 !important; margin-right: 0 !important; width: 100% !important;
-    border-radius: {{ section.settings.card_border_radius }}px {{ section.settings.card_border_radius }}px 0 0 !important;
+    border-radius: {{ r }}px {{ r }}px 0 0 !important;
   }
 }
-
-@media (max-width: 480px) {
+@media (max-width: 480px){
   .hero-content { padding: 30px 20px; }
   .hero-title { font-size: calc({{ section.settings.title_size | default: 48 }}px * 0.5) !important; }
   .hero-description { font-size: calc({{ section.settings.description_size | default: 18 }}px * 0.8) !important; }
@@ -217,51 +190,49 @@
 }
 
 /* Print */
-@media print {
-  .hero-section { background: #fff !important; box-shadow: none !important; }
-  .badge-spin { animation: none !important; }
-}
+@media print{ .hero-section{ background:#fff !important; box-shadow:none !important; } .badge-spin{ animation:none !important; } }
 </style>
 
 {% schema %}
 {
   "name": "Hero Section",
   "settings": [
-    { "type": "header", "content": "Accessibility Settings" },
-    { "type": "text", "id": "section_aria_label", "label": "Section ARIA Label", "info": "Describes this section for screen readers", "default": "Hero section with promotional content" },
+    { "type": "header", "content": "Accessibility" },
+    { "type": "text", "id": "section_aria_label", "label": "Section ARIA Label", "default": "Hero section with promotional content" },
 
-    { "type": "header", "content": "Layout Settings" },
+    { "type": "header", "content": "Layout" },
     { "type": "color", "id": "background_color", "label": "Section Background Color", "default": "#f5f5f5" },
     { "type": "range", "id": "section_padding_top", "label": "Section Padding Top", "min": 0, "max": 100, "step": 5, "default": 60, "unit": "px" },
     { "type": "range", "id": "section_padding_bottom", "label": "Section Padding Bottom", "min": 0, "max": 100, "step": 5, "default": 60, "unit": "px" },
 
-    { "type": "header", "content": "Card Settings" },
+    { "type": "header", "content": "Card" },
     { "type": "color", "id": "card_background", "label": "Card Background Color", "default": "#ffffff" },
     { "type": "color", "id": "content_background", "label": "Content Area Background", "default": "#ffffff" },
     { "type": "color", "id": "border_color", "label": "Card Border Color", "default": "#ff69b4" },
     { "type": "range", "id": "border_width", "label": "Border Width", "min": 0, "max": 10, "step": 1, "default": 3, "unit": "px" },
     { "type": "range", "id": "card_border_radius", "label": "Card Border Radius", "min": 0, "max": 50, "step": 5, "default": 20, "unit": "px" },
+    { "type": "checkbox", "id": "enable_card_shadow", "label": "Enable card drop shadow", "default": true },
 
     { "type": "header", "content": "Hero Image" },
-    { "type": "image_picker", "id": "hero_image", "label": "Hero Image", "info": "Recommended size: 800x500px or larger. Add descriptive alt text in the image settings." },
-    { "type": "range", "id": "image_overflow", "label": "Image Overflow Amount", "info": "How much the image extends outside the card border", "min": 0, "max": 80, "step": 10, "default": 40, "unit": "px" },
-    { "type": "select", "id": "image_position", "label": "Image position (desktop)", "options": [
-        { "value": "left", "label": "Image left, text right" },
-        { "value": "right", "label": "Image right, text left" }
-      ],
-      "default": "left"
+    { "type": "image_picker", "id": "hero_image", "label": "Hero Image" },
+    { "type": "select", "id": "image_position", "label": "Image position", "default": "left",
+      "options": [
+        { "value": "left", "label": "Left (image | content)" },
+        { "value": "right", "label": "Right (content | image)" }
+      ]
     },
+    { "type": "range", "id": "image_overflow", "label": "Image Overflow Amount", "min": 0, "max": 80, "step": 10, "default": 40, "unit": "px" },
 
     { "type": "header", "content": "Brand Badge" },
     { "type": "checkbox", "id": "show_badge", "label": "Show Brand Badge", "default": true },
-    { "type": "image_picker", "id": "badge_image", "label": "Badge Image", "info": "Recommended: Square image, 200x200px minimum" },
-    { "type": "text", "id": "badge_alt", "label": "Badge Alt Text", "info": "Describe what the badge shows (e.g., 'Spicy Love brand logo')", "default": "Brand Badge" },
+    { "type": "image_picker", "id": "badge_image", "label": "Badge Image" },
+    { "type": "text", "id": "badge_alt", "label": "Badge Alt Text", "default": "Brand Badge" },
     { "type": "range", "id": "badge_size", "label": "Badge Size", "min": 60, "max": 200, "step": 10, "default": 120, "unit": "px" },
-    { "type": "checkbox", "id": "badge_spin", "label": "Enable Badge Spinning", "info": "Animation respects user's motion preferences", "default": false },
-    { "type": "range", "id": "badge_spin_speed", "label": "Spin Speed (seconds per rotation)", "info": "Lower number = faster spin. 10+ seconds recommended for accessibility.", "min": 2, "max": 20, "step": 1, "default": 10, "unit": "s" },
+    { "type": "checkbox", "id": "badge_spin", "label": "Enable Badge Spinning", "default": false },
+    { "type": "range", "id": "badge_spin_speed", "label": "Spin Speed (seconds per rotation)", "min": 2, "max": 20, "step": 1, "default": 10, "unit": "s" },
 
-    { "type": "header", "content": "Title Settings" },
-    { "type": "text", "id": "hero_title", "label": "Hero Title (H1)", "info": "This will be the main page heading", "default": "Enhance your play in bed" },
+    { "type": "header", "content": "Title" },
+    { "type": "text", "id": "hero_title", "label": "Hero Title (H1)", "default": "Enhance your play in bed" },
     { "type": "color", "id": "title_color", "label": "Title Color", "default": "#8b1538" },
     { "type": "range", "id": "title_size", "label": "Title Font Size", "min": 24, "max": 72, "step": 2, "default": 48, "unit": "px" },
     { "type": "select", "id": "title_weight", "label": "Title Font Weight",
@@ -276,14 +247,14 @@
       "default": "700"
     },
 
-    { "type": "header", "content": "Description Settings" },
-    { "type": "textarea", "id": "hero_description", "label": "Hero Description", "info": "Keep under 160 characters for better SEO", "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation." },
+    { "type": "header", "content": "Description" },
+    { "type": "textarea", "id": "hero_description", "label": "Hero Description", "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation." },
     { "type": "color", "id": "description_color", "label": "Description Color", "default": "#333333" },
     { "type": "range", "id": "description_size", "label": "Description Font Size", "min": 14, "max": 24, "step": 1, "default": 18, "unit": "px" },
 
     { "type": "header", "content": "Call-to-Action Button" },
-    { "type": "text", "id": "button_text", "label": "Button Text", "info": "Use action words like 'Shop Now', 'Learn More', etc." },
-    { "type": "url", "id": "button_url", "label": "Button URL", "info": "Where the button should link to" },
+    { "type": "text", "id": "button_text", "label": "Button Text" },
+    { "type": "url", "id": "button_url", "label": "Button URL" },
     { "type": "color", "id": "button_background", "label": "Button Background Color", "default": "#ff69b4" },
     { "type": "color", "id": "button_text_color", "label": "Button Text Color", "default": "#ffffff" },
     { "type": "range", "id": "button_text_size", "label": "Button Text Size", "min": 14, "max": 24, "step": 1, "default": 18, "unit": "px" },
