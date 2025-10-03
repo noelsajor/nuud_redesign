@@ -150,8 +150,8 @@
         "wave_frequency": 4,
         "wave_amplitude": 40,
         "animate_waves": true,
-        "wave_speed": 20,
-        "wave_bob": 20,
+        "wave_speed": 10,
+        "wave_bob": 0,
         "enable_scroll_animation": true,
         "scroll_direction": "right-left"
       }
