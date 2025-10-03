@@ -87,9 +87,62 @@
         "split_blog_layout": false,
         "split_gap": "30"
       }
+    },
+    "faq_section_inFnBn": {
+      "type": "faq-section",
+      "name": "FAQ Section",
+      "settings": {
+        "subheading": "FAQ",
+        "heading": "Frequently Asked Questions",
+        "body": "<p>Find answers to the most common questions about our products and services.</p>",
+        "question_1": "What is your return policy?",
+        "answer_1": "<p>We offer a 30-day return policy for all unused items in their original packaging.</p>",
+        "question_2": "How long does shipping take?",
+        "answer_2": "<p>Standard shipping takes 3-5 business days. Express shipping is available for 1-2 business days.</p>",
+        "question_3": "Do you offer international shipping?",
+        "answer_3": "<p>Yes, we ship to most countries worldwide. Shipping costs and delivery times vary by location.</p>",
+        "question_4": "",
+        "answer_4": "",
+        "question_5": "",
+        "answer_5": "",
+        "question_6": "",
+        "answer_6": "",
+        "section_background_color": "rgba(0,0,0,0)",
+        "overlay_color": "#000000",
+        "overlay_opacity": 0,
+        "background_color": "#ffffff",
+        "section_padding": 40,
+        "section_gap": 40,
+        "mobile_gap": 30,
+        "mobile_text_alignment": "left",
+        "question_gap": 12,
+        "question_padding": 20,
+        "answer_padding": 20,
+        "border_radius": 8,
+        "question_border_radius_custom": "6,6,6,6",
+        "subheading_color": "#777777",
+        "heading_color": "#111111",
+        "body_color": "#333333",
+        "question_color": "#000000",
+        "answer_color": "#333333",
+        "question_background": "#ffffff",
+        "answer_background": "#fafafa",
+        "question_border_color": "#dddddd",
+        "icon_color": "#333333",
+        "subheading_size": 16,
+        "heading_size": 32,
+        "body_size": 16,
+        "question_size": 18,
+        "answer_size": 16,
+        "enable_animation": true,
+        "enable_hover_color": true,
+        "active_background_color": "#111111",
+        "active_text_color": "#ffffff"
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "faq_section_inFnBn"
   ]
 }
