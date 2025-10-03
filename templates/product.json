@@ -262,58 +262,54 @@
         "custom_class_name": ""
       }
     },
-    "home_support_block_FKJCYt": {
-      "type": "home-support-block",
+    "gallery_wqjam9": {
+      "type": "gallery",
       "blocks": {
-        "icon_mVFURV": {
-          "type": "icon",
+        "image_AMkpcH": {
+          "type": "Image",
           "settings": {
-            "title": "Heading",
-            "desc": "Lorem ipsum dolor sit amet",
-            "link_text": "View More",
-            "link": ""
+            "image": "shopify://shop_images/Rectangle_182.png",
+            "title": "Collection Name",
+            "gallery_title": "Ginseng",
+            "category": "",
+            "gallery_link": ""
           }
         },
-        "icon_CbjfaN": {
-          "type": "icon",
+        "image_eR36Wk": {
+          "type": "Image",
           "settings": {
-            "title": "Heading",
-            "desc": "Lorem ipsum dolor sit amet",
-            "link_text": "View More",
-            "link": ""
+            "image": "shopify://shop_images/Rectangle_185.png",
+            "title": "Collection Name",
+            "gallery_title": "",
+            "category": "",
+            "gallery_link": ""
           }
         },
-        "icon_UpbhKt": {
-          "type": "icon",
+        "image_9xp3Aq": {
+          "type": "Image",
           "settings": {
-            "title": "Heading",
-            "desc": "Lorem ipsum dolor sit amet",
-            "link_text": "View More",
-            "link": ""
+            "image": "shopify://shop_images/Rectangle_186.png",
+            "title": "Collection Name",
+            "gallery_title": "",
+            "category": "",
+            "gallery_link": ""
           }
         }
       },
       "block_order": [
-        "icon_mVFURV",
-        "icon_CbjfaN",
-        "icon_UpbhKt"
+        "image_AMkpcH",
+        "image_eR36Wk",
+        "image_9xp3Aq"
       ],
-      "name": "Support block",
+      "name": "Gallery",
       "settings": {
         "full": false,
         "spacing_both_ends": false,
         "padding": "0,0",
         "margin": "0,0",
-        "show_background_image": false,
-        "background_style": "parallax",
-        "background_size": "auto",
-        "enable_overlay": false,
-        "background_color": "",
-        "overlay_transparency": "0.5",
-        "mask_image_color": "",
-        "section_heading": "Support Block",
-        "section_sub_heading": "Sub Heading",
-        "section_description": "Use this text to share the information which you like!.",
+        "section_heading": "Ingredients",
+        "section_sub_heading": "",
+        "section_description": "",
         "section_button_text": "",
         "section_button_link": "",
         "section_heading_color": "",
@@ -323,28 +319,18 @@
         "section_button_text_color": "",
         "section_button_hover_bg_color": "",
         "section_button_hover_text_color": "",
-        "heading_position": "text-center",
-        "text_position": "text-start",
-        "block_style": "default-style",
-        "grid": "3",
-        "enable_grid_style": false,
-        "vertical_position": "position-default",
-        "reverse_column": false,
-        "border_radius": "0px",
-        "enable_box_shadow": false,
-        "block_icon_outer_size": "60px",
-        "block_icon_size": "40px",
-        "block_border_color": "",
-        "block_bg": "",
-        "block_icon_bg": "",
-        "block_icon_border_color": "",
-        "block_heading_color": "",
-        "block_description_color": "",
-        "block_button_bg_color": "",
-        "block_button_text_color": "",
-        "block_button_hover_bg_color": "",
-        "block_button_hover_text_color": "",
-        "custom_class_name": ""
+        "use_overlay": false,
+        "img_overlay": "#000",
+        "img_overlay_title": "#000",
+        "img_overlay_catgry": "#000",
+        "use_overlay_icons": false,
+        "img_overlay_icon": "#000",
+        "img_overlay_icon_bg1": "#000",
+        "img_overlay_icon_txt": "#000",
+        "img_overlay_icon_bg": "#000",
+        "img_overlay_icon_hover_txt": "#000",
+        "texthover_bg_color": "#000",
+        "texthover_txt_color": "#000"
       }
     },
     "17128268426b408274": {
@@ -559,7 +545,7 @@
     "main",
     "wavy_features_FXPJ84",
     "home_specification_block_zQq98J",
-    "home_support_block_FKJCYt",
+    "gallery_wqjam9",
     "17128268426b408274",
     "section_D8hWVF",
     "section_t9dj3V",
