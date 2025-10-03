@@ -102,7 +102,7 @@
         "wave_amplitude": 25,
         "animate_waves": true,
         "wave_speed": 12,
-        "wave_bob": 8,
+        "wave_bob": 0,
         "enable_scroll_animation": true,
         "scroll_direction": "left-right"
       }
