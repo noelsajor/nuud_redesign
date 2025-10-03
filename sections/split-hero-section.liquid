@@ -57,11 +57,13 @@
                   assign category_key         = 'category_' | append: i
                   assign category_image_key   = 'category_' | append: i | append: '_image'
                   assign category_title_key   = 'category_' | append: i | append: '_title'
+                  assign show_title_key       = 'show_category_' | append: i | append: '_title'
 
                   assign category_enabled = section.settings[category_enabled_key]
                   assign category         = section.settings[category_key]
                   assign category_image   = section.settings[category_image_key]
                   assign category_title   = section.settings[category_title_key]
+                  assign show_title       = section.settings[show_title_key]
                 %}
 
                 {% if category_enabled %}
@@ -93,15 +95,18 @@
                           </div>
                         {% endif %}
                       </div>
-                      <h3 class="ai-split-section-category-title-{{ uid }}">
-                        {% if category_title != blank %}
-                          {{ category_title }}
-                        {% elsif category != blank %}
-                          {{ category.title }}
-                        {% else %}
-                          Category {{ i }}
-                        {% endif %}
-                      </h3>
+
+                      {% if show_title %}
+                        <h3 class="ai-split-section-category-title-{{ uid }}">
+                          {% if category_title != blank %}
+                            {{ category_title }}
+                          {% elsif category != blank %}
+                            {{ category.title }}
+                          {% else %}
+                            Category {{ i }}
+                          {% endif %}
+                        </h3>
+                      {% endif %}
                     </a>
                   {% else %}
                     <div class="ai-split-section-empty-category-{{ uid }}">
@@ -314,7 +319,6 @@
 @media (max-width: 768px){
   .ai-split-section-container-{{ uid }}{ grid-template-columns:1fr; gap:40px; }
 
-  /* keep your chosen paddings on mobile, gently reduced */
   .ai-split-section-content-{{ uid }}{
     padding: {{ section.settings.padding_top | times: 0.7 }}px 15px {{ section.settings.padding_bottom | times: 0.7 }}px 15px;
   }
@@ -466,24 +470,28 @@
     { "type": "collection", "id": "category_1", "label": "Collection" },
     { "type": "image_picker", "id": "category_1_image", "label": "Custom image" },
     { "type": "text", "id": "category_1_title", "label": "Custom title" },
+    { "type": "checkbox", "id": "show_category_1_title", "label": "Show title", "default": true },
 
     { "type": "header", "content": "Category 2" },
     { "type": "checkbox", "id": "enable_category_2", "label": "Enable category 2", "default": true },
     { "type": "collection", "id": "category_2", "label": "Collection" },
     { "type": "image_picker", "id": "category_2_image", "label": "Custom image" },
     { "type": "text", "id": "category_2_title", "label": "Custom title" },
+    { "type": "checkbox", "id": "show_category_2_title", "label": "Show title", "default": true },
 
     { "type": "header", "content": "Category 3" },
     { "type": "checkbox", "id": "enable_category_3", "label": "Enable category 3", "default": false },
     { "type": "collection", "id": "category_3", "label": "Collection" },
     { "type": "image_picker", "id": "category_3_image", "label": "Custom image" },
     { "type": "text", "id": "category_3_title", "label": "Custom title" },
+    { "type": "checkbox", "id": "show_category_3_title", "label": "Show title", "default": true },
 
     { "type": "header", "content": "Category 4" },
     { "type": "checkbox", "id": "enable_category_4", "label": "Enable category 4", "default": false },
     { "type": "collection", "id": "category_4", "label": "Collection" },
     { "type": "image_picker", "id": "category_4_image", "label": "Custom image" },
     { "type": "text", "id": "category_4_title", "label": "Custom title" },
+    { "type": "checkbox", "id": "show_category_4_title", "label": "Show title", "default": true },
 
     { "type": "header", "content": "Category style" },
     { "type": "color", "id": "category_bg_color", "label": "Card background color", "default": "#f8f8f8" },
