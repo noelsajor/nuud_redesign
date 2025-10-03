@@ -361,14 +361,15 @@
 {% endunless %}
 
 <style>
-  /* Section wrapper bg (unchanged) */
+  /* ===== Outer section background color (new) ===== */
   #shopify-section-{{section.id}}.main-product-template {
-    {% if section.settings.background_im != blank  %} background-image:url({{ section.settings.background_image | img_url:'master' }}); {% endif %}
+    background-color: {{ section.settings.section_bg_color }};
     background-size: auto;
     background-repeat: no-repeat;
-    background-position:right center;
+    background-position: right center;
     position: relative;
   }
+
   #shopify-section-{{section.id}}.main-product-template:before{
     content: " ";
     position: absolute;
@@ -401,7 +402,7 @@
     z-index: -1;
   }
 
-  /* ======== INNER BACKGROUND CONTAINER (new) ======== */
+  /* ===== Inner background container (card) ===== */
   .inner-bg-{{ section.id }}{
     background: {{ section.settings.inner_bg_color }};
     border-radius: {{ section.settings.inner_bg_radius }}px;
@@ -424,7 +425,6 @@
       margin-bottom: {{ margin_bottom | divided_by: 2 }}px;
     }
   }
-  /* ======== /INNER BACKGROUND CONTAINER ======== */
 
   #shopify-product-reviews .spr-container *{color:var(--DT_Blog_Button_Text_Color);}
   .spr-form-input-text, .spr-form-input-email, .spr-form-input-textarea{color:var(--DT_Blog_Button_Text_Color);background:transparent !important;border-color:var(--DT_Blog_Button_Text_Color) !important;}
@@ -492,6 +492,11 @@
     #shopify-section-{{section.id}}.main-product-template:before{width:400px !important;height:500px !important;background-size:contain !important;}
     #shopify-section-{{section.id}}.main-product-template:after{width:200px !important;height:300px !important;background-size:contain !important;}
   }
+
+  @keyframes dt-swing {
+    0% { transform: translateY(10px); }
+    100% { transform: translateY(-10px); }
+  }
 </style>
 
 <script>
@@ -519,6 +524,9 @@
     { "type": "checkbox", "id": "spacing_both_ends", "label": "Enable Right & Left Spacing (Works only on Fullwidth)", "default": false },
     { "type": "text", "id": "padding", "label": "Style value (Padding)", "default":"0,0", "info":"Top(px),Bottom(px)" },
     { "type": "text", "id": "margin", "label": "Style value (Margin)", "default":"0,0", "info":"Top(px),Bottom(px)" },
+
+    { "type": "header", "content": "Section Background" },
+    { "type": "color", "id": "section_bg_color", "label": "Section background color", "default": "#F6F7FB" },
 
     { "type": "image_picker", "id": "before_image", "label": "Before image", "info": "Size: 1920x1280" },
     { "type": "image_picker", "id": "after_image", "label": "After image", "info": "Size: 1920x1280" },
