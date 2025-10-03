@@ -45,8 +45,9 @@
       "settings": {
         "full": false,
         "spacing_both_ends": false,
-        "padding": "0,0",
+        "padding": "100,100",
         "margin": "0,0",
+        "section_bg_color": "#ffe3ec",
         "gallery_type": "thumbnails_horizontal",
         "vertical_style": "dt-sc-product-vertical-thumb-right",
         "enable_zoom": true,
