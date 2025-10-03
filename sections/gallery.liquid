@@ -10,13 +10,18 @@
   data-section-id="{{ section.id }}"
   data-section-type="gallery_page"
   class="gallery_page align-{{ section.settings.content_alignment }}"
-  style="margin-top: {{ margin_top | default: 0 }}px; margin-bottom: {{ margin_bottom | default: 0 }}px;"
+  style="
+    background: {{ section.settings.section_bg_color | default: 'transparent' }};
+    margin-top: {{ margin_top | default: 0 }}px;
+    margin-bottom: {{ margin_bottom | default: 0 }}px;
+  "
 >
   <div class="{% render 'container-settings' %}" style="padding-top: {{ padding_top | default: 0 }}px; padding-bottom: {{ padding_bottom | default: 0 }}px;">
     <div class="row {{ section.settings.custom_class_name }}">
       {% render 'section-heading', class: section.id %}
 
-      <div class="dt-sc-column four-column">
+      <!-- Gallery grid wrapper -->
+      <div class="dt-sc-column four-column gallery-grid">
         {% for block in section.blocks %}
           <div class="bg-effect-{{ block.id }} gallery" style="position:relative;">
             {% unless section.settings.use_overlay_icons %}
@@ -36,7 +41,6 @@
                 {{ block.settings.image | img_url: '480x480', scale: 2 | img_tag: block.settings.image.alt, 'dt-sc-noscript-image' }}
               </noscript>
             {% else %}
-              {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
               {{ 'image' | placeholder_svg_tag }}
             {% endif %}
 
@@ -76,23 +80,49 @@
           </div>
         {% endfor %}
       </div>
+      <!-- /Gallery grid wrapper -->
     </div>
   </div>
 </div>
 
 <style>
-  /* =========== Alignment =========== */
-  /* Works whether the theme renders .dt-sc-column as grid or flex */
-  #gallery-{{ section.id }}.align-left  .dt-sc-column { justify-content: flex-start; }
-  #gallery-{{ section.id }}.align-center .dt-sc-column { justify-content: center; }
-  #gallery-{{ section.id }}.align-right .dt-sc-column { justify-content: flex-end; }
+  /* ------- FLEX GRID so alignment works ------- */
+  #gallery-{{ section.id }} .gallery-grid{
+    /* turn the theme grid wrapper into a flexible row of cards */
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 30px; /* default, overridden below by your theme gap if any */
+    --cols-desktop: 4;
+    --cols-laptop: 3;
+    --cols-tablet: 2;
+    --col-gap: 30px;
+  }
 
-  /* If it's a CSS Grid, also align items inside their cells */
-  #gallery-{{ section.id }}.align-left  .dt-sc-column { justify-items: start; }
-  #gallery-{{ section.id }}.align-center .dt-sc-column { justify-items: center; }
-  #gallery-{{ section.id }}.align-right .dt-sc-column { justify-items: end; }
+  /* Drive row alignment by section setting */
+  #gallery-{{ section.id }}.align-left  .gallery-grid{ justify-content: flex-start; }
+  #gallery-{{ section.id }}.align-center .gallery-grid{ justify-content: center; }
+  #gallery-{{ section.id }}.align-right .gallery-grid{ justify-content: flex-end; }
 
-  /* Headings and overlay text follow the alignment too */
+  /* Card width math for 4/3/2 columns across breakpoints */
+  #gallery-{{ section.id }} .gallery{
+    flex: 0 1 calc((100% - (var(--cols-desktop) - 1) * var(--col-gap)) / var(--cols-desktop));
+    max-width: calc((100% - (var(--cols-desktop) - 1) * var(--col-gap)) / var(--cols-desktop));
+  }
+
+  @media (max-width: 1199px){
+    #gallery-{{ section.id }} .gallery{
+      flex-basis: calc((100% - (var(--cols-laptop) - 1) * var(--col-gap)) / var(--cols-laptop));
+      max-width:  calc((100% - (var(--cols-laptop) - 1) * var(--col-gap)) / var(--cols-laptop));
+    }
+  }
+  @media (max-width: 767px){
+    #gallery-{{ section.id }} .gallery{
+      flex-basis: calc((100% - (var(--cols-tablet) - 1) * var(--col-gap)) / var(--cols-tablet));
+      max-width:  calc((100% - (var(--cols-tablet) - 1) * var(--col-gap)) / var(--cols-tablet));
+    }
+  }
+
+  /* Headings and overlay text follow alignment too */
   #gallery-{{ section.id }}.align-left  .dt-sc-heading,
   #gallery-{{ section.id }}.align-left  .image-overlay-details { text-align: left; }
   #gallery-{{ section.id }}.align-center .dt-sc-heading,
@@ -100,31 +130,29 @@
   #gallery-{{ section.id }}.align-right .dt-sc-heading,
   #gallery-{{ section.id }}.align-right .image-overlay-details { text-align: right; }
 
-  /* Make image crop focus reflect alignment (always visible) */
+  /* Image crop focus mirrors alignment (so faces don’t get cut off oddly) */
   #gallery-{{ section.id }} .gallery img{
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-    object-position: center;
+    width: 100%; height: 100%; display: block;
+    object-fit: cover; object-position: center center;
   }
-  #gallery-{{ section.id }}.align-left  .gallery img  { object-position: left center; }
+  #gallery-{{ section.id }}.align-left  .gallery img  { object-position: left  center; }
   #gallery-{{ section.id }}.align-center .gallery img { object-position: center center; }
   #gallery-{{ section.id }}.align-right .gallery img  { object-position: right center; }
 
-  /* =========== Existing visuals =========== */
+  /* Keep your original visuals */
   #gallery-{{ section.id }} .image-overlay .links i{ font-weight: 800; }
-  #gallery-{{ section.id }} .dt-sc-column { grid-gap: 30px; } /* keep spacing */
+  #gallery-{{ section.id }} .gallery:hover .image-overlay { opacity: 1; }
 
   {% if section.settings.use_overlay %}
-    #gallery-{{ section.id }} .gallery .image-overlay { background: {{ section.settings.img_overlay | color_modify: 'alpha', 0.7 }}; }
+    #gallery-{{ section.id }} .gallery .image-overlay{
+      background: {{ section.settings.img_overlay | color_modify: 'alpha', 0.7 }};
+    }
   {% endif %}
-  #gallery-{{ section.id }} .gallery:hover .image-overlay { opacity: 1; }
 
   #gallery-{{ section.id }} .image-overlay .links{
     position: absolute; inset: 0;
     display: flex; align-items: center; justify-content: center;
-    text-align: center; margin: 0 auto;
+    text-align: center; margin: 0;
   }
   #gallery-{{ section.id }} .gallery .links a{
     background: {{ section.settings.img_overlay_icon_bg1 }};
@@ -137,21 +165,22 @@
     color: {{ section.settings.img_overlay_icon_hover_txt }};
   }
   #gallery-{{ section.id }} .gallery .image-overlay-details h4 a { color: {{ section.settings.img_overlay_title }}; }
-  #gallery-{{ section.id }} .gallery .image-overlay-details p { color: {{ section.settings.img_overlay_catgry }}; }
-
-  @media (max-width: 1199px){
-    #gallery-{{ section.id }} img{ width:100%; }
-  }
+  #gallery-{{ section.id }} .gallery .image-overlay-details p     { color: {{ section.settings.img_overlay_catgry }}; }
 </style>
 
-{% javascript %}
-  $('.gallery-pop').magnificPopup({
-    type: 'image',
-    closeOnContentClick: true,
-    mainClass: 'mfp-img-mobile',
-    image: { verticalFit: true }
-  });
-{% endjavascript %}
+<script>
+  // Only run if jQuery + magnificPopup exist, to avoid console errors
+  (function(){
+    if (window.jQuery && jQuery.fn && jQuery.fn.magnificPopup) {
+      jQuery('.gallery-pop').magnificPopup({
+        type: 'image',
+        closeOnContentClick: true,
+        mainClass: 'mfp-img-mobile',
+        image: { verticalFit: true }
+      });
+    }
+  }());
+</script>
 
 {% schema %}
 {
@@ -161,11 +190,12 @@
     { "type": "checkbox", "id": "full", "label": "Show Full width" },
     { "type": "checkbox", "id": "spacing_both_ends", "label": "Enable Right & Left Spacing (Works only on Fullwidth)", "default": false },
 
-    { "type": "text", "id": "padding", "label": "Style value (Padding)", "default": "0,0", "info": "Top(px),Bottom(px)" },
-    { "type": "text", "id": "margin", "label": "Style value (Margin)", "default": "0,0", "info": "Top(px),Bottom(px)" },
+    { "type": "text", "id": "padding", "label": "Style value (Padding)", "default":"0,0", "info":"Top(px),Bottom(px)" },
+    { "type": "text", "id": "margin", "label": "Style value (Margin)", "default":"0,0", "info":"Top(px),Bottom(px)" },
 
     { "type": "text", "id": "custom_class_name", "label": "Custom class name" },
 
+    { "type": "color", "id": "section_bg_color", "label": "Section background color", "default": "#ffffff" },
     { "type": "select", "id": "content_alignment", "label": "Content alignment", "default": "center",
       "options": [
         { "value": "left", "label": "Left" },
