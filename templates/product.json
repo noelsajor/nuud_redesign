@@ -78,6 +78,42 @@
         "collection": "advanced-product-tagging"
       }
     },
+    "product_page_test_NV8rRw": {
+      "type": "product-page-test",
+      "disabled": true,
+      "name": "Pink Product Page",
+      "settings": {
+        "pick_product": "",
+        "card_bg": "#ffd6e0",
+        "accent": "#ff4fb3",
+        "ink": "#2b1a22",
+        "ink_subtle": "#6b4a58",
+        "radius": 24,
+        "review_text": "7.5k reviews",
+        "blurb": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "badge_1": "🍑",
+        "badge_2": "🍆",
+        "badge_3": "💧",
+        "pills_label": "Number of Gummies",
+        "most_popular": "40",
+        "best_value": "80",
+        "subscribe_saving": "20%",
+        "bullet_1": "Delivered monthly",
+        "bullet_2": "Pause, skip, or cancel anytime",
+        "bullet_3": "Save with each delivery",
+        "cta_text": "ADD TO CART",
+        "sold_out_text": "SOLD OUT",
+        "a1_title": "Is This For You",
+        "a1_body": "<p>Short explanation about who benefits from this product.</p>",
+        "a2_title": "Benefits",
+        "a2_body": "<ul><li>Benefit one</li><li>Benefit two</li></ul>",
+        "a3_title": "Recommended Usage",
+        "a3_body": "<p>Take 2 gummies daily with water.</p>",
+        "a4_title": "Ingredients Facts",
+        "a4_body": "<p>Ingredient list and nutrition facts here.</p>",
+        "warning_text": "WARNING: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      }
+    },
     "wavy_features_FXPJ84": {
       "type": "wavy-features",
       "name": "Features with Waves",
@@ -544,6 +580,7 @@
   },
   "order": [
     "main",
+    "product_page_test_NV8rRw",
     "wavy_features_FXPJ84",
     "home_specification_block_zQq98J",
     "gallery_wqjam9",
