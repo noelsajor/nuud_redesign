@@ -95,7 +95,7 @@
         "wave_shape": "medium",
         "show_top_wave": true,
         "show_bottom_wave": true,
-        "wave_color": "#ffd4e5",
+        "wave_color": "#ffc4e1",
         "wave_overlap_top": 100,
         "wave_overlap_bottom": 100,
         "wave_frequency": 2,
