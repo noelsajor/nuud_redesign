@@ -345,8 +345,10 @@
       "settings": {
         "full": false,
         "spacing_both_ends": false,
-        "padding": "0,0",
+        "padding": "100,100",
         "margin": "0,0",
+        "section_bg_color": "#ffffff",
+        "content_alignment": "center",
         "section_heading": "Ingredients",
         "section_sub_heading": "",
         "section_description": "",
