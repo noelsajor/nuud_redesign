@@ -430,23 +430,10 @@
             "job": "Author Designation",
             "star": "3"
           }
-        },
-        "content_y4DdTr": {
-          "type": "content",
-          "settings": {
-            "review_type": "photo",
-            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
-            "icon": "shopify://shop_images/Rectangle_97.png",
-            "author": "Author Name",
-            "job": "Author Designation",
-            "star": "3",
-            "photo": "shopify://shop_images/Rectangle_97.png"
-          }
         }
       },
       "block_order": [
-        "content_cykCyq",
-        "content_y4DdTr"
+        "content_cykCyq"
       ],
       "name": "Testimonial",
       "settings": {
@@ -482,9 +469,9 @@
         "text_position": "text-start",
         "quote_style": "no-quote-icon",
         "author_info_style": "style_2",
-        "border_radius": "0px",
-        "boxed_border_radius": "0",
-        "column_gap": "30",
+        "border_radius": "50%",
+        "boxed_border_radius": "32",
+        "column_gap": "23",
         "content_width": "30/70",
         "lap_content_width": "20/80",
         "vertical_position": "vertical-top",
