@@ -18,7 +18,23 @@
 >
   <div class="{% render 'container-settings' %}" style="padding-top: {{ padding_top | default: 0 }}px; padding-bottom: {{ padding_bottom | default: 0 }}px;">
     <div class="row {{ section.settings.custom_class_name }}">
-      {% render 'section-heading', class: section.id %}
+      
+      {%- comment -%} Local heading/subheading/body (replaces theme snippet) {%- endcomment -%}
+      {% if section.settings.heading != blank or section.settings.subheading != blank or section.settings.body_text != blank %}
+        <header class="gallery-heading">
+          {% if section.settings.subheading != blank %}
+            <div class="gallery-subheading">{{ section.settings.subheading }}</div>
+          {% endif %}
+          {% if section.settings.heading != blank %}
+            <h2 class="gallery-title">{{ section.settings.heading }}</h2>
+          {% endif %}
+          {% if section.settings.body_text != blank %}
+            <div class="gallery-body rte">
+              {{ section.settings.body_text }}
+            </div>
+          {% endif %}
+        </header>
+      {% endif %}
 
       <!-- Gallery grid wrapper -->
       <div class="dt-sc-column four-column gallery-grid">
@@ -81,6 +97,7 @@
         {% endfor %}
       </div>
       <!-- /Gallery grid wrapper -->
+
     </div>
   </div>
 </div>
@@ -88,27 +105,25 @@
 <style>
   /* ------- FLEX GRID so alignment works ------- */
   #gallery-{{ section.id }} .gallery-grid{
-    /* turn the theme grid wrapper into a flexible row of cards */
     display: flex !important;
     flex-wrap: wrap;
-    gap: 30px; /* default, overridden below by your theme gap if any */
+    gap: 30px;
     --cols-desktop: 4;
     --cols-laptop: 3;
     --cols-tablet: 2;
     --col-gap: 30px;
   }
 
-  /* Drive row alignment by section setting */
+  /* Row alignment via section setting */
   #gallery-{{ section.id }}.align-left  .gallery-grid{ justify-content: flex-start; }
   #gallery-{{ section.id }}.align-center .gallery-grid{ justify-content: center; }
   #gallery-{{ section.id }}.align-right .gallery-grid{ justify-content: flex-end; }
 
-  /* Card width math for 4/3/2 columns across breakpoints */
+  /* Card width by breakpoint */
   #gallery-{{ section.id }} .gallery{
     flex: 0 1 calc((100% - (var(--cols-desktop) - 1) * var(--col-gap)) / var(--cols-desktop));
     max-width: calc((100% - (var(--cols-desktop) - 1) * var(--col-gap)) / var(--cols-desktop));
   }
-
   @media (max-width: 1199px){
     #gallery-{{ section.id }} .gallery{
       flex-basis: calc((100% - (var(--cols-laptop) - 1) * var(--col-gap)) / var(--cols-laptop));
@@ -122,15 +137,38 @@
     }
   }
 
-  /* Headings and overlay text follow alignment too */
-  #gallery-{{ section.id }}.align-left  .dt-sc-heading,
-  #gallery-{{ section.id }}.align-left  .image-overlay-details { text-align: left; }
-  #gallery-{{ section.id }}.align-center .dt-sc-heading,
-  #gallery-{{ section.id }}.align-center .image-overlay-details { text-align: center; }
-  #gallery-{{ section.id }}.align-right .dt-sc-heading,
-  #gallery-{{ section.id }}.align-right .image-overlay-details { text-align: right; }
+  /* ---------- Heading block ---------- */
+  #gallery-{{ section.id }} .gallery-heading{
+    margin-bottom: 28px;
+  }
+  /* alignment */
+  #gallery-{{ section.id }}.align-left  .gallery-heading{ text-align: left; }
+  #gallery-{{ section.id }}.align-center .gallery-heading{ text-align: center; }
+  #gallery-{{ section.id }}.align-right .gallery-heading{ text-align: right; }
 
-  /* Image crop focus mirrors alignment (so faces don’t get cut off oddly) */
+  /* colors & type from settings */
+  #gallery-{{ section.id }} .gallery-title{
+    margin: 0 0 6px;
+    color: {{ section.settings.section_heading_color | default: '#111111' }};
+  }
+  #gallery-{{ section.id }} .gallery-subheading{
+    margin-bottom: 6px;
+    color: {{ section.settings.section_sub_heading_color | default: '#666666' }};
+    font-size: .95em;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+  }
+  #gallery-{{ section.id }} .gallery-body{
+    color: {{ section.settings.section_description_color | default: '#444444' }};
+    max-width: 65ch;
+    {% if section.settings.content_alignment == 'center' %}
+      margin-left: auto; margin-right: auto;
+    {% elsif section.settings.content_alignment == 'right' %}
+      margin-left: auto;
+    {% endif %}
+  }
+
+  /* ---------- Images & overlays ---------- */
   #gallery-{{ section.id }} .gallery img{
     width: 100%; height: 100%; display: block;
     object-fit: cover; object-position: center center;
@@ -139,8 +177,7 @@
   #gallery-{{ section.id }}.align-center .gallery img { object-position: center center; }
   #gallery-{{ section.id }}.align-right .gallery img  { object-position: right center; }
 
-  /* Keep your original visuals */
-  #gallery-{{ section.id }} .image-overlay .links i{ font-weight: 800; }
+  #gallery-{{ section.id }} .image-overlay .links i{ font-weight:800; }
   #gallery-{{ section.id }} .gallery:hover .image-overlay { opacity: 1; }
 
   {% if section.settings.use_overlay %}
@@ -169,7 +206,6 @@
 </style>
 
 <script>
-  // Only run if jQuery + magnificPopup exist, to avoid console errors
   (function(){
     if (window.jQuery && jQuery.fn && jQuery.fn.magnificPopup) {
       jQuery('.gallery-pop').magnificPopup({
@@ -192,7 +228,6 @@
 
     { "type": "text", "id": "padding", "label": "Style value (Padding)", "default":"0,0", "info":"Top(px),Bottom(px)" },
     { "type": "text", "id": "margin", "label": "Style value (Margin)", "default":"0,0", "info":"Top(px),Bottom(px)" },
-
     { "type": "text", "id": "custom_class_name", "label": "Custom class name" },
 
     { "type": "color", "id": "section_bg_color", "label": "Section background color", "default": "#ffffff" },
@@ -204,6 +239,17 @@
       ]
     },
 
+    { "type": "header", "content": "Heading content" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Our gallery" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Explore the looks" },
+    { "type": "richtext", "id": "body_text", "label": "Body text", "default": "<p>Add a short description for this gallery section.</p>" },
+
+    { "type": "header", "content": "Heading colors" },
+    { "type": "color", "id": "section_heading_color", "label": "Heading color", "default": "#111111" },
+    { "type": "color", "id": "section_sub_heading_color", "label": "Subheading color", "default": "#666666" },
+    { "type": "color", "id": "section_description_color", "label": "Body text color", "default": "#444444" },
+
+    { "type": "header", "content": "Overlay" },
     { "type": "checkbox", "id": "use_overlay", "label": "Use Overlay" },
     { "type": "color", "id": "img_overlay", "label": "Image Overlay", "default": "#000000" },
     { "type": "color", "id": "img_overlay_title", "label": "Overlay Title", "default": "#ffffff" },
