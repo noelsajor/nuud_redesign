@@ -1,181 +1,168 @@
 {% assign margin = section.settings.margin | split: ',' %}
 {% assign margin_top = margin[0] %}
-{% assign margin_bottom = margin[1] %}
+{% assign margin_bottom = margin[1] %} 
 {% assign padding = section.settings.padding | split: ',' %}
 {% assign padding_top = padding[0] %}
-{% assign padding_bottom = padding[1] %}
+{% assign padding_bottom = padding[1] %} 
 
-<section
-  id="gallery-{{ section.id }}"
-  data-section-id="{{ section.id }}"
-  data-section-type="gallery_page"
-  class="gallery_page {% if section.settings.enable_overlay %}dt-sc-overlay{% endif %} align-{{ section.settings.content_alignment }}"
-  style="background: {{ section.settings.background_color }};"
->
-  <div class="{% render 'container-settings' %}">
+<div id="gallery-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="gallery_page" class="gallery_page align-{{ section.settings.content_alignment }}">
+  <div class="{% render 'container-settings' %}"> 
     <div class="row {{ section.settings.custom_class_name }}">
-      {% render 'section-heading', class: section.id %}
+      {% render 'section-heading', class: section.id %}          
 
-      <div class="dt-sc-column four-column">
-        {% for block in section.blocks %}
+      <div class="dt-sc-column four-column">  
+        {% for block in section.blocks %}        
           <div class="bg-effect-{{ block.id }} gallery" style="position:relative;">
             {% unless section.settings.use_overlay_icons %}
               <a href="{% if block.settings.image != blank %}{{ block.settings.image | img_url: 'master' }}{% endif %}">
             {% endunless %}
 
-              {% if block.settings.image != blank %}
-                <img
-                  class="lazyload"
-                  data-src="{{ block.settings.image | img_url: 'master' }}"
-                  data-widths="[180, 360, 470, 600, 770, 970, 1060, 1280, 1512, 1728, 2048]"
-                  data-aspectratio="{{ block.settings.image.aspect_ratio }}"
-                  data-sizes="auto"
-                  alt="{{ block.settings.title | escape }}"
-                >
-                <noscript>
-                  {{ block.settings.image | img_url: '480x480', scale: 2 | img_tag: block.settings.title, 'dt-sc-noscript-image' }}
-                </noscript>
-              {% else %}
-                {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
-                {{ 'image' | placeholder_svg_tag }}
+            {% if block.settings.image != blank %}                          
+              <img
+                class="lazyload"
+                data-src="{{ block.settings.image | img_url: 'master' }}"
+                data-widths="[180, 360, 470, 600, 770, 970, 1060, 1280, 1512, 1728, 2048]"
+                data-aspectratio="{{ block.settings.image.aspect_ratio }}"
+                data-sizes="auto"
+                alt="{{ block.settings.title | escape }}">
+              <noscript>
+                {{ block.settings.image | img_url: '480x480', scale: 2 | img_tag: block.settings.image.alt, 'dt-sc-noscript-image' }}
+              </noscript>
+            {% else %}
+              {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+              {{ 'image' | placeholder_svg_tag }}
+            {% endif %}
+
+            <div class="ovrly17"> 
+              {% if section.settings.use_overlay %}
+                <div class="image-overlay">
               {% endif %}
 
-              <div class="ovrly17">
-                {% if section.settings.use_overlay %}
-                  <div class="image-overlay">
-                {% endif %}
+              {% if section.settings.use_overlay_icons %}
+                <div class="links">   
+                  <a href="{{ block.settings.image | img_url: 'master' }}" class="gallery-pop"><i class="fa fa-search" aria-hidden="true"></i><span class="visually-hidden">Open image</span></a>
+                </div>
+              {% endif %}
 
-                {% if section.settings.use_overlay_icons %}
-                  <div class="links">
-                    <a href="{{ block.settings.image | img_url: 'master' }}" class="gallery-pop"><i class="fa fa-search"></i></a>
-                  </div>
-                {% endif %}
+              {% if block.settings.gallery_title != blank or block.settings.category != blank %}
+                <div class="image-overlay-details">
+                  {% if block.settings.gallery_title != blank %}
+                    <h4><a href="{{ block.settings.gallery_link }}">{{ block.settings.gallery_title }}</a></h4>
+                  {% endif %}
+                  {% if block.settings.category != blank %}
+                    <p>{{ block.settings.category }}</p>
+                  {% endif %}
+                </div>
+              {% endif %}
 
-                {% if block.settings.gallery_title != blank or block.settings.category != blank %}
-                  <div class="image-overlay-details">
-                    {% if block.settings.gallery_title != blank %}
-                      <h4><a href="{{ block.settings.gallery_link }}">{{ block.settings.gallery_title }}</a></h4>
-                    {% endif %}
-                    {% if block.settings.category != blank %}
-                      <p>{{ block.settings.category }}</p>
-                    {% endif %}
-                  </div>
-                {% endif %}
-
-                {% if section.settings.use_overlay %}
-                  </div>
-                {% endif %}
-              </div>
+              {% if section.settings.use_overlay %}        
+                </div>
+              {% endif %}
+            </div>
 
             {% unless section.settings.use_overlay_icons %}
               </a>
-            {% endunless %}
-          </div>
-        {% endfor %}
-      </div>
+            {% endunless %}   
+          </div>        
+        {% endfor %}        
+      </div>   
     </div>
-  </div>
-</section>
+  </div>  
+</div>
 
 <style>
-  /* --- Spacing from settings --- */
-  #shopify-section-{{ section.id }} .gallery_page .row {
-    margin-top: {{ margin_top }}px;
-    margin-bottom: {{ margin_bottom }}px;
-    padding-top: {{ padding_top }}px;
-    padding-bottom: {{ padding_bottom }}px;
-  }
-  @media (max-width: 1199px){
-    #shopify-section-{{ section.id }} .gallery_page .row {
-      margin-top: {{ margin_top | divided_by: 2 }}px;
-      margin-bottom: {{ margin_bottom | divided_by: 2 }}px;
-      padding-top: {{ padding_top | divided_by: 2 }}px;
-      padding-bottom: {{ padding_bottom | divided_by: 2 }}px;
-    }
-  }
-
-  /* --- Section-wide CSS variables --- */
+  /* --- Section background & outer spacing --- */
   #gallery-{{ section.id }}{
-    /* lets tiles pick up a fixed ratio when selected */
-    --tile-ratio: {% if section.settings.tile_aspect_ratio == 'auto' or section.settings.tile_aspect_ratio == blank %}auto{% else %}{{ section.settings.tile_aspect_ratio }}{% endif %};
+    background: {{ section.settings.section_bg_color | default: 'transparent' }};
+    padding-top: {{ padding_top | default: 0 }}px;
+    padding-bottom: {{ padding_bottom | default: 0 }}px;
+    margin-top: {{ margin_top | default: 0 }}px;
+    margin-bottom: {{ margin_bottom | default: 0 }}px;
+    position: relative;
   }
 
-  /* --- Heading colors from settings --- */
-  #gallery-{{ section.id }} .dt-sc-heading .dt-sc-main-heading { color: {{ section.settings.section_heading_color }}; }
+  /* --- Alignment helpers --- */
+  #gallery-{{ section.id }}.align-left .dt-sc-heading,
+  #gallery-{{ section.id }}.align-left .image-overlay-details { text-align: left; }
+  #gallery-{{ section.id }}.align-center .dt-sc-heading,
+  #gallery-{{ section.id }}.align-center .image-overlay-details { text-align: center; }
+  #gallery-{{ section.id }}.align-right .dt-sc-heading,
+  #gallery-{{ section.id }}.align-right .image-overlay-details { text-align: right; }
+
+  /* Button alignment inside heading */
+  #gallery-{{ section.id }}.align-left .dt-sc-heading .dt-sc-btn { margin-left: 0; margin-right: 0; }
+  #gallery-{{ section.id }}.align-center .dt-sc-heading .dt-sc-btn { margin-left: auto; margin-right: auto; display: inline-block; }
+  #gallery-{{ section.id }}.align-right .dt-sc-heading .dt-sc-btn { margin-left: auto; margin-right: 0; display: inline-block; }
+
+  /* Grid item alignment nudge (keeps columns but aligns card blocks) */
+  #gallery-{{ section.id }}.align-center .dt-sc-column .gallery { margin-left: auto; margin-right: auto; }
+  #gallery-{{ section.id }}.align-right .dt-sc-column .gallery { margin-left: auto; margin-right: 0; }
+
+  /* --- Existing styles (scoped to this section id) --- */
+  #gallery-{{ section.id }} .image-overlay .links i{ font-weight:800; }
+  #gallery-{{ section.id }} img{ width:100%; }
+
+  /* Heading colors pulled from settings */
+  #gallery-{{ section.id }} .dt-sc-heading .dt-sc-main-heading { color: {{ section.settings.section_heading_color }}; padding-bottom:10px; }
   #gallery-{{ section.id }} .dt-sc-heading .dt-sc-sub-heading { color: {{ section.settings.section_sub_heading_color }}; }
   #gallery-{{ section.id }} .dt-sc-heading .dt-sc-heading-description { color: {{ section.settings.section_description_color }}; }
-  #gallery-{{ section.id }} .dt-sc-heading .dt-sc-btn {
+
+  #gallery-{{ section.id }} .dt-sc-heading .dt-sc-btn { 
     background: {{ section.settings.section_button_bg_color }};
     color: {{ section.settings.section_button_text_color }};
     width: 100%;
   }
-  #gallery-{{ section.id }} .dt-sc-heading .dt-sc-btn:hover {
-    background: {{ section.settings.section_button_hover_bg_color }};
+  #gallery-{{ section.id }} .dt-sc-heading .dt-sc-btn:hover { 
+    background: {{ section.settings.section_button_hover_bg_color }}; 
     color: {{ section.settings.section_button_hover_text_color }};
   }
 
-  /* --- Optional section overlay color (if enabled) --- */
-  #gallery-{{ section.id }}.dt-sc-overlay:before {
-    color: {{ section.settings.background_color }};
-    background: currentcolor;
-    opacity: {{ section.settings.overlay_transparency | default: 0.5 }};
+  #gallery-{{ section.id }} .dt-sc-column{ grid-gap: 30px; }
+
+  /* Optional global overlay (theme overlay helper) */
+  #gallery-{{ section.id }} .dt-sc-overlay:before  { 
+    color: {{ section.settings.background_color }};    
+    background: currentcolor; 
+    opacity: {{ section.settings.overlay_transparency }};
   }
 
-  /* --- Grid gap (use your theme defaults, just ensure some gap) --- */
-  #gallery-{{ section.id }} .dt-sc-column { grid-gap: 30px; }
-
-  /* --- Make alignment affect headings and overlay labels --- */
-  #gallery-{{ section.id }}.align-left   .dt-sc-heading,
-  #gallery-{{ section.id }}.align-left   .image-overlay-details { text-align: left; }
-  #gallery-{{ section.id }}.align-center .dt-sc-heading,
-  #gallery-{{ section.id }}.align-center .image-overlay-details { text-align: center; }
-  #gallery-{{ section.id }}.align-right  .dt-sc-heading,
-  #gallery-{{ section.id }}.align-right  .image-overlay-details { text-align: right; }
-
-  /* --- Make alignment visibly affect images via crop focus --- */
-  #gallery-{{ section.id }} .gallery { position: relative; overflow: hidden; }
-  {% unless section.settings.tile_aspect_ratio == 'auto' or section.settings.tile_aspect_ratio == blank %}
-  #gallery-{{ section.id }} .gallery { aspect-ratio: var(--tile-ratio); }
-  {% endunless %}
-
-  #gallery-{{ section.id }} .gallery img{
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;      /* enables cropping */
-    object-position: center;/* default */
-  }
-  #gallery-{{ section.id }}.align-left  .gallery img  { object-position: left center; }
-  #gallery-{{ section.id }}.align-center .gallery img { object-position: center center; }
-  #gallery-{{ section.id }}.align-right .gallery img  { object-position: right center; }
-
-  /* --- Overlay styling & icons --- */
-  .gallery_page .image-overlay .links i{ font-weight: 800; }
-  .gallery_page img{ width:100%; }
-  #gallery-{{ section.id }} .gallery .image-overlay{ background: {{ section.settings.img_overlay | color_modify: 'alpha', 0.7 }}; }
+  {% if section.settings.use_overlay %}
+    #gallery-{{ section.id }} .gallery .image-overlay { background: {{ section.settings.img_overlay | color_modify: 'alpha', 0.7 }}; }
+  {% endif %}
   #gallery-{{ section.id }} .gallery:hover .image-overlay { opacity: 1; }
 
+  /* Overlay icons & text */
   #gallery-{{ section.id }} .image-overlay .links{
-    position: absolute; inset: 0;
-    margin: 0 auto;
-    display: flex; align-items: center; justify-content: center; text-align: center;
+    position: absolute;left: 0;right: 0; top: 0;bottom: 0;margin: 0 auto;
+    text-align: center; display: flex; align-items: center; justify-content: center;
   }
-  #gallery-{{ section.id }} .gallery .links a{
+  #gallery-{{ section.id }} .gallery .links a {
     background: {{ section.settings.img_overlay_icon_bg1 }};
     color: {{ section.settings.img_overlay_icon_txt }};
-    padding: 20px; clip-path: circle(); opacity: 0; transition: opacity .25s ease;
+    padding:20px; clip-path:circle(); opacity:0;
   }
-  #gallery-{{ section.id }} .gallery:hover .links a{ opacity: 1; }
-  #gallery-{{ section.id }} .gallery .links a:hover{
+  #gallery-{{ section.id }} .gallery:hover .links a{ opacity:1; }
+  #gallery-{{ section.id }} .gallery .links a:hover { 
+    border-color: {{ section.settings.img_overlay_icon_bg }};
     background: {{ section.settings.img_overlay_icon_bg }};
     color: {{ section.settings.img_overlay_icon_hover_txt }};
   }
-
   #gallery-{{ section.id }} .gallery .image-overlay-details h4 a { color: {{ section.settings.img_overlay_title }}; }
-  #gallery-{{ section.id }} .gallery .image-overlay-details p     { color: {{ section.settings.img_overlay_catgry }}; }
+  #gallery-{{ section.id }} .gallery .image-overlay-details p { color: {{ section.settings.img_overlay_catgry }}; }
 
-  @media (max-width: 1199px){
-    .gallery_page img{ width:100%; }
+  #gallery-{{ section.id }} .grid__item .gallery .image-overlay-details { background: {{ section.settings.texthover_bg_color | color_modify: 'alpha', 0.7 }} !important; }
+  #gallery-{{ section.id }} .grid__item:hover h2 { background: {{ section.settings.texthover_bg_color | color_modify: 'alpha', 0.7 }} !important; color: {{ section.settings.texthover_txt_color }} !important; }
+  #gallery-{{ section.id }} .grid__item:hover h2 a{ color: {{ section.settings.texthover_txt_color }} !important; }
+
+  #gallery-{{ section.id }} .gallery svg { height:300px; width:300px; }
+
+  @media (max-width: 1880px) {
+    /* If your theme used a decorative :before on heading, it’s removed here on small screens */
+    #gallery-{{ section.id }} .dt-sc-heading:before{ display:none; }
+  }
+
+  @media (max-width: 1199px) {
+    #gallery-{{ section.id }} img{ width:100%; } 
   }
 </style>
 
@@ -196,37 +183,25 @@
     { "type": "checkbox", "id": "full", "label": "Show Full width" },
     { "type": "checkbox", "id": "spacing_both_ends", "label": "Enable Right & Left Spacing (Works only on Fullwidth)", "default": false },
 
-    { "type": "text", "id": "padding", "label": "Style value (Padding)", "default": "0,0", "info": "Top(px),Bottom(px)" },
-    { "type": "text", "id": "margin", "label": "Style value (Margin)", "default": "0,0", "info": "Top(px),Bottom(px)" },
+    { "type": "text", "id": "padding", "label": "Style value (Padding)", "default":"0,0", "info":"Top(px),Bottom(px)" },
+    { "type": "text", "id": "margin", "label": "Style value (Margin)", "default":"0,0", "info":"Top(px),Bottom(px)" },
 
-    { "type": "header", "content": "Layout & Colors" },
-    { "type": "color", "id": "background_color", "label": "Section background color", "default": "#ffffff" },
+    { "type": "color", "id": "section_bg_color", "label": "Section background color", "default": "#ffffff" },
     { "type": "select", "id": "content_alignment", "label": "Content alignment", "default": "center",
       "options": [
-        { "value": "left",   "label": "Left" },
+        { "value": "left", "label": "Left" },
         { "value": "center", "label": "Center" },
-        { "value": "right",  "label": "Right" }
-      ]
-    },
-    { "type": "select", "id": "tile_aspect_ratio", "label": "Tile aspect ratio", "default": "auto",
-      "options": [
-        { "value": "auto", "label": "Auto (image height)" },
-        { "value": "1/1", "label": "1:1 (square)" },
-        { "value": "4/3", "label": "4:3" },
-        { "value": "16/9", "label": "16:9" },
-        { "value": "3/4", "label": "3:4" },
-        { "value": "4/5", "label": "4:5" }
+        { "value": "right", "label": "Right" }
       ]
     },
 
-    { "type": "header", "content": "Heading content" },
     { "type": "text", "id": "section_heading", "label": "Main Heading", "default": "Isotope gallery" },
     { "type": "text", "id": "section_sub_heading", "label": "Sub Heading", "default": "Sub Heading" },
     { "type": "text", "id": "section_description", "label": "Description", "default": "Use this text to share the information which you like!." },
     { "type": "text", "id": "section_button_text", "label": "Link text" },
     { "type": "url", "id": "section_button_link", "label": "Link URL" },
 
-    { "type": "header", "content": "Heading colors" },
+    { "type": "header", "content": "Section Color settings" },
     { "type": "color", "id": "section_heading_color", "label": "Heading color" },
     { "type": "color", "id": "section_sub_heading_color", "label": "Sub heading color" },
     { "type": "color", "id": "section_description_color", "label": "Description color" },
@@ -235,20 +210,20 @@
     { "type": "color", "id": "section_button_hover_bg_color", "label": "Button hover bg color" },
     { "type": "color", "id": "section_button_hover_text_color", "label": "Button hover text color" },
 
-    { "type": "header", "content": "Image overlay" },
-    { "type": "checkbox", "id": "enable_overlay", "label": "Enable background overlay (uses color below)", "default": false },
-    { "type": "text", "id": "overlay_transparency", "label": "Overlay Transparency (0.01 to 1)", "default": "0.5" },
+    { "type": "checkbox", "id": "use_overlay", "label": "Use Overlay" },
+    { "type": "color", "id": "img_overlay", "label": "Image Overlay", "default": "#000000" },
+    { "type": "color", "id": "img_overlay_title", "label": "Overlay Title", "default": "#000000" },
+    { "type": "color", "id": "img_overlay_catgry", "label": "Overlay Category", "default": "#000000" },
 
-    { "type": "checkbox", "id": "use_overlay", "label": "Use tile overlay color", "default": true },
-    { "type": "color", "id": "img_overlay", "label": "Tile overlay color", "default": "#000000" },
-    { "type": "color", "id": "img_overlay_title", "label": "Overlay Title", "default": "#ffffff" },
-    { "type": "color", "id": "img_overlay_catgry", "label": "Overlay Category", "default": "#ffffff" },
+    { "type": "checkbox", "id": "use_overlay_icons", "label": "Use Overlay Icons" },
+    { "type": "color", "id": "img_overlay_icon", "label": "Overlay Icon Border", "default": "#000000" },
+    { "type": "color", "id": "img_overlay_icon_bg1", "label": "Overlay Icon bg1", "default": "#000000" },
+    { "type": "color", "id": "img_overlay_icon_txt", "label": "Overlay Icon Text", "default": "#ffffff" },
+    { "type": "color", "id": "img_overlay_icon_bg", "label": "Overlay Icon Hover Bg", "default": "#333333" },
+    { "type": "color", "id": "img_overlay_icon_hover_txt", "label": "Overlay Icon Hover Text", "default": "#ffffff" },
 
-    { "type": "checkbox", "id": "use_overlay_icons", "label": "Show overlay zoom icon", "default": true },
-    { "type": "color", "id": "img_overlay_icon_bg1", "label": "Icon background", "default": "#ffffff" },
-    { "type": "color", "id": "img_overlay_icon_txt", "label": "Icon text", "default": "#111111" },
-    { "type": "color", "id": "img_overlay_icon_bg", "label": "Icon hover bg", "default": "#111111" },
-    { "type": "color", "id": "img_overlay_icon_hover_txt", "label": "Icon hover text", "default": "#ffffff" }
+    { "type": "color", "id": "texthover_bg_color", "label": "Text Hover Bg Color", "default":"#000000" },
+    { "type": "color", "id": "texthover_txt_color", "label": "Text Hover Text Color", "default":"#ffffff" }
   ],
   "blocks": [
     {
@@ -263,8 +238,6 @@
       ]
     }
   ],
-  "presets": [
-    { "name": "Gallery" }
-  ]
+  "presets": [{ "name": "Gallery" }]
 }
 {% endschema %}
