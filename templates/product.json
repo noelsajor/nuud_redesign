@@ -441,15 +441,38 @@
             "star": "3",
             "photo": "shopify://shop_images/Rectangle_97.png"
           }
+        },
+        "content_CHjq6e": {
+          "type": "content",
+          "settings": {
+            "review_type": "full",
+            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
+            "author": "Author Name",
+            "job": "Author Designation",
+            "star": "3"
+          }
+        },
+        "content_mH3FzN": {
+          "type": "content",
+          "settings": {
+            "review_type": "photo",
+            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
+            "author": "Author Name",
+            "job": "Author Designation",
+            "star": "3",
+            "photo": "shopify://shop_images/Rectangle_96_e03b2b75-8d2a-4e0d-994b-12bed3406c3f.png"
+          }
         }
       },
       "block_order": [
         "content_cykCyq",
-        "content_7wPJbN"
+        "content_7wPJbN",
+        "content_CHjq6e",
+        "content_mH3FzN"
       ],
       "name": "Testimonial",
       "settings": {
-        "full": false,
+        "full": true,
         "spacing_both_ends": false,
         "padding": "0,0",
         "margin": "0,0",
@@ -487,7 +510,7 @@
         "content_width": "30/70",
         "lap_content_width": "20/80",
         "vertical_position": "vertical-top",
-        "card_aspect_ratio": "none",
+        "card_aspect_ratio": "4/5",
         "testimonial_border_color": "",
         "testimonial_background_color": "",
         "testimonial_content_color": "",
