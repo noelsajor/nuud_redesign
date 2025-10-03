@@ -63,7 +63,7 @@
         "show_checkout": true,
         "hide_addtocart": false,
         "show_wishlist": true,
-        "tab_position": "bottom",
+        "tab_position": "right",
         "tab_style": "tab",
         "product_tab1": true,
         "product_tab1_heading": "Description",
@@ -73,7 +73,7 @@
         "product_tab3": true,
         "product_tab3_heading": "Reviews",
         "enable_enquiry": false,
-        "enable_sticky_cart": false,
+        "enable_sticky_cart": true,
         "show_adv_product": false,
         "choose_label": "Choose style",
         "collection": "advanced-product-tagging"
