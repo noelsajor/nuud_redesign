@@ -65,7 +65,7 @@
         "display_back_in_stock": false,
         "show_quantity_selector": true,
         "show_checkout": true,
-        "hide_addtocart": true,
+        "hide_addtocart": false,
         "show_wishlist": true,
         "tab_position": "right",
         "tab_style": "toggle",
