@@ -1,0 +1,433 @@
+{% comment %}
+  Pink Product Page – screenshot-inspired
+{% endcomment %}
+
+{% assign _product = section.settings.pick_product | default: product %}
+
+<section id="pink-product-{{ section.id }}" class="pink-product-wrap" style="--pp-bg: {{ section.settings.card_bg }}; --pp-accent: {{ section.settings.accent }}; --pp-ink: {{ section.settings.ink }}; --pp-ink-subtle: {{ section.settings.ink_subtle }}; --pp-radius: {{ section.settings.radius }}px;">
+  {% if _product %}
+  <div class="pp-card container">
+    <div class="pp-grid">
+
+      {%- comment -%} LEFT: Gallery {%- endcomment -%}
+      <div class="pp-gallery">
+        {% assign featured = _product.featured_image | default: _product.images.first %}
+        <div class="pp-media">
+          {% if featured %}
+            <img id="pp-main-img-{{ section.id }}"
+                 src="{{ featured | image_url: width: 1200 }}"
+                 alt="{{ featured.alt | escape }}"
+                 loading="eager" decoding="async">
+          {% else %}
+            {{ 'product-1' | placeholder_svg_tag: 'pp-placeholder' }}
+          {% endif %}
+        </div>
+
+        {% if _product.images.size > 1 %}
+        <div class="pp-thumbs" role="list">
+          {% for image in _product.images %}
+            <button class="pp-thumb" role="listitem" aria-label="Show image {{ forloop.index }}"
+                    data-src="{{ image | image_url: width: 1200 }}">
+              <img src="{{ image | image_url: width: 220 }}"
+                   alt="{{ image.alt | escape }}">
+            </button>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if section.settings.badge_1 != blank or section.settings.badge_2 != blank or section.settings.badge_3 != blank %}
+        <div class="pp-emoji-badges" aria-label="Quick facts" role="list">
+          {% if section.settings.badge_1 != blank %}
+            <div class="pp-emoji" role="listitem">{{ section.settings.badge_1 }}</div>
+          {% endif %}
+          {% if section.settings.badge_2 != blank %}
+            <div class="pp-emoji" role="listitem">{{ section.settings.badge_2 }}</div>
+          {% endif %}
+          {% if section.settings.badge_3 != blank %}
+            <div class="pp-emoji" role="listitem">{{ section.settings.badge_3 }}</div>
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+
+      {%- comment -%} RIGHT: Info {%- endcomment -%}
+      <div class="pp-info">
+        <div class="pp-title">
+          <h1 class="pp-h1">{{ _product.title }}</h1>
+          <div class="pp-stars" aria-label="{{ section.settings.review_text | escape }}">
+            <span aria-hidden="true">★★★★★</span>
+            <small>{{ section.settings.review_text }}</small>
+          </div>
+        </div>
+
+        {% if section.settings.blurb != blank %}
+          <p class="pp-blurb">{{ section.settings.blurb }}</p>
+        {% endif %}
+
+        {%- comment -%} Pack size pills (first option) {%- endcomment -%}
+        {% assign has_options = _product.has_only_default_variant | default: false | not %}
+        {% if has_options %}
+          {% assign option = _product.options_with_values.first %}
+          <fieldset class="pp-pills">
+            <legend>{{ section.settings.pills_label }}</legend>
+            <div class="pp-pill-row">
+              {% for value in option.values %}
+                {% assign value_clean = value | strip %}
+                {% assign pill_id = section.id | append: '-' | append: forloop.index %}
+                <label class="pp-pill" data-value="{{ value_clean }}" for="pill-{{ pill_id }}">
+                  <input type="radio" name="pp-pack-{{ section.id }}" id="pill-{{ pill_id }}" value="{{ value_clean }}" {% if forloop.first %}checked{% endif %}>
+                  <span class="pp-pill-value">{{ value_clean }}</span>
+                  {% if value_clean == section.settings.most_popular %}
+                    <em class="pp-ribbon mp">Most Popular</em>
+                  {% endif %}
+                  {% if value_clean == section.settings.best_value %}
+                    <em class="pp-ribbon bv">Best Value</em>
+                  {% endif %}
+                </label>
+              {% endfor %}
+            </div>
+          </fieldset>
+        {% endif %}
+
+        {%- assign current_variant = _product.selected_or_first_available_variant -%}
+
+        {%- comment -%} Pricing cards: subscribe vs one-time {%- endcomment -%}
+        {% assign has_plans = false %}
+        {% if _product.selling_plan_groups.size > 0 %}
+          {% assign has_plans = true %}
+        {% endif %}
+
+        <div class="pp-purchase-cards" data-product-id="{{ _product.id }}">
+          {% if has_plans %}
+            {%- assign sp_group = _product.selling_plan_groups.first -%}
+            {%- assign sp = sp_group.selling_plans.first -%}
+            <label class="pp-purchase-card">
+              <input type="radio" name="pp-purchase-{{ section.id }}" value="subscribe" checked>
+              <div class="pp-card-body">
+                <div class="pp-card-title">Subscribe and save <strong>{{ section.settings.subscribe_saving }}</strong></div>
+                <ul class="pp-bullets">
+                  {% if section.settings.bullet_1 != blank %}<li>{{ section.settings.bullet_1 }}</li>{% endif %}
+                  {% if section.settings.bullet_2 != blank %}<li>{{ section.settings.bullet_2 }}</li>{% endif %}
+                  {% if section.settings.bullet_3 != blank %}<li>{{ section.settings.bullet_3 }}</li>{% endif %}
+                </ul>
+                <div class="pp-price-line">
+                  <span class="pp-price js-price-sub">{{ current_variant.price | money }}</span>
+                  {% if current_variant.compare_at_price > current_variant.price %}
+                    <s class="pp-compare js-compare-sub">{{ current_variant.compare_at_price | money }}</s>
+                  {% endif %}
+                </div>
+              </div>
+            </label>
+          {% endif %}
+
+          <label class="pp-purchase-card {% unless has_plans %}pp-active{% endunless %}">
+            <input type="radio" name="pp-purchase-{{ section.id }}" value="onetime" {% unless has_plans %}checked{% endunless %}>
+            <div class="pp-card-body">
+              <div class="pp-card-title">One time purchase</div>
+              <div class="pp-price-line">
+                <span class="pp-price js-price-one">{{ current_variant.price | money }}</span>
+                {% if current_variant.compare_at_price > current_variant.price %}
+                  <s class="pp-compare js-compare-one">{{ current_variant.compare_at_price | money }}</s>
+                {% endif %}
+              </div>
+            </div>
+          </label>
+        </div>
+
+        {%- comment -%} Add to cart form {%- endcomment -%}
+        <product-form class="pp-form">
+          {%- form 'product', _product, id: 'pp-form-' | append: section.id -%}
+            <input type="hidden" name="id" value="{{ current_variant.id }}" class="js-variant-id">
+            {% if has_plans %}
+              <input type="hidden" name="selling_plan" value="{{ sp.id }}" class="js-plan-id">
+            {% endif %}
+            <button class="pp-cta" type="submit" {% unless current_variant.available %}disabled{% endunless %}>
+              {% if current_variant.available %}{{ section.settings.cta_text }}{% else %}{{ section.settings.sold_out_text }}{% endif %}
+            </button>
+          {%- endform -%}
+        </product-form>
+
+        {%- comment -%} Badges row under CTA {%- endcomment -%}
+        {% if section.settings.badge_img_1 != blank or section.settings.badge_img_2 != blank or section.settings.badge_img_3 != blank %}
+        <div class="pp-badge-row">
+          {% if section.settings.badge_img_1 != blank %}
+            <img src="{{ section.settings.badge_img_1 | image_url: width: 220 }}" alt="{{ section.settings.badge_img_1.alt | escape }}">
+          {% endif %}
+          {% if section.settings.badge_img_2 != blank %}
+            <img src="{{ section.settings.badge_img_2 | image_url: width: 220 }}" alt="{{ section.settings.badge_img_2.alt | escape }}">
+          {% endif %}
+          {% if section.settings.badge_img_3 != blank %}
+            <img src="{{ section.settings.badge_img_3 | image_url: width: 220 }}" alt="{{ section.settings.badge_img_3.alt | escape }}">
+          {% endif %}
+        </div>
+        {% endif %}
+
+        {%- comment -%} Collapsible info {%- endcomment -%}
+        <div class="pp-accordions">
+          {% if section.settings.a1_title != blank %}
+          <details>
+            <summary>{{ section.settings.a1_title }}</summary>
+            <div class="pp-acc-body">{{ section.settings.a1_body }}</div>
+          </details>
+          {% endif %}
+          {% if section.settings.a2_title != blank %}
+          <details>
+            <summary>{{ section.settings.a2_title }}</summary>
+            <div class="pp-acc-body">{{ section.settings.a2_body }}</div>
+          </details>
+          {% endif %}
+          {% if section.settings.a3_title != blank %}
+          <details>
+            <summary>{{ section.settings.a3_title }}</summary>
+            <div class="pp-acc-body">{{ section.settings.a3_body }}</div>
+          </details>
+          {% endif %}
+          {% if section.settings.a4_title != blank %}
+          <details>
+            <summary>{{ section.settings.a4_title }}</summary>
+            <div class="pp-acc-body">{{ section.settings.a4_body }}</div>
+          </details>
+          {% endif %}
+        </div>
+
+        {% if section.settings.warning_text != blank %}
+        <div class="pp-warning" role="note">
+          {{ section.settings.warning_text }}
+        </div>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+  {% else %}
+    <div class="container" style="padding:40px;">
+      <p>Please assign a product to this section.</p>
+    </div>
+  {% endif %}
+</section>
+
+<style>
+  #pink-product-{{ section.id }} {
+    --pp-shadow: 0 20px 50px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.06);
+  }
+  #pink-product-{{ section.id }} .container {
+    max-width: 1200px; margin: 0 auto; padding: 24px;
+  }
+  #pink-product-{{ section.id }} .pp-card{
+    background: var(--pp-bg); color: var(--pp-ink);
+    border-radius: var(--pp-radius); padding: 28px;
+    box-shadow: var(--pp-shadow);
+  }
+  #pink-product-{{ section.id }} .pp-grid{
+    display:grid; grid-template-columns: 1.05fr 1fr; gap: 32px;
+  }
+  @media (max-width: 980px){
+    #pink-product-{{ section.id }} .pp-grid{ grid-template-columns: 1fr; }
+  }
+
+  /* Gallery */
+  #pink-product-{{ section.id }} .pp-media{
+    aspect-ratio: 1/1; border-radius: 18px; overflow:hidden; background:#fff;
+    display:grid; place-items:center;
+  }
+  #pink-product-{{ section.id }} .pp-media img{ width:100%; height:100%; object-fit:cover; display:block; }
+  #pink-product-{{ section.id }} .pp-thumbs{ display:flex; gap:12px; margin-top:14px; flex-wrap:wrap; }
+  #pink-product-{{ section.id }} .pp-thumb{
+    border:2px solid transparent; border-radius:12px; padding:0; background:#fff; cursor:pointer;
+    width:86px; height:86px; display:grid; place-items:center; transition:border-color .2s ease;
+  }
+  #pink-product-{{ section.id }} .pp-thumb img{ max-width:100%; max-height:100%; border-radius:10px; }
+  #pink-product-{{ section.id }} .pp-thumb:hover{ border-color: var(--pp-accent); }
+
+  /* Emoji badges */
+  #pink-product-{{ section.id }} .pp-emoji-badges{ display:flex; gap:12px; margin-top:16px; }
+  #pink-product-{{ section.id }} .pp-emoji{
+    width:56px; height:56px; border-radius:16px; display:grid; place-items:center;
+    font-size:26px; background:#fff; box-shadow: inset 0 -3px 0 rgba(0,0,0,.04);
+  }
+
+  /* Right side */
+  #pink-product-{{ section.id }} .pp-title{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  #pink-product-{{ section.id }} .pp-h1{ font-size:28px; line-height:1.15; margin:0; }
+  #pink-product-{{ section.id }} .pp-stars{ display:flex; gap:8px; align-items:center; color: var(--pp-ink-subtle); }
+  #pink-product-{{ section.id }} .pp-stars span{ color:#FFD54F; letter-spacing:2px; }
+  #pink-product-{{ section.id }} .pp-blurb{ margin:12px 0 16px; color: var(--pp-ink-subtle); }
+
+  /* Pills */
+  #pink-product-{{ section.id }} .pp-pills legend{ font-weight:600; margin-bottom:10px; }
+  #pink-product-{{ section.id }} .pp-pill-row{ display:flex; gap:10px; flex-wrap:wrap; }
+  #pink-product-{{ section.id }} .pp-pill{
+    position:relative; display:inline-grid; place-items:center; padding:10px 14px; border-radius:14px;
+    background:#fff; border:2px solid transparent; cursor:pointer; user-select:none; min-width:62px;
+  }
+  #pink-product-{{ section.id }} .pp-pill input{ position:absolute; inset:0; opacity:0; }
+  #pink-product-{{ section.id }} .pp-pill input:checked + .pp-pill-value,
+  #pink-product-{{ section.id }} .pp-pill:hover .pp-pill-value{ color:#111; }
+  #pink-product-{{ section.id }} .pp-pill input:checked ~ .pp-pill-value{ font-weight:700; }
+  #pink-product-{{ section.id }} .pp-pill input:checked ~ .pp-ribbon{ opacity:1; transform:translateY(0); }
+  #pink-product-{{ section.id }} .pp-pill-value{ color:#333; }
+  #pink-product-{{ section.id }} .pp-ribbon{
+    position:absolute; top:-10px; right:-6px; background: var(--pp-accent); color:#fff; padding:2px 6px;
+    font-size:10px; border-radius:999px; box-shadow:0 2px 0 rgba(0,0,0,.1); opacity:0; transform:translateY(-4px);
+    transition:.2s ease;
+  }
+  #pink-product-{{ section.id }} .pp-ribbon.bv{ background:#7b61ff; }
+  #pink-product-{{ section.id }} .pp-ribbon.mp{ background:#ff4fb3; }
+
+  /* Purchase cards */
+  #pink-product-{{ section.id }} .pp-purchase-cards{ display:grid; gap:10px; margin:14px 0 18px; }
+  #pink-product-{{ section.id }} .pp-purchase-card{
+    display:block; border-radius:14px; background:#fff; border:2px solid transparent;
+  }
+  #pink-product-{{ section.id }} .pp-purchase-card input{ position:absolute; inset:0; opacity:0; }
+  #pink-product-{{ section.id }} .pp-purchase-card .pp-card-body{ padding:14px; }
+  #pink-product-{{ section.id }} .pp-purchase-card .pp-card-title{ font-weight:700; margin-bottom:8px; }
+  #pink-product-{{ section.id }} .pp-purchase-card .pp-price-line{ display:flex; gap:10px; align-items:baseline; }
+  #pink-product-{{ section.id }} .pp-price{ font-size:18px; font-weight:800; }
+  #pink-product-{{ section.id }} .pp-compare{ color:#999; }
+  #pink-product-{{ section.id }} .pp-bullets{ margin:0 0 8px; padding-left:18px; color: var(--pp-ink-subtle); }
+  #pink-product-{{ section.id }} .pp-purchase-card.pp-active,
+  #pink-product-{{ section.id }} .pp-purchase-card:has(input:checked){ border-color: var(--pp-accent); }
+
+  /* CTA */
+  #pink-product-{{ section.id }} .pp-form{ margin-top:6px; }
+  #pink-product-{{ section.id }} .pp-cta{
+    width:100%; height:44px; border:none; border-radius:12px; background:#2b2bff; color:#fff; font-weight:800;
+    letter-spacing:.02em; box-shadow: inset 0 -3px 0 rgba(0,0,0,.15); cursor:pointer; transition: transform .06s ease, opacity .2s ease;
+  }
+  #pink-product-{{ section.id }} .pp-cta:hover{ transform: translateY(-1px); }
+  #pink-product-{{ section.id }} .pp-cta:disabled{ opacity:.6; cursor:not-allowed; }
+
+  /* Badges row */
+  #pink-product-{{ section.id }} .pp-badge-row{ display:flex; gap:18px; align-items:center; flex-wrap:wrap; margin:16px 0 8px; }
+  #pink-product-{{ section.id }} .pp-badge-row img{ width:110px; height:110px; object-fit:contain; }
+
+  /* Accordions */
+  #pink-product-{{ section.id }} .pp-accordions details{ border-top:1px solid rgba(0,0,0,.08); padding:12px 0; }
+  #pink-product-{{ section.id }} .pp-accordions summary{ cursor:pointer; list-style:none; font-weight:700; }
+  #pink-product-{{ section.id }} .pp-accordions summary::-webkit-details-marker{ display:none; }
+  #pink-product-{{ section.id }} .pp-acc-body{ color: var(--pp-ink-subtle); margin-top:6px; }
+
+  /* Warning bar */
+  #pink-product-{{ section.id }} .pp-warning{
+    margin-top:12px; background:#fff; border-left:4px solid #ff4f4f; padding:10px 12px; font-size:13px; color:#6b1b1b;
+  }
+</style>
+
+<script>
+  (function(){
+    const root = document.getElementById('pink-product-{{ section.id }}');
+    if(!root) return;
+
+    // Thumbnails -> main image
+    root.querySelectorAll('.pp-thumb').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const src = btn.getAttribute('data-src');
+        const img = root.querySelector('#pp-main-img-{{ section.id }}');
+        if(src && img){ img.src = src; }
+      });
+    });
+
+    // Variant resolution by first option pills
+    const productJSON = {{ _product | json }};
+    const pills = root.querySelectorAll('.pp-pill input');
+    const variantIdInput = root.querySelector('.js-variant-id');
+
+    function resolveVariant(){
+      if(!productJSON || !pills.length) return;
+      let selected = null;
+      pills.forEach(r => { if(r.checked) selected = r.value; });
+
+      const match = productJSON.variants.find(v => v.option1 === selected);
+      if(match){
+        variantIdInput.value = match.id;
+        const formatMoney = function(cents){
+          return (cents/100).toLocaleString(undefined,{style:'currency',currency: '{{ shop.currency }}'});
+        };
+        const priceOne = root.querySelector('.js-price-one');
+        const compareOne = root.querySelector('.js-compare-one');
+        const priceSub = root.querySelector('.js-price-sub');
+        const compareSub = root.querySelector('.js-compare-sub');
+
+        if(priceOne) priceOne.textContent = formatMoney(match.price);
+        if(compareOne) compareOne.textContent = match.compare_at_price ? formatMoney(match.compare_at_price) : '';
+        if(priceSub) priceSub.textContent = formatMoney(match.price);
+        if(compareSub) compareSub.textContent = match.compare_at_price ? formatMoney(match.compare_at_price) : '';
+      }
+    }
+
+    pills.forEach(r => r.addEventListener('change', resolveVariant));
+    resolveVariant();
+
+    // Subscribe vs one-time – set selling plan hidden input
+    const hasPlans = {% if _product.selling_plan_groups.size > 0 %}true{% else %}false{% endif %};
+    if(hasPlans){
+      const planInput = root.querySelector('.js-plan-id');
+      const radios = root.querySelectorAll('input[name="pp-purchase-{{ section.id }}"]');
+      radios.forEach(r => r.addEventListener('change', () => {
+        if(r.value === 'onetime' && r.checked){ planInput.removeAttribute('name'); }
+        if(r.value === 'subscribe' && r.checked){ planInput.setAttribute('name','selling_plan'); }
+      }));
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Pink Product Page",
+  "settings": [
+    { "type": "product", "id": "pick_product", "label": "Product (optional when used on product template)" },
+
+    { "type": "header", "content": "Card & Colors" },
+    { "type": "color", "id": "card_bg", "label": "Card background", "default": "#ffd6e0" },
+    { "type": "color", "id": "accent", "label": "Accent", "default": "#ff4fb3" },
+    { "type": "color", "id": "ink", "label": "Text color", "default": "#2b1a22" },
+    { "type": "color", "id": "ink_subtle", "label": "Muted text color", "default": "#6b4a58" },
+    { "type": "range", "id": "radius", "label": "Card radius", "min": 8, "max": 32, "step": 1, "default": 24 },
+
+    { "type": "header", "content": "Top meta" },
+    { "type": "text", "id": "review_text", "label": "Review blurb", "default": "7.5k reviews" },
+    { "type": "textarea", "id": "blurb", "label": "Intro blurb", "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." },
+
+    { "type": "header", "content": "Emoji badges (left under gallery)" },
+    { "type": "text", "id": "badge_1", "label": "Badge 1", "default": "🍑" },
+    { "type": "text", "id": "badge_2", "label": "Badge 2", "default": "🍆" },
+    { "type": "text", "id": "badge_3", "label": "Badge 3", "default": "💧" },
+
+    { "type": "header", "content": "Pack size pills" },
+    { "type": "text", "id": "pills_label", "label": "Label", "default": "Number of Gummies" },
+    { "type": "text", "id": "most_popular", "label": "Mark as “Most popular” (enter the option value)", "default": "40" },
+    { "type": "text", "id": "best_value", "label": "Mark as “Best value” (enter the option value)", "default": "80" },
+
+    { "type": "header", "content": "Subscribe card (optional)" },
+    { "type": "text", "id": "subscribe_saving", "label": "Saving label", "default": "20%" },
+    { "type": "text", "id": "bullet_1", "label": "Bullet 1", "default": "Delivered monthly" },
+    { "type": "text", "id": "bullet_2", "label": "Bullet 2", "default": "Pause, skip, or cancel anytime" },
+    { "type": "text", "id": "bullet_3", "label": "Bullet 3", "default": "Save with each delivery" },
+
+    { "type": "header", "content": "CTA" },
+    { "type": "text", "id": "cta_text", "label": "Add to cart text", "default": "ADD TO CART" },
+    { "type": "text", "id": "sold_out_text", "label": "Sold out text", "default": "SOLD OUT" },
+
+    { "type": "header", "content": "Round badges row (under CTA)" },
+    { "type": "image_picker", "id": "badge_img_1", "label": "Badge 1" },
+    { "type": "image_picker", "id": "badge_img_2", "label": "Badge 2" },
+    { "type": "image_picker", "id": "badge_img_3", "label": "Badge 3" },
+
+    { "type": "header", "content": "Accordions" },
+    { "type": "text", "id": "a1_title", "label": "Accordion 1 title", "default": "Is This For You" },
+    { "type": "richtext", "id": "a1_body", "label": "Accordion 1 body", "default": "<p>Short explanation about who benefits from this product.</p>" },
+    { "type": "text", "id": "a2_title", "label": "Accordion 2 title", "default": "Benefits" },
+    { "type": "richtext", "id": "a2_body", "label": "Accordion 2 body", "default": "<ul><li>Benefit one</li><li>Benefit two</li></ul>" },
+    { "type": "text", "id": "a3_title", "label": "Accordion 3 title", "default": "Recommended Usage" },
+    { "type": "richtext", "id": "a3_body", "label": "Accordion 3 body", "default": "<p>Take 2 gummies daily with water.</p>" },
+    { "type": "text", "id": "a4_title", "label": "Accordion 4 title", "default": "Ingredients Facts" },
+    { "type": "richtext", "id": "a4_body", "label": "Accordion 4 body", "default": "<p>Ingredient list and nutrition facts here.</p>" },
+
+    { "type": "header", "content": "Warning bar" },
+    { "type": "textarea", "id": "warning_text", "label": "Warning", "default": "WARNING: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." }
+  ],
+  "blocks": [],
+  "presets": [{ "name": "Pink Product Page" }]
+}
+{% endschema %}
