@@ -122,10 +122,10 @@
         "wave_color": "#ffd8d8",
         "wave_overlap_top": 100,
         "wave_overlap_bottom": 100,
-        "wave_frequency": 2,
-        "wave_amplitude": 25,
+        "wave_frequency": 4,
+        "wave_amplitude": 40,
         "animate_waves": true,
-        "wave_speed": 12,
+        "wave_speed": 10,
         "wave_bob": 0,
         "enable_scroll_animation": true,
         "scroll_direction": "left-right"
