@@ -1,4 +1,4 @@
-<!-- FAQ Section (icon-only toggle with perfect circular button) -->
+<!-- FAQ Section (icon-only toggle; text + icon spaced; circle via padding) -->
 <section class="faq-section {{ 'faq-root-' | append: section.id | replace: '_', '' | downcase }}"
          role="region"
          aria-labelledby="faq-title-{{ section.id | replace: '_', '' | downcase }}"
@@ -93,7 +93,7 @@
                 background-clip: padding-box;
               ">
 
-            <!-- Question row: text + icon-only button -->
+            <!-- Question row: text (static) + icon-only button (toggle) -->
             <div class="faq-question-row-{{ faq_uid }}">
               <span id="{{ q_text_id }}"
                     class="faq-question-text-{{ faq_uid }}"
@@ -160,56 +160,64 @@
   list-style:none; margin:0; padding:0;
 }
 
-/* Question row: text + icon-only button */
+/* Question row spacing: text at start, icon button at end */
 .faq-question-row-{{ faq_uid }}{
   display: flex;
-  align-items: center;      /* keep heights equal */
+  align-items: center;
+  justify-content: space-between;  /* <- requested: space between text & icon */
+  width: 100%;
   gap: 12px;
-  cursor: default;          /* only the icon button is interactive */
+  cursor: default;
 }
 
-/* Circular chevron button (perfect circle, never oval) */
+.faq-question-text-{{ faq_uid }}{
+  flex: 1 1 auto;
+  min-width: 0;
+  line-height: 1.4;
+}
+
+/* Circular chevron button using equal padding (perfect circle) */
 .faq-toggle-btn-{{ faq_uid }}{
-  --faq-btn-size: 40px;
-  flex: 0 0 var(--faq-btn-size);        /* prevent flex stretch */
-  inline-size: var(--faq-btn-size);     /* width */
-  block-size: var(--faq-btn-size);      /* height */
-  aspect-ratio: 1 / 1;                  /* enforce square */
+  /* Tweak these if you want a larger/smaller circle */
+  --faq-icon-size: 20px;  /* chevron size */
+  --faq-btn-pad: 10px;    /* equal padding makes total width==height */
+
+  flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
+  padding: var(--faq-btn-pad);       /* equal padding for perfect circle */
   border: 0;
-  border-radius: 9999px;                /* circle */
+  border-radius: 9999px;             /* circle */
   background: transparent;
   color: {{ section.settings.icon_color }};
   line-height: 1;
-  box-sizing: border-box;
+  box-sizing: content-box;           /* width/height = icon + padding */
   cursor: pointer;
   transition: background-color .2s ease, color .2s ease, transform .25s ease, box-shadow .25s ease;
 }
 
-/* Optional shadow/hover on the button itself */
-.faq-toggle-btn-{{ faq_uid }}:hover{
-  background-color: #ff679a;            /* accent on hover (button only) */
-  color: {{ section.settings.active_text_color }};
-}
-.faq-item-{{ faq_uid }}.active .faq-toggle-btn-{{ faq_uid }}{
-  background-color: #ff679a;            /* accent when open */
-  color: {{ section.settings.active_text_color }};
-}
-
-/* Keep the SVG from stretching */
+/* Keep the SVG from stretching and ensure square icon */
 .faq-icon-{{ faq_uid }}{
-  width: calc(var(--faq-btn-size) * .5);
-  height: calc(var(--faq-btn-size) * .5);
+  width: var(--faq-icon-size);
+  height: var(--faq-icon-size);
   display: block;
   pointer-events: none;
   transition: transform .25s ease, color .2s ease;
 }
+
+/* Hover/active styles: only the circular button changes */
+.faq-toggle-btn-{{ faq_uid }}:hover{
+  background-color: #ff679a;
+  color: {{ section.settings.active_text_color }};
+}
+.faq-item-{{ faq_uid }}.active .faq-toggle-btn-{{ faq_uid }}{
+  background-color: #ff679a;
+  color: {{ section.settings.active_text_color }};
+}
 .faq-item-{{ faq_uid }}.active .faq-icon-{{ faq_uid }}{ transform: rotate(180deg); }
 
-/* Question & container states: do NOT recolor the LI container on hover/active */
+/* Do NOT recolor the LI container on hover/active */
 .faq-item-{{ faq_uid }}{
   transition: background-color .2s ease, border-color .2s ease;
 }
