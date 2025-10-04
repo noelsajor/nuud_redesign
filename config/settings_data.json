@@ -129,7 +129,7 @@
     "product_sidebar_mobile": false,
     "collection_sidebar_use": "left-sidebar",
     "collection_sidebar_mobile": false,
-    "blog_page_sidebar": "left-sidebar",
+    "blog_page_sidebar": "full-width",
     "blog_sidebar_mobile": false,
     "cart_notes_enable": true,
     "ajax_cart_method": "drawer",
