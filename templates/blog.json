@@ -16,8 +16,8 @@
           "type": "articles",
           "settings": {
             "title": "Recent Articles",
-            "show_description": true,
-            "limit": 2
+            "show_description": false,
+            "limit": 4
           }
         },
         "0732544a-d1ac-41bc-a4f9-a987643eedff": {
