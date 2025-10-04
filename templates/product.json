@@ -84,6 +84,26 @@
     },
     "wavy_features_FXPJ84": {
       "type": "wavy-features",
+      "blocks": {
+        "feature_FDgc79": {
+          "type": "feature",
+          "settings": {
+            "icon_svg": "",
+            "icon_label": "Feature icon",
+            "icon_color": "#8b1538",
+            "feature_text": "Feature description",
+            "text_color": "#8b1538",
+            "text_size": 18,
+            "text_weight": "600",
+            "feature_subtext": "",
+            "subtext_color": "#666666",
+            "subtext_size": 14
+          }
+        }
+      },
+      "block_order": [
+        "feature_FDgc79"
+      ],
       "name": "Features with Waves",
       "settings": {
         "use_gradient": false,
