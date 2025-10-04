@@ -139,7 +139,7 @@
       "type": "portfolio-2",
       "name": "Blog posts",
       "settings": {
-        "full": true,
+        "full": false,
         "spacing_both_ends": true,
         "padding": "0,0",
         "margin": "0,0",
@@ -163,7 +163,7 @@
         "section_button_hover_text_color": "",
         "heading_position": "text-center",
         "blog": "news",
-        "blog_show_author": true,
+        "blog_show_author": false,
         "blog_show_date": true,
         "blog_comments": false,
         "blog_show_tag": false,
