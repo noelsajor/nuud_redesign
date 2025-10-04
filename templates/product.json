@@ -48,7 +48,7 @@
         "padding": "100,100",
         "margin": "0,0",
         "section_bg_color": "rgba(0,0,0,0)",
-        "inner_bg_color": "rgba(0,0,0,0)",
+        "inner_bg_color": "#ffd8d8",
         "inner_bg_radius": 32,
         "inner_bg_padding": 64,
         "gallery_type": "thumbnails_horizontal",
