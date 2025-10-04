@@ -29,14 +29,16 @@
         },
         "f1e131c6-6525-4150-91f7-24c14561c6af": {
           "type": "carousel",
+          "disabled": true,
           "settings": {
             "title": "New Products",
-            "collection": "best-sellers",
+            "collection": "for-both",
             "limit": 5
           }
         },
         "08599de1-333a-41a0-ad7b-7dad4bc47c9f": {
           "type": "collection",
+          "disabled": true,
           "settings": {
             "title": "New Arrivals",
             "collection": "recent-products",
@@ -45,8 +47,10 @@
         },
         "36666774-1fbe-4764-9edb-5b1feb77f99d": {
           "type": "image",
+          "disabled": true,
           "settings": {
             "title": "Promo image",
+            "image": "shopify://shop_images/Cherrybite.webp",
             "link_text": "Shop Now",
             "link": "#"
           }
