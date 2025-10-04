@@ -90,31 +90,33 @@
                 background-clip: padding-box;
               ">
 
-            <!-- Row: static question text + icon-only button -->
-            <div class="faq-question-row-{{ faq_uid }}">
-              <h3 class="faq-question-text-{{ faq_uid }}"
-                  id="faq-question-{{ faq_uid }}-{{ i }}"
-                  style="
-                    color: {{ section.settings.question_color }};
-                    font-size: {{ section.settings.question_size }}px;
-                    margin: 0;
-                  ">
+            <!-- Question row: text + circle button -->
+            <div class="faq-question-row-{{ faq_uid }}"
+                 style="
+                   display:flex; align-items:center; gap:16px;
+                   padding: {{ section.settings.question_padding }}px;
+                   color: {{ section.settings.question_color }};
+                   font-size: {{ section.settings.question_size }}px;
+                   line-height:1.4;
+                 ">
+              <span class="faq-question-text-{{ faq_uid }}"
+                    id="faq-question-text-{{ faq_uid }}-{{ i }}"
+                    style="flex:1 1 auto; min-width:0;">
                 {{ q }}
-              </h3>
+              </span>
 
               <button class="faq-toggle-btn-{{ faq_uid }}"
                       type="button"
                       aria-expanded="false"
                       aria-controls="faq-answer-{{ faq_uid }}-{{ i }}"
-                      aria-labelledby="faq-question-{{ faq_uid }}-{{ i }}"
-                      title="Toggle answer">
+                      aria-label="Toggle answer: {{ q | strip_html | escape }}"
+                      id="faq-toggle-{{ faq_uid }}-{{ i }}">
                 <svg class="faq-icon-{{ faq_uid }}"
-                     viewBox="0 0 24 24"
+                     viewBox="0 0 24 24" width="20" height="20"
                      fill="none" stroke="currentColor" stroke-width="2"
                      aria-hidden="true" focusable="false">
                   <polyline points="6,9 12,15 18,9"></polyline>
                 </svg>
-                <span class="sr-only">Toggle {{ q | escape }}</span>
               </button>
             </div>
 
@@ -122,7 +124,7 @@
             <div class="faq-answer-{{ faq_uid }}"
                  id="faq-answer-{{ faq_uid }}-{{ i }}"
                  role="region"
-                 aria-labelledby="faq-question-{{ faq_uid }}-{{ i }}"
+                 aria-labelledby="faq-question-text-{{ faq_uid }}-{{ i }}"
                  aria-hidden="true"
                  hidden
                  style="background-color: {{ section.settings.answer_background }};">
@@ -158,46 +160,43 @@
   list-style:none; margin:0; padding:0;
 }
 
-/* Row that holds text + icon button */
-.faq-question-row-{{ faq_uid }}{
-  display:flex; align-items:center; gap: 12px;
-  padding: {{ section.settings.question_padding }}px;
-  border-radius: {{ top_left }}px {{ top_right }}px {{ bottom_right }}px {{ bottom_left }}px;
-}
-
-/* Icon-only button */
+/* Circular chevron button (icon-only control) */
 .faq-toggle-btn-{{ faq_uid }}{
   margin-left:auto;
   display:inline-flex; align-items:center; justify-content:center;
   width: 40px; height: 40px;
   min-width: 40px; min-height: 40px;
-  border: 0; border-radius: 8px;
+  border: 0;
+  border-radius: 50% !important; /* always a circle */
   background: transparent; color: {{ section.settings.icon_color }};
   cursor: pointer;
+  line-height: 1;
   transition: background-color .2s ease, color .2s ease, transform .25s ease;
 }
-.faq-icon-{{ faq_uid }}{ width:20px; height:20px; transition: transform .25s ease; }
-.faq-item-{{ faq_uid }}.active .faq-icon-{{ faq_uid }}{ transform: rotate(180deg); }
-
 .faq-toggle-btn-{{ faq_uid }}:focus-visible{
   outline: 2px solid rgba(0,0,0,.6);
   outline-offset: 2px;
 }
+.faq-icon-{{ faq_uid }}{
+  pointer-events:none;
+  transition: transform .25s ease, color .2s ease;
+  color: currentColor;
+}
+.faq-item-{{ faq_uid }}.active .faq-icon-{{ faq_uid }}{ transform: rotate(180deg); }
 
-/* ====== Hover + Active styles — ONLY the icon button changes ====== */
+/* Hover + Active affect only the circle button (not the whole row) */
 {% if section.settings.enable_hover_color %}
 .faq-item-{{ faq_uid }}:hover .faq-toggle-btn-{{ faq_uid }}{
   background-color: #ff679a !important;
   color: {{ section.settings.active_text_color }} !important;
 }
 {% endif %}
-
 .faq-item-{{ faq_uid }}.active .faq-toggle-btn-{{ faq_uid }}{
   background-color: #ff679a !important;
   color: {{ section.settings.active_text_color }} !important;
 }
 
-/* Do NOT recolor the LI container on hover/active */
+/* Keep LI container colors stable on hover/active */
 .faq-item-{{ faq_uid }}:hover,
 .faq-item-{{ faq_uid }}.active{
   background-color: {{ section.settings.question_background }} !important;
@@ -242,17 +241,18 @@
   .faq-body-{{ faq_uid }}{ font-size: calc({{ section.settings.body_size }}px * .95); }
   .faq-question-row-{{ faq_uid }}{
     padding: calc({{ section.settings.question_padding }}px * .85);
+    font-size: calc({{ section.settings.question_size }}px * .95);
+  }
+  .faq-answer-content-{{ faq_uid }}{
+    padding: calc({{ section.settings.answer_padding }}px * .85);
+    font-size: calc({{ section.settings.answer_size }}px * .95);
   }
 }
-
 /* SR-only utility */
-.sr-only{
-  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
-  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
-}
+.sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 </style>
 
-<!-- Guarded script + smooth height animation (toggleable) -->
+<!-- Guarded script + smooth height animation (icon button toggles) -->
 <script>
   (function() {
     const tagName = 'faq-section-{{ section.id | replace: "_", "" | downcase }}';
@@ -273,13 +273,11 @@
             const panel = item.querySelector('.faq-answer-' + rootId);
             if (!btn || !panel) return;
 
-            // closed baseline
+            // start closed
             panel.hidden = panel.getAttribute('aria-hidden') !== 'false';
             if (panel.hidden) panel.style.height = '0px';
 
-            btn.addEventListener('click', (e) => {
-              e.preventDefault();
-              e.stopPropagation();
+            btn.addEventListener('click', () => {
               const isOpen = item.classList.contains('active');
               if (isOpen) {
                 this._close(item, btn, panel, shouldAnimate);
@@ -431,7 +429,7 @@
     {
       "type": "checkbox",
       "id": "enable_hover_color",
-      "label": "Enable hover color on questions",
+      "label": "Enable hover color on chevron button",
       "default": true
     },
     {
@@ -443,7 +441,7 @@
     {
       "type": "color",
       "id": "active_text_color",
-      "label": "Active & Hover text/icon color",
+      "label": "Active & Hover button icon color",
       "default": "#ffffff"
     }
   ],
