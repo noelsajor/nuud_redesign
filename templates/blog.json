@@ -63,6 +63,7 @@
         "08599de1-333a-41a0-ad7b-7dad4bc47c9f",
         "36666774-1fbe-4764-9edb-5b1feb77f99d"
       ],
+      "disabled": true,
       "settings": {
         "full": false,
         "spacing_both_ends": true,
@@ -208,7 +209,7 @@
   },
   "order": [
     "main",
-    "home_newsletter_7fLnWy",
-    "portfolio_2_f8imhx"
+    "portfolio_2_f8imhx",
+    "home_newsletter_7fLnWy"
   ]
 }
