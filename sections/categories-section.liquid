@@ -331,6 +331,14 @@ Structured similar to other sections: wrapper → container → row → content.
   }
 }
 
+@media (max-width: 768px){
+  #shopify-section-{{ section.id }}.home-category-block .dt-sc-section-wrapper{
+    padding-left: calc({{ section.settings.padding_horizontal }}px + 10px) !important;
+    padding-right: calc({{ section.settings.padding_horizontal }}px + 10px) !important;
+  }
+}
+
+
 /* Motion safety */
 @media (prefers-reduced-motion: reduce){
   #shopify-section-{{ section.id }}.home-category-block .category-card,
