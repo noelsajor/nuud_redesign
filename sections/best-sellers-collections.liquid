@@ -17,23 +17,24 @@ Best Sellers Collection – SEO/A11y optimized
   <div class="best-sellers-container"
        style="max-width: 960px; width: 100%; margin: 100px auto; background-color: {{ section.settings.container_background_color }};">
     
-    <!-- Badge -->
-    {% if section.settings.show_badge and section.settings.badge_image %}
-    <div class="collection-badge" role="img" aria-label="{{ section.settings.badge_alt | default: 'Collection Badge' }}">
-      <img src="{{ section.settings.badge_image | image_url: width: 200 }}" 
-           alt="{{ section.settings.badge_alt | default: 'Collection Badge' }}" 
-           class="badge-image {% if section.settings.badge_spin %}badge-spin{% endif %}"
-           style="width: {{ section.settings.badge_size }}px; height: {{ section.settings.badge_size }}px;"
-           width="{{ section.settings.badge_size }}"
-           height="{{ section.settings.badge_size }}"
-           loading="lazy"
-           decoding="async">
-    </div>
-    {% endif %}
-    
     <!-- Section Header -->
     <header class="section-header" 
-            style="text-align: {{ section.settings.title_alignment }}; margin-bottom: {{ section.settings.title_bottom_spacing }}px;">
+            style="text-align: {{ section.settings.title_alignment }}; margin-bottom: {{ section.settings.title_bottom_spacing }}px; position: relative;">
+      
+      {% if section.settings.show_badge and section.settings.badge_image %}
+      <!-- Centered Badge ABOVE the title -->
+      <div class="collection-badge collection-badge--center" role="img" aria-label="{{ section.settings.badge_alt | default: 'Collection Badge' }}">
+        <img src="{{ section.settings.badge_image | image_url: width: 200 }}" 
+             alt="{{ section.settings.badge_alt | default: 'Collection Badge' }}" 
+             class="badge-image {% if section.settings.badge_spin %}badge-spin{% endif %}"
+             style="width: {{ section.settings.badge_size }}px; height: {{ section.settings.badge_size }}px;"
+             width="{{ section.settings.badge_size }}"
+             height="{{ section.settings.badge_size }}"
+             loading="lazy"
+             decoding="async">
+      </div>
+      {% endif %}
+      
       {% if section.settings.section_title != blank %}
       <h2 id="best-sellers-title-{{ bs_uid }}" 
           class="section-title"
@@ -206,8 +207,15 @@ Best Sellers Collection – SEO/A11y optimized
 .best-sellers-{{ bs_uid }} .best-sellers-section { position: relative; }
 .best-sellers-{{ bs_uid }} .best-sellers-container { position: relative; }
 
-/* ===== Badge ===== */
-.best-sellers-{{ bs_uid }} .collection-badge { position: absolute; top: -30px; right: 20px; z-index: 10; }
+/* ===== Badge (centered above title) ===== */
+.best-sellers-{{ bs_uid }} .collection-badge {
+  position: static !important;      /* override any previous absolute rules */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 12px auto;         /* centered + space below */
+  width: auto;
+}
 .best-sellers-{{ bs_uid }} .badge-image { border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,.1); display: block; }
 .best-sellers-{{ bs_uid }} .badge-spin { animation: spin {{ section.settings.badge_spin_speed | default: 10 }}s linear infinite; }
 @keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
@@ -277,7 +285,7 @@ Best Sellers Collection – SEO/A11y optimized
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
   .best-sellers-{{ bs_uid }} .best-sellers-container { padding: 0 15px; }
-  .best-sellers-{{ bs_uid }} .collection-badge { top:-20px; right:15px; }
+  /* Badge stays centered; just scale size down */
   .best-sellers-{{ bs_uid }} .badge-image {
     width: calc({{ section.settings.badge_size | default: 120 }}px * .8) !important;
     height: calc({{ section.settings.badge_size | default: 120 }}px * .8) !important;
