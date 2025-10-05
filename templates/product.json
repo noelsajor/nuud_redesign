@@ -540,7 +540,7 @@
         "items_tablet_view": 2,
         "items_mobile_view": 1,
         "enable_center_mode": true,
-        "slider_autoplay": 0,
+        "slider_autoplay": 3,
         "dots": false,
         "carousel_pagination_alignment": "center_pagination",
         "carousel_pagination_bottom_alignment": "outside_element",
