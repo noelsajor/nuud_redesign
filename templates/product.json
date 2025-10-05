@@ -55,7 +55,7 @@
         "gallery_type": "thumbnails_horizontal",
         "vertical_style": "dt-sc-product-vertical-thumb-left",
         "enable_zoom": true,
-        "zoom_type": "inner",
+        "zoom_type": "cloud",
         "enable_video_looping": false,
         "meta-lable-style": "one-half",
         "reviews": false,
