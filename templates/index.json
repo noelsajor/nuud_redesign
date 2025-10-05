@@ -154,7 +154,7 @@
         "wave_bob": 0,
         "enable_marquee": true,
         "marquee_direction": "right-left",
-        "marquee_speed": 20,
+        "marquee_speed": 6,
         "marquee_gap": 40,
         "enable_scroll_animation": true,
         "scroll_direction": "right-left"
