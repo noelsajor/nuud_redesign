@@ -45,7 +45,7 @@
       "settings": {
         "full": false,
         "spacing_both_ends": false,
-        "padding": "100,100",
+        "padding": "100,160",
         "margin": "0,0",
         "section_bg_color": "rgba(0,0,0,0)",
         "inner_bg_color": "#ffd8d8",
