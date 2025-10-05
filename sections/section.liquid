@@ -224,6 +224,19 @@
   }
 }
 
+/* Keep the badge inside the hero bounds and below the header */
+.hero-container{ overflow: hidden; }          /* clip anything that tries to escape upward */
+.brand-badge{
+  top: 16px !important;                       /* remove the negative top */
+  right: 20px;
+  z-index: 1 !important;                      /* lower than most headers */
+  pointer-events: none;                       /* if it ever overlaps, header is still clickable */
+}
+
+/* Optional: tune size/position on small screens */
+@media (max-width: 768px){
+  .brand-badge{ top: 12px !important; right: 12px; }
+}
 
 
 @media (max-width: 480px){
