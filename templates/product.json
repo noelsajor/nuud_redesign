@@ -43,8 +43,8 @@
         "cad3ad3e-6913-4865-a804-9c9d16146aca"
       ],
       "settings": {
-        "full": true,
-        "spacing_both_ends": true,
+        "full": false,
+        "spacing_both_ends": false,
         "padding": "0,160",
         "margin": "0,0",
         "section_bg_color": "rgba(0,0,0,0)",
