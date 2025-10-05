@@ -654,7 +654,7 @@
         "show_background_image": false,
         "background_style": "none",
         "background_size": "auto",
-        "enable_overlay": true,
+        "enable_overlay": false,
         "background_color": "#fdf8e1",
         "overlay_transparency": "0.5",
         "section_heading": "Latest news",
