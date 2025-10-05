@@ -366,6 +366,11 @@
 {% endunless %}
 
 <style>
+  .dt-sc-accordion-btn {
+  background: none;
+  }
+
+
   /* -------- Section Background (full width) -------- */
   #shopify-section-{{ section.id }}.main-product-template {
     background: {{ section.settings.section_bg_color | default: 'transparent' }};
