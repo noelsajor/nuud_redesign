@@ -1,4 +1,4 @@
-<!-- Features Section with Seamless Animated Waves -->
+<!-- Features Section with Seamless Animated Waves + Marquee -->
 <section class="features-wave-section {% if section.settings.animate_waves %}waves-animated{% endif %}" 
          role="region"
          aria-labelledby="features-title"
@@ -72,37 +72,107 @@
       <h2 id="features-title" class="sr-only">Store Features and Benefits</h2>
     {% endif %}
 
-    <ul class="features-grid {% if section.settings.enable_scroll_animation %}animate-scroll-{{ section.settings.scroll_direction }}{% endif %}" role="list">
-      {% for block in section.blocks %}
-        <li class="feature-item" {{ block.shopify_attributes }} style="animation-delay: {{ forloop.index0 | times: 100 | divided_by: 1000.0 }}s;">
-          <div class="feature-icon-wrapper"
-               {% if block.settings.icon_svg != blank or block.settings.icon_image %}role="img" aria-label="{{ block.settings.icon_label | default: block.settings.feature_text }}"{% endif %}>
-            {% if block.settings.icon_svg != blank %}
-              <div class="feature-icon" style="color: {{ block.settings.icon_color }};" aria-hidden="true">{{ block.settings.icon_svg }}</div>
-            {% elsif block.settings.icon_image %}
-              <div class="feature-icon-image" aria-hidden="true">
-                <img src="{{ block.settings.icon_image | image_url: width: 120 }}"
-                     srcset="{{ block.settings.icon_image | image_url: width: 60 }} 60w, {{ block.settings.icon_image | image_url: width: 120 }} 120w"
-                     sizes="60px" alt="{{ block.settings.icon_label | default: '' }}" width="60" height="60" loading="lazy" decoding="async">
+    {%- comment -%} ----- Marquee mode ----- {%- endcomment -%}
+    {% if section.settings.enable_marquee %}
+      <div class="marquee marquee--{{ section.settings.marquee_direction }}"
+           aria-label="Scrolling features"
+           style="--marquee-duration: {{ section.settings.marquee_speed }}s; --marquee-gap: {{ section.settings.marquee_gap }}px;">
+        <ul class="features-row marquee__track" role="list">
+          {% for block in section.blocks %}
+            <li class="feature-item" {{ block.shopify_attributes }}>
+              <div class="feature-icon-wrapper"
+                   {% if block.settings.icon_svg != blank or block.settings.icon_image %}role="img" aria-label="{{ block.settings.icon_label | default: block.settings.feature_text }}"{% endif %}>
+                {% if block.settings.icon_svg != blank %}
+                  <div class="feature-icon" style="color: {{ block.settings.icon_color }};" aria-hidden="true">{{ block.settings.icon_svg }}</div>
+                {% elsif block.settings.icon_image %}
+                  <div class="feature-icon-image" aria-hidden="true">
+                    <img src="{{ block.settings.icon_image | image_url: width: 120 }}"
+                         srcset="{{ block.settings.icon_image | image_url: width: 60 }} 60w, {{ block.settings.icon_image | image_url: width: 120 }} 120w"
+                         sizes="60px" alt="{{ block.settings.icon_label | default: '' }}" width="60" height="60" loading="lazy" decoding="async">
+                  </div>
+                {% endif %}
               </div>
-            {% endif %}
-          </div>
 
-          {% if block.settings.feature_text != blank %}
-          <div class="feature-text-wrapper">
-            <p class="feature-text" style="color: {{ block.settings.text_color }}; font-size: {{ block.settings.text_size }}px; font-weight: {{ block.settings.text_weight }};">
-              {{ block.settings.feature_text }}
-            </p>
-            {% if block.settings.feature_subtext != blank %}
-            <p class="feature-subtext" style="color: {{ block.settings.subtext_color }}; font-size: {{ block.settings.subtext_size }}px;">
-              {{ block.settings.feature_subtext }}
-            </p>
+              {% if block.settings.feature_text != blank %}
+              <div class="feature-text-wrapper">
+                <p class="feature-text" style="color: {{ block.settings.text_color }}; font-size: {{ block.settings.text_size }}px; font-weight: {{ block.settings.text_weight }};">
+                  {{ block.settings.feature_text }}
+                </p>
+                {% if block.settings.feature_subtext != blank %}
+                <p class="feature-subtext" style="color: {{ block.settings.subtext_color }}; font-size: {{ block.settings.subtext_size }}px;">
+                  {{ block.settings.feature_subtext }}
+                </p>
+                {% endif %}
+              </div>
+              {% endif %}
+            </li>
+          {% endfor %}
+
+          {%- comment -%} Duplicate once for seamless loop; hide from ATs {%- endcomment -%}
+          {% for block in section.blocks %}
+            <li class="feature-item" aria-hidden="true">
+              <div class="feature-icon-wrapper" aria-hidden="true">
+                {% if block.settings.icon_svg != blank %}
+                  <div class="feature-icon" style="color: {{ block.settings.icon_color }};" aria-hidden="true">{{ block.settings.icon_svg }}</div>
+                {% elsif block.settings.icon_image %}
+                  <div class="feature-icon-image" aria-hidden="true">
+                    <img src="{{ block.settings.icon_image | image_url: width: 120 }}"
+                         srcset="{{ block.settings.icon_image | image_url: width: 60 }} 60w, {{ block.settings.icon_image | image_url: width: 120 }} 120w"
+                         sizes="60px" alt="" width="60" height="60" loading="lazy" decoding="async">
+                  </div>
+                {% endif %}
+              </div>
+
+              {% if block.settings.feature_text != blank %}
+              <div class="feature-text-wrapper" aria-hidden="true">
+                <p class="feature-text" style="color: {{ block.settings.text_color }}; font-size: {{ block.settings.text_size }}px; font-weight: {{ block.settings.text_weight }};">
+                  {{ block.settings.feature_text }}
+                </p>
+                {% if block.settings.feature_subtext != blank %}
+                <p class="feature-subtext" style="color: {{ block.settings.subtext_color }}; font-size: {{ block.settings.subtext_size }}px;">
+                  {{ block.settings.feature_subtext }}
+                </p>
+                {% endif %}
+              </div>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% else %}
+      {%- comment -%} ----- Static grid fallback (original) ----- {%- endcomment -%}
+      <ul class="features-grid {% if section.settings.enable_scroll_animation %}animate-scroll-{{ section.settings.scroll_direction }}{% endif %}" role="list">
+        {% for block in section.blocks %}
+          <li class="feature-item" {{ block.shopify_attributes }} style="animation-delay: {{ forloop.index0 | times: 100 | divided_by: 1000.0 }}s;">
+            <div class="feature-icon-wrapper"
+                 {% if block.settings.icon_svg != blank or block.settings.icon_image %}role="img" aria-label="{{ block.settings.icon_label | default: block.settings.feature_text }}"{% endif %}>
+              {% if block.settings.icon_svg != blank %}
+                <div class="feature-icon" style="color: {{ block.settings.icon_color }};" aria-hidden="true">{{ block.settings.icon_svg }}</div>
+              {% elsif block.settings.icon_image %}
+                <div class="feature-icon-image" aria-hidden="true">
+                  <img src="{{ block.settings.icon_image | image_url: width: 120 }}"
+                       srcset="{{ block.settings.icon_image | image_url: width: 60 }} 60w, {{ block.settings.icon_image | image_url: width: 120 }} 120w"
+                       sizes="60px" alt="{{ block.settings.icon_label | default: '' }}" width="60" height="60" loading="lazy" decoding="async">
+                </div>
+              {% endif %}
+            </div>
+
+            {% if block.settings.feature_text != blank %}
+            <div class="feature-text-wrapper">
+              <p class="feature-text" style="color: {{ block.settings.text_color }}; font-size: {{ block.settings.text_size }}px; font-weight: {{ block.settings.text_weight }};">
+                {{ block.settings.feature_text }}
+              </p>
+              {% if block.settings.feature_subtext != blank %}
+              <p class="feature-subtext" style="color: {{ block.settings.subtext_color }}; font-size: {{ block.settings.subtext_size }}px;">
+                {{ block.settings.feature_subtext }}
+              </p>
+              {% endif %}
+            </div>
             {% endif %}
-          </div>
-          {% endif %}
-        </li>
-      {% endfor %}
-    </ul>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
   </div>
 
   {%- comment -%} --------- BOTTOM WAVE (seamless loop) --------- {%- endcomment -%}
@@ -166,29 +236,16 @@
 .features-wave-section { position: relative; overflow: visible; z-index: 1; }
 
 /* Waves */
-.wave-top, .wave-bottom {
-  position: absolute; left: 0; width: 100%; line-height: 0; pointer-events: none; z-index: 2; overflow: visible;
-}
+.wave-top, .wave-bottom { position: absolute; left: 0; width: 100%; line-height: 0; pointer-events: none; z-index: 2; overflow: visible; }
 .wave-top svg, .wave-bottom svg { width: 100%; height: 100%; display: block; }
 
 /* Seamless wave loop */
 .features-wave-section.waves-animated .wave-top .wave-tiles,
-.features-wave-section.waves-animated .wave-bottom .wave-tiles {
-  animation: waveSlide var(--wave-speed, 8s) linear infinite;
-}
+.features-wave-section.waves-animated .wave-bottom .wave-tiles { animation: waveSlide var(--wave-speed, 8s) linear infinite; }
 .features-wave-section.waves-animated .wave-top,
-.features-wave-section.waves-animated .wave-bottom {
-  animation: waveBob var(--wave-speed, 8s) ease-in-out infinite alternate;
-}
-
-@keyframes waveSlide {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-1440px); } /* one full tile width */
-}
-@keyframes waveBob {
-  from { transform: translateY(0); }
-  to   { transform: translateY(var(--wave-bob, 8px)); }
-}
+.features-wave-section.waves-animated .wave-bottom { animation: waveBob var(--wave-speed, 8s) ease-in-out infinite alternate; }
+@keyframes waveSlide { from { transform: translateX(0); } to { transform: translateX(-1440px); } }
+@keyframes waveBob { from { transform: translateY(0); } to { transform: translateY(var(--wave-bob, 8px)); } }
 
 /* Container */
 .features-container { position: relative; z-index: 3; margin: 0 auto; width: 100%; }
@@ -196,11 +253,28 @@
 /* Section Title */
 .section-title { margin: 0 0 40px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.2; }
 
-/* Features Grid */
+/* ---------- MARQUEE MODE ---------- */
+.marquee { position: relative; overflow: hidden; }
+.features-row { display: flex; align-items: center; gap: var(--marquee-gap, 40px); margin: 0; padding: 0; list-style: none; }
+.marquee__track { width: max-content; animation-duration: var(--marquee-duration, 20s); animation-timing-function: linear; animation-iteration-count: infinite; }
+.marquee--right-left .marquee__track { animation-name: marquee-rtl; }
+.marquee--left-right .marquee__track { animation-name: marquee-ltr; }
+
+/* Seamless loop: move half the duplicated track width */
+@keyframes marquee-rtl { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes marquee-ltr { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+/* Pause on hover */
+.marquee:hover .marquee__track { animation-play-state: paused; }
+
+/* ---------- STATIC GRID MODE (fallback) ---------- */
 .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; align-items: start; justify-items: center; list-style: none; margin: 0; padding: 0; }
 
-/* Feature Item + animations unchanged */
-.feature-item { display: flex; align-items: center; gap: 15px; width: 100%; max-width: 400px; opacity: 0; animation: fadeIn 0.6s ease-out forwards; }
+/* Feature Item (shared) */
+.feature-item { display: flex; align-items: center; gap: 15px; width: 100%; max-width: 400px; }
+
+/* Optional entrance animations for static grid */
+.features-grid .feature-item { opacity: 0; animation: fadeIn 0.6s ease-out forwards; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 .animate-scroll-left-right .feature-item { animation: slideInLeft 0.8s ease-out forwards; }
 .animate-scroll-right-left .feature-item { animation: slideInRight 0.8s ease-out forwards; }
@@ -213,11 +287,12 @@
   .features-wave-section.waves-animated .wave-bottom .wave-tiles,
   .features-wave-section.waves-animated .wave-top,
   .features-wave-section.waves-animated .wave-bottom,
-  .feature-item { animation: none !important; }
-  .feature-item { opacity: 1 !important; transform: none !important; }
+  .marquee__track,
+  .features-grid .feature-item { animation: none !important; }
+  .features-grid .feature-item { opacity: 1 !important; transform: none !important; }
 }
 
-/* Icon / text styles (unchanged) */
+/* Icon / text */
 .feature-icon-wrapper{ flex-shrink:0; }
 .feature-icon, .feature-icon-image { width:60px; height:60px; display:flex; align-items:center; justify-content:center; }
 .feature-icon svg{ width:100%; height:100%; max-width:60px; max-height:60px; display:block; }
@@ -226,11 +301,11 @@
 .feature-text, .feature-subtext{ margin:0; line-height:1.4; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; text-align:left; }
 .feature-subtext{ margin-top:5px; }
 
-/* High contrast + responsive (unchanged) */
-@media (prefers-contrast: high){ .feature-item{ border:2px solid currentColor; padding:15px; border-radius:8px; } }
+/* High contrast + responsive */
+@media (prefers-contrast: high){ .features-grid .feature-item{ border:2px solid currentColor; padding:15px; border-radius:8px; } }
 @media (max-width: 768px){
   .features-grid{ grid-template-columns:1fr; gap:30px; }
-  .feature-item{ justify-content:center; text-align:center; flex-direction:column; }
+  .feature-item{ justify-content:center; text-align:center; flex-direction:column; max-width: 520px; }
   .feature-text, .feature-subtext{ text-align:center !important; }
   .section-title{ margin-bottom:30px; font-size:calc({{ section.settings.title_size | default: 32 }}px * .8) !important; }
 }
@@ -289,9 +364,18 @@
     { "type": "range", "id": "wave_speed", "label": "Loop Speed (seconds per cycle)", "min": 2, "max": 30, "step": 1, "default": 12, "unit": "s" },
     { "type": "range", "id": "wave_bob", "label": "Vertical Bob (px)", "min": 0, "max": 30, "step": 1, "default": 8, "unit": "px" },
 
-    { "type": "header", "content": "Animation Settings" },
-    { "type": "checkbox", "id": "enable_scroll_animation", "label": "Enable Scroll Animation", "default": true },
-    { "type": "select", "id": "scroll_direction", "label": "Animation Direction", "options": [
+    { "type": "header", "content": "Marquee (Scrolling Features)" },
+    { "type": "checkbox", "id": "enable_marquee", "label": "Enable marquee scrolling", "default": true },
+    { "type": "select", "id": "marquee_direction", "label": "Scroll Direction", "options": [
+      { "value": "right-left", "label": "Right → Left" },
+      { "value": "left-right", "label": "Left → Right" }
+    ], "default": "right-left" },
+    { "type": "range", "id": "marquee_speed", "label": "Marquee speed (seconds per loop)", "min": 6, "max": 60, "step": 1, "default": 20, "unit": "s" },
+    { "type": "range", "id": "marquee_gap", "label": "Gap between items (px)", "min": 8, "max": 80, "step": 2, "default": 40, "unit": "px" },
+
+    { "type": "header", "content": "Static Grid (Fallback) Animations" },
+    { "type": "checkbox", "id": "enable_scroll_animation", "label": "Enable entrance animation", "default": true },
+    { "type": "select", "id": "scroll_direction", "label": "Entrance direction", "options": [
       { "value": "left-right", "label": "Left to Right" },
       { "value": "right-left", "label": "Right to Left" }
     ], "default": "left-right" }
