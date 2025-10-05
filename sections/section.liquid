@@ -168,25 +168,45 @@
 /* High contrast */
 @media (prefers-contrast: high){ .hero-card{ border-width:3px; } .hero-cta-button{ border:2px solid currentColor; } }
 
-/* Responsive */
+/* ------- Mobile fixes ------- */
 @media (max-width: 768px){
   .hero-section { padding-left: 15px !important; padding-right: 15px !important; }
-  .hero-card { grid-template-columns: 1fr; grid-template-areas: "image" "content"; margin-left:0 !important; margin-right:0 !important; }
-  .hero-content { padding: 40px 30px; }
-  .hero-title { font-size: calc({{ section.settings.title_size | default: 48 }}px * 0.7) !important; margin-bottom: 20px; }
-  .hero-description { font-size: calc({{ section.settings.description_size | default: 18 }}px * 0.9) !important; margin-bottom: 25px; }
-  .brand-badge { top: -20px; right: 15px; }
-  .badge-image { width: calc({{ section.settings.badge_size | default: 120 }}px * 0.8) !important; height: calc({{ section.settings.badge_size | default: 120 }}px * 0.8) !important; }
+  .hero-container { margin: 48px auto; } /* tighter vertical spacing */
+
+  .hero-card {
+    grid-template-columns: 1fr;
+    grid-template-areas: "image" "content";
+    margin-left:0 !important; margin-right:0 !important;
+    min-height: unset; /* let content define height */
+  }
+
+  /* Remove image overflow/cropping tricks on mobile */
   .hero-image, .hero-image-placeholder {
     margin-left: 0 !important; margin-right: 0 !important; width: 100% !important;
+    height: auto; /* avoid forced tall image */
     border-radius: {{ r }}px {{ r }}px 0 0 !important;
   }
+  .hero-image-container { overflow: hidden; }
+
+  .hero-content { padding: 32px 22px; }
+  .hero-title { font-size: calc({{ section.settings.title_size | default: 48 }}px * 0.7) !important; margin-bottom: 18px; }
+  .hero-description { font-size: calc({{ section.settings.description_size | default: 18 }}px * 0.92) !important; margin-bottom: 22px; }
+
+  /* Make CTA full-width on mobile for easier taps */
+  .hero-cta-button { width: 100%; text-align: center; align-self: stretch; }
+
+  /* Keep badge but scale & tuck it safely */
+  .brand-badge { top: -20px; right: 12px; }
+  .badge-image { width: calc({{ section.settings.badge_size | default: 120 }}px * 0.8) !important; height: calc({{ section.settings.badge_size | default: 120 }}px * 0.8) !important; }
 }
+
 @media (max-width: 480px){
-  .hero-content { padding: 30px 20px; }
-  .hero-title { font-size: calc({{ section.settings.title_size | default: 48 }}px * 0.5) !important; }
-  .hero-description { font-size: calc({{ section.settings.description_size | default: 18 }}px * 0.8) !important; }
-  .hero-cta-button { padding: 14px 28px; font-size: calc({{ section.settings.button_text_size | default: 18 }}px * 0.9) !important; }
+  .hero-container { margin: 36px auto; }
+  .hero-content { padding: 26px 18px; }
+  .hero-title { font-size: calc({{ section.settings.title_size | default: 48 }}px * 0.54) !important; }
+  .hero-description { font-size: calc({{ section.settings.description_size | default: 18 }}px * 0.85) !important; }
+  .hero-cta-button { padding: 14px 20px; font-size: calc({{ section.settings.button_text_size | default: 18 }}px * 0.95) !important; }
+  .brand-badge { top: -16px; right: 10px; }
 }
 
 /* Print */
