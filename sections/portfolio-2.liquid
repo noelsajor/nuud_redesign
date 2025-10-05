@@ -146,11 +146,11 @@
         itemSelector: '.isotope-selector',
         percentPosition: true,
         layoutMode: 'masonry',
+        fitWidth: true,               // <-- helps centering the grid
         masonry: { gutter: {{ section.settings.gallery_spacing }} }
       });
     });
 
-    // Reflow when breakpoints change
     var resizeTimer;
     $(window).on('resize orientationchange', function(){
       clearTimeout(resizeTimer);
@@ -160,7 +160,12 @@
 </script>
 
 <style>
-  /* Base card sizing for Isotope items */
+  /* Center the whole Isotope container within the section */
+  #shopify-section-{{section.id}}.blog-portfolio .isotope-grid{
+    margin-left:auto; margin-right:auto;
+  }
+
+  /* Base card sizing for Isotope items (desktop) */
   #shopify-section-{{section.id}}.blog-portfolio .isotope-selector{
     position: relative;
     overflow: hidden;
@@ -168,7 +173,7 @@
     width: calc({{ column }} - {{ section.settings.gallery_spacing }}px);
   }
 
-  /* Use the correct section class in media queries (mobile stacks) */
+  /* Breakpoints */
   @media only screen and (max-width: 1380px){
     #shopify-section-{{section.id}}.blog-portfolio .isotope-selector{
       width: calc(24.7% - {{ section.settings.gallery_spacing }}px);
@@ -179,10 +184,19 @@
       width: calc(33.33% - {{ section.settings.gallery_spacing }}px);
     }
   }
+
+  /* ===== MOBILE CENTER ALIGN ===== */
   @media only screen and (max-width: 991px){
+    /* Make each item full width so it sits centered (no left bias) */
     #shopify-section-{{section.id}}.blog-portfolio .isotope-selector{
-      width: calc(100% - {{ section.settings.gallery_spacing }}px) !important;
+      width: 100% !important;
     }
+    /* Center text and controls inside each card */
+    #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-item .dt-sc-blog-content{ text-align:center; }
+    #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-item .dt-sc-blog-meta{ text-align:center; }
+    #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-item .dt-sc-blog-meta p{ display:inline-block; margin: 0 8px 6px; }
+    #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-item .dt-sc-btn{ display:inline-block; margin-left:auto; margin-right:auto; }
+    #shopify-section-{{section.id}}.blog-portfolio .article__grid-image-wrapper img{ display:block; margin:0 auto; }
   }
 
   /* Colors / overlay */
@@ -249,14 +263,6 @@
       margin-top:{{margin_top | divided_by: 2}}px; margin-bottom:{{margin_bottom}}px;
       padding-top:{{padding_top | divided_by: 2}}px; padding-bottom:{{padding_bottom | divided_by: 2}}px;
     }
-  }
-
-  /* List-style mobile tweaks (kept from your original) */
-  @media (max-width: 767px){
-    #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item.list-style{ flex-wrap: wrap; }
-    #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section.style-2 .dt-sc-blog-item.list-style > .dt-sc-blog-image{ margin-bottom: {{ section.settings.split_gap }}px; }
-    #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item.list-style > .dt-sc-blog-image,
-    #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item.list-style > .dt-sc-blog-content{ width:100%; }
   }
 </style>
 
