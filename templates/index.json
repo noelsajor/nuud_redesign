@@ -707,8 +707,8 @@
         "blog_button_text_color_overlay": "",
         "blog_button_bg_hover_color_overlay": "",
         "blog_button_text_hover_color_overlay": "",
-        "enable_auto_height": true,
-        "items_per_view": 4,
+        "enable_auto_height": false,
+        "items_per_view": 1,
         "column_gap": "30",
         "custom_class_name": ""
       }
