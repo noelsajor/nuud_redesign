@@ -1,473 +1,268 @@
-<!-- FAQ Section (icon-only toggle; text + icon spaced; circle via padding) -->
-<section class="faq-section {{ 'faq-root-' | append: section.id | replace: '_', '' | downcase }}"
-         role="region"
-         aria-labelledby="faq-title-{{ section.id | replace: '_', '' | downcase }}"
-         style="
-           {% if section.settings.section_background_image %}
-             background-image: url('{{ section.settings.section_background_image | image_url: width: 2000 }}');
-             background-size: cover;
-             background-position: center;
-             background-repeat: no-repeat;
-           {% else %}
-             background: {{ section.settings.section_background_color }};
-           {% endif %}
-           padding: 60px {{ settings.gutter_width }}px 60px {{ settings.gutter_width }}px;
-           position: relative;
-         ">
+<!-- Hero Section (image left/right + optional shadow) -->
+<section class="hero-section"
+         role="banner"
+         aria-label="{{ section.settings.section_aria_label | default: 'Hero section with promotional content' }}"
+         style="background-color: {{ section.settings.background_color }};
+                padding: {{ section.settings.section_padding_top }}px 20px {{ section.settings.section_padding_bottom }}px 20px;">
+  {% assign pos = section.settings.image_position | default: 'left' %}
+  {% assign ov = section.settings.image_overflow | default: 40 %}
+  {% assign r = section.settings.card_border_radius | default: 20 %}
 
-  {%- assign faq_uid = section.id | replace: '_', '' | downcase -%}
+  <div class="hero-container">
+    {% if section.settings.show_badge and section.settings.badge_image %}
+      <div class="brand-badge">
+        <img src="{{ section.settings.badge_image | image_url: width: 200 }}"
+             alt="{{ section.settings.badge_alt | default: 'Brand Badge' }}"
+             class="badge-image {% if section.settings.badge_spin %}badge-spin{% endif %}"
+             style="width: {{ section.settings.badge_size }}px; height: {{ section.settings.badge_size }}px;"
+             width="{{ section.settings.badge_size }}"
+             height="{{ section.settings.badge_size }}"
+             loading="lazy"
+             decoding="async">
+      </div>
+    {% endif %}
 
-  {%- comment -%} Parse per-corner border radius CSV (tl,tr,br,bl) {%- endcomment -%}
-  {%- assign br_vals = section.settings.question_border_radius_custom | split: ',' -%}
-  {%- assign top_left     = br_vals[0] | default: '6' | strip -%}
-  {%- assign top_right    = br_vals[1] | default: top_left  | strip -%}
-  {%- assign bottom_right = br_vals[2] | default: top_left  | strip -%}
-  {%- assign bottom_left  = br_vals[3] | default: top_right | strip -%}
+    <article class="hero-card image-{{ pos }} {% if section.settings.enable_card_shadow %}has-shadow{% endif %}"
+             style="border-color: {{ section.settings.border_color }};
+                    border-width: {{ section.settings.border_width }}px;
+                    border-radius: {{ r }}px;
+                    background-color: {{ section.settings.card_background }};
+                    {% if pos == 'left' %}margin-left: {{ ov }}px;{% else %}margin-right: {{ ov }}px;{% endif %}">
 
-  {% if section.settings.section_background_image and section.settings.overlay_opacity > 0 %}
-    <div class="faq-section-overlay-{{ faq_uid }}"
-         aria-hidden="true"
-         style="position:absolute; inset:0; background-color: {{ section.settings.overlay_color }}; opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }}; pointer-events:none;">
-    </div>
-  {% endif %}
-
-  <faq-section-{{ faq_uid }}
-      class="faq-container-{{ faq_uid }}"
-      style="
-        max-width: {{ settings.container_width }}px;
-        margin: 0 auto;
-        padding-top: {{ section.settings.section_padding }}px;
-        padding-bottom: {{ section.settings.section_padding }}px;
-        {% if section.settings.container_background_image %}
-          background-image: url('{{ section.settings.container_background_image | image_url: width: 1500 }}');
-          background-size: cover; background-position: center; background-repeat: no-repeat;
+      <!-- Image -->
+      <div class="hero-image-container">
+        {% if section.settings.hero_image %}
+          <img
+            src="{{ section.settings.hero_image | image_url: width: 800 }}"
+            srcset="{{ section.settings.hero_image | image_url: width: 400 }} 400w,
+                    {{ section.settings.hero_image | image_url: width: 600 }} 600w,
+                    {{ section.settings.hero_image | image_url: width: 800 }} 800w,
+                    {{ section.settings.hero_image | image_url: width: 1000 }} 1000w"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            alt="{{ section.settings.hero_image.alt | default: section.settings.hero_title | default: 'Hero promotional image' }}"
+            class="hero-image"
+            style="{% if pos == 'left' %}
+                     margin-left: -{{ ov }}px; width: calc(100% + {{ ov }}px);
+                     border-radius: {{ r }}px 0 0 {{ r }}px;
+                   {% else %}
+                     margin-right: -{{ ov }}px; width: calc(100% + {{ ov }}px);
+                     border-radius: 0 {{ r }}px {{ r }}px 0;
+                   {% endif %}"
+            width="800"
+            height="500"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high">
         {% else %}
-          background-color: {{ section.settings.background_color }};
+          <div class="hero-image-placeholder"
+               style="{% if pos == 'left' %}
+                        margin-left: -{{ ov }}px; width: calc(100% + {{ ov }}px);
+                        border-radius: {{ r }}px 0 0 {{ r }}px;
+                      {% else %}
+                        margin-right: -{{ ov }}px; width: calc(100% + {{ ov }}px);
+                        border-radius: 0 {{ r }}px {{ r }}px 0;
+                      {% endif %}
+                      background-color: #f0f0f0;"
+               role="img"
+               aria-label="Placeholder for hero image">
+            <span aria-hidden="true">Add your hero image</span>
+          </div>
         {% endif %}
-        border-radius: {{ section.settings.border_radius }}px;
-        position: relative; z-index: 2;
-      ">
+      </div>
 
-    <!-- Left Column (Intro) -->
-    <div class="faq-content-{{ faq_uid }}">
-      {% if section.settings.subheading != blank %}
-        <p class="faq-subheading-{{ faq_uid }}"
-           style="color: {{ section.settings.subheading_color }}; font-size: {{ section.settings.subheading_size }}px;">
-          {{ section.settings.subheading }}
-        </p>
-      {% endif %}
-
-      {% if section.settings.heading != blank %}
-        <h2 id="faq-title-{{ faq_uid }}"
-            class="faq-heading-{{ faq_uid }}"
-            style="color: {{ section.settings.heading_color }}; font-size: {{ section.settings.heading_size }}px;">
-          {{ section.settings.heading }}
-        </h2>
-      {% else %}
-        <h2 id="faq-title-{{ faq_uid }}" class="sr-only">Frequently Asked Questions</h2>
-      {% endif %}
-
-      {% if section.settings.body != blank %}
-        <div class="faq-body-{{ faq_uid }}"
-             style="color: {{ section.settings.body_color }}; font-size: {{ section.settings.body_size }}px;">
-          {{ section.settings.body }}
-        </div>
-      {% endif %}
-    </div>
-
-    <!-- Right Column: Questions -->
-    <ul class="faq-questions-{{ faq_uid }}" role="list">
-      {% for i in (1..6) %}
-        {% assign q_key = 'question_' | append: i %}
-        {% assign a_key = 'answer_'   | append: i %}
-        {% assign q = section.settings[q_key] %}
-        {% assign a = section.settings[a_key] %}
-        {% if q != blank and a != blank %}
-          {%- assign q_text_id = 'faq-question-text-' | append: faq_uid | append: '-' | append: i -%}
-          <li class="faq-item-{{ faq_uid }}"
-              data-faq-item="{{ i }}"
-              style="
-                border: 1px solid {{ section.settings.question_border_color }};
-                border-radius: {{ top_left }}px {{ top_right }}px {{ bottom_right }}px {{ bottom_left }}px;
-                background-color: {{ section.settings.question_background }};
-                background-clip: padding-box;
-              ">
-
-            <!-- Question row: text (static) + icon-only button (toggle) -->
-            <div class="faq-question-row-{{ faq_uid }}">
-              <span id="{{ q_text_id }}"
-                    class="faq-question-text-{{ faq_uid }}"
-                    style="
-                      color: {{ section.settings.question_color }};
-                      font-size: {{ section.settings.question_size }}px;
-                      padding: {{ section.settings.question_padding }}px;
-                    ">
-                {{ q }}
-              </span>
-
-              <button class="faq-toggle-btn-{{ faq_uid }}"
-                      type="button"
-                      aria-expanded="false"
-                      aria-controls="faq-answer-{{ faq_uid }}-{{ i }}"
-                      aria-label="Toggle answer for {{ q | strip | escape }}">
-                <svg class="faq-icon-{{ faq_uid }}"
-                     viewBox="0 0 24 24"
-                     fill="none" stroke="currentColor" stroke-width="2"
-                     aria-hidden="true" focusable="false">
-                  <polyline points="6,9 12,15 18,9"></polyline>
-                </svg>
-                <span class="sr-only">Toggle</span>
-              </button>
-            </div>
-
-            <!-- Answer panel -->
-            <div class="faq-answer-{{ faq_uid }}"
-                 id="faq-answer-{{ faq_uid }}-{{ i }}"
-                 role="region"
-                 aria-labelledby="{{ q_text_id }}"
-                 aria-hidden="true"
-                 hidden
-                 style="background-color: {{ section.settings.answer_background }};">
-              <div class="faq-answer-content-{{ faq_uid }}"
-                   style="
-                     color: {{ section.settings.answer_color }};
-                     font-size: {{ section.settings.answer_size }}px;
-                     padding: {{ section.settings.answer_padding }}px;
-                   ">
-                {{ a }}
-              </div>
-            </div>
-          </li>
+      <!-- Content -->
+      <header class="hero-content" style="background-color: {{ section.settings.content_background }};">
+        {% if section.settings.hero_title != blank %}
+          <h1 id="hero-title"
+              class="hero-title"
+              style="color: {{ section.settings.title_color }};
+                     font-size: {{ section.settings.title_size }}px;
+                     font-weight: {{ section.settings.title_weight }};">
+            {{ section.settings.hero_title }}
+          </h1>
         {% endif %}
-      {% endfor %}
-    </ul>
-  </faq-section-{{ faq_uid }}>
+
+        {% if section.settings.hero_description != blank %}
+          <p class="hero-description"
+             style="color: {{ section.settings.description_color }};
+                    font-size: {{ section.settings.description_size }}px;">
+            {{ section.settings.hero_description }}
+          </p>
+        {% endif %}
+
+        {% if section.settings.button_text != blank %}
+          <a href="{{ section.settings.button_url | default: '/collections/all' }}"
+             class="hero-cta-button"
+             style="background: {{ section.settings.button_background }};
+                    color: {{ section.settings.button_text_color }};
+                    border-radius: {{ section.settings.button_border_radius }}px;
+                    font-size: {{ section.settings.button_text_size }}px;"
+             {% if section.settings.button_url == blank %}aria-describedby="button-warning"{% endif %}
+             rel="noopener">
+            {{ section.settings.button_text }}
+            <span class="sr-only"> - {{ section.settings.hero_title | default: 'Learn more' }}</span>
+          </a>
+          {% if section.settings.button_url == blank %}
+            <div id="button-warning" class="sr-only">Button URL not set - links to collections page</div>
+          {% endif %}
+        {% endif %}
+      </header>
+    </article>
+  </div>
 </section>
 
 <style>
-/* Layout */
-.faq-container-{{ faq_uid }}{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: {{ section.settings.section_gap }}px;
-  padding-left: {{ settings.gutter_width }}px;
-  padding-right: {{ settings.gutter_width }}px;
-}
-.faq-content-{{ faq_uid }}{ display:flex; flex-direction:column; gap:16px; }
-.faq-questions-{{ faq_uid }}{
-  display:flex; flex-direction:column;
-  gap: {{ section.settings.question_gap }}px;
-  list-style:none; margin:0; padding:0;
-}
-
-/* Question row spacing: text at start, icon button at end */
-.faq-question-row-{{ faq_uid }}{
+/* Base */
+.hero-section {
+  position: relative;
+  min-height: 600px;
   display: flex;
   align-items: center;
-  justify-content: space-between;  /* <- requested: space between text & icon */
-  width: 100%;
-  gap: 12px;
-  cursor: default;
-}
-
-.faq-question-text-{{ faq_uid }}{
-  flex: 1 1 auto;
-  min-width: 0;
-  line-height: 1.4;
-}
-
-/* Circular chevron button using equal padding (perfect circle) */
-.faq-toggle-btn-{{ faq_uid }}{
-  /* Tweak these if you want a larger/smaller circle */
-  --faq-icon-size: 20px;  /* chevron size */
-  --faq-btn-pad: 10px;    /* equal padding makes total width==height */
-
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
   justify-content: center;
-  padding: var(--faq-btn-pad);       /* equal padding for perfect circle */
-  border: 0;
-  border-radius: 9999px;             /* circle */
-  background: transparent;
-  color: {{ section.settings.icon_color }};
-  line-height: 1;
-  box-sizing: content-box;           /* width/height = icon + padding */
-  cursor: pointer;
-  transition: background-color .2s ease, color .2s ease, transform .25s ease, box-shadow .25s ease;
 }
+.hero-container { position: relative; max-width: 960px; width: 100%; margin: 100px auto; }
 
-/* Keep the SVG from stretching and ensure square icon */
-.faq-icon-{{ faq_uid }}{
-  width: var(--faq-icon-size);
-  height: var(--faq-icon-size);
-  display: block;
-  pointer-events: none;
-  transition: transform .25s ease, color .2s ease;
-}
+/* Badge */
+.brand-badge { position: absolute; top: -30px; right: 20px; z-index: 10; }
+.badge-image { border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,.1); display: block; }
+.badge-spin { animation: spin {{ section.settings.badge_spin_speed | default: 10 }}s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg);} to { transform: rotate(360deg);} }
+@media (prefers-reduced-motion: reduce){ .badge-spin{ animation:none; } .hero-cta-button{ transition:none; } }
 
-/* Hover/active styles: only the circular button changes */
-.faq-toggle-btn-{{ faq_uid }}:hover{
-  background-color: #ff679a;
-  color: {{ section.settings.active_text_color }};
+/* Card */
+.hero-card {
+  border-style: solid;
+  overflow: visible;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "image content";
+  min-height: 500px;
+  box-shadow: none; /* shadow controlled by .has-shadow */
 }
-.faq-item-{{ faq_uid }}.active .faq-toggle-btn-{{ faq_uid }}{
-  background-color: #ff679a;
-  color: {{ section.settings.active_text_color }};
-}
-.faq-item-{{ faq_uid }}.active .faq-icon-{{ faq_uid }}{ transform: rotate(180deg); }
+.hero-card.has-shadow { box-shadow: 0 10px 30px rgba(0,0,0,.1); }
+.hero-card.image-right { grid-template-areas: "content image"; }
 
-/* Do NOT recolor the LI container on hover/active */
-.faq-item-{{ faq_uid }}{
-  transition: background-color .2s ease, border-color .2s ease;
-}
-.faq-item-{{ faq_uid }}:hover,
-.faq-item-{{ faq_uid }}.active{
-  background-color: {{ section.settings.question_background }} !important;
-  border-color: {{ section.settings.question_border_color }} !important;
-}
+.hero-image-container { grid-area: image; position: relative; overflow: visible; }
+.hero-image { height: 100%; object-fit: cover; object-position: center; display: block; }
+.hero-image-placeholder { width: 100%; height: 100%; display:flex; align-items:center; justify-content:center; color:#666; font-size:1.1rem; }
 
-/* Answer panel — height animation when enabled */
-.faq-answer-{{ faq_uid }}{
-  overflow: hidden;
-  height: 0; /* closed baseline */
-}
-{% if section.settings.enable_animation %}
-.faq-answer-{{ faq_uid }}{ transition: height .25s ease; }
-@media (prefers-reduced-motion: reduce){
-  .faq-answer-{{ faq_uid }}, .faq-icon-{{ faq_uid }}{ transition: none !important; }
-}
-{% endif %}
+.hero-content { grid-area: content; padding: 60px 50px; display:flex; flex-direction:column; justify-content:center; }
 
 /* Typography */
-.faq-subheading-{{ faq_uid }}{ margin:0; }
-.faq-heading-{{ faq_uid }}{ margin:0; line-height:1.15; }
-.faq-body-{{ faq_uid }} p{ margin: 0 0 1em; }
+.hero-title { margin: 0 0 24px 0; line-height: 1.1; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
+.hero-description { margin: 0 0 30px 0; line-height: 1.6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
+
+/* CTA */
+.hero-cta-button {
+  display: inline-block; padding: 16px 32px; text-decoration: none; font-weight: 600;
+  transition: transform .3s ease, box-shadow .3s ease; align-self: flex-start; border: 2px solid transparent; cursor: pointer;
+}
+.hero-cta-button:hover, .hero-cta-button:focus {
+  transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.2); text-decoration:none; outline:none;
+}
+.hero-cta-button:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; border-color: currentColor; }
+
+/* a11y helpers */
+.sr-only{ position: absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+
+/* High contrast */
+@media (prefers-contrast: high){ .hero-card{ border-width:3px; } .hero-cta-button{ border:2px solid currentColor; } }
 
 /* Responsive */
-@media screen and (max-width: {{ settings.lap_container_width }}px){
-  .faq-container-{{ faq_uid }}{ max-width: {{ settings.lap_container_width }}px; }
-}
-@media screen and (max-width: {{ settings.tab_container_width }}px){
-  .faq-container-{{ faq_uid }}{
-    max-width: {{ settings.tab_container_width }}px;
-    padding-left: calc({{ settings.gutter_width }}px * .8);
-    padding-right: calc({{ settings.gutter_width }}px * .8);
-  }
-}
 @media (max-width: 768px){
-  .faq-container-{{ faq_uid }}{
-    grid-template-columns: 1fr;
-    gap: {{ section.settings.mobile_gap }}px;
-    padding-top: calc({{ section.settings.section_padding }}px * .8);
-    padding-bottom: calc({{ section.settings.section_padding }}px * .8);
-    padding-left: calc({{ settings.gutter_width }}px * .6);
-    padding-right: calc({{ settings.gutter_width }}px * .6);
+  .hero-section { padding-left: 15px !important; padding-right: 15px !important; }
+  .hero-card { grid-template-columns: 1fr; grid-template-areas: "image" "content"; margin-left:0 !important; margin-right:0 !important; }
+  .hero-content { padding: 40px 30px; }
+  .hero-title { font-size: calc({{ section.settings.title_size | default: 48 }}px * 0.7) !important; margin-bottom: 20px; }
+  .hero-description { font-size: calc({{ section.settings.description_size | default: 18 }}px * 0.9) !important; margin-bottom: 25px; }
+  .brand-badge { top: -20px; right: 15px; }
+  .badge-image { width: calc({{ section.settings.badge_size | default: 120 }}px * 0.8) !important; height: calc({{ section.settings.badge_size | default: 120 }}px * 0.8) !important; }
+  .hero-image, .hero-image-placeholder {
+    margin-left: 0 !important; margin-right: 0 !important; width: 100% !important;
+    border-radius: {{ r }}px {{ r }}px 0 0 !important;
   }
-  .faq-content-{{ faq_uid }}{ text-align: {{ section.settings.mobile_text_alignment }}; }
+}
+@media (max-width: 480px){
+  .hero-content { padding: 30px 20px; }
+  .hero-title { font-size: calc({{ section.settings.title_size | default: 48 }}px * 0.5) !important; }
+  .hero-description { font-size: calc({{ section.settings.description_size | default: 18 }}px * 0.8) !important; }
+  .hero-cta-button { padding: 14px 28px; font-size: calc({{ section.settings.button_text_size | default: 18 }}px * 0.9) !important; }
 }
 
-/* SR-only utility */
-.sr-only{
-  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
-  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
-}
+/* Print */
+@media print{ .hero-section{ background:#fff !important; box-shadow:none !important; } .badge-spin{ animation:none !important; } }
 </style>
-
-<script>
-  (function() {
-    const tagName = 'faq-section-{{ section.id | replace: "_", "" | downcase }}';
-    const ANIM_ENABLED = {{ section.settings.enable_animation | json }};
-    const RESPECTS_REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (!customElements.get(tagName)) {
-      class FaqSectionElement extends HTMLElement {
-        connectedCallback(){ this._bind(); }
-
-        _bind(){
-          const rootId = '{{ section.id | replace: "_", "" | downcase }}';
-          const items = this.querySelectorAll('.faq-item-' + rootId);
-          const shouldAnimate = ANIM_ENABLED && !RESPECTS_REDUCED;
-
-          items.forEach(item => {
-            const btn   = item.querySelector('.faq-toggle-btn-' + rootId);
-            const panel = item.querySelector('.faq-answer-' + rootId);
-            if (!btn || !panel) return;
-
-            // closed baseline
-            panel.hidden = panel.getAttribute('aria-hidden') !== 'false';
-            if (panel.hidden) panel.style.height = '0px';
-
-            btn.addEventListener('click', () => {
-              const isOpen = item.classList.contains('active');
-              if (isOpen) {
-                this._close(item, btn, panel, shouldAnimate);
-              } else {
-                this._open(item, btn, panel, shouldAnimate);
-              }
-            });
-          });
-        }
-
-        _open(item, btn, panel, animate){
-          item.classList.add('active');
-          btn.setAttribute('aria-expanded','true');
-          panel.removeAttribute('hidden');
-          panel.setAttribute('aria-hidden','false');
-
-          if (!animate) {
-            panel.style.height = 'auto';
-            return;
-          }
-          panel.style.height = '0px';
-          panel.offsetHeight; // reflow
-          panel.style.height = panel.scrollHeight + 'px';
-
-          const onEnd = (e) => {
-            if (e.propertyName !== 'height') return;
-            panel.style.height = 'auto';
-            panel.removeEventListener('transitionend', onEnd);
-          };
-          panel.addEventListener('transitionend', onEnd);
-        }
-
-        _close(item, btn, panel, animate){
-          item.classList.remove('active');
-          btn.setAttribute('aria-expanded','false');
-          panel.setAttribute('aria-hidden','true');
-
-          if (!animate) {
-            panel.style.height = '0px';
-            panel.setAttribute('hidden','');
-            return;
-          }
-          panel.style.height = panel.scrollHeight + 'px';
-          panel.offsetHeight; // reflow
-          panel.style.height = '0px';
-
-          const onEnd = (e) => {
-            if (e.propertyName !== 'height') return;
-            panel.setAttribute('hidden','');
-            panel.removeEventListener('transitionend', onEnd);
-          };
-          panel.addEventListener('transitionend', onEnd);
-        }
-      }
-      customElements.define(tagName, FaqSectionElement);
-    }
-  })();
-</script>
 
 {% schema %}
 {
-  "name": "FAQ section (A11y + SEO)",
+  "name": "Hero Section",
   "settings": [
-    { "type": "header", "content": "Content" },
-    { "type": "text", "id": "subheading", "label": "Subheading", "default": "FAQ" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Frequently Asked Questions" },
-    { "type": "richtext", "id": "body", "label": "Body text", "default": "<p>Find answers to the most common questions about our products and services.</p>" },
-
-    { "type": "header", "content": "Questions" },
-    { "type": "text", "id": "question_1", "label": "Question 1", "default": "What is your return policy?" },
-    { "type": "richtext", "id": "answer_1", "label": "Answer 1", "default": "<p>We offer a 30-day return policy for all unused items in their original packaging.</p>" },
-    { "type": "text", "id": "question_2", "label": "Question 2", "default": "How long does shipping take?" },
-    { "type": "richtext", "id": "answer_2", "label": "Answer 2", "default": "<p>Standard shipping takes 3-5 business days. Express shipping is available for 1-2 business days.</p>" },
-    { "type": "text", "id": "question_3", "label": "Question 3", "default": "Do you offer international shipping?" },
-    { "type": "richtext", "id": "answer_3", "label": "Answer 3", "default": "<p>Yes, we ship to most countries worldwide. Shipping costs and delivery times vary by location.</p>" },
-    { "type": "text", "id": "question_4", "label": "Question 4" },
-    { "type": "richtext", "id": "answer_4", "label": "Answer 4" },
-    { "type": "text", "id": "question_5", "label": "Question 5" },
-    { "type": "richtext", "id": "answer_5", "label": "Answer 5" },
-    { "type": "text", "id": "question_6", "label": "Question 6" },
-    { "type": "richtext", "id": "answer_6", "label": "Answer 6" },
-
-    { "type": "header", "content": "Section background" },
-    { "type": "image_picker", "id": "section_background_image", "label": "Background image" },
-    { "type": "color", "id": "section_background_color", "label": "Background color", "default": "#f8f8f8" },
-    { "type": "color", "id": "overlay_color", "label": "Overlay color", "default": "#000000" },
-    { "type": "range", "id": "overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 80, "step": 5, "unit": "%", "default": 0 },
-
-    { "type": "header", "content": "Container background" },
-    { "type": "image_picker", "id": "container_background_image", "label": "Container background image" },
-    { "type": "color", "id": "background_color", "label": "Container background color", "default": "#ffffff" },
+    { "type": "header", "content": "Accessibility" },
+    { "type": "text", "id": "section_aria_label", "label": "Section ARIA Label", "default": "Hero section with promotional content" },
 
     { "type": "header", "content": "Layout" },
-    { "type": "range", "id": "section_padding", "label": "Section padding", "min": 20, "max": 80, "step": 5, "unit": "px", "default": 40 },
-    { "type": "range", "id": "section_gap", "label": "Gap between content and questions", "min": 20, "max": 80, "step": 5, "unit": "px", "default": 40 },
-    { "type": "range", "id": "mobile_gap", "label": "Mobile gap", "min": 15, "max": 50, "step": 5, "unit": "px", "default": 30 },
-    {
-      "type": "select",
-      "id": "mobile_text_alignment",
-      "label": "Mobile text alignment",
+    { "type": "color", "id": "background_color", "label": "Section Background Color", "default": "#f5f5f5" },
+    { "type": "range", "id": "section_padding_top", "label": "Section Padding Top", "min": 0, "max": 100, "step": 5, "default": 60, "unit": "px" },
+    { "type": "range", "id": "section_padding_bottom", "label": "Section Padding Bottom", "min": 0, "max": 100, "step": 5, "default": 60, "unit": "px" },
+
+    { "type": "header", "content": "Card" },
+    { "type": "color", "id": "card_background", "label": "Card Background Color", "default": "#ffffff" },
+    { "type": "color", "id": "content_background", "label": "Content Area Background", "default": "#ffffff" },
+    { "type": "color", "id": "border_color", "label": "Card Border Color", "default": "#ff69b4" },
+    { "type": "range", "id": "border_width", "label": "Border Width", "min": 0, "max": 10, "step": 1, "default": 3, "unit": "px" },
+    { "type": "range", "id": "card_border_radius", "label": "Card Border Radius", "min": 0, "max": 50, "step": 5, "default": 20, "unit": "px" },
+    { "type": "checkbox", "id": "enable_card_shadow", "label": "Enable card drop shadow", "default": true },
+
+    { "type": "header", "content": "Hero Image" },
+    { "type": "image_picker", "id": "hero_image", "label": "Hero Image" },
+    { "type": "select", "id": "image_position", "label": "Image position", "default": "left",
       "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "center", "label": "Center" },
-        { "value": "right", "label": "Right" }
+        { "value": "left", "label": "Left (image | content)" },
+        { "value": "right", "label": "Right (content | image)" }
+      ]
+    },
+    { "type": "range", "id": "image_overflow", "label": "Image Overflow Amount", "min": 0, "max": 80, "step": 10, "default": 40, "unit": "px" },
+
+    { "type": "header", "content": "Brand Badge" },
+    { "type": "checkbox", "id": "show_badge", "label": "Show Brand Badge", "default": true },
+    { "type": "image_picker", "id": "badge_image", "label": "Badge Image" },
+    { "type": "text", "id": "badge_alt", "label": "Badge Alt Text", "default": "Brand Badge" },
+    { "type": "range", "id": "badge_size", "label": "Badge Size", "min": 60, "max": 200, "step": 10, "default": 120, "unit": "px" },
+    { "type": "checkbox", "id": "badge_spin", "label": "Enable Badge Spinning", "default": false },
+    { "type": "range", "id": "badge_spin_speed", "label": "Spin Speed (seconds per rotation)", "min": 2, "max": 20, "step": 1, "default": 10, "unit": "s" },
+
+    { "type": "header", "content": "Title" },
+    { "type": "text", "id": "hero_title", "label": "Hero Title (H1)", "default": "Enhance your play in bed" },
+    { "type": "color", "id": "title_color", "label": "Title Color", "default": "#8b1538" },
+    { "type": "range", "id": "title_size", "label": "Title Font Size", "min": 24, "max": 72, "step": 2, "default": 48, "unit": "px" },
+    { "type": "select", "id": "title_weight", "label": "Title Font Weight",
+      "options": [
+        { "value": "300", "label": "Light" },
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi Bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
       ],
-      "default": "left"
-    },
-    { "type": "range", "id": "question_gap", "label": "Gap between questions", "min": 5, "max": 30, "step": 1, "unit": "px", "default": 12 },
-    { "type": "range", "id": "question_padding", "label": "Question padding", "min": 10, "max": 30, "step": 2, "unit": "px", "default": 20 },
-    { "type": "range", "id": "answer_padding", "label": "Answer padding", "min": 10, "max": 30, "step": 2, "unit": "px", "default": 20 },
-    { "type": "range", "id": "border_radius", "label": "Section border radius", "min": 0, "max": 30, "step": 2, "unit": "px", "default": 8 },
-
-    {
-      "type": "text",
-      "id": "question_border_radius_custom",
-      "label": "Question border radius (tl,tr,br,bl)",
-      "default": "6,6,6,6",
-      "info": "Enter values separated by commas: top-left, top-right, bottom-right, bottom-left (e.g., 16,8,16,8)"
+      "default": "700"
     },
 
-    { "type": "header", "content": "Colors" },
-    { "type": "color", "id": "subheading_color", "label": "Subheading color", "default": "#777777" },
-    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#111111" },
-    { "type": "color", "id": "body_color", "label": "Body text color", "default": "#333333" },
-    { "type": "color", "id": "question_color", "label": "Question text color", "default": "#000000" },
-    { "type": "color", "id": "answer_color", "label": "Answer text color", "default": "#333333" },
-    { "type": "color", "id": "question_background", "label": "Question background", "default": "#ffffff" },
-    { "type": "color", "id": "answer_background", "label": "Answer background", "default": "#fafafa" },
-    { "type": "color", "id": "question_border_color", "label": "Question border color", "default": "#dddddd" },
-    { "type": "color", "id": "icon_color", "label": "Icon color", "default": "#333333" },
+    { "type": "header", "content": "Description" },
+    { "type": "textarea", "id": "hero_description", "label": "Hero Description", "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation." },
+    { "type": "color", "id": "description_color", "label": "Description Color", "default": "#333333" },
+    { "type": "range", "id": "description_size", "label": "Description Font Size", "min": 14, "max": 24, "step": 1, "default": 18, "unit": "px" },
 
-    { "type": "header", "content": "Typography" },
-    { "type": "range", "id": "subheading_size", "label": "Subheading font size", "min": 12, "max": 24, "step": 1, "unit": "px", "default": 16 },
-    { "type": "range", "id": "heading_size", "label": "Heading font size", "min": 20, "max": 48, "step": 2, "unit": "px", "default": 32 },
-    { "type": "range", "id": "body_size", "label": "Body font size", "min": 14, "max": 20, "step": 1, "unit": "px", "default": 16 },
-    { "type": "range", "id": "question_size", "label": "Question font size", "min": 14, "max": 24, "step": 1, "unit": "px", "default": 18 },
-    { "type": "range", "id": "answer_size", "label": "Answer font size", "min": 14, "max": 20, "step": 1, "unit": "px", "default": 16 },
-
-    { "type": "header", "content": "Animation" },
-    {
-      "type": "checkbox",
-      "id": "enable_animation",
-      "label": "Enable animation",
-      "default": true,
-      "info": "Smoothly expands/collapses answers. Automatically disabled for users who prefer reduced motion."
-    },
-
-    { "type": "header", "content": "States" },
-    {
-      "type": "checkbox",
-      "id": "enable_hover_color",
-      "label": "Enable hover color on questions",
-      "default": true
-    },
-    {
-      "type": "color",
-      "id": "active_background_color",
-      "label": "Active/Hover background color (container, unused in this variant)",
-      "default": "#111111"
-    },
-    {
-      "type": "color",
-      "id": "active_text_color",
-      "label": "Active & Hover text/icon color",
-      "default": "#ffffff"
-    }
+    { "type": "header", "content": "Call-to-Action Button" },
+    { "type": "text", "id": "button_text", "label": "Button Text" },
+    { "type": "url", "id": "button_url", "label": "Button URL" },
+    { "type": "color", "id": "button_background", "label": "Button Background Color", "default": "#ff69b4" },
+    { "type": "color", "id": "button_text_color", "label": "Button Text Color", "default": "#ffffff" },
+    { "type": "range", "id": "button_text_size", "label": "Button Text Size", "min": 14, "max": 24, "step": 1, "default": 18, "unit": "px" },
+    { "type": "range", "id": "button_border_radius", "label": "Button Border Radius", "min": 0, "max": 50, "step": 5, "default": 30, "unit": "px" }
   ],
   "presets": [
-    { "name": "FAQ Section", "category": "Custom" }
-  ]
+    { "name": "Hero Section", "category": "Custom" }
+  ],
+  "templates": ["index", "page", "collection", "product"]
 }
 {% endschema %}
