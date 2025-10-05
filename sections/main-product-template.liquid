@@ -461,6 +461,35 @@
   }
 </style>
 
+<style>
+  /* Full-width container on mobile for this section only */
+  @media (max-width: 767px){
+    /* kill container max-width & side padding */
+    #shopify-section-{{ section.id }} [class*="container"]{
+      width: 100% !important;
+      max-width: none !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+
+    /* neutralize .row negative margins to prevent horizontal scroll */
+    #shopify-section-{{ section.id }} .row{
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+
+    /* let the inner card bleed edge-to-edge and look native */
+    #shopify-section-{{ section.id }} .outer-pad-{{ section.id }}{
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+    #shopify-section-{{ section.id }} .inner-bg-{{ section.id }}{
+      border-radius: 0; /* optional: remove rounding for true full-bleed */
+    }
+  }
+</style>
+
+
 <script>
   $(document).ready(function(){
     $(".tablinks").on("click", function(){
