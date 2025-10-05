@@ -286,10 +286,10 @@
       "name": "Hero Section",
       "settings": {
         "section_aria_label": "Hero section with promotional content",
-        "background_color": "#ffffff",
+        "background_color": "#fdf8e1",
         "section_padding_top": 100,
         "section_padding_bottom": 100,
-        "card_background": "rgba(0,0,0,0)",
+        "card_background": "#ffffff",
         "content_background": "rgba(0,0,0,0)",
         "border_color": "#ff69b4",
         "border_width": 4,
