@@ -17,9 +17,10 @@
         <div class="{{settings.product_page_sidebar}} {% if settings.product_page_sidebar == 'full-width' %} no-sidebar {% else %}has-sidebar{% endif  %}">
           <div class="product-template-content">
             <div class="text-center sidebar_btn">
-              <a class="dt-sc-btn toggleIcon {% if settings.product_sidebar_mobile %} hidden {% endif %}">
+              <!-- remove custom dt-sc button class -->
+              <button type="button" class="toggleIcon {% if settings.product_sidebar_mobile %} hidden {% endif %}" aria-label="Toggle sidebar">
                 <i class="fa fa-caret-right" aria-hidden="true"></i>
-              </a>
+              </button>
             </div>
 
             {%- assign product_thumb_size = '160x160' -%}
@@ -241,6 +242,7 @@
                       <div class="product-attributes dt-sc-qty">
                         <p class="product-label">{{ 'products.product.quantity' | t }}</p>
                         <div class="quantity product-form__item product-form__item--quantity product-item-caption-qty">
+                          <!-- keep structure; no theme-override classes added -->
                           <button class="quantity-btn quantity-btn-minus btn-number btn-number-{{ section.id }}" type="button" data-type="minus" data-field="quant[1]">&#45;</button>
                           <input type="text" id="Quantity-{{ section.id }}" name="quantity" value="1" class="quantity-btn-number form-control input-number input-number-{{ section.id }} product-form__input" pattern="[0-9]*">
                           <button class="quantity-btn quantity-btn-plus btn-number btn-number-{{ section.id }}" type="button" data-type="plus" data-field="quant[1]">&#43;</button>
@@ -250,8 +252,12 @@
 
                     <div class="product-form__item product-form__item--submit product_payments_btns">
                       {% unless section.settings.hide_addtocart %}
-                        <button type="submit" name="add" id="dT_AddToCart-{{section.id}}" class="dT_AddToCart dt-sc-btn {% if product.options.size == 1 and product.variants[0].title == 'Default Title' and product.variants.size == 1 %} product-form__cart-submit--small{% endif %}">
-                          <span class="dT_AddToCartText-{{ section.id }}">{{ 'products.product.add_to_cart' | t }}</span>
+                        <!-- remove dt-sc/dT classes; use theme defaults -->
+                        <button type="submit"
+                                name="add"
+                                id="AddToCart-{{ section.id }}"
+                                class="product-form__submit button {% if product.options.size == 1 and product.variants[0].title == 'Default Title' and product.variants.size == 1 %} product-form__cart-submit--small{% endif %}">
+                          {{ 'products.product.add_to_cart' | t }}
                         </button>
                       {% endunless %}
 
@@ -260,7 +266,10 @@
                           {%- if product.handle != blank -%}
                             <div>
                               <dtx-wishlist>
-                                <a href="javascript:void(0);" class="dt-sc-btn add-wishlist" data-product_handle="{{ product.handle }}"></a>
+                                <!-- remove custom dt-sc button class; keep component hook -->
+                                <a href="javascript:void(0);" class="add-wishlist" data-product_handle="{{ product.handle }}">
+                                  <span class="visually-hidden">Add to wishlist</span>
+                                </a>
                               </dtx-wishlist>
                             </div>
                           {%- endif -%}
@@ -459,6 +468,7 @@
     });
   });
 
+  // Update subtotal when quantity changes (kept functionality, class updated to be generic if needed)
   $('.quantity-btn-number').on('change', function() {
     var qty = parseFloat($('.quantity-btn-number').val()) || 1;
     var priceText = $('.product-price-current span').text();
