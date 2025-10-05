@@ -331,6 +331,24 @@ Structured similar to other sections: wrapper → container → row → content.
   }
 }
 
+@media (max-width: 768px){
+  .best-sellers-{{ bs_uid }} .collection-badge{
+    /* stop pinning to the corner on mobile */
+    position: static !important;
+    top: auto; right: auto; left: auto;
+    /* center above the heading */
+    display: flex; justify-content: center;
+    margin: 0 auto 12px;      /* space under the badge */
+    z-index: auto;
+  }
+
+  /* optional: tighten header spacing if needed */
+  .best-sellers-{{ bs_uid }} .section-header{
+    margin-top: 0;
+  }
+}
+
+
 
 /* Motion safety */
 @media (prefers-reduced-motion: reduce){
