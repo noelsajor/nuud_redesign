@@ -10,7 +10,8 @@
 
   <div class="hero-container">
     {% if section.settings.show_badge and section.settings.badge_image %}
-      <div class="brand-badge">
+      <div class="brand-badge"
+           style="padding-left: {{ section.settings.badge_padding_left | default: 0 }}px;">
         <img src="{{ section.settings.badge_image | image_url: width: 200 }}"
              alt="{{ section.settings.badge_alt | default: 'Brand Badge' }}"
              class="badge-image {% if section.settings.badge_spin %}badge-spin{% endif %}"
@@ -230,6 +231,7 @@
     { "type": "range", "id": "badge_size", "label": "Badge Size", "min": 60, "max": 200, "step": 10, "default": 120, "unit": "px" },
     { "type": "checkbox", "id": "badge_spin", "label": "Enable Badge Spinning", "default": false },
     { "type": "range", "id": "badge_spin_speed", "label": "Spin Speed (seconds per rotation)", "min": 2, "max": 20, "step": 1, "default": 10, "unit": "s" },
+    { "type": "range", "id": "badge_padding_left", "label": "Badge left padding", "min": 0, "max": 80, "step": 2, "default": 0, "unit": "px" },
 
     { "type": "header", "content": "Title" },
     { "type": "text", "id": "hero_title", "label": "Hero Title (H1)", "default": "Enhance your play in bed" },
