@@ -718,7 +718,7 @@
         "background_size": "auto",
         "background_color": "",
         "enable_overlay": false,
-        "overlay_transparency": "1",
+        "overlay_transparency": "0,5",
         "section_heading": "Sign Up & Subscribe To Our Newsletter",
         "section_sub_heading": "",
         "section_description": "Use this text to share the information which you like!.",
