@@ -213,7 +213,7 @@
       "settings": {
         "full": false,
         "spacing_both_ends": false,
-        "padding": "240,100",
+        "padding": "160,100",
         "margin": "0,0",
         "background_style": "none",
         "background_size": "auto",
