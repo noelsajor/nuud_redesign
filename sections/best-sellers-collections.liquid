@@ -302,6 +302,15 @@ Best Sellers Collection – SEO/A11y optimized
 
 /* SR-only utility */
 .best-sellers-{{ bs_uid }} .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+
+/* --- Fix: badge should never overlay the navbar --- */
+.best-sellers-{{ bs_uid }} { position: relative; z-index: 0; }               /* section sits in a low stack */
+.best-sellers-{{ bs_uid }} .section-header { position: relative; z-index: 1; }/* header above section bg */
+.best-sellers-{{ bs_uid }} .collection-badge {
+  position: relative !important;  /* ensure not absolute anywhere */
+  z-index: 1 !important;          /* keep it low so header can sit above */
+}
+
 </style>
 
 {% schema %}
