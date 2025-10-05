@@ -17,7 +17,7 @@
         <div class="{{settings.product_page_sidebar}} {% if settings.product_page_sidebar == 'full-width' %} no-sidebar {% else %}has-sidebar{% endif  %}">
           <div class="product-template-content">
             <div class="text-center sidebar_btn">
-              <!-- remove custom dt-sc button class -->
+              <!-- default theme button; removed custom dt-sc class -->
               <button type="button" class="toggleIcon {% if settings.product_sidebar_mobile %} hidden {% endif %}" aria-label="Toggle sidebar">
                 <i class="fa fa-caret-right" aria-hidden="true"></i>
               </button>
@@ -252,7 +252,7 @@
 
                     <div class="product-form__item product-form__item--submit product_payments_btns">
                       {% unless section.settings.hide_addtocart %}
-                        <!-- remove dt-sc/dT classes; use theme defaults -->
+                        <!-- default Shopify button classes -->
                         <button type="submit"
                                 name="add"
                                 id="AddToCart-{{ section.id }}"
@@ -266,7 +266,7 @@
                           {%- if product.handle != blank -%}
                             <div>
                               <dtx-wishlist>
-                                <!-- remove custom dt-sc button class; keep component hook -->
+                                <!-- no custom dt-sc styling -->
                                 <a href="javascript:void(0);" class="add-wishlist" data-product_handle="{{ product.handle }}">
                                   <span class="visually-hidden">Add to wishlist</span>
                                 </a>
@@ -461,77 +461,69 @@
   }
 </style>
 
+{%- comment -%} Mobile full-width container + Accordion line style (overrides) {%- endcomment -%}
 <style>
-  /* Full-width container on mobile for this section only */
-  @media (max-width: 767px){
-    /* kill container max-width & side padding */
-    #shopify-section-{{ section.id }} [class*="container"]{
-      width: 100% !important;
-      max-width: none !important;
-      padding-left: 0 !important;
-      padding-right: 0 !important;
-    }
-
-    /* neutralize .row negative margins to prevent horizontal scroll */
-    #shopify-section-{{ section.id }} .row{
-      margin-left: 0 !important;
-      margin-right: 0 !important;
-    }
-
-    /* let the inner card bleed edge-to-edge and look native */
-    #shopify-section-{{ section.id }} .outer-pad-{{ section.id }}{
-      padding-left: 0 !important;
-      padding-right: 0 !important;
-    }
-    #shopify-section-{{ section.id }} .inner-bg-{{ section.id }}{
-      border-radius: 0; /* optional: remove rounding for true full-bleed */
-    }
-      /* Mobile-only inner padding (keeps full-width container) */
-  @media (max-width: 767px){
-    #shopify-section{{ '-' }}{{ section.id }} .inner-bg-{{ section.id }}{
-      /* tweak these values to taste */
-      padding: 24px;
-
-      /* optional: keep a little gutter for phones with notches */
-      padding-left: max(16px, env(safe-area-inset-left));
-      padding-right: max(16px, env(safe-area-inset-right));
-    }
+/* ---- Full-width container on mobile (this section only) ---- */
+@media (max-width: 767px){
+  /* remove container max width + side padding */
+  #shopify-section-{{ section.id }} [class*="container"]{
+    width: 100% !important;
+    max-width: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
-    /* Accordion (toggle) – header line color */
-  #shopify-section-{{ section.id }} .product-tab{
-    --accordion-line: var(--DTColor_Border); /* change to any color if you like */
+  /* neutralize .row negative margins */
+  #shopify-section-{{ section.id }} .row{
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
+  /* let the inner card bleed edge-to-edge */
+  #shopify-section-{{ section.id }} .outer-pad-{{ section.id }}{
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  /* keep a comfortable inner gutter on phones */
+  #shopify-section-{{ section.id }} .inner-bg-{{ section.id }}{
+    border-radius: 0;
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+}
 
-  /* Headers: remove bg/shadow/borders, add bottom border line */
-  #shopify-section-{{ section.id }} .product-tab details > summary,
-  #shopify-section-{{ section.id }} .dt-sc-tabs .tablinks{
-    background: transparent !important;
-    box-shadow: none !important;
-    border: 0 !important;
-    padding-left: 0; padding-right: 0; /* keeps the line flush */
-    border-bottom: 2px solid var(--accordion-line);
-  }
+/* ---- Accordion/Tabs: transparent header + colored bottom border ---- */
+#shopify-section-{{ section.id }} .product-tab{
+  /* customize this to your brand color; falls back to theme border */
+  --accordion-line: var(--DTColor_Border, #e5e5e5);
+}
 
-  /* Open state stays transparent */
-  #shopify-section-{{ section.id }} .product-tab details[open] > summary{
-    background: transparent !important;
-  }
+/* Details/Summary headers and tab headers */
+#shopify-section-{{ section.id }} .product-tab details > summary,
+#shopify-section-{{ section.id }} .dt-sc-tabs .tablinks{
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  padding-left: 0;
+  padding-right: 0;
+  border-bottom: 2px solid var(--accordion-line);
+}
 
-  /* Bodies: ensure no fill behind content */
-  #shopify-section-{{ section.id }} .product-tab details > div,
-  #shopify-section-{{ section.id }} .dt-sc-tabs .tabcontent{
-    background: transparent !important;
-    border: 0 !important;
-    box-shadow: none !important;
-  }
+/* Keep open state transparent */
+#shopify-section-{{ section.id }} .product-tab details[open] > summary{
+  background: transparent !important;
+}
 
-  /* Optional: remove bottom line from last header if you prefer a clean end */
-  #shopify-section-{{ section.id }} .product-tab details:last-of-type > summary{
-    /* border-bottom: 0; */
-  }
-  }
+/* Content/body areas transparent, no borders */
+#shopify-section-{{ section.id }} .product-tab details > div,
+#shopify-section-{{ section.id }} .dt-sc-tabs .tabcontent{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Optional: remove the line on the last header
+#shopify-section-{{ section.id }} .product-tab details:last-of-type > summary{ border-bottom: 0; }
+*/
 </style>
-
 
 <script>
   $(document).ready(function(){
@@ -540,7 +532,7 @@
     });
   });
 
-  // Update subtotal when quantity changes (kept functionality, class updated to be generic if needed)
+  // Update subtotal when quantity changes
   $('.quantity-btn-number').on('change', function() {
     var qty = parseFloat($('.quantity-btn-number').val()) || 1;
     var priceText = $('.product-price-current span').text();
