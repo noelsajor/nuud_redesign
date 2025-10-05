@@ -524,46 +524,6 @@
 #shopify-section-{{ section.id }} .product-tab details:last-of-type > summary{ border-bottom: 0; }
 */
 
-/* Accordion/Tabs: transparent header + single bottom border (this section only) */
-#shopify-section-{{ section.id }} .product-tab{
-  /* pick up theme border color or fall back */
-  --accordion-line: var(--DTColor_Border, #e5e5e5);
-}
-
-/* Headers (both details/summary and tab headers) */
-#shopify-section-{{ section.id }} .product-tab details > summary,
-#shopify-section-{{ section.id }} .dt-sc-tabs .tablinks{
-  background: transparent !important;
-  border: 0 !important;
-  border-bottom: 1px solid var(--accordion-line) !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  padding-left: 0;
-  padding-right: 0;
-}
-
-/* Keep all states transparent (hover, focus, active, open) */
-#shopify-section-{{ section.id }} .product-tab details[open] > summary,
-#shopify-section-{{ section.id }} .dt-sc-tabs .tablinks:hover,
-#shopify-section-{{ section.id }} .dt-sc-tabs .tablinks:focus,
-#shopify-section-{{ section.id }} .dt-sc-tabs .tablinks.active{
-  background: transparent !important;
-  box-shadow: none !important;
-  border-bottom-color: var(--accordion-line) !important;
-}
-
-/* Body/content areas transparent, no borders */
-#shopify-section-{{ section.id }} .product-tab details > div,
-#shopify-section-{{ section.id }} .dt-sc-tabs .tabcontent{
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-}
-
-/* Optional: remove the line from the very last header
-#shopify-section-{{ section.id }} .product-tab details:last-of-type > summary{ border-bottom: 0 !important; }
-*/
-
 </style>
 
 <script>
