@@ -716,7 +716,7 @@
         "show_background_image": false,
         "background_style": "none",
         "background_size": "auto",
-        "background_color": "",
+        "background_color": "#fdf8e1",
         "enable_overlay": false,
         "overlay_transparency": "0,5",
         "section_heading": "Sign Up & Subscribe To Our Newsletter",
