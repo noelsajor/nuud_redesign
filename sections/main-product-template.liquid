@@ -486,6 +486,17 @@
     #shopify-section-{{ section.id }} .inner-bg-{{ section.id }}{
       border-radius: 0; /* optional: remove rounding for true full-bleed */
     }
+      /* Mobile-only inner padding (keeps full-width container) */
+  @media (max-width: 767px){
+    #shopify-section{{ '-' }}{{ section.id }} .inner-bg-{{ section.id }}{
+      /* tweak these values to taste */
+      padding: 20px 16px; /* top/bottom 20px, left/right 16px */
+
+      /* optional: keep a little gutter for phones with notches */
+      padding-left: max(16px, env(safe-area-inset-left));
+      padding-right: max(16px, env(safe-area-inset-right));
+    }
+  }
   }
 </style>
 
