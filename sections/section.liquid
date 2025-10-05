@@ -200,6 +200,32 @@
   .badge-image { width: calc({{ section.settings.badge_size | default: 120 }}px * 0.8) !important; height: calc({{ section.settings.badge_size | default: 120 }}px * 0.8) !important; }
 }
 
+/* Hero: force vertical stack on mobile */
+@media (max-width: 768px){
+  .hero-card{
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: 1fr !important;
+    grid-template-areas: "image" "content" !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    min-height: auto !important;
+  }
+  .hero-image-container{ order: 0; overflow: hidden; }
+  .hero-content{ order: 1; }
+
+  /* remove desktop overflow effect */
+  .hero-image,
+  .hero-image-placeholder{
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    border-radius: 20px 20px 0 0 !important; /* or keep {{ section.settings.card_border_radius }} if inside Liquid */
+  }
+}
+
+
+
 @media (max-width: 480px){
   .hero-container { margin: 36px auto; }
   .hero-content { padding: 26px 18px; }
