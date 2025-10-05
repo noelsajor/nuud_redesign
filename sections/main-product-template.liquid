@@ -498,6 +498,38 @@
     }
   }
   }
+    /* Accordion (toggle) – header line color */
+  #shopify-section-{{ section.id }} .product-tab{
+    --accordion-line: var(--DTColor_Border); /* change to any color if you like */
+  }
+
+  /* Headers: remove bg/shadow/borders, add bottom border line */
+  #shopify-section-{{ section.id }} .product-tab details > summary,
+  #shopify-section-{{ section.id }} .dt-sc-tabs .tablinks{
+    background: transparent !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    padding-left: 0; padding-right: 0; /* keeps the line flush */
+    border-bottom: 2px solid var(--accordion-line);
+  }
+
+  /* Open state stays transparent */
+  #shopify-section-{{ section.id }} .product-tab details[open] > summary{
+    background: transparent !important;
+  }
+
+  /* Bodies: ensure no fill behind content */
+  #shopify-section-{{ section.id }} .product-tab details > div,
+  #shopify-section-{{ section.id }} .dt-sc-tabs .tabcontent{
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* Optional: remove bottom line from last header if you prefer a clean end */
+  #shopify-section-{{ section.id }} .product-tab details:last-of-type > summary{
+    /* border-bottom: 0; */
+  }
 </style>
 
 
