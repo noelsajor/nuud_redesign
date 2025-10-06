@@ -145,7 +145,7 @@
       "name": "Features with Waves",
       "settings": {
         "use_gradient": false,
-        "background_color": "#ff679a",
+        "background_color": "#fdf8e1",
         "background_gradient": "linear-gradient(135deg, rgba(255, 196, 225, 1), rgba(180, 213, 255, 1) 100%)",
         "section_padding_top": 30,
         "section_padding_bottom": 0,
@@ -156,7 +156,7 @@
         "wave_shape": "gentle",
         "show_top_wave": true,
         "show_bottom_wave": false,
-        "wave_color": "#ff679a",
+        "wave_color": "#fdf8e1",
         "wave_overlap_top": 40,
         "wave_overlap_bottom": 40,
         "wave_frequency": 4,
