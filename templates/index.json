@@ -173,7 +173,7 @@
         "products_grid_gap": 15,
         "enable_image_float": true,
         "image_float_offset": 25,
-        "show_see_all_button": true,
+        "show_see_all_button": false,
         "see_all_text": "See All Products",
         "button_alignment": "center",
         "button_top_spacing": 80,
