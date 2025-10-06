@@ -254,7 +254,7 @@
         "background_gradient": "linear-gradient(0deg, rgba(255, 224, 230, 1), rgba(255, 215, 220, 1) 100%)",
         "section_padding_top": 10,
         "section_padding_bottom": 10,
-        "container_width": 1600,
+        "container_width": 800,
         "section_title": "Check our feed",
         "title_color": "#7b1d2a",
         "title_size": 40,
