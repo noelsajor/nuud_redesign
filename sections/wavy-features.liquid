@@ -1,14 +1,14 @@
-<!-- Features Section with Seamless Animated Waves + Perfect Marquee -->
-<section class="features-wave-section {% if section.settings.animate_waves %}waves-animated{% endif %}" 
+<!-- Features Section with Seamless Animated Waves + Full-Bleed Option -->
+<section class="features-wave-section {% if section.settings.animate_waves %}waves-animated{% endif %} {% if section.settings.full_bleed %}full-bleed{% endif %}"
          role="region"
          aria-labelledby="features-title"
-         style="background: {% if section.settings.use_gradient %}{{ section.settings.background_gradient }}{% else %}{{ section.settings.background_color }}{% endif %}; 
-                padding: {{ section.settings.section_padding_top }}px 20px {{ section.settings.section_padding_bottom }}px 20px;
+         style="background: {% if section.settings.use_gradient %}{{ section.settings.background_gradient }}{% else %}{{ section.settings.background_color }}{% endif %};
+                padding: {{ section.settings.section_padding_top }}px {% if section.settings.full_bleed %}0{% else %}20{% endif %}px {{ section.settings.section_padding_bottom }}px {% if section.settings.full_bleed %}0{% else %}20{% endif %}px;
                 {% if section.settings.animate_waves %}--wave-speed: {{ section.settings.wave_speed }}s; --wave-bob: {{ section.settings.wave_bob }}px;{% endif %}">
 
   {%- comment -%} --------- TOP WAVE (seamless loop) --------- {%- endcomment -%}
   {% if section.settings.show_top_wave %}
-  <div class="wave-top" 
+  <div class="wave-top"
        style="top: -{{ section.settings.wave_overlap_top }}px; height: {{ section.settings.wave_overlap_top }}px;"
        aria-hidden="true">
     <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" role="presentation" focusable="false">
@@ -61,7 +61,7 @@
   </div>
   {% endif %}
 
-  {%- comment -%} --------- CONTENT: PERFECT MARQUEE --------- {%- endcomment -%}
+  {%- comment -%} --------- CONTENT (SEAMLESS TICKER) --------- {%- endcomment -%}
   <div class="features-container" style="max-width: {{ section.settings.container_width }}px;">
     {% if section.settings.section_title != blank %}
       <h2 id="features-title" class="section-title"
@@ -72,12 +72,12 @@
       <h2 id="features-title" class="sr-only">Store Features and Benefits</h2>
     {% endif %}
 
-    {% assign dir_class = section.settings.marquee_direction | default: 'rtl' %}
-    <div class="features-ticker dir-{{ dir_class }}"
-         style="--gap: {{ section.settings.marquee_gap }}px; --ticker-speed: {{ section.settings.marquee_speed }}s;">
-      <div class="ticker__track">
+    <div class="features-ticker {% if section.settings.scroll_direction == 'right-left' %}dir-rtl{% else %}dir-ltr{% endif %}"
+         aria-live="off" aria-label="Features marquee">
+      <div class="ticker-track"
+           style="--ticker-speed: {{ section.settings.ticker_speed }}s; --ticker-gap: {{ section.settings.ticker_gap }}px;">
         <!-- Row A -->
-        <ul class="ticker__row" role="list">
+        <ul class="ticker-row" role="list">
           {% for block in section.blocks %}
             <li class="feature-item" {{ block.shopify_attributes }}>
               <div class="feature-icon-wrapper"
@@ -109,15 +109,15 @@
           {% endfor %}
         </ul>
 
-        <!-- Row B (duplicate of A) -->
-        <ul class="ticker__row" role="list" aria-hidden="true">
+        <!-- Row B (clone) -->
+        <ul class="ticker-row clone" role="list" aria-hidden="true" aria-label="Repeated for seamless scroll">
           {% for block in section.blocks %}
             <li class="feature-item">
-              <div class="feature-icon-wrapper">
+              <div class="feature-icon-wrapper" aria-hidden="true">
                 {% if block.settings.icon_svg != blank %}
-                  <div class="feature-icon" style="color: {{ block.settings.icon_color }};" aria-hidden="true">{{ block.settings.icon_svg }}</div>
+                  <div class="feature-icon" style="color: {{ block.settings.icon_color }};">{{ block.settings.icon_svg }}</div>
                 {% elsif block.settings.icon_image %}
-                  <div class="feature-icon-image" aria-hidden="true">
+                  <div class="feature-icon-image">
                     <img src="{{ block.settings.icon_image | image_url: width: 120 }}"
                          srcset="{{ block.settings.icon_image | image_url: width: 60 }} 60w, {{ block.settings.icon_image | image_url: width: 120 }} 120w"
                          sizes="60px" alt="" width="60" height="60" loading="lazy" decoding="async">
@@ -126,7 +126,7 @@
               </div>
 
               {% if block.settings.feature_text != blank %}
-              <div class="feature-text-wrapper">
+              <div class="feature-text-wrapper" aria-hidden="true">
                 <p class="feature-text" style="color: {{ block.settings.text_color }}; font-size: {{ block.settings.text_size }}px; font-weight: {{ block.settings.text_weight }};">
                   {{ block.settings.feature_text }}
                 </p>
@@ -146,7 +146,7 @@
 
   {%- comment -%} --------- BOTTOM WAVE (seamless loop) --------- {%- endcomment -%}
   {% if section.settings.show_bottom_wave %}
-  <div class="wave-bottom" 
+  <div class="wave-bottom"
        style="bottom: -{{ section.settings.wave_overlap_bottom }}px; height: {{ section.settings.wave_overlap_bottom }}px;"
        aria-hidden="true">
     <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" role="presentation" focusable="false">
@@ -201,8 +201,25 @@
 </section>
 
 <style>
-/* Base Section */
+/* Base */
 .features-wave-section { position: relative; overflow: visible; z-index: 1; }
+
+/* Full-bleed (edge-to-edge) */
+.features-wave-section.full-bleed{
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+  overflow: hidden;
+}
+.features-wave-section.full-bleed .features-container{
+  max-width: none !important;
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+}
+.features-wave-section.full-bleed .features-ticker{ width: 100vw; }
 
 /* Waves */
 .wave-top, .wave-bottom {
@@ -226,91 +243,64 @@
 .features-container { position: relative; z-index: 3; margin: 0 auto; width: 100%; }
 
 /* Section Title */
-.section-title { margin: 0 0 32px 0; font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; line-height: 1.2; }
+.section-title { margin: 0 0 32px 0; line-height: 1.2; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; text-wrap: balance; }
 
-/* ---------- PERFECT MARQUEE ---------- */
-.features-ticker{
-  overflow: hidden;
-  width: 100%;
-  --gap: 40px;
-  --ticker-speed: 20s;
-  contain: layout paint;
-}
-.ticker__track{
-  display: flex;
-  flex-wrap: nowrap;
-  width: max-content;          /* track is only as wide as its children (2 rows) */
+/* ------- Seamless Marquee/Ticker ------- */
+.features-ticker{ overflow:hidden; width:100%; }
+.ticker-track{
+  display:flex; width:max-content;
   will-change: transform;
-  backface-visibility: hidden;
+  animation: ticker var(--ticker-speed, 24s) linear infinite;
   transform: translate3d(0,0,0);
-  animation: marquee var(--ticker-speed) linear infinite;
 }
-.features-ticker.dir-ltr .ticker__track{ animation-direction: reverse; } /* left → right */
-.features-ticker.dir-rtl .ticker__track{ animation-direction: normal; }  /* right → left */
+.features-ticker.dir-ltr .ticker-track{ animation-direction: reverse; } /* left->right */
+.ticker-row{ display:flex; align-items:center; gap: var(--ticker-gap, 40px); padding: 6px 0; margin:0; list-style:none; }
+.ticker-row.clone{ /* visually identical to row A; aria-hidden for SRs */ }
 
-/* Each row = one full set of features; duplicating 2x makes -50% a perfect loop point */
-.ticker__row{
-  flex: none;                  /* do not shrink or grow; keep natural width */
-  display: flex;
-  align-items: center;
-  gap: var(--gap);
-  padding-right: var(--gap);   /* balances the gap at the seam */
-  white-space: nowrap;         /* prevents tiny wrapping that causes jolts */
-}
-
-/* Items */
-.feature-item{
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  margin: 0;                   /* no margins, only gap controls spacing */
-}
+/* Each item is fixed-size in flow so no wrapping -> avoids gaps */
+.feature-item{ display:flex; align-items:center; gap:14px; flex: 0 0 auto; }
 .feature-icon-wrapper{ flex-shrink:0; }
-.feature-icon, .feature-icon-image{ width:60px; height:60px; display:flex; align-items:center; justify-content:center; }
+.feature-icon, .feature-icon-image { width:60px; height:60px; display:flex; align-items:center; justify-content:center; }
 .feature-icon svg{ width:100%; height:100%; display:block; }
-.feature-icon-image img{ max-width:100%; max-height:100%; object-fit:contain; display:block; }
-.feature-text-wrapper{ min-width:0; }
-.feature-text, .feature-subtext{ margin:0; line-height:1.4; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; }
-.feature-subtext{ margin-top:4px; }
+.feature-icon-image img{ max-width:100%; max-height:100%; display:block; object-fit:contain; }
+.feature-text-wrapper{ flex:1; min-width:0; }
+.feature-text, .feature-subtext{ margin:0; line-height:1.4; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; white-space:nowrap; }
+.feature-subtext{ margin-left:6px; opacity:.9; }
 
-/* The magic: move the two-row track by exactly half its own width */
-@keyframes marquee{
-  from { transform: translate3d(0,0,0); }
-  to   { transform: translate3d(-50%,0,0); }
+/* Endless loop by shifting half the total width (two identical rows) */
+@keyframes ticker{
+  from{ transform: translate3d(0,0,0); }
+  to  { transform: translate3d(-50%,0,0); } /* exactly half because we duplicated content */
 }
-
-/* Hover pause (optional via setting) */
-{% if section.settings.marquee_pause %}
-.features-ticker:hover .ticker__track{ animation-play-state: paused; }
-{% endif %}
 
 /* Respect user motion preferences */
-@media (prefers-reduced-motion: reduce){
-  .ticker__track,
+@media (prefers-reduced-motion: reduce) {
   .features-wave-section.waves-animated .wave-top .wave-tiles,
   .features-wave-section.waves-animated .wave-bottom .wave-tiles,
   .features-wave-section.waves-animated .wave-top,
-  .features-wave-section.waves-animated .wave-bottom{
-    animation: none !important;
-    transform: none !important;
-  }
+  .features-wave-section.waves-animated .wave-bottom,
+  .ticker-track { animation: none !important; transform: none !important; }
 }
 
-/* Responsive */
+/* Responsive tweaks */
 @media (max-width: 768px){
-  .section-title{ margin-bottom: 24px; font-size: calc({{ section.settings.title_size | default: 32 }}px * .85) !important; }
-  .feature-icon, .feature-icon-image{ width:48px; height:48px; }
+  .section-title{ margin-bottom:24px; font-size:calc({{ section.settings.title_size | default: 32 }}px * .85) !important; }
+  .feature-icon, .feature-icon-image{ width:50px; height:50px; }
+  .features-ticker{ width: 100%; }
 }
 @media (max-width: 480px){
-  .section-title{ font-size: calc({{ section.settings.title_size | default: 32 }}px * .78) !important; }
-  .features-ticker{ --gap: {{ section.settings.marquee_gap | default: 40 | times: 0.7 }}px; }
+  .section-title{ font-size:calc({{ section.settings.title_size | default: 32 }}px * .75) !important; }
+  .ticker-row{ gap: max(20px, var(--ticker-gap, 40px) * .75); }
 }
+
+/* a11y helpers */
+.sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 
 /* Print */
 @media print{
   .features-wave-section{ background:white !important; }
   .wave-top, .wave-bottom{ display:none; }
-  .ticker__track{ animation:none !important; transform:none !important; }
+  .ticker-track{ animation:none !important; transform:none !important; }
 }
 </style>
 
@@ -319,17 +309,18 @@
   "name": "Features with Waves",
   "settings": [
     { "type": "header", "content": "Section Layout" },
+    { "type": "checkbox", "id": "full_bleed", "label": "Make section full width", "default": true },
     { "type": "checkbox", "id": "use_gradient", "label": "Use Gradient Background", "default": true },
     { "type": "color", "id": "background_color", "label": "Background Color", "default": "#ffc4e1" },
     { "type": "color_background", "id": "background_gradient", "label": "Background Gradient", "default": "linear-gradient(135deg, #ffc4e1 0%, #b4d5ff 100%)" },
     { "type": "range", "id": "section_padding_top", "label": "Padding Top", "min": 0, "max": 250, "step": 10, "default": 80, "unit": "px" },
     { "type": "range", "id": "section_padding_bottom", "label": "Padding Bottom", "min": 0, "max": 250, "step": 10, "default": 80, "unit": "px" },
-    { "type": "range", "id": "container_width", "label": "Container Max Width", "min": 800, "max": 1400, "step": 100, "default": 1200, "unit": "px" },
+    { "type": "range", "id": "container_width", "label": "Container Max Width (when not full width)", "min": 800, "max": 1600, "step": 100, "default": 1200, "unit": "px" },
 
     { "type": "header", "content": "Section Title (Optional)" },
     { "type": "text", "id": "section_title", "label": "Section Title" },
     { "type": "color", "id": "title_color", "label": "Title Color", "default": "#8b1538" },
-    { "type": "range", "id": "title_size", "label": "Title Font Size", "min": 20, "max": 48, "step": 2, "default": 32, "unit": "px" },
+    { "type": "range", "id": "title_size", "label": "Title Font Size", "min": 20, "max": 56, "step": 2, "default": 32, "unit": "px" },
     { "type": "select", "id": "title_alignment", "label": "Title Alignment", "options": [
       { "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }, { "value": "right", "label": "Right" }
     ], "default": "center" },
@@ -355,14 +346,13 @@
     { "type": "range", "id": "wave_speed", "label": "Wave Loop Speed (s)", "min": 2, "max": 30, "step": 1, "default": 12, "unit": "s" },
     { "type": "range", "id": "wave_bob", "label": "Vertical Bob (px)", "min": 0, "max": 30, "step": 1, "default": 8, "unit": "px" },
 
-    { "type": "header", "content": "Content Marquee" },
-    { "type": "range", "id": "marquee_speed", "label": "Content Loop Speed (s)", "min": 3, "max": 60, "step": 1, "default": 20, "unit": "s" },
-    { "type": "select", "id": "marquee_direction", "label": "Content Direction", "options": [
-      { "value": "rtl", "label": "Right → Left" },
-      { "value": "ltr", "label": "Left → Right" }
-    ], "default": "rtl" },
-    { "type": "range", "id": "marquee_gap", "label": "Space Between Items (px)", "min": 0, "max": 80, "step": 2, "default": 40 },
-    { "type": "checkbox", "id": "marquee_pause", "label": "Pause marquee on hover", "default": true }
+    { "type": "header", "content": "Marquee Settings" },
+    { "type": "select", "id": "scroll_direction", "label": "Marquee Direction", "options": [
+      { "value": "left-right", "label": "Left → Right" },
+      { "value": "right-left", "label": "Right → Left" }
+    ], "default": "right-left" },
+    { "type": "range", "id": "ticker_speed", "label": "Marquee Speed (s per cycle)", "min": 6, "max": 60, "step": 1, "default": 26, "unit": "s" },
+    { "type": "range", "id": "ticker_gap", "label": "Gap Between Items", "min": 8, "max": 80, "step": 2, "default": 40, "unit": "px" }
   ],
   "blocks": [
     {
@@ -376,7 +366,7 @@
         { "type": "color", "id": "icon_color", "label": "Icon Color", "default": "#8b1538" },
 
         { "type": "header", "content": "Text Settings" },
-        { "type": "text", "id": "feature_text", "label": "Feature Text", "default": "Feature description" },
+        { "type": "text", "id": "feature_text", "label": "Feature Text", "default": "Fast & Discreet Shipping" },
         { "type": "color", "id": "text_color", "label": "Text Color", "default": "#8b1538" },
         { "type": "range", "id": "text_size", "label": "Text Size", "min": 14, "max": 24, "step": 1, "default": 18, "unit": "px" },
         { "type": "select", "id": "text_weight", "label": "Text Weight", "options": [
