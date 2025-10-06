@@ -349,7 +349,7 @@
         "body_text": "",
         "text_alignment": "left",
         "header_spacing": 50,
-        "see_all_text": "See all products",
+        "see_all_text": "",
         "see_all_link": "shopify://collections/frontpage",
         "category_1_collection": "",
         "category_1_title": "",
@@ -389,7 +389,7 @@
         "button_border_width": 1,
         "button_margin": 40,
         "border_radius": 12,
-        "card_aspect_ratio": "4/5",
+        "card_aspect_ratio": "16/9",
         "image_fit": "cover",
         "custom_class_name": ""
       }
