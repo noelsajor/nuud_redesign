@@ -46,7 +46,7 @@
         "image_overflow_direction": "center",
         "enable_category_1": true,
         "category_1": "",
-        "category_1_image": "shopify://shop_images/Section.webp",
+        "category_1_image": "shopify://shop_images/for-her.webp",
         "category_1_title": "",
         "show_category_1_title": false,
         "enable_category_2": true,
@@ -152,11 +152,8 @@
         "animate_waves": true,
         "wave_speed": 10,
         "wave_bob": 0,
-        "enable_marquee": true,
-        "marquee_direction": "right-left",
+        "enable_content_marquee": true,
         "marquee_speed": 6,
-        "marquee_gap": 40,
-        "enable_scroll_animation": true,
         "scroll_direction": "right-left"
       }
     },
