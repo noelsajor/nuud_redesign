@@ -29,7 +29,7 @@
         "description": "",
         "description_size": 16,
         "description_color": "#666666",
-        "right_image": "shopify://shop_images/Section.webp",
+        "right_image": "shopify://shop_images/Section_girl.webp",
         "right_image_radius": 8,
         "enable_float_animation": true,
         "float_intensity": 15,
