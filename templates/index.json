@@ -141,7 +141,7 @@
         "title_alignment": "center",
         "wave_shape": "rounded",
         "show_top_wave": true,
-        "show_bottom_wave": true,
+        "show_bottom_wave": false,
         "wave_color": "#fdf8e1",
         "wave_overlap_top": 70,
         "wave_overlap_bottom": 70,
