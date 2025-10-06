@@ -1,4 +1,4 @@
-<!-- Features Section with Seamless Animated Waves & Marquee -->
+<!-- Features Section with Seamless Animated Waves + Perfect Marquee -->
 <section class="features-wave-section {% if section.settings.animate_waves %}waves-animated{% endif %}" 
          role="region"
          aria-labelledby="features-title"
@@ -61,7 +61,7 @@
   </div>
   {% endif %}
 
-  {%- comment -%} --------- CONTENT --------- {%- endcomment -%}
+  {%- comment -%} --------- CONTENT: PERFECT MARQUEE --------- {%- endcomment -%}
   <div class="features-container" style="max-width: {{ section.settings.container_width }}px;">
     {% if section.settings.section_title != blank %}
       <h2 id="features-title" class="section-title"
@@ -72,82 +72,76 @@
       <h2 id="features-title" class="sr-only">Store Features and Benefits</h2>
     {% endif %}
 
-    {% if section.settings.enable_content_marquee %}
-      <!-- Seamless marquee (duplicates items to remove the gap) -->
-      <div class="features-marquee dir-{% if section.settings.scroll_direction == 'right-left' %}rtl{% else %}ltr{% endif %}"
-           style="--marquee-speed: {{ section.settings.marquee_speed | default: 24 }}s;">
-        <ul class="features-track" role="list" aria-live="off">
-          {% for i in (1..2) %}
-            {% for block in section.blocks %}
-              {% if i == 1 %}
-                <li class="feature-item" {{ block.shopify_attributes }}>
-              {% else %}
-                <li class="feature-item">
-              {% endif %}
-                  <div class="feature-icon-wrapper"
-                       {% if block.settings.icon_svg != blank or block.settings.icon_image %}role="img" aria-label="{{ block.settings.icon_label | default: block.settings.feature_text }}"{% endif %}>
-                    {% if block.settings.icon_svg != blank %}
-                      <div class="feature-icon" style="color: {{ block.settings.icon_color }};" aria-hidden="true">{{ block.settings.icon_svg }}</div>
-                    {% elsif block.settings.icon_image %}
-                      <div class="feature-icon-image" aria-hidden="true">
-                        <img src="{{ block.settings.icon_image | image_url: width: 120 }}"
-                             srcset="{{ block.settings.icon_image | image_url: width: 60 }} 60w, {{ block.settings.icon_image | image_url: width: 120 }} 120w"
-                             sizes="60px" alt="{{ block.settings.icon_label | default: '' }}" width="60" height="60" loading="lazy" decoding="async">
-                      </div>
-                    {% endif %}
+    {% assign dir_class = section.settings.marquee_direction | default: 'rtl' %}
+    <div class="features-ticker dir-{{ dir_class }}"
+         style="--gap: {{ section.settings.marquee_gap }}px; --ticker-speed: {{ section.settings.marquee_speed }}s;">
+      <div class="ticker__track">
+        <!-- Row A -->
+        <ul class="ticker__row" role="list">
+          {% for block in section.blocks %}
+            <li class="feature-item" {{ block.shopify_attributes }}>
+              <div class="feature-icon-wrapper"
+                   {% if block.settings.icon_svg != blank or block.settings.icon_image %}role="img" aria-label="{{ block.settings.icon_label | default: block.settings.feature_text }}"{% endif %}>
+                {% if block.settings.icon_svg != blank %}
+                  <div class="feature-icon" style="color: {{ block.settings.icon_color }};" aria-hidden="true">{{ block.settings.icon_svg }}</div>
+                {% elsif block.settings.icon_image %}
+                  <div class="feature-icon-image" aria-hidden="true">
+                    <img src="{{ block.settings.icon_image | image_url: width: 120 }}"
+                         srcset="{{ block.settings.icon_image | image_url: width: 60 }} 60w, {{ block.settings.icon_image | image_url: width: 120 }} 120w"
+                         sizes="60px" alt="{{ block.settings.icon_label | default: '' }}" width="60" height="60" loading="lazy" decoding="async">
                   </div>
+                {% endif %}
+              </div>
 
-                  {% if block.settings.feature_text != blank %}
-                  <div class="feature-text-wrapper">
-                    <p class="feature-text" style="color: {{ block.settings.text_color }}; font-size: {{ block.settings.text_size }}px; font-weight: {{ block.settings.text_weight }};">
-                      {{ block.settings.feature_text }}
-                    </p>
-                    {% if block.settings.feature_subtext != blank %}
-                    <p class="feature-subtext" style="color: {{ block.settings.subtext_color }}; font-size: {{ block.settings.subtext_size }}px;">
-                      {{ block.settings.feature_subtext }}
-                    </p>
-                    {% endif %}
+              {% if block.settings.feature_text != blank %}
+              <div class="feature-text-wrapper">
+                <p class="feature-text" style="color: {{ block.settings.text_color }}; font-size: {{ block.settings.text_size }}px; font-weight: {{ block.settings.text_weight }};">
+                  {{ block.settings.feature_text }}
+                </p>
+                {% if block.settings.feature_subtext != blank %}
+                <p class="feature-subtext" style="color: {{ block.settings.subtext_color }}; font-size: {{ block.settings.subtext_size }}px;">
+                  {{ block.settings.feature_subtext }}
+                </p>
+                {% endif %}
+              </div>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+
+        <!-- Row B (duplicate of A) -->
+        <ul class="ticker__row" role="list" aria-hidden="true">
+          {% for block in section.blocks %}
+            <li class="feature-item">
+              <div class="feature-icon-wrapper">
+                {% if block.settings.icon_svg != blank %}
+                  <div class="feature-icon" style="color: {{ block.settings.icon_color }};" aria-hidden="true">{{ block.settings.icon_svg }}</div>
+                {% elsif block.settings.icon_image %}
+                  <div class="feature-icon-image" aria-hidden="true">
+                    <img src="{{ block.settings.icon_image | image_url: width: 120 }}"
+                         srcset="{{ block.settings.icon_image | image_url: width: 60 }} 60w, {{ block.settings.icon_image | image_url: width: 120 }} 120w"
+                         sizes="60px" alt="" width="60" height="60" loading="lazy" decoding="async">
                   </div>
-                  {% endif %}
-                </li>
-            {% endfor %}
+                {% endif %}
+              </div>
+
+              {% if block.settings.feature_text != blank %}
+              <div class="feature-text-wrapper">
+                <p class="feature-text" style="color: {{ block.settings.text_color }}; font-size: {{ block.settings.text_size }}px; font-weight: {{ block.settings.text_weight }};">
+                  {{ block.settings.feature_text }}
+                </p>
+                {% if block.settings.feature_subtext != blank %}
+                <p class="feature-subtext" style="color: {{ block.settings.subtext_color }}; font-size: {{ block.settings.subtext_size }}px;">
+                  {{ block.settings.feature_subtext }}
+                </p>
+                {% endif %}
+              </div>
+              {% endif %}
+            </li>
           {% endfor %}
         </ul>
       </div>
-    {% else %}
-      <!-- Static grid fallback -->
-      <ul class="features-grid" role="list">
-        {% for block in section.blocks %}
-          <li class="feature-item" {{ block.shopify_attributes }}>
-            <div class="feature-icon-wrapper"
-                 {% if block.settings.icon_svg != blank or block.settings.icon_image %}role="img" aria-label="{{ block.settings.icon_label | default: block.settings.feature_text }}"{% endif %}>
-              {% if block.settings.icon_svg != blank %}
-                <div class="feature-icon" style="color: {{ block.settings.icon_color }};" aria-hidden="true">{{ block.settings.icon_svg }}</div>
-              {% elsif block.settings.icon_image %}
-                <div class="feature-icon-image" aria-hidden="true">
-                  <img src="{{ block.settings.icon_image | image_url: width: 120 }}"
-                       srcset="{{ block.settings.icon_image | image_url: width: 60 }} 60w, {{ block.settings.icon_image | image_url: width: 120 }} 120w"
-                       sizes="60px" alt="{{ block.settings.icon_label | default: '' }}" width="60" height="60" loading="lazy" decoding="async">
-                </div>
-              {% endif %}
-            </div>
-
-            {% if block.settings.feature_text != blank %}
-            <div class="feature-text-wrapper">
-              <p class="feature-text" style="color: {{ block.settings.text_color }}; font-size: {{ block.settings.text_size }}px; font-weight: {{ block.settings.text_weight }};">
-                {{ block.settings.feature_text }}
-              </p>
-              {% if block.settings.feature_subtext != blank %}
-              <p class="feature-subtext" style="color: {{ block.settings.subtext_color }}; font-size: {{ block.settings.subtext_size }}px;">
-                {{ block.settings.feature_subtext }}
-              </p>
-              {% endif %}
-            </div>
-            {% endif %}
-          </li>
-        {% endfor %}
-      </ul>
-    {% endif %}
+    </div>
   </div>
 
   {%- comment -%} --------- BOTTOM WAVE (seamless loop) --------- {%- endcomment -%}
@@ -214,93 +208,109 @@
 .wave-top, .wave-bottom {
   position: absolute; left: 0; width: 100%; line-height: 0; pointer-events: none; z-index: 2; overflow: visible;
 }
-.wave-top { top: 0; }
-.wave-bottom { bottom: 0; }
 .wave-top svg, .wave-bottom svg { width: 100%; height: 100%; display: block; }
 
-/* Seamless wave loop (shift exactly one tile width) */
+/* Seamless wave loop */
 .features-wave-section.waves-animated .wave-top .wave-tiles,
 .features-wave-section.waves-animated .wave-bottom .wave-tiles {
   animation: waveSlide var(--wave-speed, 8s) linear infinite;
-  will-change: transform;
 }
 .features-wave-section.waves-animated .wave-top,
 .features-wave-section.waves-animated .wave-bottom {
   animation: waveBob var(--wave-speed, 8s) ease-in-out infinite alternate;
 }
-
-@keyframes waveSlide {
-  from { transform: translateX(0%); }
-  to   { transform: translateX(-50%); } /* one tile; no seam */
-}
-@keyframes waveBob {
-  from { transform: translateY(0); }
-  to   { transform: translateY(var(--wave-bob, 8px)); }
-}
+@keyframes waveSlide { from { transform: translateX(0); } to { transform: translateX(-1440px); } }
+@keyframes waveBob   { from { transform: translateY(0); } to { transform: translateY(var(--wave-bob, 8px)); } }
 
 /* Container */
 .features-container { position: relative; z-index: 3; margin: 0 auto; width: 100%; }
 
 /* Section Title */
-.section-title { margin: 0 0 40px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.2; }
+.section-title { margin: 0 0 32px 0; font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; line-height: 1.2; }
 
-/* Static grid (fallback) */
-.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; align-items: start; justify-items: center; list-style: none; margin: 0; padding: 0; }
-
-/* Seamless marquee for features */
-.features-marquee { position: relative; overflow: hidden; }
-.features-track {
-  display: inline-flex;
-  gap: 40px;
-  width: max-content;               /* ensures total width is content-based (2x set) */
-  animation: marquee var(--marquee-speed, 24s) linear infinite;
+/* ---------- PERFECT MARQUEE ---------- */
+.features-ticker{
+  overflow: hidden;
+  width: 100%;
+  --gap: 40px;
+  --ticker-speed: 20s;
+  contain: layout paint;
+}
+.ticker__track{
+  display: flex;
+  flex-wrap: nowrap;
+  width: max-content;          /* track is only as wide as its children (2 rows) */
   will-change: transform;
+  backface-visibility: hidden;
+  transform: translate3d(0,0,0);
+  animation: marquee var(--ticker-speed) linear infinite;
 }
-.features-marquee.dir-rtl .features-track { animation-direction: reverse; }
-@keyframes marquee {
-  from { transform: translateX(0%); }
-  to   { transform: translateX(-50%); } /* move exactly one copy */
+.features-ticker.dir-ltr .ticker__track{ animation-direction: reverse; } /* left → right */
+.features-ticker.dir-rtl .ticker__track{ animation-direction: normal; }  /* right → left */
+
+/* Each row = one full set of features; duplicating 2x makes -50% a perfect loop point */
+.ticker__row{
+  flex: none;                  /* do not shrink or grow; keep natural width */
+  display: flex;
+  align-items: center;
+  gap: var(--gap);
+  padding-right: var(--gap);   /* balances the gap at the seam */
+  white-space: nowrap;         /* prevents tiny wrapping that causes jolts */
 }
 
-/* Feature Item + visuals */
-.feature-item { display: flex; align-items: center; gap: 15px; width: 100%; max-width: 400px; }
-.features-track .feature-item { flex: 0 0 auto; }  /* prevent shrinking in marquee */
-
+/* Items */
+.feature-item{
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;                   /* no margins, only gap controls spacing */
+}
 .feature-icon-wrapper{ flex-shrink:0; }
-.feature-icon, .feature-icon-image { width:60px; height:60px; display:flex; align-items:center; justify-content:center; }
-.feature-icon svg{ width:100%; height:100%; max-width:60px; max-height:60px; display:block; }
+.feature-icon, .feature-icon-image{ width:60px; height:60px; display:flex; align-items:center; justify-content:center; }
+.feature-icon svg{ width:100%; height:100%; display:block; }
 .feature-icon-image img{ max-width:100%; max-height:100%; object-fit:contain; display:block; }
-.feature-text-wrapper{ flex:1; min-width:0; }
-.feature-text, .feature-subtext{ margin:0; line-height:1.4; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; text-align:left; }
-.feature-subtext{ margin-top:5px; }
+.feature-text-wrapper{ min-width:0; }
+.feature-text, .feature-subtext{ margin:0; line-height:1.4; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; }
+.feature-subtext{ margin-top:4px; }
 
-/* Respect reduced motion */
-@media (prefers-reduced-motion: reduce) {
+/* The magic: move the two-row track by exactly half its own width */
+@keyframes marquee{
+  from { transform: translate3d(0,0,0); }
+  to   { transform: translate3d(-50%,0,0); }
+}
+
+/* Hover pause (optional via setting) */
+{% if section.settings.marquee_pause %}
+.features-ticker:hover .ticker__track{ animation-play-state: paused; }
+{% endif %}
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce){
+  .ticker__track,
   .features-wave-section.waves-animated .wave-top .wave-tiles,
   .features-wave-section.waves-animated .wave-bottom .wave-tiles,
   .features-wave-section.waves-animated .wave-top,
-  .features-wave-section.waves-animated .wave-bottom,
-  .features-track { animation: none !important; transform: none !important; }
+  .features-wave-section.waves-animated .wave-bottom{
+    animation: none !important;
+    transform: none !important;
+  }
 }
 
-/* High contrast + responsive */
-@media (prefers-contrast: high){ .feature-item{ border:2px solid currentColor; padding:15px; border-radius:8px; } }
+/* Responsive */
 @media (max-width: 768px){
-  .features-grid{ grid-template-columns:1fr; gap:30px; }
-  .feature-item{ justify-content:center; text-align:center; flex-direction:column; }
-  .feature-text, .feature-subtext{ text-align:center !important; }
-  .section-title{ margin-bottom:30px; font-size:calc({{ section.settings.title_size | default: 32 }}px * .8) !important; }
+  .section-title{ margin-bottom: 24px; font-size: calc({{ section.settings.title_size | default: 32 }}px * .85) !important; }
+  .feature-icon, .feature-icon-image{ width:48px; height:48px; }
 }
 @media (max-width: 480px){
-  .features-grid{ gap:25px; }
-  .feature-icon, .feature-icon-image{ width:50px; height:50px; }
-  .section-title{ font-size:calc({{ section.settings.title_size | default: 32 }}px * .7) !important; }
+  .section-title{ font-size: calc({{ section.settings.title_size | default: 32 }}px * .78) !important; }
+  .features-ticker{ --gap: {{ section.settings.marquee_gap | default: 40 | times: 0.7 }}px; }
 }
 
 /* Print */
 @media print{
   .features-wave-section{ background:white !important; }
   .wave-top, .wave-bottom{ display:none; }
+  .ticker__track{ animation:none !important; transform:none !important; }
 }
 </style>
 
@@ -342,16 +352,17 @@
 
     { "type": "header", "content": "Wave Animation" },
     { "type": "checkbox", "id": "animate_waves", "label": "Animate Waves", "default": true },
-    { "type": "range", "id": "wave_speed", "label": "Loop Speed (seconds per cycle)", "min": 2, "max": 30, "step": 1, "default": 12, "unit": "s" },
+    { "type": "range", "id": "wave_speed", "label": "Wave Loop Speed (s)", "min": 2, "max": 30, "step": 1, "default": 12, "unit": "s" },
     { "type": "range", "id": "wave_bob", "label": "Vertical Bob (px)", "min": 0, "max": 30, "step": 1, "default": 8, "unit": "px" },
 
     { "type": "header", "content": "Content Marquee" },
-    { "type": "checkbox", "id": "enable_content_marquee", "label": "Enable Moving Features Marquee", "default": true },
-    { "type": "range", "id": "marquee_speed", "label": "Content Loop Speed (s)", "min": 6, "max": 60, "step": 1, "default": 24, "unit": "s" },
-    { "type": "select", "id": "scroll_direction", "label": "Marquee Direction", "options": [
-      { "value": "left-right", "label": "Left to Right" },
-      { "value": "right-left", "label": "Right to Left" }
-    ], "default": "left-right" }
+    { "type": "range", "id": "marquee_speed", "label": "Content Loop Speed (s)", "min": 3, "max": 60, "step": 1, "default": 20, "unit": "s" },
+    { "type": "select", "id": "marquee_direction", "label": "Content Direction", "options": [
+      { "value": "rtl", "label": "Right → Left" },
+      { "value": "ltr", "label": "Left → Right" }
+    ], "default": "rtl" },
+    { "type": "range", "id": "marquee_gap", "label": "Space Between Items (px)", "min": 0, "max": 80, "step": 2, "default": 40 },
+    { "type": "checkbox", "id": "marquee_pause", "label": "Pause marquee on hover", "default": true }
   ],
   "blocks": [
     {
@@ -380,10 +391,7 @@
     }
   ],
   "presets": [
-    {
-      "name": "Features with Waves",
-      "category": "Custom"
-    }
+    { "name": "Features with Waves", "category": "Custom" }
   ],
   "templates": ["index", "collection", "page", "product"]
 }
