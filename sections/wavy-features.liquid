@@ -73,7 +73,7 @@
     {% endif %}
 
     {% assign dir_class = section.settings.marquee_direction | default: 'rtl' %}
-    <div class="features-ticker dir-{{ dir_class }}"
+    <div class="features-ticker dir-{{ dir_class }} {% if section.settings.animate_features %}ticker-animated{% endif %}"
          style="--gap: {{ section.settings.marquee_gap }}px; --ticker-speed: {{ section.settings.marquee_speed }}s;">
       <div class="ticker__track">
         <!-- Row A -->
@@ -109,7 +109,8 @@
           {% endfor %}
         </ul>
 
-        <!-- Row B (duplicate of A) -->
+        {% if section.settings.animate_features %}
+        <!-- Row B (duplicate of A, only needed for perfect looping) -->
         <ul class="ticker__row" role="list" aria-hidden="true">
           {% for block in section.blocks %}
             <li class="feature-item">
@@ -140,6 +141,7 @@
             </li>
           {% endfor %}
         </ul>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -243,10 +245,14 @@
   will-change: transform;
   backface-visibility: hidden;
   transform: translate3d(0,0,0);
+  /* animation applied only when .ticker-animated is present */
+  animation: none;
+}
+.ticker-animated .ticker__track{
   animation: marquee var(--ticker-speed) linear infinite;
 }
-.features-ticker.dir-ltr .ticker__track{ animation-direction: reverse; } /* left → right */
-.features-ticker.dir-rtl .ticker__track{ animation-direction: normal; }  /* right → left */
+.features-ticker.dir-ltr.ticker-animated .ticker__track{ animation-direction: reverse; } /* left → right */
+.features-ticker.dir-rtl.ticker-animated .ticker__track{ animation-direction: normal; }  /* right → left */
 
 /* Each row = one full set of features; duplicating 2x makes -50% a perfect loop point */
 .ticker__row{
@@ -256,6 +262,15 @@
   gap: var(--gap);
   padding-right: var(--gap);
   white-space: nowrap;
+}
+
+/* Static fallback when animation is disabled */
+.features-ticker:not(.ticker-animated) .ticker__track{ width: 100%; }
+.features-ticker:not(.ticker-animated) .ticker__row{
+  justify-content: center;
+  flex-wrap: wrap;
+  white-space: normal;
+  padding-right: 0;
 }
 
 /* Items */
@@ -281,7 +296,7 @@
 
 /* Hover pause (optional via setting) */
 {% if section.settings.marquee_pause %}
-.features-ticker:hover .ticker__track{ animation-play-state: paused; }
+.ticker-animated:hover .ticker__track{ animation-play-state: paused; }
 {% endif %}
 
 /* Respect user motion preferences */
@@ -355,6 +370,7 @@
     { "type": "range", "id": "wave_bob", "label": "Vertical Bob (px)", "min": 0, "max": 30, "step": 1, "default": 8, "unit": "px" },
 
     { "type": "header", "content": "Content Marquee" },
+    { "type": "checkbox", "id": "animate_features", "label": "Animate Features Marquee", "default": true },
     { "type": "range", "id": "marquee_speed", "label": "Content Loop Speed (s)", "min": 3, "max": 60, "step": 1, "default": 20, "unit": "s" },
     { "type": "select", "id": "marquee_direction", "label": "Content Direction", "options": [
       { "value": "rtl", "label": "Right → Left" },
