@@ -153,7 +153,7 @@
         "title_color": "#8b1538",
         "title_size": 48,
         "title_alignment": "center",
-        "wave_shape": "rounded",
+        "wave_shape": "dramatic",
         "show_top_wave": true,
         "show_bottom_wave": false,
         "wave_color": "#fdf8e1",
