@@ -606,7 +606,7 @@
         "overlay_color": "#000000",
         "overlay_opacity": 0,
         "background_color": "rgba(0,0,0,0)",
-        "section_padding": 80,
+        "section_padding": 40,
         "section_gap": 40,
         "mobile_gap": 30,
         "mobile_text_alignment": "left",
