@@ -13,7 +13,7 @@
       "type": "split-hero-section",
       "name": "Split hero section",
       "settings": {
-        "padding_top": 200,
+        "padding_top": 120,
         "padding_bottom": 200,
         "background_image": "shopify://shop_images/wave-bg.webp",
         "image_alignment": "center",
