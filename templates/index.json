@@ -348,7 +348,7 @@
         "background_overlay_opacity": 0,
         "image_overflow": 70,
         "heading": "Shop by Category",
-        "subheading": "Discover our collections",
+        "subheading": "",
         "body_text": "",
         "text_alignment": "left",
         "header_spacing": 50,
@@ -476,7 +476,7 @@
         "content_pFdJJD"
       ],
       "custom_css": [
-        ".overall_boxed{border: none;}"
+        ".overall_boxed {border: none;}"
       ],
       "settings": {
         "full": true,
