@@ -136,7 +136,7 @@
         "background_gradient": "linear-gradient(135deg, rgba(255, 196, 225, 1), rgba(180, 213, 255, 1) 100%)",
         "section_padding_top": 10,
         "section_padding_bottom": 10,
-        "container_width": 800,
+        "container_width": 1400,
         "section_title": "",
         "title_color": "#8b1538",
         "title_size": 48,
@@ -152,7 +152,7 @@
         "animate_waves": true,
         "wave_speed": 10,
         "wave_bob": 0,
-        "marquee_speed": 6,
+        "marquee_speed": 20,
         "marquee_direction": "rtl",
         "marquee_gap": 40,
         "marquee_pause": true
