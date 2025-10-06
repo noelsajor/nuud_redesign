@@ -162,7 +162,7 @@
         "wave_frequency": 4,
         "wave_amplitude": 40,
         "animate_waves": true,
-        "wave_speed": 30,
+        "wave_speed": 10,
         "wave_bob": 2,
         "marquee_speed": 8,
         "marquee_direction": "rtl",
