@@ -475,7 +475,9 @@
         "content_CNPyjX",
         "content_pFdJJD"
       ],
-      "custom_css": [],
+      "custom_css": [
+        ".overall_boxed{border: none;}"
+      ],
       "settings": {
         "full": true,
         "spacing_both_ends": false,
