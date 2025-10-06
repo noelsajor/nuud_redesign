@@ -23,7 +23,7 @@
         "grad_angle": 155,
         "radial_position": "center center",
         "grad_color_1": "#ff4881",
-        "grad_stop_1": 50,
+        "grad_stop_1": 30,
         "grad_color_2": "#32c6ff",
         "grad_stop_2": 100,
         "enable_grad_color_3": false,
