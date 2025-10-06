@@ -162,9 +162,9 @@
         "wave_frequency": 4,
         "wave_amplitude": 40,
         "animate_waves": true,
-        "wave_speed": 12,
+        "wave_speed": 30,
         "wave_bob": 2,
-        "marquee_speed": 60,
+        "marquee_speed": 16,
         "marquee_direction": "rtl",
         "marquee_gap": 80,
         "marquee_pause": true
