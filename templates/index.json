@@ -53,7 +53,7 @@
         "categories_per_row_mobile": "2",
         "enable_category_shadow": true,
         "category_aspect_ratio": "1/1",
-        "image_fit": "cover",
+        "image_fit": "contain",
         "enable_image_overflow": true,
         "image_overflow_scale": 2,
         "image_overflow_direction": "top",
