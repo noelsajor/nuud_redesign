@@ -205,23 +205,9 @@ Build gradient string (linear or radial) with up to 4 colors.
   display:grid; grid-template-columns: 1fr 1fr; gap:60px; align-items:center; min-height:400px;
 }
 
-/* Left column text alignment */
+/* Left column text alignment (layout only) */
 .ai-split-section-left-{{ uid }}{
   display:flex; flex-direction:column; gap:24px; text-align: {{ section.settings.content_alignment }};
-}
-
-/* Typography */
-.ai-split-section-heading-{{ uid }}{
-  font-size: {{ section.settings.heading_size }}px; color: {{ section.settings.heading_color }};
-  margin:0; line-height:1.2;
-}
-.ai-split-section-subheading-{{ uid }}{
-  font-size: {{ section.settings.subheading_size }}px; color: {{ section.settings.subheading_color }};
-  margin:0; line-height:1.4;
-}
-.ai-split-section-description-{{ uid }}{
-  font-size: {{ section.settings.description_size }}px; color: {{ section.settings.description_color }};
-  margin:0; line-height:1.6;
 }
 
 /* Categories alignment wrapper */
@@ -241,22 +227,20 @@ Build gradient string (linear or radial) with up to 4 colors.
   {% if section.settings.categories_alignment == 'center' %}max-width:fit-content;{% endif %}
 }
 
-/* Category card */
+/* Category card (no text color/decoration overrides) */
 .ai-split-section-category-{{ uid }}{
   background-color: {{ section.settings.category_bg_color }};
   border-radius: {{ section.settings.category_border_radius }}px;
-  padding:16px; text-decoration:none; color: {{ section.settings.category_text_color }};
+  padding:16px;
   transition:
     transform .45s cubic-bezier(.22,1,.36,1),
     box-shadow .45s cubic-bezier(.22,1,.36,1),
-    background-color .45s cubic-bezier(.22,1,.36,1),
-    color .45s cubic-bezier(.22,1,.36,1);
+    background-color .45s cubic-bezier(.22,1,.36,1);
   will-change: transform, box-shadow;
   display:block; text-align:center; position:relative;
   {% if section.settings.enable_image_overflow %}overflow:visible;{% endif %}
 }
 .ai-split-section-category-{{ uid }}:hover{
-  color: {{ section.settings.category_hover_text_color }};
   background-color: {{ section.settings.category_hover_bg_color }};
   transform: translateY(-2px);
 }
@@ -313,11 +297,17 @@ Build gradient string (linear or radial) with up to 4 colors.
 }
 .ai-split-section-category-placeholder-{{ uid }} svg{ width:30px; height:30px; opacity:.5; }
 
-.ai-split-section-category-title-{{ uid }}{ font-size:14px; font-weight:600; margin:0; position:relative; z-index:3; }
+/* Keep only stacking context for title (no font overrides) */
+.ai-split-section-category-title-{{ uid }}{ position:relative; z-index:3; }
 
+/* Empty states (no typography overrides) */
 .ai-split-section-empty-category-{{ uid }}{
-  padding:16px; text-align:center; color:#666; font-style:italic;
-  background:#f9f9f9; border-radius: {{ section.settings.category_border_radius }}px; border:2px dashed #ddd; font-size:12px;
+  padding:16px; text-align:center;
+  background:#f9f9f9; border-radius: {{ section.settings.category_border_radius }}px; border:2px dashed #ddd;
+}
+.ai-split-section-empty-state-{{ uid }}{
+  position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
+  padding:8px 16px; background:rgba(255,255,255,.9); border-radius:4px; text-align:center; pointer-events:none;
 }
 
 /* Right image (floating) */
@@ -335,10 +325,6 @@ Build gradient string (linear or radial) with up to 4 colors.
 }
 .ai-split-section-right-placeholder-{{ uid }} svg{
   width:100px; height:100px; opacity:.3; animation: ai-float-{{ uid }} {{ section.settings.float_duration }}s ease-in-out infinite;
-}
-.ai-split-section-empty-state-{{ uid }}{
-  position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
-  padding:8px 16px; background:rgba(255,255,255,.9); border-radius:4px; font-size:12px; color:#666; text-align:center; pointer-events:none;
 }
 
 /* Float keyframes */
@@ -370,8 +356,6 @@ Build gradient string (linear or radial) with up to 4 colors.
     max-width: 100%;
   }
 
-  .ai-split-section-heading-{{ uid }}{ font-size: {{ section.settings.heading_size | times: 0.8 }}px; }
-  .ai-split-section-subheading-{{ uid }}{ font-size: {{ section.settings.subheading_size | times: 0.9 }}px; }
   .ai-split-section-bg-{{ uid }}--fixed{ background-attachment: scroll; }
   .ai-split-section-right-image-{{ uid }}, .ai-split-section-right-placeholder-{{ uid }}{ min-height:300px; }
 
@@ -478,14 +462,8 @@ Build gradient string (linear or radial) with up to 4 colors.
       "default": "left"
     },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Welcome to our store" },
-    { "type": "range", "id": "heading_size", "min": 20, "max": 80, "step": 2, "unit": "px", "label": "Heading size", "default": 48 },
-    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#000000" },
     { "type": "text", "id": "subheading", "label": "Subheading", "default": "Discover our amazing products" },
-    { "type": "range", "id": "subheading_size", "min": 14, "max": 40, "step": 1, "unit": "px", "label": "Subheading size", "default": 24 },
-    { "type": "color", "id": "subheading_color", "label": "Subheading color", "default": "#333333" },
     { "type": "textarea", "id": "description", "label": "Description", "default": "Browse through our carefully curated collection of products designed to meet your needs." },
-    { "type": "range", "id": "description_size", "min": 12, "max": 24, "step": 1, "unit": "px", "label": "Description size", "default": 16 },
-    { "type": "color", "id": "description_color", "label": "Description color", "default": "#666666" },
 
     { "type": "header", "content": "Right side image" },
     { "type": "image_picker", "id": "right_image", "label": "Right side image" },
@@ -561,8 +539,6 @@ Build gradient string (linear or radial) with up to 4 colors.
     { "type": "color", "id": "category_bg_color", "label": "Card background color", "default": "#f8f8f8" },
     { "type": "color", "id": "category_hover_bg_color", "label": "Card hover background color", "default": "#e8e8e8" },
     { "type": "color", "id": "category_image_bg_color", "label": "Image background color", "default": "#f0f0f0" },
-    { "type": "color", "id": "category_text_color", "label": "Text color", "default": "#000000" },
-    { "type": "color", "id": "category_hover_text_color", "label": "Hover text color", "default": "#000000" },
     { "type": "range", "id": "category_border_radius", "min": 0, "max": 20, "step": 1, "unit": "px", "label": "Card border radius", "default": 8 },
     { "type": "range", "id": "category_image_radius", "min": 0, "max": 20, "step": 1, "unit": "px", "label": "Image border radius", "default": 4 }
   ],
