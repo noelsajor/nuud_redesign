@@ -164,7 +164,7 @@
         "animate_waves": true,
         "wave_speed": 30,
         "wave_bob": 2,
-        "marquee_speed": 3,
+        "marquee_speed": 8,
         "marquee_direction": "rtl",
         "marquee_gap": 80,
         "marquee_pause": false
