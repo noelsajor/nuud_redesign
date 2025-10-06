@@ -567,7 +567,7 @@
         "image_float_offset": 0,
         "show_see_all_button": true,
         "see_all_text": "See All Products",
-        "button_alignment": "center",
+        "button_alignment": "right",
         "button_top_spacing": 80,
         "see_all_add_padding": false,
         "show_badge": true,
