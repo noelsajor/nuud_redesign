@@ -239,7 +239,7 @@
 .ticker__track{
   display: flex;
   flex-wrap: nowrap;
-  width: max-content;          /* track is only as wide as its children (2 rows) */
+  width: max-content;
   will-change: transform;
   backface-visibility: hidden;
   transform: translate3d(0,0,0);
@@ -250,12 +250,12 @@
 
 /* Each row = one full set of features; duplicating 2x makes -50% a perfect loop point */
 .ticker__row{
-  flex: none;                  /* do not shrink or grow; keep natural width */
+  flex: none;
   display: flex;
   align-items: center;
   gap: var(--gap);
-  padding-right: var(--gap);   /* balances the gap at the seam */
-  white-space: nowrap;         /* prevents tiny wrapping that causes jolts */
+  padding-right: var(--gap);
+  white-space: nowrap;
 }
 
 /* Items */
@@ -263,7 +263,7 @@
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  margin: 0;                   /* no margins, only gap controls spacing */
+  margin: 0;
 }
 .feature-icon-wrapper{ flex-shrink:0; }
 .feature-icon, .feature-icon-image{ width:60px; height:60px; display:flex; align-items:center; justify-content:center; }
@@ -348,6 +348,11 @@
     { "type": "range", "id": "wave_overlap_bottom", "label": "Bottom Wave Height", "min": 20, "max": 200, "step": 10, "default": 100, "unit": "px" },
     { "type": "range", "id": "wave_frequency", "label": "Wave Frequency", "min": 1, "max": 4, "step": 1, "default": 2 },
     { "type": "range", "id": "wave_amplitude", "label": "Wave Amplitude", "min": 10, "max": 40, "step": 5, "default": 25 },
+
+    { "type": "header", "content": "Wave Animation" },
+    { "type": "checkbox", "id": "animate_waves", "label": "Animate Waves", "default": true },
+    { "type": "range", "id": "wave_speed", "label": "Loop Speed (seconds per cycle)", "min": 2, "max": 30, "step": 1, "default": 12, "unit": "s" },
+    { "type": "range", "id": "wave_bob", "label": "Vertical Bob (px)", "min": 0, "max": 30, "step": 1, "default": 8, "unit": "px" },
 
     { "type": "header", "content": "Content Marquee" },
     { "type": "range", "id": "marquee_speed", "label": "Content Loop Speed (s)", "min": 3, "max": 60, "step": 1, "default": 20, "unit": "s" },
