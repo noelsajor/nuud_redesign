@@ -14,7 +14,7 @@
       "name": "Split hero section",
       "settings": {
         "padding_top": 80,
-        "padding_bottom": 200,
+        "padding_bottom": 80,
         "image_alignment": "center",
         "background_effect": "none",
         "use_gradient": true,
