@@ -320,6 +320,10 @@
     flex-direction: column;
     gap: 32px;
   }
+
+  .ticker__row li {
+    flex-direction: column;
+  }
 }
 @media (max-width: 480px){
   .section-title{ font-size: calc({{ section.settings.title_size | default: 32 }}px * .78) !important; }
