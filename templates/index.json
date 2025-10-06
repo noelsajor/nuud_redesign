@@ -182,7 +182,7 @@
         "title_color": "#8b1538",
         "title_size": 40,
         "title_weight": "400",
-        "title_alignment": "center",
+        "title_alignment": "left",
         "title_bottom_spacing": 80,
         "products_grid_gap": 15,
         "enable_image_float": true,
