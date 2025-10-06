@@ -1,4 +1,4 @@
-<!-- Features Section with Seamless Animated Waves + Perfect Marquee -->
+<!-- Features Section with Seamless Animated Waves + Perfect Marquee (No max-width container) -->
 <section class="features-wave-section {% if section.settings.animate_waves %}waves-animated{% endif %}" 
          role="region"
          aria-labelledby="features-title"
@@ -62,7 +62,7 @@
   {% endif %}
 
   {%- comment -%} --------- CONTENT: PERFECT MARQUEE --------- {%- endcomment -%}
-  <div class="features-container" style="max-width: {{ section.settings.container_width }}px;">
+  <div class="features-container">
     {% if section.settings.section_title != blank %}
       <h2 id="features-title" class="section-title"
           style="color: {{ section.settings.title_color }}; font-size: {{ section.settings.title_size }}px; text-align: {{ section.settings.title_alignment }};">
@@ -222,8 +222,8 @@
 @keyframes waveSlide { from { transform: translateX(0); } to { transform: translateX(-1440px); } }
 @keyframes waveBob   { from { transform: translateY(0); } to { transform: translateY(var(--wave-bob, 8px)); } }
 
-/* Container */
-.features-container { position: relative; z-index: 3; margin: 0 auto; width: 100%; }
+/* Container — no max-width */
+.features-container { position: relative; z-index: 3; margin: 0 auto; width: 100%; max-width: none !important; }
 
 /* Section Title */
 .section-title { margin: 0 0 32px 0; font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; line-height: 1.2; }
@@ -324,7 +324,6 @@
     { "type": "color_background", "id": "background_gradient", "label": "Background Gradient", "default": "linear-gradient(135deg, #ffc4e1 0%, #b4d5ff 100%)" },
     { "type": "range", "id": "section_padding_top", "label": "Padding Top", "min": 0, "max": 250, "step": 10, "default": 80, "unit": "px" },
     { "type": "range", "id": "section_padding_bottom", "label": "Padding Bottom", "min": 0, "max": 250, "step": 10, "default": 80, "unit": "px" },
-    { "type": "range", "id": "container_width", "label": "Container Max Width", "min": 800, "max": 1400, "step": 100, "default": 1200, "unit": "px" },
 
     { "type": "header", "content": "Section Title (Optional)" },
     { "type": "text", "id": "section_title", "label": "Section Title" },
@@ -349,11 +348,6 @@
     { "type": "range", "id": "wave_overlap_bottom", "label": "Bottom Wave Height", "min": 20, "max": 200, "step": 10, "default": 100, "unit": "px" },
     { "type": "range", "id": "wave_frequency", "label": "Wave Frequency", "min": 1, "max": 4, "step": 1, "default": 2 },
     { "type": "range", "id": "wave_amplitude", "label": "Wave Amplitude", "min": 10, "max": 40, "step": 5, "default": 25 },
-
-    { "type": "header", "content": "Wave Animation" },
-    { "type": "checkbox", "id": "animate_waves", "label": "Animate Waves", "default": true },
-    { "type": "range", "id": "wave_speed", "label": "Wave Loop Speed (s)", "min": 2, "max": 30, "step": 1, "default": 12, "unit": "s" },
-    { "type": "range", "id": "wave_bob", "label": "Vertical Bob (px)", "min": 0, "max": 30, "step": 1, "default": 8, "unit": "px" },
 
     { "type": "header", "content": "Content Marquee" },
     { "type": "range", "id": "marquee_speed", "label": "Content Loop Speed (s)", "min": 3, "max": 60, "step": 1, "default": 20, "unit": "s" },
