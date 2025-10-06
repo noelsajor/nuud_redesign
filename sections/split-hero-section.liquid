@@ -1,10 +1,40 @@
 {% assign uid = section.id | replace: '_', '' | downcase %}
 
+{%- comment -%}
+Build gradient string (linear or radial) with up to 4 colors.
+{%- endcomment -%}
+{% capture gradient_bg %}
+  {% if section.settings.use_gradient %}
+    {% if section.settings.grad_type == 'linear' %}
+      linear-gradient({{ section.settings.grad_angle }}deg,
+        {{ section.settings.grad_color_1 }} {{ section.settings.grad_stop_1 }}%,
+        {{ section.settings.grad_color_2 }} {{ section.settings.grad_stop_2 }}%
+        {% if section.settings.enable_grad_color_3 %}, {{ section.settings.grad_color_3 }} {{ section.settings.grad_stop_3 }}%{% endif %}
+        {% if section.settings.enable_grad_color_4 %}, {{ section.settings.grad_color_4 }} {{ section.settings.grad_stop_4 }}%{% endif %}
+      )
+    {% else %}
+      radial-gradient(
+        circle at {{ section.settings.radial_position }},
+        {{ section.settings.grad_color_1 }} {{ section.settings.grad_stop_1 }}%,
+        {{ section.settings.grad_color_2 }} {{ section.settings.grad_stop_2 }}%
+        {% if section.settings.enable_grad_color_3 %}, {{ section.settings.grad_color_3 }} {{ section.settings.grad_stop_3 }}%{% endif %}
+        {% if section.settings.enable_grad_color_4 %}, {{ section.settings.grad_color_4 }} {{ section.settings.grad_stop_4 }}%{% endif %}
+      )
+    {% endif %}
+  {% endif %}
+{% endcapture %}
+
 <section
   id="split-hero-{{ uid }}"
   class="ai-split-section-{{ uid }}"
   data-bg-effect="{{ section.settings.background_effect }}"
-  style="background-color: {{ section.settings.background_color }};"
+  style="
+    {% if section.settings.use_gradient and gradient_bg != blank %}
+      background: {{ gradient_bg | strip | strip_newlines }};
+    {% else %}
+      background-color: {{ section.settings.background_color }};
+    {% endif %}
+  "
 >
   {% if section.settings.background_image %}
     <div class="ai-split-section-bg-{{ uid }} ai-split-section-bg-{{ uid }}--{{ section.settings.background_effect }}">
@@ -130,6 +160,7 @@
               loading="lazy"
               width="{{ section.settings.right_image.width }}"
               height="{{ section.settings.right_image.height }}"
+              {% unless section.settings.enable_float_animation %}style="animation:none"{% endunless %}
             >
           {% else %}
             <div class="ai-split-section-right-placeholder-{{ uid }}">
@@ -210,12 +241,11 @@
   {% if section.settings.categories_alignment == 'center' %}max-width:fit-content;{% endif %}
 }
 
-/* Category card — smoother hover */
+/* Category card */
 .ai-split-section-category-{{ uid }}{
   background-color: {{ section.settings.category_bg_color }};
   border-radius: {{ section.settings.category_border_radius }}px;
   padding:16px; text-decoration:none; color: {{ section.settings.category_text_color }};
-  /* CHANGED: smoother transitions + perf hint */
   transition:
     transform .45s cubic-bezier(.22,1,.36,1),
     box-shadow .45s cubic-bezier(.22,1,.36,1),
@@ -231,7 +261,6 @@
   transform: translateY(-2px);
 }
 .ai-split-section-category-{{ uid }}--shadow{ box-shadow: 0 4px 12px rgba(0,0,0,.1); }
-/* CHANGED: shadow transition pairs with easing above */
 .ai-split-section-category-{{ uid }}--shadow:hover{ box-shadow: 0 8px 24px rgba(0,0,0,.15); }
 
 /* Category image box */
@@ -241,7 +270,6 @@
   background-color: {{ section.settings.category_image_bg_color }};
   {% if section.settings.enable_image_overflow %}overflow:visible; position:relative;{% else %}overflow:hidden;{% endif %}
 }
-/* CHANGED: give images a smooth transform pipeline (no visual change unless you already scale via overflow) */
 .ai-split-section-category-image-{{ uid }} img{
   width:100%; height:100%; object-fit: {{ section.settings.image_fit }};
   border-radius: {{ section.settings.category_image_radius }}px;
@@ -334,13 +362,12 @@
     padding: {{ section.settings.padding_top | times: 0.7 }}px 15px {{ section.settings.padding_bottom | times: 0.7 }}px 15px;
   }
 
-  /* FORCE VERTICAL STACK ON MOBILE */
   .ai-split-section-categories-{{ uid }}{
     display: grid;
-    grid-template-columns: 1fr !important;  /* one column */
+    grid-template-columns: 1fr !important;
     gap: 12px;
     width: 100%;
-    max-width: 100%;                         /* ignore "fit-content" center rule on mobile */
+    max-width: 100%;
   }
 
   .ai-split-section-heading-{{ uid }}{ font-size: {{ section.settings.heading_size | times: 0.8 }}px; }
@@ -358,52 +385,30 @@
     50%{ transform: translateY(-{{ section.settings.float_intensity | times: 0.7 }}px); }
   }
 }
-
 </style>
 
-
 <script>
-(function(){
-  class SplitSection{{ uid | replace: '-', '_' }} extends HTMLElement{
-    constructor(){
-      super();
-      this.bgEffect = this.dataset.bgEffect;
-      this._onParallax = this.handleParallax.bind(this);
-      this.parallaxElement = null;
-    }
+  // Simple, robust parallax without custom elements
+  document.addEventListener('DOMContentLoaded', function(){
+    var section = document.getElementById('split-hero-{{ uid }}');
+    if (!section) return;
 
-    connectedCallback(){
-      if(this.bgEffect === 'parallax'){
-        this.parallaxElement = this.querySelector('.ai-split-section-bg-{{ uid }}');
-        if(this.parallaxElement){
-          window.addEventListener('scroll', this._onParallax, { passive: true });
-          this.handleParallax();
-        }
-      }
-    }
+    if (section.dataset.bgEffect === 'parallax') {
+      var bg = section.querySelector('.ai-split-section-bg-{{ uid }}');
+      if (!bg) return;
 
-    handleParallax(){
-      if(!this.parallaxElement) return;
-      const rect = this.getBoundingClientRect();
-      const scrolled = window.pageYOffset || document.documentElement.scrollTop || 0;
-      const rate = scrolled * -0.5;
-      if(rect.bottom >= 0 && rect.top <= window.innerHeight){
-        this.parallaxElement.style.transform = `translateY(${rate}px)`;
-      }
-    }
+      var onScroll = function(){
+        var rect = section.getBoundingClientRect();
+        if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+        var scrolled = window.pageYOffset || document.documentElement.scrollTop || 0;
+        var rate = scrolled * -0.5;
+        bg.style.transform = 'translateY(' + rate + 'px)';
+      };
 
-    disconnectedCallback(){
-      if(this.bgEffect === 'parallax'){
-        window.removeEventListener('scroll', this._onParallax);
-      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
     }
-  }
-
-  const tagName = 'split-section-{{ uid }}';
-  if(!customElements.get(tagName)){
-    customElements.define(tagName, SplitSection{{ uid | replace: '-', '_' }});
-  }
-})();
+  });
 </script>
 
 {% schema %}
@@ -414,7 +419,7 @@
     { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 200, "step": 5, "default": 60, "unit": "px" },
     { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 200, "step": 5, "default": 60, "unit": "px" },
 
-    { "type": "header", "content": "Background" },
+    { "type": "header", "content": "Background image (optional)" },
     { "type": "image_picker", "id": "background_image", "label": "Background image" },
     { "type": "select", "id": "image_alignment", "label": "Background image alignment",
       "options": [{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}],
@@ -424,7 +429,48 @@
       "options": [{"value":"none","label":"None"},{"value":"fixed","label":"Fixed"},{"value":"parallax","label":"Parallax"}],
       "default": "none"
     },
-    { "type": "color", "id": "background_color", "label": "Background color", "default": "#ffffff" },
+
+    { "type": "header", "content": "Background color / gradient" },
+    { "type": "checkbox", "id": "use_gradient", "label": "Use gradient instead of solid color", "default": true },
+    { "type": "color", "id": "background_color", "label": "Solid background color (fallback)", "default": "#ffffff" },
+
+    { "type": "select", "id": "grad_type", "label": "Gradient type",
+      "options": [
+        { "value": "linear", "label": "Linear" },
+        { "value": "radial", "label": "Radial" }
+      ],
+      "default": "linear"
+    },
+    { "type": "range", "id": "grad_angle", "label": "Linear angle (°)", "min": 0, "max": 360, "step": 5, "default": 135, "unit": "deg" },
+
+    { "type": "select", "id": "radial_position", "label": "Radial position",
+      "options": [
+        { "value": "center center", "label": "Center" },
+        { "value": "top left", "label": "Top left" },
+        { "value": "top center", "label": "Top" },
+        { "value": "top right", "label": "Top right" },
+        { "value": "center left", "label": "Left" },
+        { "value": "center right", "label": "Right" },
+        { "value": "bottom left", "label": "Bottom left" },
+        { "value": "bottom center", "label": "Bottom" },
+        { "value": "bottom right", "label": "Bottom right" }
+      ],
+      "default": "center center"
+    },
+
+    { "type": "color", "id": "grad_color_1", "label": "Gradient color 1", "default": "#ff9a9e" },
+    { "type": "range", "id": "grad_stop_1", "label": "Stop 1 (%)", "min": 0, "max": 100, "step": 1, "default": 0, "unit": "%" },
+
+    { "type": "color", "id": "grad_color_2", "label": "Gradient color 2", "default": "#fad0c4" },
+    { "type": "range", "id": "grad_stop_2", "label": "Stop 2 (%)", "min": 0, "max": 100, "step": 1, "default": 50, "unit": "%" },
+
+    { "type": "checkbox", "id": "enable_grad_color_3", "label": "Add color 3", "default": false },
+    { "type": "color", "id": "grad_color_3", "label": "Gradient color 3", "default": "#fcb69f" },
+    { "type": "range", "id": "grad_stop_3", "label": "Stop 3 (%)", "min": 0, "max": 100, "step": 1, "default": 75, "unit": "%" },
+
+    { "type": "checkbox", "id": "enable_grad_color_4", "label": "Add color 4", "default": false },
+    { "type": "color", "id": "grad_color_4", "label": "Gradient color 4", "default": "#a1c4fd" },
+    { "type": "range", "id": "grad_stop_4", "label": "Stop 4 (%)", "min": 0, "max": 100, "step": 1, "default": 100, "unit": "%" },
 
     { "type": "header", "content": "Content" },
     { "type": "select", "id": "content_alignment", "label": "Content alignment",
