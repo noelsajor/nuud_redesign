@@ -45,7 +45,7 @@
         "right_image": "shopify://shop_images/Gemini_Generated_Image_39d2pb39d2pb39d2_1.png",
         "right_image_radius": 8,
         "enable_float_animation": true,
-        "float_intensity": 9,
+        "float_intensity": 12,
         "float_duration": 4,
         "show_categories": true,
         "categories_alignment": "left",
