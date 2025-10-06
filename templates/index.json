@@ -649,7 +649,7 @@
         "padding": "100,100",
         "margin": "0,0",
         "show_background_image": false,
-        "background_style": "none",
+        "background_style": "parallax",
         "background_size": "auto",
         "enable_overlay": false,
         "background_color": "#fdf8e1",
