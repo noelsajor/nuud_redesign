@@ -36,7 +36,7 @@
         "float_duration": 4,
         "show_categories": true,
         "categories_alignment": "left",
-        "categories_per_row": "2",
+        "categories_per_row": "1",
         "categories_per_row_mobile": "2",
         "enable_category_shadow": true,
         "category_aspect_ratio": "4/3",
@@ -152,9 +152,10 @@
         "animate_waves": true,
         "wave_speed": 10,
         "wave_bob": 0,
-        "enable_content_marquee": true,
         "marquee_speed": 6,
-        "scroll_direction": "right-left"
+        "marquee_direction": "rtl",
+        "marquee_gap": 40,
+        "marquee_pause": true
       }
     },
     "2_test_section_claude_9VyBTH": {
