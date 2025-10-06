@@ -316,6 +316,9 @@
 @media (max-width: 768px){
   .section-title{ margin-bottom: 24px; font-size: calc({{ section.settings.title_size | default: 32 }}px * .85) !important; }
   .feature-icon, .feature-icon-image{ width:48px; height:48px; }
+  .ticker__row {
+    flex-direction: row;
+  }
 }
 @media (max-width: 480px){
   .section-title{ font-size: calc({{ section.settings.title_size | default: 32 }}px * .78) !important; }
