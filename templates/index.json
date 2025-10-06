@@ -311,7 +311,7 @@
         "enable_card_shadow": false,
         "hero_image": "shopify://shop_images/Gemini_Generated_Image_39d2pb39d2pb39d2_1.png",
         "image_position": "right",
-        "image_overflow": 40,
+        "image_overflow": 0,
         "show_badge": true,
         "badge_image": "shopify://shop_images/SpicyLove.png",
         "badge_alt": "Brand Badge",
