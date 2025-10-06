@@ -154,7 +154,7 @@
         "title_size": 48,
         "title_alignment": "center",
         "wave_shape": "gentle",
-        "show_top_wave": true,
+        "show_top_wave": false,
         "show_bottom_wave": false,
         "wave_color": "#fdf8e1",
         "wave_overlap_top": 40,
