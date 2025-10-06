@@ -163,7 +163,7 @@
         "wave_amplitude": 40,
         "animate_waves": true,
         "wave_speed": 12,
-        "wave_bob": 8,
+        "wave_bob": 0,
         "marquee_speed": 20,
         "marquee_direction": "rtl",
         "marquee_gap": 40,
