@@ -276,7 +276,7 @@
         "title_color": "#7b1d2a",
         "title_size": 40,
         "title_alignment": "left",
-        "wave_shape": "rounded",
+        "wave_shape": "gentle",
         "show_top_wave": true,
         "show_bottom_wave": true,
         "wave_color": "#ffd8d8",
