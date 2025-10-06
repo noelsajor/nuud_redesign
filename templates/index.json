@@ -17,7 +17,7 @@
         "padding_bottom": 200,
         "background_image": "shopify://shop_images/wave-bg.webp",
         "image_alignment": "center",
-        "background_effect": "parallax",
+        "background_effect": "fixed",
         "background_color": "#ffffff",
         "content_alignment": "left",
         "heading": "Enhance your Pleasure",
