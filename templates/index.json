@@ -83,7 +83,7 @@
         "category_text_color": "#2d0288",
         "category_hover_text_color": "#ffffff",
         "category_border_color": "#ffccdd",
-        "category_border_width": 2,
+        "category_border_width": 0,
         "category_border_radius": 20,
         "category_image_radius": 12,
         "enable_image_hover_rotate": true,
