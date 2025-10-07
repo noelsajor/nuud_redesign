@@ -140,7 +140,7 @@ Compute RGBA for category card background (opacity controlled in settings)
                       </div>
 
                       {% if show_title %}
-                        <h3 class="ai-split-section-category-title-{{ uid }}">
+                        <h4 class="ai-split-section-category-title-{{ uid }}">
                           {% if category_title != blank %}
                             {{ category_title }}
                           {% elsif category != blank %}
@@ -148,7 +148,7 @@ Compute RGBA for category card background (opacity controlled in settings)
                           {% else %}
                             Category {{ i }}
                           {% endif %}
-                        </h3>
+                        </h4>
                       {% endif %}
                     </a>
                   {% else %}
