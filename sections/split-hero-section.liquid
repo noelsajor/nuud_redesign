@@ -394,14 +394,6 @@ Compute RGBA for category card background (opacity controlled in settings)
     padding: {{ section.settings.padding_top | times: 0.7 }}px 15px {{ section.settings.padding_bottom | times: 0.7 }}px 15px;
   }
 
-  .ai-split-section-categories-{{ uid }}{
-    display: grid;
-    grid-template-columns: 1fr !important;
-    gap: 12px;
-    width: 100%;
-    max-width: 100%;
-  }
-
   .ai-split-section-heading-{{ uid }}{ font-size: {{ section.settings.heading_size | times: 0.8 }}px;}
   .ai-split-section-subheading-{{ uid }}{ font-size: {{ section.settings.subheading_size | times: 0.9 }}px; }
   .ai-split-section-bg-{{ uid }}--fixed{ background-attachment: scroll; }
