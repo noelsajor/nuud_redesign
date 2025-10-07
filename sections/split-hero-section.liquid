@@ -24,6 +24,15 @@ Build gradient string (linear or radial) with up to 4 colors.
   {% endif %}
 {% endcapture %}
 
+{%- comment -%}
+Compute RGBA for category card background (opacity controlled in settings)
+{%- endcomment -%}
+{% liquid
+  assign _bg_rgb = section.settings.category_bg_color | color_to_rgb
+  assign _bg_rgb_vals = _bg_rgb | replace: 'rgb(', '' | replace: ')', ''
+  assign _bg_alpha = section.settings.category_bg_opacity | times: 0.01
+%}
+
 <section
   id="split-hero-{{ uid }}"
   class="ai-split-section-{{ uid }}"
@@ -34,6 +43,10 @@ Build gradient string (linear or radial) with up to 4 colors.
     {% else %}
       background-color: {{ section.settings.background_color }};
     {% endif %}
+    --card-bg: rgba({{ _bg_rgb_vals }}, {{ _bg_alpha }});
+    --card-border-width: {{ section.settings.category_border_width }}px;
+    --card-border-color: {{ section.settings.category_border_color }};
+    --hover-rotate-deg: {{ section.settings.image_hover_rotate_deg }}deg;
   "
 >
   {% if section.settings.background_image %}
@@ -210,7 +223,7 @@ Build gradient string (linear or radial) with up to 4 colors.
   display:flex; flex-direction:column; gap:24px; text-align: {{ section.settings.content_alignment }};
 }
 
-/* Typography */
+/* Headings/descriptions use theme defaults, only spacing/size/color controlled by settings */
 .ai-split-section-heading-{{ uid }}{
   font-size: {{ section.settings.heading_size }}px; color: {{ section.settings.heading_color }};
   margin:0; line-height:1.2;
@@ -243,7 +256,8 @@ Build gradient string (linear or radial) with up to 4 colors.
 
 /* Category card */
 .ai-split-section-category-{{ uid }}{
-  background-color: {{ section.settings.category_bg_color }};
+  background-color: var(--card-bg);
+  border: var(--card-border-width) solid var(--card-border-color);
   border-radius: {{ section.settings.category_border_radius }}px;
   padding:16px; text-decoration:none; color: {{ section.settings.category_text_color }};
   transition:
@@ -270,16 +284,12 @@ Build gradient string (linear or radial) with up to 4 colors.
   background-color: {{ section.settings.category_image_bg_color }};
   {% if section.settings.enable_image_overflow %}overflow:visible; position:relative;{% else %}overflow:hidden;{% endif %}
 }
-
-/* ✨ Subtle rotation on hover (with scale compatibility) */
 .ai-split-section-category-image-{{ uid }} img{
   width:100%; height:100%; object-fit: {{ section.settings.image_fit }};
   border-radius: {{ section.settings.category_image_radius }}px;
-  will-change: transform;
   transition: transform .45s cubic-bezier(.22,1,.36,1);
-  transform: scale(var(--img-scale, 1)) rotate(var(--img-rotate, 0deg));
   {% if section.settings.enable_image_overflow %}
-    --img-scale: {{ section.settings.image_overflow_scale }};
+    transform: scale({{ section.settings.image_overflow_scale }});
     {% case section.settings.image_overflow_direction %}
       {% when 'top' %}transform-origin:center bottom;
       {% when 'bottom' %}transform-origin:center top;
@@ -294,15 +304,22 @@ Build gradient string (linear or radial) with up to 4 colors.
     z-index:2; position:relative;
   {% endif %}
 }
-/* On card hover, gently rotate the image */
-.ai-split-section-category-{{ uid }}:hover .ai-split-section-category-image-{{ uid }} img{
-  --img-rotate: 2deg;
-}
 
-/* Optional: rotate the placeholder icon too */
-.ai-split-section-category-{{ uid }}:hover .ai-split-section-category-placeholder-{{ uid }} svg{
-  transition: transform .45s cubic-bezier(.22,1,.36,1);
-  transform: rotate(2deg);
+/* Subtle rotation on hover (keeps overflow scale if enabled) */
+.ai-split-section-category-{{ uid }}:hover .ai-split-section-category-image-{{ uid }} img{
+  {% if section.settings.enable_image_hover_rotate %}
+    {% if section.settings.enable_image_overflow %}
+      transform: scale({{ section.settings.image_overflow_scale }}) rotate(var(--hover-rotate-deg));
+    {% else %}
+      transform: rotate(var(--hover-rotate-deg));
+    {% endif %}
+  {% else %}
+    {% if section.settings.enable_image_overflow %}
+      transform: scale({{ section.settings.image_overflow_scale }});
+    {% else %}
+      transform: none;
+    {% endif %}
+  {% endif %}
 }
 
 /* Placeholder inside category image */
@@ -327,8 +344,7 @@ Build gradient string (linear or radial) with up to 4 colors.
 }
 .ai-split-section-category-placeholder-{{ uid }} svg{ width:30px; height:30px; opacity:.5; }
 
-.ai-split-section-category-title-{{ uid }}{ font-size:32px; font-weight:600; margin:0; position:relative; z-index:3; }
-.ai-split-section-category-title-{{ uid }}:hover{ color:#ffffff; }
+.ai-split-section-category-title-{{ uid }}{ font-size:14px; font-weight:600; margin:0; position:relative; z-index:3; }
 
 .ai-split-section-empty-category-{{ uid }}{
   padding:16px; text-align:center; color:#666; font-style:italic;
@@ -367,10 +383,7 @@ Build gradient string (linear or radial) with up to 4 colors.
   .ai-split-section-right-image-{{ uid }} img,
   .ai-split-section-right-placeholder-{{ uid }} svg{ animation:none !important; }
   .ai-split-section-category-{{ uid }}{ transition: none !important; }
-  .ai-split-section-category-{{ uid }}:hover .ai-split-section-category-image-{{ uid }} img{
-    --img-rotate: 0deg !important;
-    transition: none !important;
-  }
+  .ai-split-section-category-image-{{ uid }} img{ transition: none !important; }
 }
 
 /* Responsive */
@@ -429,7 +442,6 @@ Build gradient string (linear or radial) with up to 4 colors.
     }
   });
 </script>
-
 
 {% schema %}
 {
@@ -579,12 +591,19 @@ Build gradient string (linear or radial) with up to 4 colors.
 
     { "type": "header", "content": "Category style" },
     { "type": "color", "id": "category_bg_color", "label": "Card background color", "default": "#f8f8f8" },
+    { "type": "range", "id": "category_bg_opacity", "label": "Card background opacity", "min": 0, "max": 100, "step": 1, "default": 100, "unit": "%" },
     { "type": "color", "id": "category_hover_bg_color", "label": "Card hover background color", "default": "#e8e8e8" },
     { "type": "color", "id": "category_image_bg_color", "label": "Image background color", "default": "#f0f0f0" },
     { "type": "color", "id": "category_text_color", "label": "Text color", "default": "#000000" },
     { "type": "color", "id": "category_hover_text_color", "label": "Hover text color", "default": "#000000" },
+    { "type": "color", "id": "category_border_color", "label": "Card border color", "default": "#e5e5e5" },
+    { "type": "range", "id": "category_border_width", "label": "Card border width", "min": 0, "max": 8, "step": 1, "default": 1, "unit": "px" },
     { "type": "range", "id": "category_border_radius", "min": 0, "max": 20, "step": 1, "unit": "px", "label": "Card border radius", "default": 8 },
-    { "type": "range", "id": "category_image_radius", "min": 0, "max": 20, "step": 1, "unit": "px", "label": "Image border radius", "default": 4 }
+    { "type": "range", "id": "category_image_radius", "min": 0, "max": 20, "step": 1, "unit": "px", "label": "Image border radius", "default": 4 },
+
+    { "type": "header", "content": "Hover effects" },
+    { "type": "checkbox", "id": "enable_image_hover_rotate", "label": "Rotate category image on hover", "default": true },
+    { "type": "range", "id": "image_hover_rotate_deg", "label": "Rotation amount (deg)", "min": 0, "max": 10, "step": 1, "default": 3, "unit": "deg" }
   ],
   "presets": [{ "name": "Split hero section" }]
 }
