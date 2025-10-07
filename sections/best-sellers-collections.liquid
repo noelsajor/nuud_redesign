@@ -1,6 +1,6 @@
 {% comment %}
 Best Sellers Collection – SEO/A11y optimized
-- Typography consistent with blog section
+- Typography now strictly inherits theme fonts (no external families)
 - Optional image overflow (float up out of the card)
 - Container background color
 - Blog-style "See all" button (dt-sc-btn + SVG)
@@ -37,7 +37,7 @@ Best Sellers Collection – SEO/A11y optimized
       
       {% if section.settings.section_title != blank %}
       <h2 id="best-sellers-title-{{ bs_uid }}" 
-          class="section-title"
+          class="section-title h2"
           style="color: {{ section.settings.title_color }}; 
                  font-size: {{ section.settings.title_size }}px;
                  font-weight: {{ section.settings.title_weight }};">
@@ -104,7 +104,7 @@ Best Sellers Collection – SEO/A11y optimized
             {% if section.settings.show_ratings %}
             <div class="product-rating" aria-label="5 out of 5 stars">
               {% for i in (1..5) %}
-                <span class="star" 
+                <span class="star"
                       style="color: {{ section.settings.star_color }};"
                       aria-hidden="true">★</span>
               {% endfor %}
@@ -121,7 +121,7 @@ Best Sellers Collection – SEO/A11y optimized
             {% endif %}
             
             <!-- Product Title -->
-            <h3 class="product-title">
+            <h3 class="product-title h4">
               <a href="{{ product.url }}" 
                  style="color: {{ section.settings.product_title_color }}; 
                         font-size: {{ section.settings.product_title_size }}px;
@@ -176,8 +176,8 @@ Best Sellers Collection – SEO/A11y optimized
           <!-- same SVG used in blog button; path follows currentColor -->
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
             <path d="M8,45h72L66.4,31.4c-1.9-1.9-1.9-5.1,0-7c1.9-1.9,5.1-1.9,7,0l22.1,22.1c0,0,0,0,0.1,0.1c0.2,0.2,0.4,0.4,0.6,0.7
-                     c0.1,0.1,0.1,0.2,0.1,0.3c0.1,0.2,0.2,0.4,0.3,0.6c0,0.1,0.1,0.2,0.1,0.3c0.1,0.2,0.1,0.4,0.2,0.6c0.1,0.3,0.1,0.6,0.1,1
-                     s0,0.7-0.1,1c0,0.2-0.1,0.4-0.2,0.6c0,0.1-0.1,0.2-0.1,0.3c-0.1,0.2-0.2,0.4-0.3,0.6c0,0.1-0.1,0.2-0.1,0.3
+                     c0.1,0.1,0.1,0.2,0.1,0.3c0.1,0.2,0.2,0.4,0.3,0.6c0,0.1,0.1,0.2,0.1,0.3c0.1,0.2,0.1,0.4,0.2,0.6c0,0.1,0.1,0.2,0.1,0.3
+                     c-0.1,0.2-0.2,0.4-0.3,0.6c0,0.1-0.1,0.2-0.1,0.3
                      c-0.2,0.2-0.4,0.5-0.6,0.7c0,0,0,0,0,0.1L73.4,75.6c-1,1-2.2,1.5-3.5,1.5s-2.5-0.5-3.5-1.5c-1.9-1.9-1.9-5.1,0-7L80,55H8
                      c-2.7,0-5-2.2-5-5C3.1,47.3,5.3,45,8,45z"></path>
           </svg>
@@ -196,11 +196,32 @@ Best Sellers Collection – SEO/A11y optimized
 </section>
 
 <style>
-/* ===== Base & Typography (match blog look) ===== */
-.best-sellers-{{ bs_uid }} .section-title,
-.best-sellers-{{ bs_uid }} .product-title {
-  margin: 0;
+/* ===== Theme Typography: inherit theme fonts only ===== */
+.best-sellers-{{ bs_uid }} { 
+  font-family: var(--font-body-family), var(--font-body-fallback, sans-serif);
 }
+.best-sellers-{{ bs_uid }} .h1,
+.best-sellers-{{ bs_uid }} .h2,
+.best-sellers-{{ bs_uid }} .h3,
+.best-sellers-{{ bs_uid }} .h4,
+.best-sellers-{{ bs_uid }} .h5,
+.best-sellers-{{ bs_uid }} .h6 {
+  font-family: var(--font-heading-family), var(--font-heading-fallback, var(--font-body-family), sans-serif);
+}
+/* Ensure UI elements & third-party classes don’t force a different font */
+.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn,
+.best-sellers-{{ bs_uid }} .add-to-cart-btn,
+.best-sellers-{{ bs_uid }} .product-vendor,
+.best-sellers-{{ bs_uid }} .product-rating,
+.best-sellers-{{ bs_uid }} .sale-badge,
+.best-sellers-{{ bs_uid }} .no-products-message,
+.best-sellers-{{ bs_uid }} .no-collection-message {
+  font-family: inherit;
+}
+
+/* ===== Base resets (no font-family here) ===== */
+.best-sellers-{{ bs_uid }} .section-title,
+.best-sellers-{{ bs_uid }} .product-title { margin: 0; }
 
 /* Container position hooks */
 .best-sellers-{{ bs_uid }} .best-sellers-section { position: relative; }
@@ -208,11 +229,11 @@ Best Sellers Collection – SEO/A11y optimized
 
 /* ===== Badge (centered above title) ===== */
 .best-sellers-{{ bs_uid }} .collection-badge {
-  position: static !important;      /* override any previous absolute rules */
+  position: static !important;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0 auto 12px auto;         /* centered + space below */
+  margin: 0 auto 12px auto;
   width: auto;
 }
 .best-sellers-{{ bs_uid }} .badge-image { border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,.1); display: block; }
@@ -242,6 +263,7 @@ Best Sellers Collection – SEO/A11y optimized
 .best-sellers-{{ bs_uid }} .product-card:hover .product-image { transform: scale(1.05); }
 .best-sellers-{{ bs_uid }} .product-image-placeholder { width: 100%; height: 100%; display:flex; align-items:center; justify-content:center; color:#999; font-size:14px; }
 
+/* ===== Badges ===== */
 .best-sellers-{{ bs_uid }} .sale-badge {
   position:absolute; top:10px; left:10px;
   color:#fff; padding:5px 10px; border-radius:4px; font-size:12px; font-weight:600; text-transform:uppercase;
@@ -284,7 +306,6 @@ Best Sellers Collection – SEO/A11y optimized
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
   .best-sellers-{{ bs_uid }} .best-sellers-container { padding: 0 15px; }
-  /* Badge stays centered; just scale size down */
   .best-sellers-{{ bs_uid }} .badge-image {
     width: calc({{ section.settings.badge_size | default: 120 }}px * .8) !important;
     height: calc({{ section.settings.badge_size | default: 120 }}px * .8) !important;
@@ -303,432 +324,105 @@ Best Sellers Collection – SEO/A11y optimized
 .best-sellers-{{ bs_uid }} .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 
 /* --- Fix: badge should never overlay the navbar --- */
-.best-sellers-{{ bs_uid }} { position: relative; z-index: 0; }               /* section sits in a low stack */
-.best-sellers-{{ bs_uid }} .section-header { position: relative; z-index: 1; }/* header above section bg */
+.best-sellers-{{ bs_uid }} { position: relative; z-index: 0; }
+.best-sellers-{{ bs_uid }} .section-header { position: relative; z-index: 1; }
 .best-sellers-{{ bs_uid }} .collection-badge {
-  position: relative !important;  /* ensure not absolute anywhere */
-  z-index: 1 !important;          /* keep it low so header can sit above */
+  position: relative !important;
+  z-index: 1 !important;
 }
-
 </style>
 
 {% schema %}
 {
   "name": "Best Sellers Collection",
   "settings": [
-    {
-      "type": "header",
-      "content": "Collection Settings"
-    },
-    {
-      "type": "collection",
-      "id": "collection",
-      "label": "Collection",
-      "info": "Select the collection to display products from"
-    },
-    {
-      "type": "range",
-      "id": "products_to_show",
-      "label": "Number of Products to Show",
-      "min": 1,
-      "max": 12,
-      "step": 1,
-      "default": 3
-    },
-    {
-      "type": "range",
-      "id": "min_product_width",
-      "label": "Minimum Product Card Width",
-      "info": "Controls responsive breakpoints",
-      "min": 200,
-      "max": 350,
-      "step": 25,
-      "default": 275,
-      "unit": "px"
-    },
-    {
-      "type": "header",
-      "content": "Section Layout"
-    },
-    {
-      "type": "color",
-      "id": "background_color",
-      "label": "Section Background Color",
-      "default": "#f8f8f8"
-    },
-    {
-      "type": "color",
-      "id": "container_background_color",
-      "label": "Inner Container Background",
-      "default": "transparent"
-    },
-    {
-      "type": "range",
-      "id": "section_padding_top",
-      "label": "Section Padding Top",
-      "min": 0,
-      "max": 100,
-      "step": 5,
-      "default": 60,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "section_padding_bottom",
-      "label": "Section Padding Bottom",
-      "min": 0,
-      "max": 100,
-      "step": 5,
-      "default": 60,
-      "unit": "px"
-    },
-    {
-      "type": "header",
-      "content": "Section Title"
-    },
-    {
-      "type": "text",
-      "id": "section_title",
-      "label": "Section Title",
-      "default": "Our Best Sellers"
-    },
-    {
-      "type": "color",
-      "id": "title_color",
-      "label": "Title Color",
-      "default": "#8b1538"
-    },
-    {
-      "type": "range",
-      "id": "title_size",
-      "label": "Title Font Size",
-      "min": 24,
-      "max": 48,
-      "step": 2,
-      "default": 36,
-      "unit": "px"
-    },
-    {
-      "type": "select",
-      "id": "title_weight",
-      "label": "Title Font Weight",
-      "options": [
-        { "value": "400", "label": "Normal" },
-        { "value": "500", "label": "Medium" },
-        { "value": "600", "label": "Semi Bold" },
-        { "value": "700", "label": "Bold" }
-      ],
-      "default": "700"
-    },
-    {
-      "type": "select",
-      "id": "title_alignment",
-      "label": "Title Alignment",
-      "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "center", "label": "Center" },
-        { "value": "right", "label": "Right" }
-      ],
-      "default": "center"
-    },
-    {
-      "type": "range",
-      "id": "title_bottom_spacing",
-      "label": "Space Below Title",
-      "info": "Vertical spacing between title and products",
-      "min": 20,
-      "max": 80,
-      "step": 5,
-      "default": 40,
-      "unit": "px"
-    },
-    {
-      "type": "header",
-      "content": "Product Grid Spacing"
-    },
-    {
-      "type": "range",
-      "id": "products_grid_gap",
-      "label": "Gap Between Products",
-      "info": "Horizontal and vertical spacing between product cards",
-      "min": 15,
-      "max": 60,
-      "step": 5,
-      "default": 30,
-      "unit": "px"
-    },
-    {
-      "type": "header",
-      "content": "Image Float (Overflow)"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_image_float",
-      "label": "Allow product images to overflow above card",
-      "default": true
-    },
-    {
-      "type": "range",
-      "id": "image_float_offset",
-      "label": "Overflow amount (px)",
-      "min": 0,
-      "max": 80,
-      "step": 5,
-      "default": 25,
-      "unit": "px"
-    },
-    {
-      "type": "header",
-      "content": "See All Button"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_see_all_button",
-      "label": "Show 'See All' Button",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "see_all_text",
-      "label": "Button Text",
-      "default": "See all"
-    },
-    {
-      "type": "select",
-      "id": "button_alignment",
-      "label": "Button Alignment",
-      "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "center", "label": "Center" },
-        { "value": "right", "label": "Right" }
-      ],
-      "default": "center"
-    },
-    {
-      "type": "range",
-      "id": "button_top_spacing",
-      "label": "Space Above Button",
-      "min": 20,
-      "max": 80,
-      "step": 5,
-      "default": 40,
-      "unit": "px"
-    },
-    {
-      "type": "checkbox",
-      "id": "see_all_add_padding",
-      "label": "Use blog-style padding (ctm-btn-padding)",
-      "default": false
-    },
-    {
-      "type": "header",
-      "content": "Badge Settings"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_badge",
-      "label": "Show Badge",
-      "default": true
-    },
-    {
-      "type": "image_picker",
-      "id": "badge_image",
-      "label": "Badge Image"
-    },
-    {
-      "type": "text",
-      "id": "badge_alt",
-      "label": "Badge Alt Text",
-      "default": "100% Fun Guaranteed"
-    },
-    {
-      "type": "range",
-      "id": "badge_size",
-      "label": "Badge Size",
-      "min": 80,
-      "max": 150,
-      "step": 10,
-      "default": 120,
-      "unit": "px"
-    },
-    {
-      "type": "checkbox",
-      "id": "badge_spin",
-      "label": "Enable Badge Spinning",
-      "default": false
-    },
-    {
-      "type": "range",
-      "id": "badge_spin_speed",
-      "label": "Spin Speed (seconds)",
-      "min": 5,
-      "max": 20,
-      "step": 1,
-      "default": 10,
-      "unit": "s"
-    },
-    {
-      "type": "header",
-      "content": "Product Cards"
-    },
-    {
-      "type": "color",
-      "id": "card_background",
-      "label": "Card Background",
-      "default": "#ffffff"
-    },
-    {
-      "type": "range",
-      "id": "card_border_radius",
-      "label": "Card Border Radius",
-      "min": 0,
-      "max": 30,
-      "step": 5,
-      "default": 15,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "card_padding",
-      "label": "Card Content Padding",
-      "min": 15,
-      "max": 35,
-      "step": 5,
-      "default": 20,
-      "unit": "px"
-    },
-    {
-      "type": "color",
-      "id": "placeholder_color",
-      "label": "Image Placeholder Color",
-      "default": "#f0f0f0"
-    },
-    {
-      "type": "color",
-      "id": "sale_badge_color",
-      "label": "Sale Badge Color",
-      "default": "#ff4444"
-    },
-    {
-      "type": "header",
-      "content": "Product Information"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_ratings",
-      "label": "Show Star Ratings",
-      "default": true
-    },
-    {
-      "type": "color",
-      "id": "star_color",
-      "label": "Star Color",
-      "default": "#ffc107"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_vendor",
-      "label": "Show Brand/Vendor",
-      "default": true
-    },
-    {
-      "type": "color",
-      "id": "vendor_color",
-      "label": "Brand Color",
-      "default": "#666666"
-    },
-    {
-      "type": "range",
-      "id": "vendor_size",
-      "label": "Brand Font Size",
-      "min": 10,
-      "max": 16,
-      "step": 1,
-      "default": 12,
-      "unit": "px"
-    },
-    {
-      "type": "color",
-      "id": "product_title_color",
-      "label": "Product Title Color",
-      "default": "#333333"
-    },
-    {
-      "type": "range",
-      "id": "product_title_size",
-      "label": "Product Title Size",
-      "min": 14,
-      "max": 20,
-      "step": 1,
-      "default": 16,
-      "unit": "px"
-    },
-    {
-      "type": "select",
-      "id": "product_title_weight",
-      "label": "Product Title Weight",
-      "options": [
-        { "value": "400", "label": "Normal" },
-        { "value": "500", "label": "Medium" },
-        { "value": "600", "label": "Semi Bold" },
-        { "value": "700", "label": "Bold" }
-      ],
-      "default": "600"
-    },
-    {
-      "type": "header",
-      "content": "Add to Cart Button"
-    },
-    {
-      "type": "text",
-      "id": "add_to_cart_text",
-      "label": "Add to Cart Text",
-      "default": "ADD TO CART"
-    },
-    {
-      "type": "text",
-      "id": "sold_out_text",
-      "label": "Sold Out Text",
-      "default": "SOLD OUT"
-    },
-    {
-      "type": "color",
-      "id": "cart_button_background",
-      "label": "Button Background",
-      "default": "#ff69b4"
-    },
-    {
-      "type": "color",
-      "id": "cart_button_text_color",
-      "label": "Button Text Color",
-      "default": "#ffffff"
-    },
-    {
-      "type": "range",
-      "id": "cart_button_radius",
-      "label": "Button Border Radius",
-      "min": 0,
-      "max": 30,
-      "step": 5,
-      "default": 25,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "cart_button_text_size",
-      "label": "Button Text Size",
-      "min": 12,
-      "max": 16,
-      "step": 1,
-      "default": 14,
-      "unit": "px"
-    }
+    { "type": "header", "content": "Collection Settings" },
+    { "type": "collection", "id": "collection", "label": "Collection", "info": "Select the collection to display products from" },
+    { "type": "range", "id": "products_to_show", "label": "Number of Products to Show", "min": 1, "max": 12, "step": 1, "default": 3 },
+
+    { "type": "range", "id": "min_product_width", "label": "Minimum Product Card Width", "info": "Controls responsive breakpoints", "min": 200, "max": 350, "step": 25, "default": 275, "unit": "px" },
+
+    { "type": "header", "content": "Section Layout" },
+    { "type": "color", "id": "background_color", "label": "Section Background Color", "default": "#f8f8f8" },
+    { "type": "color", "id": "container_background_color", "label": "Inner Container Background", "default": "transparent" },
+    { "type": "range", "id": "section_padding_top", "label": "Section Padding Top", "min": 0, "max": 100, "step": 5, "default": 60, "unit": "px" },
+    { "type": "range", "id": "section_padding_bottom", "label": "Section Padding Bottom", "min": 0, "max": 100, "step": 5, "default": 60, "unit": "px" },
+
+    { "type": "header", "content": "Section Title" },
+    { "type": "text", "id": "section_title", "label": "Section Title", "default": "Our Best Sellers" },
+    { "type": "color", "id": "title_color", "label": "Title Color", "default": "#8b1538" },
+    { "type": "range", "id": "title_size", "label": "Title Font Size", "min": 24, "max": 48, "step": 2, "default": 36, "unit": "px" },
+    { "type": "select", "id": "title_weight", "label": "Title Font Weight", "options": [
+      { "value": "400", "label": "Normal" },
+      { "value": "500", "label": "Medium" },
+      { "value": "600", "label": "Semi Bold" },
+      { "value": "700", "label": "Bold" }
+    ], "default": "700" },
+    { "type": "select", "id": "title_alignment", "label": "Title Alignment", "options": [
+      { "value": "left", "label": "Left" },
+      { "value": "center", "label": "Center" },
+      { "value": "right", "label": "Right" }
+    ], "default": "center" },
+    { "type": "range", "id": "title_bottom_spacing", "label": "Space Below Title", "info": "Vertical spacing between title and products", "min": 20, "max": 80, "step": 5, "default": 40, "unit": "px" },
+
+    { "type": "header", "content": "Product Grid Spacing" },
+    { "type": "range", "id": "products_grid_gap", "label": "Gap Between Products", "info": "Horizontal and vertical spacing between product cards", "min": 15, "max": 60, "step": 5, "default": 30, "unit": "px" },
+
+    { "type": "header", "content": "Image Float (Overflow)" },
+    { "type": "checkbox", "id": "enable_image_float", "label": "Allow product images to overflow above card", "default": true },
+    { "type": "range", "id": "image_float_offset", "label": "Overflow amount (px)", "min": 0, "max": 80, "step": 5, "default": 25, "unit": "px" },
+
+    { "type": "header", "content": "See All Button" },
+    { "type": "checkbox", "id": "show_see_all_button", "label": "Show 'See All' Button", "default": true },
+    { "type": "text", "id": "see_all_text", "label": "Button Text", "default": "See all" },
+    { "type": "select", "id": "button_alignment", "label": "Button Alignment", "options": [
+      { "value": "left", "label": "Left" },
+      { "value": "center", "label": "Center" },
+      { "value": "right", "label": "Right" }
+    ], "default": "center" },
+    { "type": "range", "id": "button_top_spacing", "label": "Space Above Button", "min": 20, "max": 80, "step": 5, "default": 40, "unit": "px" },
+    { "type": "checkbox", "id": "see_all_add_padding", "label": "Use blog-style padding (ctm-btn-padding)", "default": false },
+
+    { "type": "header", "content": "Badge Settings" },
+    { "type": "checkbox", "id": "show_badge", "label": "Show Badge", "default": true },
+    { "type": "image_picker", "id": "badge_image", "label": "Badge Image" },
+    { "type": "text", "id": "badge_alt", "label": "Badge Alt Text", "default": "100% Fun Guaranteed" },
+    { "type": "range", "id": "badge_size", "label": "Badge Size", "min": 80, "max": 150, "step": 10, "default": 120, "unit": "px" },
+    { "type": "checkbox", "id": "badge_spin", "label": "Enable Badge Spinning", "default": false },
+    { "type": "range", "id": "badge_spin_speed", "label": "Spin Speed (seconds)", "min": 5, "max": 20, "step": 1, "default": 10, "unit": "s" },
+
+    { "type": "header", "content": "Product Cards" },
+    { "type": "color", "id": "card_background", "label": "Card Background", "default": "#ffffff" },
+    { "type": "range", "id": "card_border_radius", "label": "Card Border Radius", "min": 0, "max": 30, "step": 5, "default": 15, "unit": "px" },
+    { "type": "range", "id": "card_padding", "label": "Card Content Padding", "min": 15, "max": 35, "step": 5, "default": 20, "unit": "px" },
+    { "type": "color", "id": "placeholder_color", "label": "Image Placeholder Color", "default": "#f0f0f0" },
+    { "type": "color", "id": "sale_badge_color", "label": "Sale Badge Color", "default": "#ff4444" },
+
+    { "type": "header", "content": "Product Information" },
+    { "type": "checkbox", "id": "show_ratings", "label": "Show Star Ratings", "default": true },
+    { "type": "color", "id": "star_color", "label": "Star Color", "default": "#ffc107" },
+    { "type": "checkbox", "id": "show_vendor", "label": "Show Brand/Vendor", "default": true },
+    { "type": "color", "id": "vendor_color", "label": "Brand Color", "default": "#666666" },
+    { "type": "range", "id": "vendor_size", "label": "Brand Font Size", "min": 10, "max": 16, "step": 1, "default": 12, "unit": "px" },
+    { "type": "color", "id": "product_title_color", "label": "Product Title Color", "default": "#333333" },
+    { "type": "range", "id": "product_title_size", "label": "Product Title Size", "min": 14, "max": 20, "step": 1, "default": 16, "unit": "px" },
+    { "type": "select", "id": "product_title_weight", "label": "Product Title Weight", "options": [
+      { "value": "400", "label": "Normal" },
+      { "value": "500", "label": "Medium" },
+      { "value": "600", "label": "Semi Bold" },
+      { "value": "700", "label": "Bold" }
+    ], "default": "600" },
+
+    { "type": "header", "content": "Add to Cart Button" },
+    { "type": "text", "id": "add_to_cart_text", "label": "Add to Cart Text", "default": "ADD TO CART" },
+    { "type": "text", "id": "sold_out_text", "label": "Sold Out Text", "default": "SOLD OUT" },
+    { "type": "color", "id": "cart_button_background", "label": "Button Background", "default": "#ff69b4" },
+    { "type": "color", "id": "cart_button_text_color", "label": "Button Text Color", "default": "#ffffff" },
+    { "type": "range", "id": "cart_button_radius", "label": "Button Border Radius", "min": 0, "max": 30, "step": 5, "default": 25, "unit": "px" },
+    { "type": "range", "id": "cart_button_text_size", "label": "Button Text Size", "min": 12, "max": 16, "step": 1, "default": 14, "unit": "px" }
   ],
   "presets": [
-    {
-      "name": "Best Sellers Collection",
-      "category": "Custom"
-    }
+    { "name": "Best Sellers Collection", "category": "Custom" }
   ],
   "templates": ["index", "collection", "page"]
 }
