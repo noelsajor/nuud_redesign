@@ -54,7 +54,7 @@
         "enable_category_shadow": false,
         "category_aspect_ratio": "1/1",
         "image_fit": "cover",
-        "enable_image_overflow": true,
+        "enable_image_overflow": false,
         "image_overflow_scale": 1.5,
         "image_overflow_direction": "top",
         "enable_category_1": true,
