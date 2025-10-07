@@ -81,7 +81,7 @@
         "category_image_bg_color": "rgba(0,0,0,0)",
         "category_text_color": "#2d0288",
         "category_hover_text_color": "#000000",
-        "category_border_radius": 16,
+        "category_border_radius": 20,
         "category_image_radius": 12
       }
     },
