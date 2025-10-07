@@ -468,7 +468,12 @@ Compute RGBA for category card background (opacity controlled in settings)
     width: clamp(200px, 70vw, 280px);
   }
 
-    /* Center the scroller wrapper */
+  
+}
+
+/* Mobile: center the categories and allow horizontal scroll */
+@media (max-width: 768px){
+  /* Center the scroller wrapper */
   .ai-split-section-categories-wrapper-{{ uid }}{
     justify-content: center !important;
   }
@@ -501,6 +506,7 @@ Compute RGBA for category card background (opacity controlled in settings)
     min-width: clamp(220px, 70%, 320px);
   }
 }
+
 
 </style>
 
