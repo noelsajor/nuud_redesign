@@ -471,43 +471,6 @@ Compute RGBA for category card background (opacity controlled in settings)
   
 }
 
-/* Mobile: center the categories and allow horizontal scroll */
-@media (max-width: 768px){
-  /* Center the scroller wrapper */
-  .ai-split-section-categories-wrapper-{{ uid }}{
-    justify-content: center !important;
-  }
-
-  /* Make the list a horizontal scroller */
-  .ai-split-section-categories-{{ uid }}{
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    justify-content: center;           /* centers when there's extra space */
-    gap: 12px !important;
-
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    -webkit-overflow-scrolling: touch;
-
-    scroll-snap-type: x proximity;     /* nice snapping while scrolling */
-    padding: 0 12px 8px;
-    width: 100%;
-    max-width: 100%;
-    margin: 0 auto;
-
-    /* neutralize any previous grid rules */
-    grid-template-columns: unset !important;
-  }
-
-  /* Each card is a snap target and keeps its width */
-  .ai-split-section-category-{{ uid }}{
-    flex: 0 0 auto;
-    scroll-snap-align: center;
-    min-width: clamp(220px, 70%, 320px);
-  }
-}
-
-
 </style>
 
 <script>
