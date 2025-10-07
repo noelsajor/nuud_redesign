@@ -245,7 +245,7 @@ Compute RGBA for category card background (opacity controlled in settings)
   {% if section.settings.categories_alignment == 'right' %}justify-content:flex-end;{% endif %}
 }
 
-/* Categories grid */
+/* Categories grid (desktop/tablet) */
 .ai-split-section-categories-{{ uid }}{
   display:grid;
   grid-template-columns: repeat({{ section.settings.categories_per_row }}, 1fr);
@@ -344,12 +344,8 @@ Compute RGBA for category card background (opacity controlled in settings)
 }
 .ai-split-section-category-placeholder-{{ uid }} svg{ width:30px; height:30px; opacity:.5; }
 
-.ai-split-section-category-title-{{ uid }}{ font-size:32px; font-weight:600; margin:0; position:relative; z-index:3; color: #ffffff; }
-
-.ai-split-section-empty-category-{{ uid }}{
-  padding:16px; text-align:center; color:#666; font-style:italic;
-  background:#f9f9f9; border-radius: {{ section.settings.category_border_radius }}px; border:2px dashed #ddd; font-size:12px;
-}
+/* Use theme typography by default (no hardcoded type styles) */
+.ai-split-section-category-title-{{ uid }}{ margin:0; position:relative; z-index:3; }
 
 /* Right image (floating) */
 .ai-split-section-right-{{ uid }}{ position:relative; }
@@ -386,22 +382,79 @@ Compute RGBA for category card background (opacity controlled in settings)
   .ai-split-section-category-image-{{ uid }} img{ transition: none !important; }
 }
 
-/* Responsive */
+/* ---------- Mobile layout & horizontal finger scrolling ---------- */
 @media (max-width: 768px){
-  .ai-split-section-container-{{ uid }}{ grid-template-columns:1fr; gap:40px; }
+  /* 1) Layout: heading (center) → right image → categories */
+  .ai-split-section-container-{{ uid }}{
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "heading"
+      "image"
+      "categories";
+    gap: 24px !important;
+    align-items: start !important;
+  }
 
+  .ai-split-section-left-{{ uid }}{
+    display: contents !important;
+    text-align: center !important;
+  }
+  .ai-split-section-heading-{{ uid }},
+  .ai-split-section-subheading-{{ uid }},
+  .ai-split-section-description-{{ uid }}{
+    grid-area: heading;
+    text-align: center !important;
+  }
+
+  .ai-split-section-right-{{ uid }}{ grid-area: image; }
+
+  .ai-split-section-categories-wrapper-{{ uid }}{
+    grid-area: categories;
+    justify-content: center !important;
+  }
+
+  /* 2) Horizontal scroller with momentum + snapping */
+  .ai-split-section-categories-{{ uid }}{
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 12px !important;
+
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pinch-zoom;
+    overscroll-behavior-x: contain;
+
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 12px 8px;
+
+    scroll-snap-type: x proximity;
+  }
+  .ai-split-section-categories-{{ uid }}::-webkit-scrollbar{ display:none; }
+  .ai-split-section-categories-{{ uid }}{ scrollbar-width:none; }
+
+  .ai-split-section-category-{{ uid }}{
+    flex: 0 0 auto !important;
+    min-width: clamp(220px, 72vw, 320px);
+    scroll-snap-align: center;
+  }
+
+  /* Additional mobile tweaks */
   .ai-split-section-content-{{ uid }}{
     padding: {{ section.settings.padding_top | times: 0.7 }}px 15px {{ section.settings.padding_bottom | times: 0.7 }}px 15px;
   }
-
-  .ai-split-section-heading-{{ uid }}{ font-size: {{ section.settings.heading_size | times: 0.8 }}px;}
-  .ai-split-section-subheading-{{ uid }}{ font-size: {{ section.settings.subheading_size | times: 0.9 }}px; }
-  .ai-split-section-bg-{{ uid }}--fixed{ background-attachment: scroll; }
   .ai-split-section-right-image-{{ uid }}, .ai-split-section-right-placeholder-{{ uid }}{ min-height:300px; }
+
+  .ai-split-section-heading-{{ uid }}{ font-size: {{ section.settings.heading_size | times: 0.8 }}px; }
+  .ai-split-section-subheading-{{ uid }}{ font-size: {{ section.settings.subheading_size | times: 0.9 }}px; }
 
   {% if section.settings.enable_image_overflow %}
     .ai-split-section-category-image-{{ uid }} img,
-    .ai-split-section-category-placeholder-{{ uid }}{ transform: scale({{ section.settings.image_overflow_scale | times: 0.8 }}); }
+    .ai-split-section-category-placeholder-{{ uid }}{
+      transform: scale({{ section.settings.image_overflow_scale | times: 0.8 }});
+    }
   {% endif %}
 
   @keyframes ai-float-{{ uid }}{
@@ -409,91 +462,59 @@ Compute RGBA for category card background (opacity controlled in settings)
     50%{ transform: translateY(-{{ section.settings.float_intensity | times: 0.7 }}px); }
   }
 }
-
-/* --- Mobile layout: heading (center) → right image → categories (one row) --- */
-@media (max-width: 768px){
-  /* Make the container a 3-row grid in the desired order */
-  .ai-split-section-container-{{ uid }}{
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "heading"
-      "image"
-      "categories";
-    gap: 24px;
-    align-items: start;
-  }
-
-  /* Let the left column's children be grid items */
-  .ai-split-section-left-{{ uid }}{
-    display: contents;
-    text-align: center; /* force center on mobile */
-  }
-
-  /* Put heading (and optional sub/desc) in the "heading" area, centered */
-  .ai-split-section-heading-{{ uid }},
-  .ai-split-section-subheading-{{ uid }},
-  .ai-split-section-description-{{ uid }}{
-    grid-area: heading;
-    text-align: center;
-  }
-
-  /* Right image goes in the second row */
-  .ai-split-section-right-{{ uid }}{
-    grid-area: image;
-    display:none;
-  }
-
-  /* Categories block goes last */
-  .ai-split-section-categories-wrapper-{{ uid }}{
-    grid-area: categories;
-  }
-
-
-  /* Make categories a single horizontal row (scrolls if needed) */
-  .ai-split-section-categories-{{ uid }}{
-    display: flex;
-    gap: 12px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 8px;
-    width: 100%;
-    max-width: 100%;
-  }
-
-  /* Each card stays a fixed-ish width so they line up horizontally */
-  .ai-split-section-category-{{ uid }}{
-    flex: 0 0 auto;
-    width: clamp(200px, 70vw, 280px);
-  }
-
-  
-}
-
 </style>
 
 <script>
-  // Simple, robust parallax without custom elements
+  // Parallax + horizontal drag-to-scroll (mobile-friendly)
   document.addEventListener('DOMContentLoaded', function(){
     var section = document.getElementById('split-hero-{{ uid }}');
     if (!section) return;
 
+    /* Parallax */
     if (section.dataset.bgEffect === 'parallax') {
       var bg = section.querySelector('.ai-split-section-bg-{{ uid }}');
-      if (!bg) return;
-
-      var onScroll = function(){
-        var rect = section.getBoundingClientRect();
-        if (rect.bottom < 0 || rect.top > window.innerHeight) return;
-        var scrolled = window.pageYOffset || document.documentElement.scrollTop || 0;
-        var rate = scrolled * -0.5;
-        bg.style.transform = 'translateY(' + rate + 'px)';
-      };
-
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
+      if (bg){
+        var onScroll = function(){
+          var rect = section.getBoundingClientRect();
+          if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+          var scrolled = window.pageYOffset || document.documentElement.scrollTop || 0;
+          var rate = scrolled * -0.5;
+          bg.style.transform = 'translateY(' + rate + 'px)';
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      }
     }
+
+    /* Drag-to-scroll fallback for the categories row on mobile */
+    var scroller = section.querySelector('.ai-split-section-categories-{{ uid }}');
+    if (!scroller) return;
+
+    var isDown = false, startX = 0, startScroll = 0, moved = false;
+
+    scroller.addEventListener('pointerdown', function(e){
+      isDown = true;
+      moved = false;
+      startX = e.clientX;
+      startScroll = scroller.scrollLeft;
+      try { scroller.setPointerCapture(e.pointerId); } catch (err) {}
+    });
+
+    scroller.addEventListener('pointermove', function(e){
+      if (!isDown) return;
+      var dx = e.clientX - startX;
+      scroller.scrollLeft = startScroll - dx;
+      if (Math.abs(dx) > 6) moved = true;
+    });
+
+    ['pointerup','pointercancel','pointerleave'].forEach(function(ev){
+      scroller.addEventListener(ev, function(){ isDown = false; });
+    });
+
+    // Prevent accidental link activation when dragging
+    scroller.addEventListener('click', function(e){
+      if (moved) { e.preventDefault(); e.stopPropagation(); }
+    }, true);
   });
 </script>
 
