@@ -4305,3 +4305,7 @@ h1.product-single__title, .product-single__title.h1 {
     align-self: flex-end;
     text-align: right;
 }
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap');
+</style>
