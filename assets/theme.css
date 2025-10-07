@@ -4308,7 +4308,7 @@ h1.product-single__title, .product-single__title.h1 {
 
     @font-face {
       font-family: 'bricolage-grotesque'; /* Name of your new font */
-      src: url('https://cdn.shopify.com/s/files/1/0963/7370/2965/files/Bricolage_Grotesque.zip?v=1759864032') format('woff2'); /* Use the URL you copied */
+      src: url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap'); 
       font-weight: normal;
       font-style: normal;
     }
