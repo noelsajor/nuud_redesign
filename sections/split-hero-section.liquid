@@ -417,6 +417,67 @@ Compute RGBA for category card background (opacity controlled in settings)
     50%{ transform: translateY(-{{ section.settings.float_intensity | times: 0.7 }}px); }
   }
 }
+
+/* --- Mobile layout: heading (center) → right image → categories (one row) --- */
+@media (max-width: 768px){
+  /* Make the container a 3-row grid in the desired order */
+  .ai-split-section-container-{{ uid }}{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "heading"
+      "image"
+      "categories";
+    gap: 24px;
+    align-items: start;
+  }
+
+  /* Let the left column's children be grid items */
+  .ai-split-section-left-{{ uid }}{
+    display: contents;
+    text-align: center; /* force center on mobile */
+  }
+
+  /* Put heading (and optional sub/desc) in the "heading" area, centered */
+  .ai-split-section-heading-{{ uid }},
+  .ai-split-section-subheading-{{ uid }},
+  .ai-split-section-description-{{ uid }}{
+    grid-area: heading;
+    text-align: center;
+  }
+
+  /* Right image goes in the second row */
+  .ai-split-section-right-{{ uid }}{
+    grid-area: image;
+  }
+
+  /* Categories block goes last */
+  .ai-split-section-categories-wrapper-{{ uid }}{
+    grid-area: categories;
+  }
+
+  /* Make categories a single horizontal row (scrolls if needed) */
+  .ai-split-section-categories-{{ uid }}{
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Each card stays a fixed-ish width so they line up horizontally */
+  .ai-split-section-category-{{ uid }}{
+    flex: 0 0 auto;
+    width: clamp(200px, 70vw, 280px);
+  }
+
+  /* Optional: hide the old mobile grid rule if you had 1-column forcing */
+  /* .ai-split-section-categories-{{ uid }}{ grid-template-columns: 1fr !important; } */
+}
+
 </style>
 
 <script>
