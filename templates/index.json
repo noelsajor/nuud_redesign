@@ -83,11 +83,11 @@
         "category_text_color": "#2d0288",
         "category_hover_text_color": "#ffffff",
         "category_border_color": "rgba(0,0,0,0)",
-        "category_border_width": 3,
+        "category_border_width": 0,
         "category_border_radius": 20,
         "category_image_radius": 12,
         "enable_image_hover_rotate": true,
-        "image_hover_rotate_deg": 3
+        "image_hover_rotate_deg": 6
       }
     },
     "wavy_features_MDYa7y": {
