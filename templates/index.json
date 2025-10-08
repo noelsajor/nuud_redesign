@@ -310,7 +310,7 @@
         "enable_card_shadow": false,
         "hero_image": "shopify://shop_images/retrato-moda-cerca-al-aire-libre-pareja-muy-sexy-abrazos-amor-increible-playa-tropical-vistiendo-elegantes-trajes-bano_1_1.webp",
         "image_position": "left",
-        "image_overflow": 50,
+        "image_overflow": 80,
         "image_overflow_direction": "outer",
         "layout_ratio": "1-1",
         "hero_title": "Enhance your play in bed",
