@@ -61,7 +61,7 @@
         "category_1": "",
         "category_1_image": "shopify://shop_images/for-her.webp",
         "category_1_title": "For Her",
-        "show_category_1_title": true,
+        "show_category_1_title": false,
         "enable_category_2": true,
         "category_2": "",
         "category_2_image": "shopify://shop_images/for-him.webp",
