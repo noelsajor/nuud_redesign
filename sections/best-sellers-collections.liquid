@@ -173,17 +173,12 @@
       {% if section.settings.show_see_all_button and section.settings.collection != blank %}
       <div class="see-all-container" 
            style="text-align: {{ section.settings.button_alignment }}; margin-top: {{ section.settings.button_top_spacing }}px;">
+        <!-- Secondary button replacing the old See All -->
         <a href="{{ collections[section.settings.collection].url }}" 
-           class="see-all-button dt-sc-btn{% if section.settings.see_all_add_padding %} ctm-btn-padding{% endif %}"
+           class="secondary-btn"
            aria-label="See all products in {{ collections[section.settings.collection].title }} collection">
-          {{ section.settings.see_all_text | default: 'See all' }}
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
-            <path d="M8,45h72L66.4,31.4c-1.9-1.9-1.9-5.1,0-7c1.9-1.9,5.1-1.9,7,0l22.1,22.1c0,0,0,0,0.1,0.1c0.2,0.2,0.4,0.4,0.6,0.7
-                     c0.1,0.1,0.1,0.2,0.1,0.3c0.1,0.2,0.2,0.4,0.3,0.6c0,0.1,0.1,0.2,0.1,0.3c0.1,0.2,0.1,0.4,0.2,0.6c0,0.1,0.1,0.2,0.1,0.3
-                     c-0.1,0.2-0.2,0.4-0.3,0.6c0,0.1-0.1,0.2-0.1,0.3
-                     c-0.2,0.2-0.4,0.5-0.6,0.7c0,0,0,0,0,0.1L73.4,75.6c-1,1-2.2,1.5-3.5,1.5s-2.5-0.5-3.5-1.5c-1.9-1.9-1.9-5.1,0-7L80,55H8
-                     c-2.7,0-5-2.2-5-5C3.1,47.3,5.3,45,8,45z"></path>
-          </svg>
+          <span class="secondary-btn__label">{{ section.settings.see_all_text | default: 'See all products' }}</span>
+          <span class="secondary-btn__arrow" aria-hidden="true">→</span>
         </a>
       </div>
       {% endif %}
@@ -259,18 +254,12 @@
   object-position: center;
   transition: opacity .3s ease, transform .3s ease;
 }
-/* Start with primary visible, secondary hidden */
 .best-sellers-{{ bs_uid }} .product-image--primary { opacity: 1; }
 .best-sellers-{{ bs_uid }} .product-image--secondary { opacity: 0; }
-/* On hover: fade to secondary (if present) */
 .best-sellers-{{ bs_uid }} .product-card:hover .product-image--secondary { opacity: 1; }
 .best-sellers-{{ bs_uid }} .product-card:hover .product-image--primary { opacity: 0; }
-
-/* Keep your existing slight zoom on hover for whichever image is visible */
 .best-sellers-{{ bs_uid }} .product-card:hover .product-image--primary,
-.best-sellers-{{ bs_uid }} .product-card:hover .product-image--secondary {
-  transform: scale(1.05);
-}
+.best-sellers-{{ bs_uid }} .product-card:hover .product-image--secondary { transform: scale(1.05); }
 
 /* Placeholder */
 .best-sellers-{{ bs_uid }} .product-image-placeholder { width: 100%; height: 100%; display:flex; align-items:center; justify-content:center; color:#999; }
@@ -288,20 +277,40 @@
 /* Add to Cart */
 .best-sellers-{{ bs_uid }} .product-form { margin-top:auto; }
 .best-sellers-{{ bs_uid }} .add-to-cart-btn { width:100%; border:0; padding:12px 20px; cursor:pointer; transition: all .3s ease; }
-.best-sellers-{{ bs_uid }} .add-to-cart-btn:hover:not(.sold-out) { background-color: #1FC2DB !important ; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.2); }
-.best-sellers-{{ bs_uid }} .add-to-cart-btn:focus { outline:2px solid currentColor; outline-offset:2px; }
-.best-sellers-{{ bs_uid }} .add-to-cart-btn.sold-out { opacity:.6; cursor:not-allowed; }
+/* keep theme/default hover unless your theme sets one */
 
-/* See All (dt-sc-btn stays as-is) */
-.best-sellers-{{ bs_uid }} .see-all-container { width:100%; }
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn { display: inline-flex; align-items: center; gap: 8px; background: none; border: none; text-decoration: none; padding: 0; color: #2D0288; transition: background .3s ease, color .3s ease, opacity .3s ease, transform .2s ease; }
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn.ctm-btn-padding { padding: 6px 15px; }
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn:visited { color: #2D0288; }
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn:hover,
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn:focus { background: none; color: #FF4881; text-decoration: none; }
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: 6px; }
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn svg { width: 36px; height: 36px; display: inline-block; }
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn svg path { fill: currentColor; }
+/* === Secondary button (See all) === */
+.best-sellers-{{ bs_uid }} .secondary-btn {
+  --btn-color: #2D0288;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  background: transparent;
+  color: var(--btn-color);
+  border: 1px solid var(--btn-color);
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-family: inherit;      /* default theme font */
+  font-size: 18px;           /* requested size */
+  line-height: 1.2;
+  transition: border-color .2s ease, color .2s ease;
+}
+.best-sellers-{{ bs_uid }} .secondary-btn__arrow {
+  display: inline-block;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity .2s ease, transform .2s ease;
+}
+.best-sellers-{{ bs_uid }} .secondary-btn:hover .secondary-btn__arrow,
+.best-sellers-{{ bs_uid }} .secondary-btn:focus .secondary-btn__arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+.best-sellers-{{ bs_uid }} .secondary-btn:focus-visible {
+  outline: 2px solid var(--btn-color);
+  outline-offset: 2px;
+}
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -333,7 +342,6 @@
     { "type": "header", "content": "Collection Settings" },
     { "type": "collection", "id": "collection", "label": "Collection", "info": "Select the collection to display products from" },
     { "type": "range", "id": "products_to_show", "label": "Number of Products to Show", "min": 1, "max": 12, "step": 1, "default": 3 },
-
     { "type": "range", "id": "min_product_width", "label": "Minimum Product Card Width", "info": "Controls responsive breakpoints", "min": 200, "max": 350, "step": 25, "default": 275, "unit": "px" },
 
     { "type": "header", "content": "Section Layout" },
