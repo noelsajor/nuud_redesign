@@ -288,6 +288,13 @@
   object-fit:contain !important;       /* show the whole image */
   object-position:center !important;
 }
+
+/* Put this AFTER your existing CSS */
+.hero-card{
+  max-height: 520px;
+  overflow: hidden; /* or overflow: auto; if you prefer scroll */
+}
+
 </style>
 
 {% schema %}
