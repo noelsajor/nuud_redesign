@@ -243,6 +243,20 @@
 @media print{ .hero-section{ background:#fff !important; box-shadow:none !important; } .badge-spin{ animation:none !important; } }
 </style>
 
+<!-- ✦ Anti-crop override: keep full image visible without changing anything else -->
+<style>
+.hero-card .hero-image-container{
+  display:flex;
+  align-items:center;
+}
+.hero-card .hero-image{
+  width:100% !important;
+  height:auto !important;              /* stop forcing full card height */
+  object-fit:contain !important;       /* show the whole image */
+  object-position:center !important;
+}
+</style>
+
 {% schema %}
 {
   "name": "Hero Section",
