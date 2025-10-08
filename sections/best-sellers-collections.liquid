@@ -36,13 +36,13 @@ Best Sellers Collection – SEO/A11y optimized
       {% endif %}
       
       {% if section.settings.section_title != blank %}
-      <h2 id="best-sellers-title-{{ bs_uid }}" 
+      <h3 id="best-sellers-title-{{ bs_uid }}" 
           class="section-title h2"
           style="color: {{ section.settings.title_color }};">
         {{ section.settings.section_title }}
-      </h2>
+      </h3>
       {% else %}
-      <h2 id="best-sellers-title-{{ bs_uid }}" class="sr-only">Best Sellers</h2>
+      <h3 id="best-sellers-title-{{ bs_uid }}" class="sr-only">Best Sellers</h3>
       {% endif %}
     </header>
     
@@ -118,12 +118,12 @@ Best Sellers Collection – SEO/A11y optimized
             {% endif %}
             
             <!-- Product Title -->
-            <h3 class="product-title h4">
+            <h4 class="product-title h4">
               <a href="{{ product.url }}" 
                  style="color: {{ section.settings.product_title_color }};">
                 {{ product.title }}
               </a>
-            </h3>
+            </h4>
             
             <!-- Add to Cart Button -->
             <form action="/cart/add" method="post" enctype="multipart/form-data" class="product-form">
