@@ -1,28 +1,19 @@
-{% comment %}
-Best Sellers Collection – SEO/A11y optimized
-- Typography fully inherits theme defaults (no overrides or controls)
-- Optional image overflow (float up out of the card)
-- Container background color
-- Blog-style "See all" button (dt-sc-btn + SVG)
-{% endcomment %}
-
 {%- assign bs_uid = section.id | replace: '_','' | downcase -%}
 
-<!-- Best Sellers Collection Section -->
 <section class="best-sellers-section best-sellers-{{ bs_uid }}" 
          style="background-color: {{ section.settings.background_color }}; 
                 padding: {{ section.settings.section_padding_top }}px 20px {{ section.settings.section_padding_bottom }}px 20px;"
          aria-labelledby="best-sellers-title-{{ bs_uid }}">
   
+  <!-- Unified max-width wrapper -->
   <div class="best-sellers-container"
-       style="max-width: 960px; width: 100%; margin: 100px auto; background-color: {{ section.settings.container_background_color }};">
-    
+       style="max-width: 1280px; width: 100%; margin: 0 auto; background-color: {{ section.settings.container_background_color }};">
+
     <!-- Section Header -->
     <header class="section-header" 
             style="margin-bottom: {{ section.settings.title_bottom_spacing }}px; position: relative;">
       
       {% if section.settings.show_badge and section.settings.badge_image %}
-      <!-- Centered Badge ABOVE the title -->
       <div class="collection-badge collection-badge--center" role="img" aria-label="{{ section.settings.badge_alt | default: 'Collection Badge' }}">
         <img src="{{ section.settings.badge_image | image_url: width: 200 }}" 
              alt="{{ section.settings.badge_alt | default: 'Collection Badge' }}" 
@@ -84,7 +75,6 @@ Best Sellers Collection – SEO/A11y optimized
                 </div>
               {% endif %}
               
-              <!-- Product Badge/Sale -->
               {% if product.compare_at_price > product.price %}
               <span class="sale-badge" 
                     style="background-color: {{ section.settings.sale_badge_color }};"
@@ -98,7 +88,6 @@ Best Sellers Collection – SEO/A11y optimized
           <!-- Product Info -->
           <div class="product-info" style="padding: {{ section.settings.card_padding }}px;">
             
-            <!-- Star Rating -->
             {% if section.settings.show_ratings %}
             <div class="product-rating" aria-label="5 out of 5 stars">
               {% for i in (1..5) %}
@@ -109,7 +98,6 @@ Best Sellers Collection – SEO/A11y optimized
             </div>
             {% endif %}
             
-            <!-- Brand Name -->
             {% if section.settings.show_vendor and product.vendor %}
             <p class="product-vendor" 
                style="color: {{ section.settings.vendor_color }};">
@@ -117,7 +105,6 @@ Best Sellers Collection – SEO/A11y optimized
             </p>
             {% endif %}
             
-            <!-- Product Title -->
             <h4 class="product-title h4">
               <a href="{{ product.url }}" 
                  style="color: {{ section.settings.product_title_color }};">
@@ -125,7 +112,6 @@ Best Sellers Collection – SEO/A11y optimized
               </a>
             </h4>
             
-            <!-- Add to Cart Button -->
             <form action="/cart/add" method="post" enctype="multipart/form-data" class="product-form">
               {% unless product.has_only_default_variant %}
                 <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
@@ -159,7 +145,6 @@ Best Sellers Collection – SEO/A11y optimized
       </div>
       {% endif %}
       
-      <!-- See All Button (Below Products) -->
       {% if section.settings.show_see_all_button and section.settings.collection != blank %}
       <div class="see-all-container" 
            style="text-align: {{ section.settings.button_alignment }}; margin-top: {{ section.settings.button_top_spacing }}px;">
@@ -167,7 +152,6 @@ Best Sellers Collection – SEO/A11y optimized
            class="see-all-button dt-sc-btn{% if section.settings.see_all_add_padding %} ctm-btn-padding{% endif %}"
            aria-label="See all products in {{ collections[section.settings.collection].title }} collection">
           {{ section.settings.see_all_text | default: 'See all' }}
-          <!-- same SVG used in blog button; path follows currentColor -->
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
             <path d="M8,45h72L66.4,31.4c-1.9-1.9-1.9-5.1,0-7c1.9-1.9,5.1-1.9,7,0l22.1,22.1c0,0,0,0,0.1,0.1c0.2,0.2,0.4,0.4,0.6,0.7
                      c0.1,0.1,0.1,0.2,0.1,0.3c0.1,0.2,0.2,0.4,0.3,0.6c0,0.1,0.1,0.2,0.1,0.3c0.1,0.2,0.1,0.4,0.2,0.6c0,0.1,0.1,0.2,0.1,0.3
@@ -190,43 +174,46 @@ Best Sellers Collection – SEO/A11y optimized
 </section>
 
 <style>
-/* ===== Base resets (no typography overrides) ===== */
 .best-sellers-{{ bs_uid }} .section-title,
 .best-sellers-{{ bs_uid }} .product-title { margin: 0; }
 
-/* Container position hooks */
-.best-sellers-{{ bs_uid }} .best-sellers-section { position: relative; }
-.best-sellers-{{ bs_uid }} .best-sellers-container { position: relative; }
+/* Ensure the whole section sits under header elements */
+.best-sellers-{{ bs_uid }} { position: relative; z-index: 0; }
 
-/* ===== Badge (centered above title) ===== */
+/* Container: max-width + make children span full width */
+.best-sellers-{{ bs_uid }} .best-sellers-container {
+  position: relative;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.best-sellers-{{ bs_uid }} .section-header,
+.best-sellers-{{ bs_uid }} .products-grid,
+.best-sellers-{{ bs_uid }} .see-all-container { width: 100%; }
+
+/* Badge (centered above title) */
 .best-sellers-{{ bs_uid }} .collection-badge {
   position: static !important;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto 12px auto;
-  width: auto;
+  display: flex; justify-content: center; align-items: center;
+  margin: 0 auto 12px auto; width: auto;
 }
 .best-sellers-{{ bs_uid }} .badge-image { border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,.1); display: block; }
 .best-sellers-{{ bs_uid }} .badge-spin { animation: spin {{ section.settings.badge_spin_speed | default: 10 }}s linear infinite; }
 @keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
 @media (prefers-reduced-motion: reduce) { .best-sellers-{{ bs_uid }} .badge-spin { animation: none; } }
 
-/* ===== Grid ===== */
+/* Grid */
 .best-sellers-{{ bs_uid }} .products-grid { display: grid; margin-bottom: 20px; }
 
-/* ===== Product Card ===== */
+/* Product Card */
 .best-sellers-{{ bs_uid }} .product-card {
-  position: relative;
-  overflow: visible;
+  position: relative; overflow: visible;
   transition: transform .3s ease, box-shadow .3s ease;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  height: 100%; display: flex; flex-direction: column;
 }
 .best-sellers-{{ bs_uid }} .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,.15); }
 
-/* ===== Product Image (with optional float/overflow) ===== */
+/* Product Image */
 .best-sellers-{{ bs_uid }} .product-image-container { position: relative; aspect-ratio: 1/1; overflow: hidden; background-color: #f8f8f8; }
 .best-sellers-{{ bs_uid }} .product-image-container.image-float { transform: translateY(calc(var(--float-offset) * -1)); margin-bottom: calc(var(--float-offset) * -1); }
 .best-sellers-{{ bs_uid }} .product-link { display:block; width:100%; height:100%; }
@@ -234,33 +221,26 @@ Best Sellers Collection – SEO/A11y optimized
 .best-sellers-{{ bs_uid }} .product-card:hover .product-image { transform: scale(1.05); }
 .best-sellers-{{ bs_uid }} .product-image-placeholder { width: 100%; height: 100%; display:flex; align-items:center; justify-content:center; color:#999; }
 
-/* ===== Badges ===== */
+/* Badges */
 .best-sellers-{{ bs_uid }} .sale-badge { position:absolute; top:10px; left:10px; color:#fff; padding:5px 10px; border-radius:4px; }
 
-/* ===== Info area ===== */
+/* Info area */
 .best-sellers-{{ bs_uid }} .product-info { flex:1; display:flex; flex-direction:column; gap:10px; }
 .best-sellers-{{ bs_uid }} .product-rating { display:flex; gap:2px; margin-bottom:5px; }
 .best-sellers-{{ bs_uid }} .product-vendor { margin:0; }
 .best-sellers-{{ bs_uid }} .product-title { margin:0; flex:1; }
 .best-sellers-{{ bs_uid }} .product-title a { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
 
-/* ===== Add to Cart ===== */
+/* Add to Cart */
 .best-sellers-{{ bs_uid }} .product-form { margin-top:auto; }
-.best-sellers-{{ bs_uid }} .add-to-cart-btn {
-  width:100%; border:0; padding:12px 20px; cursor:pointer; transition: all .3s ease;
-}
+.best-sellers-{{ bs_uid }} .add-to-cart-btn { width:100%; border:0; padding:12px 20px; cursor:pointer; transition: all .3s ease; }
 .best-sellers-{{ bs_uid }} .add-to-cart-btn:hover:not(.sold-out) { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.2); }
 .best-sellers-{{ bs_uid }} .add-to-cart-btn:focus { outline:2px solid currentColor; outline-offset:2px; }
 .best-sellers-{{ bs_uid }} .add-to-cart-btn.sold-out { opacity:.6; cursor:not-allowed; }
 
-/* ===== See All (blog-style button) ===== */
+/* See All (dt-sc-btn stays as-is) */
 .best-sellers-{{ bs_uid }} .see-all-container { width:100%; }
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: none; border: none; text-decoration: none;
-  padding: 0; color: #2D0288;
-  transition: background .3s ease, color .3s ease, opacity .3s ease, transform .2s ease;
-}
+.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn { display: inline-flex; align-items: center; gap: 8px; background: none; border: none; text-decoration: none; padding: 0; color: #2D0288; transition: background .3s ease, color .3s ease, opacity .3s ease, transform .2s ease; }
 .best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn.ctm-btn-padding { padding: 6px 15px; }
 .best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn:visited { color: #2D0288; }
 .best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn:hover,
@@ -269,7 +249,7 @@ Best Sellers Collection – SEO/A11y optimized
 .best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn svg { width: 36px; height: 36px; display: inline-block; }
 .best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn svg path { fill: currentColor; }
 
-/* ===== Responsive ===== */
+/* Responsive */
 @media (max-width: 768px) {
   .best-sellers-{{ bs_uid }} .best-sellers-container { padding: 0 15px; }
   .best-sellers-{{ bs_uid }} .badge-image {
@@ -284,13 +264,12 @@ Best Sellers Collection – SEO/A11y optimized
   .best-sellers-{{ bs_uid }} .products-grid { grid-template-columns: 1fr !important; }
 }
 
-/* SR-only utility */
+/* SR-only */
 .best-sellers-{{ bs_uid }} .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 
-/* --- Fix: badge should never overlay the navbar --- */
-.best-sellers-{{ bs_uid }} { position: relative; z-index: 0; }
-.best-sellers-{{ bs_uid }} .section-header { position: relative; z-index: 1; }
-.best-sellers-{{ bs_uid }} .collection-badge { position: relative !important; z-index: 1 !important; }
+/* Navbar safety */
+.best-sellers-{{ bs_uid }} .section-header,
+.best-sellers-{{ bs_uid }} .collection-badge { position: relative; z-index: 1; }
 </style>
 
 {% schema %}
