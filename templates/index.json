@@ -236,7 +236,7 @@
         "title_alignment": "left",
         "proxy_url": "/apps/instagram-feed?user_id=YOUR_ID&access_token=YOUR_TOKEN",
         "instagram_profile_url": "https://www.instagram.com/nuudpleasures/",
-        "show_view_on_ig": true,
+        "show_view_on_ig": false,
         "carousel_desktop": 4,
         "carousel_tablet": 3,
         "carousel_mobile": 2,
