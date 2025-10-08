@@ -3,6 +3,7 @@ Categories Showcase – 3 clickable category cards with hover-only overlay,
 image overflow, adjustable padding/background, and optional fixed aspect ratio.
 Structured similar to other sections: wrapper → container → row → content.
 Now using a fixed inner container (max-width: 1280px; padding: 80px 40px).
+Heading size is no longer configurable; it follows theme defaults.
 {% endcomment %}
 
 <div
@@ -211,8 +212,7 @@ Now using a fixed inner container (max-width: 1280px; padding: 80px 40px).
   margin: 0 0 {{ section.settings.heading_margin }}px 0;
   font-weight: 600;
   color: {{ section.settings.heading_color }};
-  /* uses theme's default typography for sizes/line-height unless overridden */
-  font-size: {{ section.settings.heading_size }}px;
+  /* Font-size follows theme defaults; no user control */
 }
 #shopify-section-{{ section.id }}.home-category-block .category-showcase__subheading{
   margin: 0 0 {{ section.settings.subheading_margin }}px 0;
@@ -356,12 +356,7 @@ Now using a fixed inner container (max-width: 1280px; padding: 80px 40px).
     height: calc(100% + (var(--overflow) * .7));
     margin-top: calc(-1 * var(--overflow) * .7);
   }
-  #shopify-section-{{ section.id }}.home-category-block .category-showcase__heading{
-    font-size: {{ section.settings.heading_size | times: 0.8 }}px;
-  }
-  #shopify-section-{{ section.id }}.home-category-block .category-showcase__subheading{
-    font-size: {{ section.settings.subheading_size | times: 0.9 }}px;
-  }
+  /* No responsive heading font-size overrides */
 }
 
 /* Motion safety */
@@ -510,7 +505,6 @@ Now using a fixed inner container (max-width: 1280px; padding: 80px 40px).
     { "type": "color", "id": "button_border_hover_color", "label": "Border hover", "default": "#ff679a" },
 
     { "type": "header", "content": "Typography" },
-    { "type": "range", "id": "heading_size", "min": 20, "max": 60, "step": 2, "unit": "px", "label": "Heading size", "default": 36 },
     { "type": "range", "id": "heading_margin", "min": 0, "max": 40, "step": 2, "unit": "px", "label": "Heading bottom margin", "default": 16 },
     { "type": "range", "id": "subheading_size", "min": 14, "max": 32, "step": 1, "unit": "px", "label": "Subheading size", "default": 20 },
     { "type": "range", "id": "subheading_margin", "min": 0, "max": 40, "step": 2, "unit": "px", "label": "Subheading bottom margin", "default": 12 },
