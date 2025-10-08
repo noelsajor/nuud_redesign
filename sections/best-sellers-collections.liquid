@@ -288,18 +288,18 @@
 /* Add to Cart */
 .best-sellers-{{ bs_uid }} .product-form { margin-top:auto; }
 .best-sellers-{{ bs_uid }} .add-to-cart-btn { width:100%; border:0; padding:12px 20px; cursor:pointer; transition: all .3s ease; }
-.best-sellers-{{ bs_uid }} .add-to-cart-btn:hover:not(.sold-out) { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.2); }
+/* REMOVED custom hover so theme default applies */
+/* .best-sellers-{{ bs_uid }} .add-to-cart-btn:hover:not(.sold-out) { ... } */
 .best-sellers-{{ bs_uid }} .add-to-cart-btn:focus { outline:2px solid currentColor; outline-offset:2px; }
 .best-sellers-{{ bs_uid }} .add-to-cart-btn.sold-out { opacity:.6; cursor:not-allowed; }
 
 /* See All (dt-sc-btn stays as-is) */
 .best-sellers-{{ bs_uid }} .see-all-container { width:100%; }
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn { display: inline-flex; align-items: center; gap: 8px; background: none; border: none; text-decoration: none; padding: 0; color: #2D0288; transition: background .3s ease, color .3s ease, opacity .3s ease, transform .2s ease; }
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn.ctm-btn-padding { padding: 6px 15px; }
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn:visited { color: #2D0288; }
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn:hover,
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn:focus { background: none; color: #FF4881; text-decoration: none; }
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: 6px; }
+.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn { display: inline-flex; align-items: center; gap: 8px; background: none; border: none; text-decoration: none; padding: 0; }
+/* REMOVED custom color/hover overrides so theme default dt-sc-btn styles apply */
+/* .best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn:visited { ... } */
+/* .best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn:hover, .see-all-button.dt-sc-btn:focus { ... } */
+/* .best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn:focus-visible { ... } */
 .best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn svg { width: 36px; height: 36px; display: inline-block; }
 .best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn svg path { fill: currentColor; }
 
