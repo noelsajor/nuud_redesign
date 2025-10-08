@@ -3,7 +3,7 @@ Categories Showcase – 3 clickable category cards with hover-only overlay,
 image overflow, adjustable padding/background, and optional fixed aspect ratio.
 Structured similar to other sections: wrapper → container → row → content.
 Now using a fixed inner container (max-width: 1280px; padding: 80px 40px).
-Heading size is no longer configurable; it follows theme defaults.
+Heading size is not user-configurable; it follows theme defaults.
 {% endcomment %}
 
 <div
@@ -212,7 +212,7 @@ Heading size is no longer configurable; it follows theme defaults.
   margin: 0 0 {{ section.settings.heading_margin }}px 0;
   font-weight: 600;
   color: {{ section.settings.heading_color }};
-  /* Font-size follows theme defaults; no user control */
+  /* Heading font-size follows theme defaults; no user control */
 }
 #shopify-section-{{ section.id }}.home-category-block .category-showcase__subheading{
   margin: 0 0 {{ section.settings.subheading_margin }}px 0;
@@ -333,7 +333,7 @@ Heading size is no longer configurable; it follows theme defaults.
 #shopify-section-{{ section.id }}.home-category-block .category-showcase__button-arrow{ transition: transform .3s ease; }
 #shopify-section-{{ section.id }}.home-category-block .category-showcase__see-all-button:hover .category-showcase__button-arrow{ transform: translateX(3px); }
 
-/* Mobile/tablet: stack */
+/* Tablet */
 @media (max-width: 1024px){
   #shopify-section-{{ section.id }}.home-category-block .category-showcase__layout{
     grid-template-columns: 1fr;
@@ -344,19 +344,45 @@ Heading size is no longer configurable; it follows theme defaults.
   }
 }
 
+/* Mobile: force center alignment for everything */
 @media (max-width: 768px){
-  #shopify-section-{{ section.id }}.home-category-block .category-showcase__grid{
-    grid-template-columns: 1fr; gap:20px; margin-top: calc(var(--overflow) * .7);
+  /* Force center alignment via CSS variable */
+  #shopify-section-{{ section.id }}.home-category-block{
+    --align: center;
   }
+
+  /* Grid: single column, centered items */
+  #shopify-section-{{ section.id }}.home-category-block .category-showcase__grid{
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-top: calc(var(--overflow) * .7);
+    justify-items: center;
+  }
+
+  /* Cards keep a nice readable width */
   #shopify-section-{{ section.id }}.home-category-block .category-card{
     {% if section.settings.card_aspect_ratio == 'none' %} height:300px; {% endif %}
     margin-top: calc(var(--overflow) * .7);
+    width: 100%;
+    max-width: 560px;
   }
+
   #shopify-section-{{ section.id }}.home-category-block .category-card__image-wrap{
     height: calc(100% + (var(--overflow) * .7));
     margin-top: calc(-1 * var(--overflow) * .7);
   }
-  /* No responsive heading font-size overrides */
+
+  /* Explicit center for header and footer */
+  #shopify-section-{{ section.id }}.home-category-block .category-showcase__header,
+  #shopify-section-{{ section.id }}.home-category-block .category-showcase__footer{
+    text-align: center;
+  }
+
+  /* Center the CTA button itself */
+  #shopify-section-{{ section.id }}.home-category-block .category-showcase__see-all-button{
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 /* Motion safety */
