@@ -169,7 +169,7 @@
       {% if section.settings.show_see_all_button and section.settings.collection != blank %}
       <div class="see-all-container" 
            style="text-align: {{ section.settings.button_alignment }}; margin-top: {{ section.settings.button_top_spacing }}px;">
-        <!-- Secondary outline button with sliding arrow -->
+        <!-- Secondary filled button with sliding arrow -->
         <a href="{{ collections[section.settings.collection].url }}" 
            class="seeall-btn btn-arrow"
            aria-label="See all products in {{ collections[section.settings.collection].title }} collection">
@@ -277,7 +277,7 @@
 .best-sellers-{{ bs_uid }} .add-to-cart-btn:focus { outline:2px solid currentColor; outline-offset:2px; }
 .best-sellers-{{ bs_uid }} .add-to-cart-btn.sold-out { opacity:.6; cursor:not-allowed; }
 
-/* === See all: Secondary outline button inspired by your example === */
+/* === See all button === */
 .best-sellers-{{ bs_uid }} .seeall-btn {
   --btn-color: #2D0288;
   display: inline-flex;
@@ -301,8 +301,8 @@
 }
 .best-sellers-{{ bs_uid }} .seeall-btn:hover,
 .best-sellers-{{ bs_uid }} .seeall-btn:focus {
-  background:rgba(45, 2, 136, 0.06); 
-  color: #2D0288;
+  background: #2D0288;
+  color: #ffffff;
 }
 .best-sellers-{{ bs_uid }} .seeall-btn:focus-visible {
   outline: 2px solid var(--btn-color);
@@ -337,15 +337,32 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .best-sellers-{{ bs_uid }} .best-sellers-container { padding: 0 15px; }
+  /* Requested mobile padding */
+  .best-sellers-{{ bs_uid }} .best-sellers-container { padding: 32px 16px; }
+
+  /* Center the heading on mobile */
+  .best-sellers-{{ bs_uid }} .section-header { 
+    margin-bottom: 30px; 
+    text-align: center; 
+  }
+
+  /* Center the See All button regardless of desktop alignment setting */
+  .best-sellers-{{ bs_uid }} .see-all-container { 
+    margin-top: 30px !important; 
+    text-align: center !important; 
+  }
+
   .best-sellers-{{ bs_uid }} .badge-image {
     width: calc({{ section.settings.badge_size | default: 120 }}px * .8) !important;
     height: calc({{ section.settings.badge_size | default: 120 }}px * .8) !important;
   }
-  .best-sellers-{{ bs_uid }} .section-header { margin-bottom: 30px; }
-  .best-sellers-{{ bs_uid }} .see-all-container { margin-top: 30px !important; }
-  .best-sellers-{{ bs_uid }} .products-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important; gap: 64px !important; }
+
+  .best-sellers-{{ bs_uid }} .products-grid { 
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important; 
+    gap: 64px !important; 
+  }
 }
+
 @media (max-width: 480px) { 
   .best-sellers-{{ bs_uid }} .products-grid { grid-template-columns: 1fr !important; }
 }
