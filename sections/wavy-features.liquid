@@ -65,7 +65,7 @@
   <div class="features-container">
     {% if section.settings.section_title != blank %}
       <h2 id="features-title" class="section-title"
-          style="color: {{ section.settings.title_color }}; font-size: {{ section.settings.title_size }}px; text-align: {{ section.settings.title_alignment }};">
+          style="color: {{ section.settings.title_color }}; text-align: {{ section.settings.title_alignment }};">
         {{ section.settings.section_title }}
       </h2>
     {% else %}
@@ -95,11 +95,11 @@
 
               {% if block.settings.feature_text != blank %}
               <div class="feature-text-wrapper">
-                <p class="feature-text" style="color: {{ block.settings.text_color }}; font-size: {{ block.settings.text_size }}px; font-weight: {{ block.settings.text_weight }};">
+                <p class="feature-text" style="color: {{ block.settings.text_color }};">
                   {{ block.settings.feature_text }}
                 </p>
                 {% if block.settings.feature_subtext != blank %}
-                <p class="feature-subtext" style="color: {{ block.settings.subtext_color }}; font-size: {{ block.settings.subtext_size }}px;">
+                <p class="feature-subtext" style="color: {{ block.settings.subtext_color }};">
                   {{ block.settings.feature_subtext }}
                 </p>
                 {% endif %}
@@ -128,11 +128,11 @@
 
               {% if block.settings.feature_text != blank %}
               <div class="feature-text-wrapper">
-                <p class="feature-text" style="color: {{ block.settings.text_color }}; font-size: {{ block.settings.text_size }}px; font-weight: {{ block.settings.text_weight }};">
+                <p class="feature-text" style="color: {{ block.settings.text_color }};">
                   {{ block.settings.feature_text }}
                 </p>
                 {% if block.settings.feature_subtext != blank %}
-                <p class="feature-subtext" style="color: {{ block.settings.subtext_color }}; font-size: {{ block.settings.subtext_size }}px;">
+                <p class="feature-subtext" style="color: {{ block.settings.subtext_color }};">
                   {{ block.settings.feature_subtext }}
                 </p>
                 {% endif %}
@@ -204,7 +204,7 @@
 
 <style>
 /* Base Section */
-.features-wave-section { position: relative; overflow: visible; z-index: 1; }
+.features-wave-section { position: relative; overflow: visible; z-index: 1; font-family: inherit; }
 
 /* Waves */
 .wave-top, .wave-bottom {
@@ -228,7 +228,7 @@
 .features-container { position: relative; z-index: 3; margin: 0 auto !important; width: 100%; max-width: none !important; }
 
 /* Section Title */
-.section-title { margin: 0 0 32px 0; line-height: 1.2; }
+.section-title { margin: 0 0 32px 0; line-height: 1.2; font-family: inherit; }
 
 /* ---------- PERFECT MARQUEE ---------- */
 .features-ticker{
@@ -286,7 +286,7 @@
 .feature-icon svg{ width:100%; height:100%; display:block; }
 .feature-icon-image img{ max-width:100%; max-height:100%; object-fit:contain; display:block; }
 .feature-text-wrapper{ min-width:0; }
-.feature-text, .feature-subtext{ margin:0; line-height:1.4; }
+.feature-text, .feature-subtext{ margin:0; line-height:1.4; font-family: inherit; }
 .feature-subtext{ margin-top:4px; }
 
 /* The magic: move the two-row track by exactly half its own width */
@@ -314,7 +314,7 @@
 
 /* Responsive */
 @media (max-width: 768px){
-  .section-title{  margin-bottom: 24px; font-size: calc({{ section.settings.title_size | default: 32 }}px * .85) !important; }
+  .section-title{  margin-bottom: 24px; }
   .feature-icon, .feature-icon-image{ width:48px; height:48px; }
   .ticker__row {
     flex-direction: column;
@@ -327,7 +327,6 @@
   }
 }
 @media (max-width: 480px){
-  .section-title{ font-size: calc({{ section.settings.title_size | default: 32 }}px * .78) !important; }
   .features-ticker{ --gap: {{ section.settings.marquee_gap | default: 40 | times: 0.7 }}px; }
 }
 
