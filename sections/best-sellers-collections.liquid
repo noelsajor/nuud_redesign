@@ -109,7 +109,6 @@
           <!-- Product Info -->
           <div class="product-info" style="padding: {{ section.settings.card_padding }}px;">
             
-            <!-- Star Rating -->
             {% if section.settings.show_ratings %}
             <div class="product-rating" aria-label="5 out of 5 stars">
               {% for i in (1..5) %}
@@ -120,7 +119,6 @@
             </div>
             {% endif %}
             
-            <!-- Brand Name -->
             {% if section.settings.show_vendor and product.vendor %}
             <p class="product-vendor" 
                style="color: {{ section.settings.vendor_color }};">
@@ -128,7 +126,6 @@
             </p>
             {% endif %}
             
-            <!-- Product Title -->
             <h4 class="product-title h4">
               <a href="{{ product.url }}" 
                  style="color: {{ section.settings.product_title_color }};">
@@ -136,7 +133,6 @@
               </a>
             </h4>
             
-            <!-- Add to Cart Button -->
             <form action="/cart/add" method="post" enctype="multipart/form-data" class="product-form">
               {% unless product.has_only_default_variant %}
                 <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
@@ -173,17 +169,19 @@
       {% if section.settings.show_see_all_button and section.settings.collection != blank %}
       <div class="see-all-container" 
            style="text-align: {{ section.settings.button_alignment }}; margin-top: {{ section.settings.button_top_spacing }}px;">
+        <!-- Secondary outline button with sliding arrow -->
         <a href="{{ collections[section.settings.collection].url }}" 
-           class="see-all-button dt-sc-btn{% if section.settings.see_all_add_padding %} ctm-btn-padding{% endif %}"
+           class="seeall-btn btn-arrow"
            aria-label="See all products in {{ collections[section.settings.collection].title }} collection">
-          {{ section.settings.see_all_text | default: 'See all' }}
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
-            <path d="M8,45h72L66.4,31.4c-1.9-1.9-1.9-5.1,0-7c1.9-1.9,5.1-1.9,7,0l22.1,22.1c0,0,0,0,0.1,0.1c0.2,0.2,0.4,0.4,0.6,0.7
-                     c0.1,0.1,0.1,0.2,0.1,0.3c0.1,0.2,0.2,0.4,0.3,0.6c0,0.1,0.1,0.2,0.1,0.3c0.1,0.2,0.1,0.4,0.2,0.6c0,0.1,0.1,0.2,0.1,0.3
-                     c-0.1,0.2-0.2,0.4-0.3,0.6c0,0.1-0.1,0.2-0.1,0.3
-                     c-0.2,0.2-0.4,0.5-0.6,0.7c0,0,0,0,0,0.1L73.4,75.6c-1,1-2.2,1.5-3.5,1.5s-2.5-0.5-3.5-1.5c-1.9-1.9-1.9-5.1,0-7L80,55H8
-                     c-2.7,0-5-2.2-5-5C3.1,47.3,5.3,45,8,45z"></path>
-          </svg>
+          <span class="seeall-btn__content">
+            {{ section.settings.see_all_text | default: 'See all products' }}
+            <svg class="seeall-btn__arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36.1 25.8" aria-hidden="true" focusable="false">
+              <g>
+                <line fill="none" stroke="currentColor" stroke-width="3" stroke-miterlimit="10" x1="0" y1="12.9" x2="34" y2="12.9"></line>
+                <polyline fill="none" stroke="currentColor" stroke-width="3" stroke-miterlimit="10" points="22.2,1.1 34,12.9 22.2,24.7"></polyline>
+              </g>
+            </svg>
+          </span>
         </a>
       </div>
       {% endif %}
@@ -245,32 +243,19 @@
 .best-sellers-{{ bs_uid }} .product-link { display:block; width:100%; height:100%; }
 
 /* --- Image swap stack --- */
-.best-sellers-{{ bs_uid }} .product-image-wrap {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
+.best-sellers-{{ bs_uid }} .product-image-wrap { position: relative; width: 100%; height: 100%; }
 .best-sellers-{{ bs_uid }} .product-image {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
   transition: opacity .3s ease, transform .3s ease;
 }
-/* Start with primary visible, secondary hidden */
 .best-sellers-{{ bs_uid }} .product-image--primary { opacity: 1; }
 .best-sellers-{{ bs_uid }} .product-image--secondary { opacity: 0; }
-/* On hover: fade to secondary (if present) */
 .best-sellers-{{ bs_uid }} .product-card:hover .product-image--secondary { opacity: 1; }
 .best-sellers-{{ bs_uid }} .product-card:hover .product-image--primary { opacity: 0; }
-
-/* Keep your existing slight zoom on hover for whichever image is visible */
 .best-sellers-{{ bs_uid }} .product-card:hover .product-image--primary,
-.best-sellers-{{ bs_uid }} .product-card:hover .product-image--secondary {
-  transform: scale(1.05);
-}
+.best-sellers-{{ bs_uid }} .product-card:hover .product-image--secondary { transform: scale(1.05); }
 
 /* Placeholder */
 .best-sellers-{{ bs_uid }} .product-image-placeholder { width: 100%; height: 100%; display:flex; align-items:center; justify-content:center; color:#999; }
@@ -288,20 +273,69 @@
 /* Add to Cart */
 .best-sellers-{{ bs_uid }} .product-form { margin-top:auto; }
 .best-sellers-{{ bs_uid }} .add-to-cart-btn { width:100%; border:0; padding:12px 20px; cursor:pointer; transition: all .3s ease; }
-.best-sellers-{{ bs_uid }} .add-to-cart-btn:hover:not(.sold-out) { background-color: #1FC2DB !important ; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.2); }
+/* no custom hover here so theme default applies */
 .best-sellers-{{ bs_uid }} .add-to-cart-btn:focus { outline:2px solid currentColor; outline-offset:2px; }
 .best-sellers-{{ bs_uid }} .add-to-cart-btn.sold-out { opacity:.6; cursor:not-allowed; }
 
-/* See All (dt-sc-btn stays as-is) */
-.best-sellers-{{ bs_uid }} .see-all-container { width:100%; }
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn { display: inline-flex; align-items: center; gap: 8px; background: none; border: none; text-decoration: none; padding: 0; color: #2D0288; transition: background .3s ease, color .3s ease, opacity .3s ease, transform .2s ease; }
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn.ctm-btn-padding { padding: 6px 15px; }
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn:visited { color: #2D0288; }
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn:hover,
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn:focus { background: none; color: #FF4881; text-decoration: none; }
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: 6px; }
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn svg { width: 36px; height: 36px; display: inline-block; }
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn svg path { fill: currentColor; }
+/* === See all: Secondary outline button inspired by your example === */
+.best-sellers-{{ bs_uid }} .seeall-btn {
+  --btn-color: #2D0288;
+  display: inline-flex;
+  align-items: center;
+  border: 2px solid var(--btn-color);
+  background: transparent;
+  color: var(--btn-color);
+  text-decoration: none;
+  padding: 14px 21px;
+  border-radius: 8px;
+  min-width: 200px;
+  font-family: inherit;     /* theme font */
+  font-size: 18px;          /* requested size */
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  line-height: 1;
+  position: relative;
+  overflow: hidden;
+  transition: color .1s cubic-bezier(0.16, 0.08, 0.355, 1), 
+              background .1s cubic-bezier(0.16, 0.08, 0.355, 1),
+              border-color .1s cubic-bezier(0.16, 0.08, 0.355, 1);
+}
+.best-sellers-{{ bs_uid }} .seeall-btn:hover,
+.best-sellers-{{ bs_uid }} .seeall-btn:focus {
+  background: rgba(45, 2, 136, 0.06);
+  border-color: #3a09b5;   /* slightly lighter on hover */
+  color: #2D0288;
+}
+.best-sellers-{{ bs_uid }} .seeall-btn:focus-visible {
+  outline: 2px solid var(--btn-color);
+  outline-offset: 2px;
+}
+.best-sellers-{{ bs_uid }} .seeall-btn__content {
+  display: inline-block;
+  position: relative;
+  transition: transform 300ms ease-out;
+  will-change: transform;
+}
+.best-sellers-{{ bs_uid }} .seeall-btn.btn-arrow:hover .seeall-btn__content,
+.best-sellers-{{ bs_uid }} .seeall-btn.btn-arrow:focus .seeall-btn__content {
+  transform: translate3d(-0.8rem, 0, 0);
+}
+.best-sellers-{{ bs_uid }} .seeall-btn__arrow {
+  position: absolute;
+  width: 1.1em;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: right 300ms ease-out, opacity 300ms ease-out;
+  will-change: right, opacity;
+  color: currentColor;
+}
+.best-sellers-{{ bs_uid }} .seeall-btn.btn-arrow:hover .seeall-btn__arrow,
+.best-sellers-{{ bs_uid }} .seeall-btn.btn-arrow:focus .seeall-btn__arrow {
+  opacity: 1;
+  right: -1.8rem;
+}
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -333,7 +367,6 @@
     { "type": "header", "content": "Collection Settings" },
     { "type": "collection", "id": "collection", "label": "Collection", "info": "Select the collection to display products from" },
     { "type": "range", "id": "products_to_show", "label": "Number of Products to Show", "min": 1, "max": 12, "step": 1, "default": 3 },
-
     { "type": "range", "id": "min_product_width", "label": "Minimum Product Card Width", "info": "Controls responsive breakpoints", "min": 200, "max": 350, "step": 25, "default": 275, "unit": "px" },
 
     { "type": "header", "content": "Section Layout" },
