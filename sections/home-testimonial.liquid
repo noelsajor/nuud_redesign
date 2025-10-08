@@ -54,7 +54,11 @@
        style="{% render 'bg-color-image-padding' %} background-size: {{- section.settings.background_size -}}; {% if section.settings.background_style == 'fixed' %}background-attachment: fixed;{% endif %} background-repeat:{% if section.settings.background_size == 'repeat' %}repeat{% else %}no-repeat;{% endif %}"
        {% include 'bg_image' %}>
 
-    <div class="{% render 'container-settings' %}">
+    {%- comment -%}
+      NEW: Constrain all foreground content (not background) inside a fixed container.
+      We intentionally do NOT wrap the .dt-sc-section-wrapper itself so its background spans full width.
+    {%- endcomment -%}
+    <div class="max-container">
       <div class="row {{ section.settings.custom_class_name }}">
 
         {% render 'section-heading', class: section.id %}
@@ -253,7 +257,7 @@
         {% if section.settings.enable_slider %}</div>{% endif %}
 
       </div>
-    </div>
+    </div> <!-- /.max-container -->
   </div>
 
   <div class="rightimage" style="{% if section.settings.image_2 != blank %} background-image:url('{{ section.settings.image_2 | img_url: 'master' }}');background-repeat:no-repeat; position:absolute;width:110px;height:170px;{% endif %}"></div>
@@ -261,6 +265,14 @@
 {% endif %}
 
 <style>
+/* NEW: Foreground content container (background remains on .dt-sc-section-wrapper) */
+#shopify-section-{{section.id}}.home-testimonial-block .max-container{
+  max-width:1280px;
+  margin:0 auto;
+  padding:80px 40px;
+  box-sizing:border-box;
+}
+
 .dt-sc-testimonial > svg.placeholder-svg {
   width: 90px;
   height: 90px;
@@ -329,7 +341,7 @@
 }
 
 #shopify-section-{{section.id}}.home-testimonial-block .rightimage {
-  animation: bounce 5s infinite linear; /* keep original */
+  animation: bounce 5s infinite linear;
   top: 120px; bottom:auto; right:70px; background-size: contain;
 }
 
@@ -365,7 +377,7 @@
   #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-section-wrapper:after{display:none;}
 }
 
-/* Spacing */
+/* Spacing on wrapper (kept as in original; background wrapper can still have its own spacing) */
 @media only screen and (min-width: 1200px){
   #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-section-wrapper {
     margin-top:{{margin_top}}px; margin-bottom:{{margin_bottom}}px;
@@ -531,6 +543,7 @@
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content.text-center .dt-sc-author-info.style_2 cite span:before { right:0; margin:auto; }
 
 /* Style 2 specifics */
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2 { gap:30px; }
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2 .dt-sc-testimonial-content { width:100%; }
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2 .dt-sc-testimonial-content .dt-sc-testimonial-content-inner {
   margin:auto; width:100%; display:grid; gap: calc(.5*{{section.settings.column_gap}}px);
@@ -605,31 +618,24 @@
 
 /* Mobile: center the animated badge above the heading */
 @media (max-width: 767px){
-  /* make sure the section is the positioning context */
   #shopify-section-{{section.id}}.home-testimonial-block { position: relative; }
-
-  /* the animated badge (".rightimage") is inline-styled; override with !important */
   #shopify-section-{{section.id}}.home-testimonial-block .rightimage{
     position: absolute !important;
-    top: 40px !important;                 /* tweak if you want it closer/farther from the top */
+    top: 40px !important;
     left: 10% !important;
     right: auto !important;
-    transform: translateX(-50%);          /* centers it horizontally */
-    z-index: 3;                           /* above background & behind interactions */
-    pointer-events: none;                 /* don't block taps on the heading */
-    /* optional: keep its size or adjust for mobile */
+    transform: translateX(-50%);
+    z-index: 3;
+    pointer-events: none;
     width: 110px !important;
     height: 170px !important;
     background-size: contain !important;
   }
-
-  /* add space so the heading sits below the centered badge */
   #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-heading{
-    padding-top: 180px;                   /* ≈ badge height + breathing room */
-    text-align: center;                   /* heading centered under the badge */
+    padding-top: 180px;
+    text-align: center;
   }
 }
-
 
 /* Rating glyphs (Font Awesome dependency) */
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content div[class*="no-star-rating"] { display:none !important; }
