@@ -107,7 +107,11 @@
   {%- comment -%} ---------- CONTENT ---------- {%- endcomment -%}
   <div class="features-container" style="max-width: {{ section.settings.container_width }}px;">
     {% if section.settings.section_title != blank %}
-      <h2 id="feed-title" class="section-title h2">
+      <h2 id="feed-title"
+          class="section-title h2"
+          style="color: {{ section.settings.title_color }};
+                 font-size: {{ section.settings.title_size }}px;
+                 text-align: {{ section.settings.title_alignment }};">
         {{ section.settings.section_title }}
       </h2>
     {% endif %}
@@ -239,26 +243,6 @@
 </section>
 
 <style>
-/* ==== Theme Typography only (no per-section overrides) ==== */
-.features-wave-section {
-  font-family: var(--font-body-family), var(--font-body-fallback, sans-serif);
-}
-.features-wave-section .h1,
-.features-wave-section .h2,
-.features-wave-section .h3,
-.features-wave-section .h4,
-.features-wave-section .h5,
-.features-wave-section .h6 {
-  font-family: var(--font-heading-family), var(--font-heading-fallback, var(--font-body-family), sans-serif);
-}
-.features-wave-section .section-title,
-.features-wave-section .feed-grid,
-.features-wave-section .feed-card,
-.features-wave-section .feed-card *,
-.features-wave-section .feed-placeholder {
-  font-family: inherit;
-}
-
 /* Positioning & waves */
 .features-wave-section { position: relative; overflow: visible; z-index: 1; }
 .wave-top, .wave-bottom { position: absolute; left: 0; width: 100%; line-height: 0; pointer-events: none; z-index: 2; overflow: visible; }
@@ -276,7 +260,7 @@
 
 /* Content */
 .features-container { position: relative; z-index: 3; margin: 100px auto; width: 100%; }
-.section-title { margin: 100px 32px; line-height: 1.2; }
+.section-title { margin: 100px 32px; line-height: 1.2; } /* no font-family here */
 
 /* Grid & cards */
 .feed-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: {{ section.settings.card_gap }}px; align-items: stretch; }
@@ -322,6 +306,9 @@
     { "type": "range", "id": "container_width", "label": "Container Max Width", "min": 800, "max": 1600, "step": 50, "default": 1200 },
 
     { "type": "text", "id": "section_title", "label": "Heading", "default": "Check our Feed" },
+    { "type": "color", "id": "title_color", "label": "Heading Color", "default": "#7b1d2a" },
+    { "type": "range", "id": "title_size", "label": "Heading Size", "min": 20, "max": 48, "step": 2, "default": 36 },
+    { "type": "select", "id": "title_alignment", "label": "Heading Alignment", "options": [{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}], "default": "center" },
 
     { "type": "header", "content": "Wave Settings" },
     { "type": "select", "id": "wave_shape", "label": "Wave Shape", "options": [{"value":"gentle","label":"Gentle"},{"value":"medium","label":"Medium"},{"value":"dramatic","label":"Dramatic"},{"value":"sharp","label":"Sharp"},{"value":"rounded","label":"Rounded"}], "default": "medium" },
