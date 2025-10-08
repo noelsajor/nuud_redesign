@@ -1,6 +1,6 @@
 {% comment %}
 Best Sellers Collection – SEO/A11y optimized
-- Typography now strictly inherits theme fonts (no external families)
+- Typography fully inherits theme defaults (no overrides or controls)
 - Optional image overflow (float up out of the card)
 - Container background color
 - Blog-style "See all" button (dt-sc-btn + SVG)
@@ -19,7 +19,7 @@ Best Sellers Collection – SEO/A11y optimized
     
     <!-- Section Header -->
     <header class="section-header" 
-            style="text-align: {{ section.settings.title_alignment }}; margin-bottom: {{ section.settings.title_bottom_spacing }}px; position: relative;">
+            style="margin-bottom: {{ section.settings.title_bottom_spacing }}px; position: relative;">
       
       {% if section.settings.show_badge and section.settings.badge_image %}
       <!-- Centered Badge ABOVE the title -->
@@ -38,9 +38,7 @@ Best Sellers Collection – SEO/A11y optimized
       {% if section.settings.section_title != blank %}
       <h2 id="best-sellers-title-{{ bs_uid }}" 
           class="section-title h2"
-          style="color: {{ section.settings.title_color }}; 
-                 font-size: {{ section.settings.title_size }}px;
-                 font-weight: {{ section.settings.title_weight }};">
+          style="color: {{ section.settings.title_color }};">
         {{ section.settings.section_title }}
       </h2>
       {% else %}
@@ -114,18 +112,15 @@ Best Sellers Collection – SEO/A11y optimized
             <!-- Brand Name -->
             {% if section.settings.show_vendor and product.vendor %}
             <p class="product-vendor" 
-               style="color: {{ section.settings.vendor_color }}; 
-                      font-size: {{ section.settings.vendor_size }}px;">
-              {{ product.vendor | upcase }}
+               style="color: {{ section.settings.vendor_color }};">
+              {{ product.vendor }}
             </p>
             {% endif %}
             
             <!-- Product Title -->
             <h3 class="product-title h4">
               <a href="{{ product.url }}" 
-                 style="color: {{ section.settings.product_title_color }}; 
-                        font-size: {{ section.settings.product_title_size }}px;
-                        font-weight: {{ section.settings.product_title_weight }};">
+                 style="color: {{ section.settings.product_title_color }};">
                 {{ product.title }}
               </a>
             </h3>
@@ -142,8 +137,7 @@ Best Sellers Collection – SEO/A11y optimized
                       class="add-to-cart-btn {% unless product.available %}sold-out{% endunless %}"
                       style="background-color: {{ section.settings.cart_button_background }}; 
                              color: {{ section.settings.cart_button_text_color }};
-                             border-radius: {{ section.settings.cart_button_radius }}px;
-                             font-size: {{ section.settings.cart_button_text_size }}px;"
+                             border-radius: {{ section.settings.cart_button_radius }}px;"
                       {% unless product.available %}disabled{% endunless %}
                       aria-label="Add {{ product.title }} to cart">
                 {% if product.available %}
@@ -196,30 +190,7 @@ Best Sellers Collection – SEO/A11y optimized
 </section>
 
 <style>
-/* ===== Theme Typography: inherit theme fonts only ===== */
-.best-sellers-{{ bs_uid }} { 
-  font-family: var(--font-body-family), var(--font-body-fallback, sans-serif);
-}
-.best-sellers-{{ bs_uid }} .h1,
-.best-sellers-{{ bs_uid }} .h2,
-.best-sellers-{{ bs_uid }} .h3,
-.best-sellers-{{ bs_uid }} .h4,
-.best-sellers-{{ bs_uid }} .h5,
-.best-sellers-{{ bs_uid }} .h6 {
-  font-family: var(--font-heading-family), var(--font-heading-fallback, var(--font-body-family), sans-serif);
-}
-/* Ensure UI elements & third-party classes don’t force a different font */
-.best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn,
-.best-sellers-{{ bs_uid }} .add-to-cart-btn,
-.best-sellers-{{ bs_uid }} .product-vendor,
-.best-sellers-{{ bs_uid }} .product-rating,
-.best-sellers-{{ bs_uid }} .sale-badge,
-.best-sellers-{{ bs_uid }} .no-products-message,
-.best-sellers-{{ bs_uid }} .no-collection-message {
-  font-family: inherit;
-}
-
-/* ===== Base resets (no font-family here) ===== */
+/* ===== Base resets (no typography overrides) ===== */
 .best-sellers-{{ bs_uid }} .section-title,
 .best-sellers-{{ bs_uid }} .product-title { margin: 0; }
 
@@ -261,27 +232,22 @@ Best Sellers Collection – SEO/A11y optimized
 .best-sellers-{{ bs_uid }} .product-link { display:block; width:100%; height:100%; }
 .best-sellers-{{ bs_uid }} .product-image { width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform .3s ease; }
 .best-sellers-{{ bs_uid }} .product-card:hover .product-image { transform: scale(1.05); }
-.best-sellers-{{ bs_uid }} .product-image-placeholder { width: 100%; height: 100%; display:flex; align-items:center; justify-content:center; color:#999; font-size:14px; }
+.best-sellers-{{ bs_uid }} .product-image-placeholder { width: 100%; height: 100%; display:flex; align-items:center; justify-content:center; color:#999; }
 
 /* ===== Badges ===== */
-.best-sellers-{{ bs_uid }} .sale-badge {
-  position:absolute; top:10px; left:10px;
-  color:#fff; padding:5px 10px; border-radius:4px; font-size:12px; font-weight:600; text-transform:uppercase;
-}
+.best-sellers-{{ bs_uid }} .sale-badge { position:absolute; top:10px; left:10px; color:#fff; padding:5px 10px; border-radius:4px; }
 
 /* ===== Info area ===== */
 .best-sellers-{{ bs_uid }} .product-info { flex:1; display:flex; flex-direction:column; gap:10px; }
-.best-sellers-{{ bs_uid }} .product-rating { display:flex; gap:2px; font-size:14px; margin-bottom:5px; }
-.best-sellers-{{ bs_uid }} .product-vendor { margin:0; font-size:12px; font-weight:600; letter-spacing:.5px; }
+.best-sellers-{{ bs_uid }} .product-rating { display:flex; gap:2px; margin-bottom:5px; }
+.best-sellers-{{ bs_uid }} .product-vendor { margin:0; }
 .best-sellers-{{ bs_uid }} .product-title { margin:0; flex:1; }
-.best-sellers-{{ bs_uid }} .product-title a { text-decoration:none; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; line-height:1.3; }
-.best-sellers-{{ bs_uid }} .product-title a:hover,
-.best-sellers-{{ bs_uid }} .product-title a:focus { text-decoration: underline; }
+.best-sellers-{{ bs_uid }} .product-title a { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
 
 /* ===== Add to Cart ===== */
 .best-sellers-{{ bs_uid }} .product-form { margin-top:auto; }
 .best-sellers-{{ bs_uid }} .add-to-cart-btn {
-  width:100%; border:0; padding:12px 20px; font-weight:600; text-transform:uppercase; cursor:pointer; transition: all .3s ease; letter-spacing:.5px;
+  width:100%; border:0; padding:12px 20px; cursor:pointer; transition: all .3s ease;
 }
 .best-sellers-{{ bs_uid }} .add-to-cart-btn:hover:not(.sold-out) { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.2); }
 .best-sellers-{{ bs_uid }} .add-to-cart-btn:focus { outline:2px solid currentColor; outline-offset:2px; }
@@ -291,8 +257,8 @@ Best Sellers Collection – SEO/A11y optimized
 .best-sellers-{{ bs_uid }} .see-all-container { width:100%; }
 .best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn {
   display: inline-flex; align-items: center; gap: 8px;
-  background: none; border: none; text-decoration: none; line-height: 1;
-  font-weight: 600; padding: 0; color: #2D0288;
+  background: none; border: none; text-decoration: none;
+  padding: 0; color: #2D0288;
   transition: background .3s ease, color .3s ease, opacity .3s ease, transform .2s ease;
 }
 .best-sellers-{{ bs_uid }} .see-all-button.dt-sc-btn.ctm-btn-padding { padding: 6px 15px; }
@@ -311,13 +277,11 @@ Best Sellers Collection – SEO/A11y optimized
     height: calc({{ section.settings.badge_size | default: 120 }}px * .8) !important;
   }
   .best-sellers-{{ bs_uid }} .section-header { margin-bottom: 30px; }
-  .best-sellers-{{ bs_uid }} .section-title { font-size: calc({{ section.settings.title_size | default: 36 }}px * .8) !important; }
   .best-sellers-{{ bs_uid }} .see-all-container { margin-top: 30px !important; }
   .best-sellers-{{ bs_uid }} .products-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important; gap: 64px !important; }
 }
 @media (max-width: 480px) { 
   .best-sellers-{{ bs_uid }} .products-grid { grid-template-columns: 1fr !important; }
-  .best-sellers-{{ bs_uid }} .section-title { font-size: calc({{ section.settings.title_size | default: 36 }}px * .7) !important; }
 }
 
 /* SR-only utility */
@@ -326,10 +290,7 @@ Best Sellers Collection – SEO/A11y optimized
 /* --- Fix: badge should never overlay the navbar --- */
 .best-sellers-{{ bs_uid }} { position: relative; z-index: 0; }
 .best-sellers-{{ bs_uid }} .section-header { position: relative; z-index: 1; }
-.best-sellers-{{ bs_uid }} .collection-badge {
-  position: relative !important;
-  z-index: 1 !important;
-}
+.best-sellers-{{ bs_uid }} .collection-badge { position: relative !important; z-index: 1 !important; }
 </style>
 
 {% schema %}
@@ -351,18 +312,6 @@ Best Sellers Collection – SEO/A11y optimized
     { "type": "header", "content": "Section Title" },
     { "type": "text", "id": "section_title", "label": "Section Title", "default": "Our Best Sellers" },
     { "type": "color", "id": "title_color", "label": "Title Color", "default": "#8b1538" },
-    { "type": "range", "id": "title_size", "label": "Title Font Size", "min": 24, "max": 48, "step": 2, "default": 36, "unit": "px" },
-    { "type": "select", "id": "title_weight", "label": "Title Font Weight", "options": [
-      { "value": "400", "label": "Normal" },
-      { "value": "500", "label": "Medium" },
-      { "value": "600", "label": "Semi Bold" },
-      { "value": "700", "label": "Bold" }
-    ], "default": "700" },
-    { "type": "select", "id": "title_alignment", "label": "Title Alignment", "options": [
-      { "value": "left", "label": "Left" },
-      { "value": "center", "label": "Center" },
-      { "value": "right", "label": "Right" }
-    ], "default": "center" },
     { "type": "range", "id": "title_bottom_spacing", "label": "Space Below Title", "info": "Vertical spacing between title and products", "min": 20, "max": 80, "step": 5, "default": 40, "unit": "px" },
 
     { "type": "header", "content": "Product Grid Spacing" },
@@ -403,23 +352,14 @@ Best Sellers Collection – SEO/A11y optimized
     { "type": "color", "id": "star_color", "label": "Star Color", "default": "#ffc107" },
     { "type": "checkbox", "id": "show_vendor", "label": "Show Brand/Vendor", "default": true },
     { "type": "color", "id": "vendor_color", "label": "Brand Color", "default": "#666666" },
-    { "type": "range", "id": "vendor_size", "label": "Brand Font Size", "min": 10, "max": 16, "step": 1, "default": 12, "unit": "px" },
     { "type": "color", "id": "product_title_color", "label": "Product Title Color", "default": "#333333" },
-    { "type": "range", "id": "product_title_size", "label": "Product Title Size", "min": 14, "max": 20, "step": 1, "default": 16, "unit": "px" },
-    { "type": "select", "id": "product_title_weight", "label": "Product Title Weight", "options": [
-      { "value": "400", "label": "Normal" },
-      { "value": "500", "label": "Medium" },
-      { "value": "600", "label": "Semi Bold" },
-      { "value": "700", "label": "Bold" }
-    ], "default": "600" },
 
     { "type": "header", "content": "Add to Cart Button" },
     { "type": "text", "id": "add_to_cart_text", "label": "Add to Cart Text", "default": "ADD TO CART" },
     { "type": "text", "id": "sold_out_text", "label": "Sold Out Text", "default": "SOLD OUT" },
     { "type": "color", "id": "cart_button_background", "label": "Button Background", "default": "#ff69b4" },
     { "type": "color", "id": "cart_button_text_color", "label": "Button Text Color", "default": "#ffffff" },
-    { "type": "range", "id": "cart_button_radius", "label": "Button Border Radius", "min": 0, "max": 30, "step": 5, "default": 25, "unit": "px" },
-    { "type": "range", "id": "cart_button_text_size", "label": "Button Text Size", "min": 12, "max": 16, "step": 1, "default": 14, "unit": "px" }
+    { "type": "range", "id": "cart_button_radius", "label": "Button Border Radius", "min": 0, "max": 30, "step": 5, "default": 25, "unit": "px" }
   ],
   "presets": [
     { "name": "Best Sellers Collection", "category": "Custom" }
