@@ -108,7 +108,7 @@
   <div class="features-container" style="max-width: {{ section.settings.container_width }}px;">
     {% if section.settings.section_title != blank %}
       <h2 id="feed-title"
-          class="section-title"
+          class="section-title h2"
           style="color: {{ section.settings.title_color }};
                  font-size: {{ section.settings.title_size }}px;
                  text-align: {{ section.settings.title_alignment }};">
@@ -243,11 +243,32 @@
 </section>
 
 <style>
+/* ==== Theme Typography only (no external stacks) ==== */
+.features-wave-section {
+  font-family: var(--font-body-family), var(--font-body-fallback, sans-serif);
+}
+.features-wave-section .h1,
+.features-wave-section .h2,
+.features-wave-section .h3,
+.features-wave-section .h4,
+.features-wave-section .h5,
+.features-wave-section .h6 {
+  font-family: var(--font-heading-family), var(--font-heading-fallback, var(--font-body-family), sans-serif);
+}
+.features-wave-section .section-title,
+.features-wave-section .feed-grid,
+.features-wave-section .feed-card,
+.features-wave-section .feed-card *,
+.features-wave-section .feed-placeholder {
+  font-family: inherit;
+}
+
+/* Positioning & waves */
 .features-wave-section { position: relative; overflow: visible; z-index: 1; }
 .wave-top, .wave-bottom { position: absolute; left: 0; width: 100%; line-height: 0; pointer-events: none; z-index: 2; overflow: visible; }
 .wave-top svg, .wave-bottom svg { width: 100%; height: 100%; display: block; }
 
-/* NEW: animation scaffolding */
+/* Animation scaffolding */
 .wave-bob { width: 100%; height: 100%; }
 .is-bobbing.wave-bob--top { animation: wave-bob var(--wave-bob-speed) ease-in-out infinite; will-change: transform; }
 .is-bobbing.wave-bob--bottom { animation: wave-bob-bottom var(--wave-bob-speed) ease-in-out infinite; will-change: transform; }
@@ -259,7 +280,7 @@
 
 /* Content */
 .features-container { position: relative; z-index: 3; margin: 100px auto; width: 100%; }
-.section-title { margin: 100px 32px; line-height: 1.2; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
+.section-title { margin: 100px 32px; line-height: 1.2; } /* removed hard-coded font-family */
 
 /* Grid & cards */
 .feed-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: {{ section.settings.card_gap }}px; align-items: stretch; }
@@ -270,7 +291,6 @@
 @media (max-width: 749px){
   .feed-grid { grid-template-columns: 1fr !important; }
 }
-
 
 /* Image ratio */
 .feed-thumb { position: relative; aspect-ratio: var(--ratio, 1); }
