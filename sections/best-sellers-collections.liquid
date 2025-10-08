@@ -52,29 +52,50 @@
           <!-- Product Image -->
           <div class="product-image-container{% if section.settings.enable_image_float %} image-float{% endif %}"
                style="--float-offset: {{ section.settings.image_float_offset }}px;">
+            
+            {%- assign first_image = product.featured_image | default: product.images.first -%}
+            {%- assign second_image = product.images[1] -%}
+
             <a href="{{ product.url }}" 
                aria-label="View {{ product.title }}"
                class="product-link">
-              {% if product.featured_image %}
-                <img src="{{ product.featured_image | image_url: width: 400 }}"
-                     srcset="{{ product.featured_image | image_url: width: 200 }} 200w,
-                             {{ product.featured_image | image_url: width: 300 }} 300w,
-                             {{ product.featured_image | image_url: width: 400 }} 400w"
-                     sizes="(max-width: 480px) 200px, (max-width: 768px) 300px, 400px"
-                     alt="{{ product.featured_image.alt | default: product.title }}"
-                     class="product-image"
-                     width="400"
-                     height="400"
-                     loading="lazy"
-                     decoding="async">
-              {% else %}
-                <div class="product-image-placeholder" 
-                     style="background-color: {{ section.settings.placeholder_color }};"
-                     aria-label="No image available for {{ product.title }}">
-                  <span aria-hidden="true">No Image</span>
-                </div>
-              {% endif %}
               
+              <div class="product-image-wrap">
+                {% if first_image %}
+                  <img
+                    src="{{ first_image | image_url: width: 400 }}"
+                    srcset="{{ first_image | image_url: width: 200 }} 200w,
+                            {{ first_image | image_url: width: 300 }} 300w,
+                            {{ first_image | image_url: width: 400 }} 400w"
+                    sizes="(max-width: 480px) 200px, (max-width: 768px) 300px, 400px"
+                    alt="{{ first_image.alt | default: product.title }}"
+                    class="product-image product-image--primary"
+                    width="400" height="400"
+                    loading="lazy" decoding="async">
+                {% else %}
+                  <div class="product-image-placeholder" 
+                       style="background-color: {{ section.settings.placeholder_color }};"
+                       aria-label="No image available for {{ product.title }}">
+                    <span aria-hidden="true">No Image</span>
+                  </div>
+                {% endif %}
+
+                {% if second_image %}
+                  <img
+                    src="{{ second_image | image_url: width: 400 }}"
+                    srcset="{{ second_image | image_url: width: 200 }} 200w,
+                            {{ second_image | image_url: width: 300 }} 300w,
+                            {{ second_image | image_url: width: 400 }} 400w"
+                    sizes="(max-width: 480px) 200px, (max-width: 768px) 300px, 400px"
+                    alt=""
+                    aria-hidden="true"
+                    class="product-image product-image--secondary"
+                    width="400" height="400"
+                    loading="lazy" decoding="async">
+                {% endif %}
+              </div>
+
+              <!-- Product Badge/Sale -->
               {% if product.compare_at_price > product.price %}
               <span class="sale-badge" 
                     style="background-color: {{ section.settings.sale_badge_color }};"
@@ -88,6 +109,7 @@
           <!-- Product Info -->
           <div class="product-info" style="padding: {{ section.settings.card_padding }}px;">
             
+            <!-- Star Rating -->
             {% if section.settings.show_ratings %}
             <div class="product-rating" aria-label="5 out of 5 stars">
               {% for i in (1..5) %}
@@ -98,6 +120,7 @@
             </div>
             {% endif %}
             
+            <!-- Brand Name -->
             {% if section.settings.show_vendor and product.vendor %}
             <p class="product-vendor" 
                style="color: {{ section.settings.vendor_color }};">
@@ -105,6 +128,7 @@
             </p>
             {% endif %}
             
+            <!-- Product Title -->
             <h4 class="product-title h4">
               <a href="{{ product.url }}" 
                  style="color: {{ section.settings.product_title_color }};">
@@ -112,6 +136,7 @@
               </a>
             </h4>
             
+            <!-- Add to Cart Button -->
             <form action="/cart/add" method="post" enctype="multipart/form-data" class="product-form">
               {% unless product.has_only_default_variant %}
                 <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
@@ -214,12 +239,40 @@
 }
 .best-sellers-{{ bs_uid }} .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,.15); }
 
-/* Product Image */
+/* Product Image container */
 .best-sellers-{{ bs_uid }} .product-image-container { position: relative; aspect-ratio: 1/1; overflow: hidden; background-color: #f8f8f8; }
 .best-sellers-{{ bs_uid }} .product-image-container.image-float { transform: translateY(calc(var(--float-offset) * -1)); margin-bottom: calc(var(--float-offset) * -1); }
 .best-sellers-{{ bs_uid }} .product-link { display:block; width:100%; height:100%; }
-.best-sellers-{{ bs_uid }} .product-image { width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform .3s ease; }
-.best-sellers-{{ bs_uid }} .product-card:hover .product-image { transform: scale(1.05); }
+
+/* --- Image swap stack --- */
+.best-sellers-{{ bs_uid }} .product-image-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.best-sellers-{{ bs_uid }} .product-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: opacity .3s ease, transform .3s ease;
+}
+/* Start with primary visible, secondary hidden */
+.best-sellers-{{ bs_uid }} .product-image--primary { opacity: 1; }
+.best-sellers-{{ bs_uid }} .product-image--secondary { opacity: 0; }
+/* On hover: fade to secondary (if present) */
+.best-sellers-{{ bs_uid }} .product-card:hover .product-image--secondary { opacity: 1; }
+.best-sellers-{{ bs_uid }} .product-card:hover .product-image--primary { opacity: 0; }
+
+/* Keep your existing slight zoom on hover for whichever image is visible */
+.best-sellers-{{ bs_uid }} .product-card:hover .product-image--primary,
+.best-sellers-{{ bs_uid }} .product-card:hover .product-image--secondary {
+  transform: scale(1.05);
+}
+
+/* Placeholder */
 .best-sellers-{{ bs_uid }} .product-image-placeholder { width: 100%; height: 100%; display:flex; align-items:center; justify-content:center; color:#999; }
 
 /* Badges */
