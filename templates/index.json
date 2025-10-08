@@ -311,6 +311,7 @@
         "hero_image": "shopify://shop_images/Gemini_Generated_Image_39d2pb39d2pb39d2_1.png",
         "image_position": "left",
         "image_overflow": 30,
+        "layout_ratio": "1-2",
         "show_badge": true,
         "badge_image": "shopify://shop_images/SpicyLove.png",
         "badge_alt": "Brand Badge",
