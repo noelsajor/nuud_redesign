@@ -36,113 +36,115 @@ Structured similar to other sections: wrapper → container → row → content.
       <div class="row {{ section.settings.custom_class_name }}">
 
         {%- comment -%}
-          Local section header (kept here to avoid pulling in a button from the shared heading snippet).
+          SIDE-BY-SIDE LAYOUT (Title 1/5 | Cards 3/5)
         {%- endcomment -%}
-        {% if section.settings.heading != blank or section.settings.subheading != blank or section.settings.body_text != blank %}
-          <div class="category-showcase__header" data-align="{{ section.settings.text_alignment }}">
-            {% if section.settings.heading != blank %}
-              <h2 class="category-showcase__heading">{{ section.settings.heading }}</h2>
-            {% endif %}
-            {% if section.settings.subheading != blank %}
-              <h3 class="category-showcase__subheading">{{ section.settings.subheading }}</h3>
-            {% endif %}
-            {% if section.settings.body_text != blank %}
-              <div class="category-showcase__body-text">{{ section.settings.body_text }}</div>
-            {% endif %}
-          </div>
-        {% endif %}
+        <div class="category-showcase__layout">
+          {% if section.settings.heading != blank or section.settings.subheading != blank or section.settings.body_text != blank %}
+            <aside class="category-showcase__header" data-align="{{ section.settings.text_alignment }}">
+              {% if section.settings.heading != blank %}
+                <h2 class="category-showcase__heading">{{ section.settings.heading }}</h2>
+              {% endif %}
+              {% if section.settings.subheading != blank %}
+                <h3 class="category-showcase__subheading">{{ section.settings.subheading }}</h3>
+              {% endif %}
+              {% if section.settings.body_text != blank %}
+                <div class="category-showcase__body-text">{{ section.settings.body_text }}</div>
+              {% endif %}
+            </aside>
+          {% endif %}
 
-        <div class="category-showcase__grid">
-          {% for i in (1..3) %}
-            {% liquid
-              assign collection_key   = 'category_' | append: i | append: '_collection'
-              assign title_key        = 'category_' | append: i | append: '_title'
-              assign description_key  = 'category_' | append: i | append: '_description'
-              assign image_key        = 'category_' | append: i | append: '_image'
+          <div class="category-showcase__grid">
+            {% for i in (1..3) %}
+              {% liquid
+                assign collection_key   = 'category_' | append: i | append: '_collection'
+                assign title_key        = 'category_' | append: i | append: '_title'
+                assign description_key  = 'category_' | append: i | append: '_description'
+                assign image_key        = 'category_' | append: i | append: '_image'
 
-              assign collection   = section.settings[collection_key]
-              assign custom_title = section.settings[title_key]
-              assign description  = section.settings[description_key]
-              assign image        = section.settings[image_key]
+                assign collection   = section.settings[collection_key]
+                assign custom_title = section.settings[title_key]
+                assign description  = section.settings[description_key]
+                assign image        = section.settings[image_key]
 
-              if collection != blank
-                assign category_url = collection.url
-                assign category_title = collection.title
-              else
-                assign category_url = '#'
-                assign category_title = custom_title
-              endif
+                if collection != blank
+                  assign category_url = collection.url
+                  assign category_title = collection.title
+                else
+                  assign category_url = '#'
+                  assign category_title = custom_title
+                endif
 
-              if custom_title != blank
-                assign display_title = custom_title
-              else
-                assign display_title = category_title
-              endif
-            %}
+                if custom_title != blank
+                  assign display_title = custom_title
+                else
+                  assign display_title = category_title
+                endif
+              %}
 
-            <a href="{{ category_url }}" class="category-card" data-category="{{ i }}">
-              <div class="category-card__image-wrap">
-                {% if image %}
-                  <img
-                    src="{{ image | image_url: width: 900 }}"
-                    srcset="
-                      {{ image | image_url: width: 480 }} 480w,
-                      {{ image | image_url: width: 720 }} 720w,
-                      {{ image | image_url: width: 900 }} 900w,
-                      {{ image | image_url: width: 1200 }} 1200w
-                    "
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    alt="{{ image.alt | escape }}"
-                    class="category-card__image"
-                    loading="lazy"
-                    width="{{ image.width }}"
-                    height="{{ image.height }}"
-                  >
-                {% elsif collection and collection.featured_image %}
-                  <img
-                    src="{{ collection.featured_image | image_url: width: 900 }}"
-                    srcset="
-                      {{ collection.featured_image | image_url: width: 480 }} 480w,
-                      {{ collection.featured_image | image_url: width: 720 }} 720w,
-                      {{ collection.featured_image | image_url: width: 900 }} 900w,
-                      {{ collection.featured_image | image_url: width: 1200 }} 1200w
-                    "
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    alt="{{ collection.featured_image.alt | escape }}"
-                    class="category-card__image"
-                    loading="lazy"
-                    width="{{ collection.featured_image.width }}"
-                    height="{{ collection.featured_image.height }}"
-                  >
-                {% else %}
-                  <div class="category-card__image-placeholder">
-                    {{ 'collection-1' | placeholder_svg_tag }}
-                    {% if collection == blank and custom_title == blank %}
-                      <div class="category-card__empty-state">Add a collection or title</div>
+              <a href="{{ category_url }}" class="category-card" data-category="{{ i }}">
+                <div class="category-card__image-wrap">
+                  {% if image %}
+                    <img
+                      src="{{ image | image_url: width: 900 }}"
+                      srcset="
+                        {{ image | image_url: width: 480 }} 480w,
+                        {{ image | image_url: width: 720 }} 720w,
+                        {{ image | image_url: width: 900 }} 900w,
+                        {{ image | image_url: width: 1200 }} 1200w
+                      "
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      alt="{{ image.alt | escape }}"
+                      class="category-card__image"
+                      loading="lazy"
+                      width="{{ image.width }}"
+                      height="{{ image.height }}"
+                    >
+                  {% elsif collection and collection.featured_image %}
+                    <img
+                      src="{{ collection.featured_image | image_url: width: 900 }}"
+                      srcset="
+                        {{ collection.featured_image | image_url: width: 480 }} 480w,
+                        {{ collection.featured_image | image_url: width: 720 }} 720w,
+                        {{ collection.featured_image | image_url: width: 900 }} 900w,
+                        {{ collection.featured_image | image_url: width: 1200 }} 1200w
+                      "
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      alt="{{ collection.featured_image.alt | escape }}"
+                      class="category-card__image"
+                      loading="lazy"
+                      width="{{ collection.featured_image.width }}"
+                      height="{{ collection.featured_image.height }}"
+                    >
+                  {% else %}
+                    <div class="category-card__image-placeholder">
+                      {{ 'collection-1' | placeholder_svg_tag }}
+                      {% if collection == blank and custom_title == blank %}
+                        <div class="category-card__empty-state">Add a collection or title</div>
+                      {% endif %}
+                    </div>
+                  {% endif %}
+
+                  <div class="category-card__overlay">
+                    {% if display_title != blank %}
+                      <h3 class="category-card__title">{{ display_title }}</h3>
                     {% endif %}
+                    {% if description != blank %}
+                      <p class="category-card__description">{{ description }}</p>
+                    {% endif %}
+                    <span class="category-card__cta">
+                      {{ section.settings.cta_text }}
+                      <span class="category-card__cta-arrow">→</span>
+                    </span>
                   </div>
-                {% endif %}
-
-                <div class="category-card__overlay">
-                  {% if display_title != blank %}
-                    <h3 class="category-card__title">{{ display_title }}</h3>
-                  {% endif %}
-                  {% if description != blank %}
-                    <p class="category-card__description">{{ description }}</p>
-                  {% endif %}
-                  <span class="category-card__cta">
-                    {{ section.settings.cta_text }}
-                    <span class="category-card__cta-arrow">→</span>
-                  </span>
                 </div>
-              </div>
-            </a>
-          {% endfor %}
+              </a>
+            {% endfor %}
+          </div>
         </div>
 
         {% if section.settings.see_all_text != blank and section.settings.see_all_link != blank %}
           <div class="category-showcase__footer" data-align="{{ section.settings.text_alignment }}">
-            <a href="{{ section.settings.see_all_link }}" class="category-showcase__see-all-button">
+            <a href="{{ section.settings.see_all_link }}" class="category-showcase__see-all-button dt-sc-btn ctm-btn-padding">
               {{ section.settings.see_all_text }}
               <span class="category-showcase__button-arrow">→</span>
             </a>
@@ -183,10 +185,18 @@ Structured similar to other sections: wrapper → container → row → content.
   pointer-events:none; z-index:1;
 }
 
-/* Header */
+/* Horizontal split: header 1/5, cards 3/5 */
+#shopify-section-{{ section.id }}.home-category-block .category-showcase__layout{
+  display: grid;
+  grid-template-columns: 1fr 3fr; /* 1/5 | 3/5 */
+  gap: 40px;
+  align-items: start;
+  margin-bottom: {{ section.settings.header_spacing }}px;
+}
+
+/* Header (left column) */
 #shopify-section-{{ section.id }}.home-category-block .category-showcase__header{
   text-align: var(--align);
-  margin-bottom: {{ section.settings.header_spacing }}px;
 }
 #shopify-section-{{ section.id }}.home-category-block .category-showcase__heading{
   font-size: {{ section.settings.heading_size }}px;
@@ -207,7 +217,7 @@ Structured similar to other sections: wrapper → container → row → content.
   {% if section.settings.text_alignment == 'center' %}margin-left:auto; margin-right:auto;{% endif %}
 }
 
-/* Grid */
+/* Grid (right column) */
 #shopify-section-{{ section.id }}.home-category-block .category-showcase__grid{
   display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap:30px; align-items:start; margin-top: var(--overflow);
@@ -291,7 +301,10 @@ Structured similar to other sections: wrapper → container → row → content.
 
 /* Footer button */
 #shopify-section-{{ section.id }}.home-category-block .category-showcase__footer{
-  text-align: var(--align); margin-top: {{ section.settings.button_margin }}px;
+  text-align: var(--align);
+  margin-top: {{ section.settings.button_margin }}px;
+  /* Place it under the cards (right column) when split */
+  grid-column: 2;
 }
 #shopify-section-{{ section.id }}.home-category-block .category-showcase__see-all-button{
   display:inline-flex; align-items:center; gap:8px;
@@ -301,6 +314,7 @@ Structured similar to other sections: wrapper → container → row → content.
   font-size: {{ section.settings.button_text_size }}px; font-weight:500;
   border: {{ section.settings.button_border_width }}px solid var(--btn-border);
   transition: all .3s ease;
+  /* Your global dt-sc-btn style will still apply */
 }
 #shopify-section-{{ section.id }}.home-category-block .category-showcase__see-all-button:hover{
   background: var(--btn-bg-hover); color: var(--btn-text-hover);
@@ -310,7 +324,17 @@ Structured similar to other sections: wrapper → container → row → content.
 #shopify-section-{{ section.id }}.home-category-block .category-showcase__button-arrow{ transition: transform .3s ease; }
 #shopify-section-{{ section.id }}.home-category-block .category-showcase__see-all-button:hover .category-showcase__button-arrow{ transform: translateX(3px); }
 
-/* Mobile tweaks */
+/* Mobile/tablet: stack */
+@media (max-width: 1024px){
+  #shopify-section-{{ section.id }}.home-category-block .category-showcase__layout{
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  #shopify-section-{{ section.id }}.home-category-block .category-showcase__footer{
+    grid-column: 1;
+  }
+}
+
 @media (max-width: 768px){
   #shopify-section-{{ section.id }}.home-category-block .category-showcase__grid{
     grid-template-columns: 1fr; gap:20px; margin-top: calc(var(--overflow) * .7);
@@ -330,25 +354,6 @@ Structured similar to other sections: wrapper → container → row → content.
     font-size: {{ section.settings.subheading_size | times: 0.9 }}px;
   }
 }
-
-@media (max-width: 768px){
-  .best-sellers-{{ bs_uid }} .collection-badge{
-    /* stop pinning to the corner on mobile */
-    position: static !important;
-    top: auto; right: auto; left: auto;
-    /* center above the heading */
-    display: flex; justify-content: center;
-    margin: 0 auto 12px;      /* space under the badge */
-    z-index: auto;
-  }
-
-  /* optional: tighten header spacing if needed */
-  .best-sellers-{{ bs_uid }} .section-header{
-    margin-top: 0;
-  }
-}
-
-
 
 /* Motion safety */
 @media (prefers-reduced-motion: reduce){
