@@ -108,7 +108,6 @@
   <div class="features-container" style="max-width: {{ section.settings.container_width }}px;">
     {% if section.settings.section_title != blank %}
       <h3 id="feed-title"
-          class="section-title"
           style="color: {{ section.settings.title_color }};
                  text-align: {{ section.settings.title_alignment }};">
         {{ section.settings.section_title }}
@@ -259,7 +258,9 @@
 
 /* Content */
 .features-container { position: relative; z-index: 3; margin: 100px auto; width: 100%; }
-.section-title { margin: 100px 32px; line-height: 1.2; font-weight: 600; } /* no font-family or font-size here */
+
+/* Removed .section-title (it was forcing font-family: inherit) */
+#feed-title { margin: 100px 32px; line-height: 1.2; } /* spacing only; no font-family/size */
 
 /* Grid & cards */
 .feed-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: {{ section.settings.card_gap }}px; align-items: stretch; }
@@ -306,7 +307,7 @@
 
     { "type": "text", "id": "section_title", "label": "Heading", "default": "Check our Feed" },
     { "type": "color", "id": "title_color", "label": "Heading Color", "default": "#7b1d2a" },
-    { "type": "range", "id": "title_size", "label": "Heading Size", "min": 20, "max": 48, "step": 2, "default": 36 },
+    { "type": "range", "id": "title_size", "label": "Heading Size (no longer used on H3)", "min": 20, "max": 48, "step": 2, "default": 36 },
     { "type": "select", "id": "title_alignment", "label": "Heading Alignment", "options": [{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}], "default": "center" },
 
     { "type": "header", "content": "Wave Settings" },
