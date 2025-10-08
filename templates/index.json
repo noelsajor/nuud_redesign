@@ -223,46 +223,6 @@
     },
     "wavy_feed_AgMWDx": {
       "type": "wavy-feed",
-      "blocks": {
-        "image_card_RE7c4p": {
-          "type": "image_card",
-          "settings": {
-            "image": "shopify://shop_images/hero_mobile.webp",
-            "alt_text": "Feed image",
-            "link": ""
-          }
-        },
-        "image_card_HQikmB": {
-          "type": "image_card",
-          "settings": {
-            "image": "shopify://shop_images/hero_mobile.webp",
-            "alt_text": "Feed image",
-            "link": ""
-          }
-        },
-        "image_card_k9mAfn": {
-          "type": "image_card",
-          "settings": {
-            "image": "shopify://shop_images/hero_mobile.webp",
-            "alt_text": "Feed image",
-            "link": ""
-          }
-        },
-        "image_card_rg6FWe": {
-          "type": "image_card",
-          "settings": {
-            "image": "shopify://shop_images/hero_mobile.webp",
-            "alt_text": "Feed image",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "image_card_RE7c4p",
-        "image_card_HQikmB",
-        "image_card_k9mAfn",
-        "image_card_rg6FWe"
-      ],
       "name": "Feed with Waves",
       "settings": {
         "use_gradient": false,
@@ -273,8 +233,19 @@
         "container_width": 800,
         "section_title": "Check Our Feed",
         "title_color": "#7b1d2a",
-        "title_size": 40,
         "title_alignment": "left",
+        "proxy_url": "/apps/instagram-feed?user_id=YOUR_ID&access_token=YOUR_TOKEN",
+        "instagram_profile_url": "https://www.instagram.com/nuudpleasures/",
+        "show_view_on_ig": true,
+        "carousel_desktop": 4,
+        "carousel_tablet": 3,
+        "carousel_mobile": 2,
+        "autoplay": false,
+        "autoplay_interval": 4000,
+        "card_bg": "#ffffff",
+        "card_radius": 18,
+        "card_gap": 32,
+        "max_items": 20,
         "wave_shape": "gentle",
         "show_top_wave": true,
         "show_bottom_wave": true,
@@ -287,11 +258,7 @@
         "wave_scroll_speed": 10,
         "wave_bob_amount": 0,
         "wave_bob_speed": 2,
-        "wave_direction": "left",
-        "aspect_ratio": 1,
-        "card_bg": "#ffffff",
-        "card_radius": 18,
-        "card_gap": 32
+        "wave_direction": "left"
       }
     },
     "section_dwbELd": {
