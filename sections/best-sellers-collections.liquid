@@ -273,9 +273,12 @@
 /* Add to Cart */
 .best-sellers-{{ bs_uid }} .product-form { margin-top:auto; }
 .best-sellers-{{ bs_uid }} .add-to-cart-btn { width:100%; border:0; padding:12px 20px; cursor:pointer; transition: all .3s ease; }
-/* no custom hover here so theme default applies */
 .best-sellers-{{ bs_uid }} .add-to-cart-btn:focus { outline:2px solid currentColor; outline-offset:2px; }
 .best-sellers-{{ bs_uid }} .add-to-cart-btn.sold-out { opacity:.6; cursor:not-allowed; }
+/* Requested Add-to-cart hover color */
+.best-sellers-{{ bs_uid }} .add-to-cart-btn:hover:not(.sold-out) {
+  background-color: #1FC2DB !important;
+}
 
 /* === See all button === */
 .best-sellers-{{ bs_uid }} .seeall-btn {
