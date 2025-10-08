@@ -197,7 +197,6 @@
 </section>
 
 <style>
-/* Titles */
 .best-sellers-{{ bs_uid }} .section-title,
 .best-sellers-{{ bs_uid }} .product-title { font-weight: 600; margin: 0; }
 
@@ -274,14 +273,11 @@
 /* Add to Cart */
 .best-sellers-{{ bs_uid }} .product-form { margin-top:auto; }
 .best-sellers-{{ bs_uid }} .add-to-cart-btn { width:100%; border:0; padding:12px 20px; cursor:pointer; transition: all .3s ease; }
+/* no custom hover here so theme default applies */
 .best-sellers-{{ bs_uid }} .add-to-cart-btn:focus { outline:2px solid currentColor; outline-offset:2px; }
 .best-sellers-{{ bs_uid }} .add-to-cart-btn.sold-out { opacity:.6; cursor:not-allowed; }
-/* Requested Add-to-cart hover color */
-.best-sellers-{{ bs_uid }} .add-to-cart-btn:hover:not(.sold-out) {
-  background-color: #1FC2DB !important;
-}
 
-/* === See all button (filled, sliding arrow) === */
+/* === See all button === */
 .best-sellers-{{ bs_uid }} .seeall-btn {
   --btn-color: #2D0288;
   display: inline-flex;
@@ -416,6 +412,14 @@
     ], "default": "center" },
     { "type": "range", "id": "button_top_spacing", "label": "Space Above Button", "min": 20, "max": 80, "step": 5, "default": 40, "unit": "px" },
     { "type": "checkbox", "id": "see_all_add_padding", "label": "Use blog-style padding (ctm-btn-padding)", "default": false },
+
+    { "type": "header", "content": "Badge Settings" },
+    { "type": "checkbox", "id": "show_badge", "label": "Show Badge", "default": true },
+    { "type": "image_picker", "id": "badge_image", "label": "Badge Image" },
+    { "type": "text", "id": "badge_alt", "label": "Badge Alt Text", "default": "100% Fun Guaranteed" },
+    { "type": "range", "id": "badge_size", "label": "Badge Size", "min": 80, "max": 150, "step": 10, "default": 120, "unit": "px" },
+    { "type": "checkbox", "id": "badge_spin", "label": "Enable Badge Spinning", "default": false },
+    { "type": "range", "id": "badge_spin_speed", "label": "Spin Speed (seconds)", "min": 5, "max": 20, "step": 1, "default": 10, "unit": "s" },
 
     { "type": "header", "content": "Product Cards" },
     { "type": "color", "id": "card_background", "label": "Card Background", "default": "#ffffff" },
