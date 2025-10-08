@@ -7,6 +7,7 @@
   {% assign pos = section.settings.image_position | default: 'left' %}
   {% assign ov = section.settings.image_overflow | default: 40 %}
   {% assign r = section.settings.card_border_radius | default: 20 %}
+  {% assign ovdir = section.settings.image_overflow_direction | default: 'auto' %}
 
   {%- comment -%} Image|Content ratio mapping {%- endcomment -%}
   {% assign ratio = section.settings.layout_ratio | default: '1-1' %}
@@ -21,6 +22,34 @@
     {% when '4-1' %}{% assign image_fr = '4fr' %}{% assign content_fr = '1fr' %}
     {% else %}{% assign image_fr = '1fr' %}{% assign content_fr = '1fr' %}
   {% endcase %}
+
+  {%- comment -%}
+    Compute overflow side without parentheses (Liquid-safe).
+    Outputs: img_ml, img_mr and img_w.
+  {%- endcomment -%}
+  {% assign img_ml = '0' %}
+  {% assign img_mr = '0' %}
+  {% assign img_w = '100%' %}
+
+  {% if ov > 0 and ovdir != 'none' %}
+    {% if pos == 'left' %}
+      {% if ovdir == 'auto' or ovdir == 'outer' %}
+        {% assign img_ml = '-' | append: ov | append: 'px' %}
+        {% assign img_w = 'calc(100% + ' | append: ov | append: 'px)' %}
+      {% elsif ovdir == 'inner' %}
+        {% assign img_mr = '-' | append: ov | append: 'px' %}
+        {% assign img_w = 'calc(100% + ' | append: ov | append: 'px)' %}
+      {% endif %}
+    {% else %}
+      {% if ovdir == 'auto' or ovdir == 'outer' %}
+        {% assign img_mr = '-' | append: ov | append: 'px' %}
+        {% assign img_w = 'calc(100% + ' | append: ov | append: 'px)' %}
+      {% elsif ovdir == 'inner' %}
+        {% assign img_ml = '-' | append: ov | append: 'px' %}
+        {% assign img_w = 'calc(100% + ' | append: ov | append: 'px)' %}
+      {% endif %}
+    {% endif %}
+  {% endif %}
 
   <div class="hero-container">
     {% if section.settings.show_badge and section.settings.badge_image %}
@@ -56,14 +85,16 @@
             sizes="(max-width: 768px) 100vw, 50vw"
             alt="{{ section.settings.hero_image.alt | default: section.settings.hero_title | default: 'Hero promotional image' }}"
             class="hero-image"
-            style="{% if pos == 'left' %}
-                     margin-left: -{{ ov }}px; width: calc(100% + {{ ov }}px);
-                     border-radius: {{ r }}px 0 0 {{ r }}px;
-                   {% else %}
-                     margin-right: -{{ ov }}px; width: calc(100% + {{ ov }}px);
-                     border-radius: 0 {{ r }}px {{ r }}px 0;
-                   {% endif %}
-                   height: 100%; object-fit: cover;"
+            style="
+              {% if img_ml != '0' %}margin-left: {{ img_ml }};{% endif %}
+              {% if img_mr != '0' %}margin-right: {{ img_mr }};{% endif %}
+              width: {{ img_w }};
+              {% if pos == 'left' %}
+                border-radius: {{ r }}px 0 0 {{ r }}px;
+              {% else %}
+                border-radius: 0 {{ r }}px {{ r }}px 0;
+              {% endif %}
+              height: 100%; object-fit: cover;"
             width="800"
             height="500"
             loading="eager"
@@ -71,14 +102,16 @@
             fetchpriority="high">
         {% else %}
           <div class="hero-image-placeholder"
-               style="{% if pos == 'left' %}
-                        margin-left: -{{ ov }}px; width: calc(100% + {{ ov }}px);
-                        border-radius: {{ r }}px 0 0 {{ r }}px;
-                      {% else %}
-                        margin-right: -{{ ov }}px; width: calc(100% + {{ ov }}px);
-                        border-radius: 0 {{ r }}px {{ r }}px 0;
-                      {% endif %}
-                      background-color: #f0f0f0;"
+               style="
+                 {% if img_ml != '0' %}margin-left: {{ img_ml }};{% endif %}
+                 {% if img_mr != '0' %}margin-right: {{ img_mr }};{% endif %}
+                 width: {{ img_w }};
+                 {% if pos == 'left' %}
+                   border-radius: {{ r }}px 0 0 {{ r }}px;
+                 {% else %}
+                   border-radius: 0 {{ r }}px {{ r }}px 0;
+                 {% endif %}
+                 background-color: #f0f0f0;"
                role="img"
                aria-label="Placeholder for hero image">
             <span aria-hidden="true">Add your hero image</span>
@@ -288,6 +321,18 @@
     { "type": "range", "id": "image_overflow", "label": "Image Overflow Amount", "min": 0, "max": 80, "step": 10, "default": 40, "unit": "px" },
 
     { "type": "select",
+      "id": "image_overflow_direction",
+      "label": "Image Overflow Direction",
+      "default": "auto",
+      "options": [
+        { "value": "auto", "label": "Auto (outer by image side)" },
+        { "value": "outer", "label": "Outer (toward edge of card)" },
+        { "value": "inner", "label": "Inner (toward content)" },
+        { "value": "none", "label": "None (no overflow)" }
+      ]
+    },
+
+    { "type": "select",
       "id": "layout_ratio",
       "label": "Image | Content ratio (desktop)",
       "default": "1-1",
@@ -302,14 +347,6 @@
         { "value": "4-1", "label": "4/5 | 1/5" }
       ]
     },
-
-    { "type": "header", "content": "Brand Badge" },
-    { "type": "checkbox", "id": "show_badge", "label": "Show Brand Badge", "default": true },
-    { "type": "image_picker", "id": "badge_image", "label": "Badge Image" },
-    { "type": "text", "id": "badge_alt", "label": "Badge Alt Text", "default": "Brand Badge" },
-    { "type": "range", "id": "badge_size", "label": "Badge Size", "min": 60, "max": 200, "step": 10, "default": 120, "unit": "px" },
-    { "type": "checkbox", "id": "badge_spin", "label": "Enable Badge Spinning", "default": false },
-    { "type": "range", "id": "badge_spin_speed", "label": "Spin Speed (seconds per rotation)", "min": 2, "max": 20, "step": 1, "default": 10, "unit": "s" },
 
     { "type": "header", "content": "Title" },
     { "type": "text", "id": "hero_title", "label": "Hero Title (H1)", "default": "Enhance your play in bed" },
