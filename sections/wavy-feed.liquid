@@ -1,4 +1,4 @@
-<!-- Feed Gallery with Overlapping Waves (animated, seamless loop + bob) --> 
+<!-- Feed Gallery with Overlapping Waves (animated, seamless loop + bob) + Instagram Carousel -->
 <section class="features-wave-section"
          role="region"
          aria-labelledby="feed-title"
@@ -104,40 +104,43 @@
   </div>
   {% endif %}
 
-  {%- comment -%} ---------- CONTENT ---------- {%- endcomment -%}
+  {%- comment -%} ---------- CONTENT (INSTAGRAM CAROUSEL) ---------- {%- endcomment -%}
   <div class="features-container" style="max-width: {{ section.settings.container_width }}px;">
     {% if section.settings.section_title != blank %}
       <h3 id="feed-title"
-          style="color: {{ section.settings.title_color }};
-                 text-align: {{ section.settings.title_alignment }};">
+          style="color: {{ section.settings.title_color }}; text-align: {{ section.settings.title_alignment }};">
         {{ section.settings.section_title }}
       </h3>
     {% endif %}
 
-    <div class="feed-grid" role="list">
-      {%- for block in section.blocks -%}
-        {%- assign img = block.settings.image -%}
-        <a class="feed-card"
-           {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% else %}role="link" aria-disabled="true"{% endif %}
-           {{ block.shopify_attributes }}>
-          <div class="feed-thumb" style="--ratio: {{ section.settings.aspect_ratio | default: 1 }}">
-            {% if img %}
-              {% assign img_url = img | image_url: width: 1200 %}
-              {{ img_url | image_tag:
-                alt: block.settings.alt_text,
-                loading: 'lazy',
-                decoding: 'async',
-                widths: '360, 600, 900, 1200',
-                sizes: '(max-width: 749px) 45vw, (max-width: 989px) 30vw, 260px',
-                class: 'feed-img'
-              }}
-            {% else %}
-              {{ 'image' | placeholder_svg_tag: 'feed-placeholder' }}
-            {% endif %}
-          </div>
-        </a>
-      {%- endfor -%}
+    <div class="insta-carousel" data-visible="{{ section.settings.carousel_desktop }}"
+         data-tablet="{{ section.settings.carousel_tablet }}"
+         data-mobile="{{ section.settings.carousel_mobile }}"
+         data-autoplay="{{ section.settings.autoplay | json }}"
+         data-autoplay-interval="{{ section.settings.autoplay_interval }}"
+         role="listbox" aria-label="Instagram posts carousel">
+
+      <button class="insta-nav insta-nav--prev" aria-label="Previous posts" type="button">&larr;</button>
+
+      <div class="insta-track" id="instaTrack-{{ section.id }}" tabindex="0">
+        <!-- Slides appended by JS -->
+        <div class="insta-skeletons" aria-hidden="true">
+          {% for i in (1..6) %}
+            <div class="insta-slide skeleton">
+              <div class="square"></div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <button class="insta-nav insta-nav--next" aria-label="Next posts" type="button">&rarr;</button>
     </div>
+
+    {% if section.settings.show_view_on_ig and section.settings.instagram_profile_url != blank %}
+      <p class="insta-cta" style="text-align: {{ section.settings.title_alignment }};">
+        <a href="{{ section.settings.instagram_profile_url }}" target="_blank" rel="noopener nofollow">View on Instagram</a>
+      </p>
+    {% endif %}
   </div>
 
   {%- comment -%} ---------- BOTTOM WAVE (animated) ---------- {%- endcomment -%}
@@ -250,31 +253,32 @@
 .wave-bob { width: 100%; height: 100%; }
 .is-bobbing.wave-bob--top { animation: wave-bob var(--wave-bob-speed) ease-in-out infinite; will-change: transform; }
 .is-bobbing.wave-bob--bottom { animation: wave-bob-bottom var(--wave-bob-speed) ease-in-out infinite; will-change: transform; }
-
 .wave-track { width: 200%; height: 100%; display: flex; will-change: transform; }
 .wave-track.is-animating { animation: wave-scroll var(--wave-speed) linear infinite; }
 .wave-track.is-animating.dir-right { animation-name: wave-scroll-reverse; }
 .wave-strip { width: 50%; height: 100%; flex: 0 0 50%; }
 
-/* Content */
+/* Content container */
 .features-container { position: relative; z-index: 3; margin: 100px auto; width: 100%; }
 
+/* Title spacing (keeps theme h3 font) */
+#feed-title { margin: 100px 32px; line-height: 1.2; }
 
-#feed-title { font-weight: 600; margin: 100px 32px; line-height: 1.2; } /
+/* -------- Instagram Carousel (scroll-snap) -------- */
+.insta-carousel { position: relative; display: flex; align-items: center; gap: 12px; }
+.insta-track { position: relative; overflow-x: auto; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; display: grid; grid-auto-flow: column; grid-auto-columns: calc(100% / var(--vis)); gap: {{ section.settings.card_gap }}px; padding: 6px; scroll-behavior: smooth; outline: none; }
+.insta-track:focus { box-shadow: 0 0 0 3px rgba(0,0,0,.08) inset; }
+.insta-slide { scroll-snap-align: start; position: relative; border-radius: {{ section.settings.card_radius }}px; overflow: hidden; background: {{ section.settings.card_bg }}; box-shadow: 0 10px 18px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.06); }
+.insta-slide a { display: block; width: 100%; height: 100%; }
+.insta-imgwrap { position: relative; width: 100%; aspect-ratio: 1 / 1; } /* square */
+.insta-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.insta-nav { background: #fff; border: 1px solid rgba(0,0,0,.1); border-radius: 999px; width: 42px; height: 42px; font-size: 18px; line-height: 40px; text-align: center; box-shadow: 0 6px 12px rgba(0,0,0,.08); cursor: pointer; }
+.insta-nav:disabled { opacity: .4; cursor: default; }
+.insta-cta a { text-decoration: underline; }
 
-/* Grid & cards */
-.feed-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: {{ section.settings.card_gap }}px; align-items: stretch; }
-@media (max-width: 990px) { .feed-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 749px) { .feed-grid { grid-template-columns: repeat(2, 1fr); } }
-.feed-card { display: block; background: {{ section.settings.card_bg }}; border-radius: {{ section.settings.card_radius }}px; overflow: hidden; transition: transform .25s ease, box-shadow .25s ease; box-shadow: 0 10px 18px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.06); }
-.feed-card:hover { transform: translateY(-4px); box-shadow: 0 16px 28px rgba(0,0,0,.12), 0 4px 10px rgba(0,0,0,.08); }
-@media (max-width: 749px){
-  .feed-grid { grid-template-columns: 1fr !important; }
-}
-
-/* Image ratio */
-.feed-thumb { position: relative; aspect-ratio: var(--ratio, 1); }
-.feed-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* Skeletons */
+.skeleton .square { width: 100%; aspect-ratio: 1 / 1; background: linear-gradient(90deg, #ececec 25%, #f6f6f6 37%, #ececec 63%); background-size: 400% 100%; animation: shimmer 1.25s infinite linear; border-radius: {{ section.settings.card_radius }}px; }
+@keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: 0 0; } }
 
 /* Keyframes */
 @keyframes wave-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
@@ -289,13 +293,140 @@
   .is-bobbing.wave-bob--bottom {
     animation: none !important;
   }
-  .feed-card { transition: none !important; }
+  .insta-track { scroll-behavior: auto; }
 }
 </style>
 
+<script>
+(function() {
+  const root = document.currentScript.closest('section');
+  const carousel = root.querySelector('.insta-carousel');
+  const track = root.querySelector('#instaTrack-{{ section.id }}');
+  const btnPrev = root.querySelector('.insta-nav--prev');
+  const btnNext = root.querySelector('.insta-nav--next');
+
+  // settings from schema
+  const visDesktop = parseInt(carousel.dataset.visible, 10) || 4;
+  const visTablet = parseInt(carousel.dataset.tablet, 10) || 3;
+  const visMobile = parseInt(carousel.dataset.mobile, 10) || 2;
+  const autoplay = carousel.dataset.autoplay === 'true';
+  const autoplayInterval = parseInt(carousel.dataset.autoplayInterval, 10) || 4000;
+
+  // set columns via CSS var
+  function setVis() {
+    const w = window.innerWidth;
+    let vis = visDesktop;
+    if (w <= 990) vis = visTablet;
+    if (w <= 749) vis = visMobile;
+    track.style.setProperty('--vis', vis);
+  }
+  setVis();
+  window.addEventListener('resize', setVis);
+
+  // basic nav
+  function scrollBySlides(dir) {
+    const vis = parseFloat(getComputedStyle(track).getPropertyValue('--vis')) || 4;
+    const slideWidth = track.clientWidth / vis;
+    const gap = parseFloat(getComputedStyle(track).columnGap || '0');
+    track.scrollBy({ left: dir * (slideWidth + gap), behavior: 'smooth' });
+  }
+  btnPrev.addEventListener('click', () => scrollBySlides(-1));
+  btnNext.addEventListener('click', () => scrollBySlides(1));
+
+  // autoplay
+  let timer = null;
+  function startAutoplay() {
+    if (!autoplay) return;
+    stopAutoplay();
+    timer = setInterval(() => scrollBySlides(1), autoplayInterval);
+  }
+  function stopAutoplay() {
+    if (timer) clearInterval(timer);
+    timer = null;
+  }
+  track.addEventListener('mouseenter', stopAutoplay);
+  track.addEventListener('mouseleave', startAutoplay);
+  startAutoplay();
+
+  // ---- Instagram fetching via proxy ----
+  const proxyUrl = {{ section.settings.proxy_url | json }}; // e.g. "/apps/instagram-feed?user_id=XXXXX&access_token=YYYYY"
+  const maxItems = {{ section.settings.max_items | json }};
+  const openInNew = true;
+
+  async function fetchFromProxy(url) {
+    const res = await fetch(url, { credentials: 'same-origin' });
+    if (!res.ok) throw new Error('Failed to load Instagram feed');
+    return res.json();
+  }
+
+  function normalizeItems(json) {
+    // expects { data: [{ media_type, media_url, thumbnail_url, permalink, timestamp, caption }], paging?: {...} }
+    if (!json || !Array.isArray(json.data)) return [];
+    return json.data.map(item => {
+      const isVideo = item.media_type === 'VIDEO' || item.media_type === 'REEL';
+      const url = isVideo ? (item.thumbnail_url || item.media_url) : item.media_url;
+      return {
+        img: url,
+        href: item.permalink || '#',
+        alt: (item.caption || 'Instagram image').slice(0, 140)
+      };
+    }).filter(x => !!x.img);
+  }
+
+  async function loadInstagram() {
+    if (!proxyUrl) return;
+    try {
+      let out = [];
+      const first = await fetchFromProxy(proxyUrl);
+      out = out.concat(normalizeItems(first));
+      if (maxItems && out.length > maxItems) out = out.slice(0, maxItems);
+
+      // Render slides
+      track.innerHTML = ''; // clear skeletons
+      if (!out.length) {
+        track.innerHTML = '<p style="opacity:.7;padding:12px;">No Instagram posts to display.</p>';
+        return;
+      }
+      const frag = document.createDocumentFragment();
+      out.forEach(it => {
+        const slide = document.createElement('div');
+        slide.className = 'insta-slide';
+        slide.setAttribute('role', 'option');
+
+        const a = document.createElement('a');
+        a.href = it.href;
+        if (openInNew) { a.target = '_blank'; a.rel = 'noopener nofollow'; }
+        a.ariaLabel = 'Open Instagram post';
+
+        const wrap = document.createElement('div');
+        wrap.className = 'insta-imgwrap';
+
+        const img = document.createElement('img');
+        img.className = 'insta-img';
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        img.alt = it.alt;
+        img.src = it.img;
+
+        wrap.appendChild(img);
+        a.appendChild(wrap);
+        slide.appendChild(a);
+        frag.appendChild(slide);
+      });
+      track.appendChild(frag);
+    } catch (e) {
+      console.error(e);
+      track.innerHTML = '<p style="opacity:.7;padding:12px;">Unable to load Instagram feed.</p>';
+    }
+  }
+
+  loadInstagram();
+})();
+</script>
+
 {% schema %}
 {
-  "name": "Feed with Waves",
+  "name": "IG Waves Feed",
   "settings": [
     { "type": "checkbox", "id": "use_gradient", "label": "Use Gradient Background", "default": true },
     { "type": "color", "id": "background_color", "label": "Background Color", "default": "#FFE9ED" },
@@ -305,10 +436,29 @@
     { "type": "range", "id": "section_padding_bottom", "label": "Padding Bottom", "min": 0, "max": 250, "step": 10, "default": 80 },
     { "type": "range", "id": "container_width", "label": "Container Max Width", "min": 800, "max": 1600, "step": 50, "default": 1200 },
 
-    { "type": "text", "id": "section_title", "label": "Heading", "default": "Check our Feed" },
+    { "type": "text", "id": "section_title", "label": "Heading", "default": "Follow us on Instagram" },
     { "type": "color", "id": "title_color", "label": "Heading Color", "default": "#7b1d2a" },
-    { "type": "range", "id": "title_size", "label": "Heading Size (no longer used on H3)", "min": 20, "max": 48, "step": 2, "default": 36 },
     { "type": "select", "id": "title_alignment", "label": "Heading Alignment", "options": [{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}], "default": "center" },
+
+    { "type": "header", "content": "Instagram Source" },
+    { "type": "text", "id": "proxy_url", "label": "Proxy URL (server endpoint)", "default": "/apps/instagram-feed?user_id=YOUR_ID&access_token=YOUR_TOKEN", "info": "Must return Instagram JSON from the Basic Display API." },
+    { "type": "text", "id": "instagram_profile_url", "label": "Instagram Profile URL (optional CTA link)", "default": "https://instagram.com/yourhandle" },
+    { "type": "checkbox", "id": "show_view_on_ig", "label": "Show 'View on Instagram' link", "default": true },
+
+    { "type": "header", "content": "Carousel" },
+    { "type": "range", "id": "carousel_desktop", "label": "Visible on Desktop", "min": 2, "max": 8, "step": 1, "default": 4 },
+    { "type": "range", "id": "carousel_tablet", "label": "Visible on Tablet", "min": 2, "max": 6, "step": 1, "default": 3 },
+    { "type": "range", "id": "carousel_mobile", "label": "Visible on Mobile", "min": 1, "max": 4, "step": 1, "default": 2 },
+    { "type": "checkbox", "id": "autoplay", "label": "Autoplay", "default": false },
+    { "type": "range", "id": "autoplay_interval", "label": "Autoplay Interval (ms)", "min": 1500, "max": 9000, "step": 500, "default": 4000 },
+
+    { "type": "header", "content": "Cards" },
+    { "type": "color", "id": "card_bg", "label": "Card Background", "default": "#FFFFFF" },
+    { "type": "range", "id": "card_radius", "label": "Card Corner Radius", "min": 8, "max": 36, "step": 1, "default": 18 },
+    { "type": "range", "id": "card_gap", "label": "Gap Between Slides", "min": 8, "max": 36, "step": 1, "default": 16 },
+
+    { "type": "header", "content": "Data" },
+    { "type": "range", "id": "max_items", "label": "Max posts to display", "min": 4, "max": 100, "step": 1, "default": 20 },
 
     { "type": "header", "content": "Wave Settings" },
     { "type": "select", "id": "wave_shape", "label": "Wave Shape", "options": [{"value":"gentle","label":"Gentle"},{"value":"medium","label":"Medium"},{"value":"dramatic","label":"Dramatic"},{"value":"sharp","label":"Sharp"},{"value":"rounded","label":"Rounded"}], "default": "medium" },
@@ -322,30 +472,12 @@
 
     { "type": "header", "content": "Wave Animation" },
     { "type": "checkbox", "id": "enable_wave_animation", "label": "Enable Wave Animation", "default": true },
-    { "type": "range", "id": "wave_scroll_speed", "label": "Horizontal Scroll Speed (s)", "min": 4, "max": 40, "step": 1, "default": 14, "unit": "s" },
-    { "type": "range", "id": "wave_bob_amount", "label": "Bob Amount (px)", "min": 0, "max": 20, "step": 1, "default": 6, "unit": "px" },
-    { "type": "range", "id": "wave_bob_speed", "label": "Bob Speed (s)", "min": 2, "max": 20, "step": 1, "default": 7, "unit": "s" },
-    { "type": "select", "id": "wave_direction", "label": "Scroll Direction", "options": [{"value":"left","label":"Left"},{"value":"right","label":"Right"}], "default": "left" },
-
-    { "type": "header", "content": "Cards" },
-    { "type": "range", "id": "aspect_ratio", "label": "Image Aspect Ratio", "min": 0.5, "max": 1.5, "step": 0.1, "default": 1 },
-    { "type": "color", "id": "card_bg", "label": "Card Background", "default": "#FFFFFF" },
-    { "type": "range", "id": "card_radius", "label": "Card Corner Radius", "min": 8, "max": 36, "step": 1, "default": 18 },
-    { "type": "range", "id": "card_gap", "label": "Grid Gap", "min": 8, "max": 36, "step": 1, "default": 20 }
+    { "type": "range", "id": "wave_scroll_speed", "label": "Horizontal Scroll Speed (s)", "min": 4, "max": 40, "step": 1, "default": 14 },
+    { "type": "range", "id": "wave_bob_amount", "label": "Bob Amount (px)", "min": 0, "max": 20, "step": 1, "default": 6 },
+    { "type": "range", "id": "wave_bob_speed", "label": "Bob Speed (s)", "min": 2, "max": 20, "step": 1, "default": 7 },
+    { "type": "select", "id": "wave_direction", "label": "Scroll Direction", "options": [{"value":"left","label":"Left"},{"value":"right","label":"Right"}], "default": "left" }
   ],
-  "blocks": [
-    {
-      "type": "image_card",
-      "name": "Image card",
-      "settings": [
-        { "type": "image_picker", "id": "image", "label": "Image" },
-        { "type": "text", "id": "alt_text", "label": "Alt text", "default": "Feed image" },
-        { "type": "url", "id": "link", "label": "Optional link" }
-      ]
-    }
-  ],
-  "presets": [
-    { "name": "Feed with Waves", "blocks": [{ "type": "image_card" }, { "type": "image_card" }, { "type": "image_card" }, { "type": "image_card" }] }
-  ]
+  "blocks": [],
+  "presets": [{ "name": "IG Waves Feed" }]
 }
 {% endschema %}
