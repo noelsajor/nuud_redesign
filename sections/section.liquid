@@ -2,8 +2,7 @@
 <section class="hero-section"
          role="banner"
          aria-label="{{ section.settings.section_aria_label | default: 'Hero section with promotional content' }}"
-         style="background-color: {{ section.settings.background_color }};
-                padding: {{ section.settings.section_padding_top }}px 20px {{ section.settings.section_padding_bottom }}px 20px;">
+         style="background-color: {{ section.settings.background_color }}; padding: 80px 40px;">
   {% assign pos = section.settings.image_position | default: 'left' %}
   {% assign ov = section.settings.image_overflow | default: 40 %}
   {% assign r = section.settings.card_border_radius | default: 20 %}
@@ -169,7 +168,9 @@
   align-items: center;
   justify-content: center;
 }
-.hero-container { position: relative; max-width: 960px; width: 100%; margin: 100px auto; }
+
+/* Unified max-width wrapper at 1280px (centered) */
+.hero-container { position: relative; max-width: 1280px; width: 100%; margin: 0 auto; }
 
 /* Badge */
 .brand-badge { position: absolute; right: 20px; z-index: 2; } /* keep above card */
@@ -233,7 +234,7 @@
 /* ------- Mobile fixes ------- */
 @media (max-width: 768px){
   .hero-section { padding-left: 15px !important; padding-right: 15px !important; }
-  .hero-container { margin: 48px auto; overflow: hidden; } /* keep mobile neat */
+  .hero-container { margin: 0 auto; overflow: hidden; } /* keep mobile neat */
 
   .hero-card {
     display: flex !important;
@@ -265,7 +266,6 @@
 }
 
 @media (max-width: 480px){
-  .hero-container { margin: 36px auto; }
   .hero-content { padding: 26px 18px; }
   .hero-title { font-size: calc({{ section.settings.title_size | default: 48 }}px * 0.54) !important; }
   .hero-description { font-size: calc({{ section.settings.description_size | default: 18 }}px * 0.85) !important; }
