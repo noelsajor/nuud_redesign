@@ -2,6 +2,7 @@
 Categories Showcase – 3 clickable category cards with hover-only overlay,
 image overflow, adjustable padding/background, and optional fixed aspect ratio.
 Structured similar to other sections: wrapper → container → row → content.
+Now using a fixed inner container (max-width: 1280px; padding: 80px 40px).
 {% endcomment %}
 
 <div
@@ -13,10 +14,8 @@ Structured similar to other sections: wrapper → container → row → content.
   <div
     class="dt-sc-section-wrapper {% if section.settings.background_style == 'parallax' %}parallax-initiated{% endif %}"
     style="
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-      padding-left: {{ section.settings.padding_horizontal }}px;
-      padding-right: {{ section.settings.padding_horizontal }}px;
+      /* Full-bleed background; content spacing handled by inner container */
+      padding: 0;
       background-color: {{ section.settings.background_color }};
       {% if section.settings.background_image %}
         background-image: url('{{ section.settings.background_image | image_url: width: 2000 }}');
@@ -25,6 +24,7 @@ Structured similar to other sections: wrapper → container → row → content.
         background-repeat: no-repeat;
         {% if section.settings.background_style == 'fixed' %}background-attachment: fixed;{% endif %}
       {% endif %}
+      position: relative;
     "
     {% if section.settings.background_style == 'parallax' %} data-speed="2" data-style="parallax"{% endif %}
   >
@@ -32,12 +32,11 @@ Structured similar to other sections: wrapper → container → row → content.
       <div class="category-showcase__background-overlay"></div>
     {% endif %}
 
-    <div class="{% render 'container-settings' %}">
+    <!-- Fixed inner container -->
+    <div class="category-showcase__container">
       <div class="row {{ section.settings.custom_class_name }}">
 
-        {%- comment -%}
-          SIDE-BY-SIDE LAYOUT (Title 1/5 | Cards 3/5)
-        {%- endcomment -%}
+        {%- comment -%} SIDE-BY-SIDE LAYOUT (Title 1/5 | Cards 3/5) {%- endcomment -%}
         <div class="category-showcase__layout">
           {% if section.settings.heading != blank or section.settings.subheading != blank or section.settings.body_text != blank %}
             <aside class="category-showcase__header" data-align="{{ section.settings.text_alignment }}">
@@ -157,6 +156,16 @@ Structured similar to other sections: wrapper → container → row → content.
 </div>
 
 <style>
+/* ---------- Fixed inner container ---------- */
+#shopify-section-{{ section.id }}.home-category-block .category-showcase__container{
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 80px 40px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 2; /* above background overlay */
+}
+
 /* ---------- Scoped to this section ---------- */
 #shopify-section-{{ section.id }}.home-category-block{
   --overflow: {{ section.settings.image_overflow }}px;
@@ -199,16 +208,17 @@ Structured similar to other sections: wrapper → container → row → content.
   text-align: var(--align);
 }
 #shopify-section-{{ section.id }}.home-category-block .category-showcase__heading{
-  font-size: {{ section.settings.heading_size }}px;
-  color: {{ section.settings.heading_color }};
   margin: 0 0 {{ section.settings.heading_margin }}px 0;
   font-weight: 600;
+  color: {{ section.settings.heading_color }};
+  /* uses theme's default typography for sizes/line-height unless overridden */
+  font-size: {{ section.settings.heading_size }}px;
 }
 #shopify-section-{{ section.id }}.home-category-block .category-showcase__subheading{
-  font-size: {{ section.settings.subheading_size }}px;
-  color: {{ section.settings.subheading_color }};
   margin: 0 0 {{ section.settings.subheading_margin }}px 0;
   font-weight: 500;
+  color: {{ section.settings.subheading_color }};
+  font-size: {{ section.settings.subheading_size }}px;
 }
 #shopify-section-{{ section.id }}.home-category-block .category-showcase__body-text{
   font-size: {{ section.settings.body_text_size }}px;
@@ -314,7 +324,6 @@ Structured similar to other sections: wrapper → container → row → content.
   font-size: {{ section.settings.button_text_size }}px; font-weight:500;
   border: {{ section.settings.button_border_width }}px solid var(--btn-border);
   transition: all .3s ease;
-  /* Your global dt-sc-btn style will still apply */
 }
 #shopify-section-{{ section.id }}.home-category-block .category-showcase__see-all-button:hover{
   background: var(--btn-bg-hover); color: var(--btn-text-hover);
@@ -406,7 +415,9 @@ Structured similar to other sections: wrapper → container → row → content.
   "name": "Categories showcase",
   "class": "index-section home-category-block",
   "settings": [
-    { "type": "header", "content": "Section spacing" },
+    { "type": "header", "content": "Section spacing (container)" },
+    { "type": "paragraph", "content": "Background stays full-bleed; inner content uses a fixed 1280px container with 80/40 padding." },
+
     { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 5, "unit": "px", "label": "Top padding", "default": 60 },
     { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 5, "unit": "px", "label": "Bottom padding", "default": 60 },
     { "type": "range", "id": "padding_horizontal", "min": 0, "max": 60, "step": 5, "unit": "px", "label": "Horizontal padding", "default": 20 },
