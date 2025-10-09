@@ -153,7 +153,7 @@
 }
 .faq-content-{{ faq_uid }}{ display:flex; flex-direction:column; gap:16px; }
 .faq-questions-{{ faq_uid }}{
-  font-size: 24px;
+  /* inherit theme typography entirely */
   display:flex; flex-direction:column;
   gap: {{ section.settings.question_gap }}px;
   list-style:none; margin:0; padding:0;
@@ -172,7 +172,7 @@
 .faq-question-text-{{ faq_uid }}{
   flex: 1 1 auto;
   min-width: 0;
-  line-height: 1.4; /* respects theme font, only adjusts rhythm */
+  /* no custom line-height or font settings; fully inherit */
 }
 
 /* Circular chevron button using equal padding (perfect circle) */
@@ -237,12 +237,11 @@
 }
 {% endif %}
 
-/* Typography (inherit theme fonts entirely) */
+/* Typography (fully inherit theme fonts) */
 .faq-subheading-{{ faq_uid }}{ margin:0; }
 .faq-heading-{{ faq_uid }}{
   margin:0;
-  line-height:1.15;
-  font-weight: 600; /* requested weight */
+  /* no font-weight or size overrides */
 }
 .faq-body-{{ faq_uid }} p{ margin: 0 0 1em; }
 
