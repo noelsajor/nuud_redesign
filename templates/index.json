@@ -734,7 +734,7 @@
         "question_background": "#a7e4b2",
         "answer_background": "rgba(0,0,0,0)",
         "question_border_color": "rgba(0,0,0,0)",
-        "icon_color": "#2d0288",
+        "icon_color": "#881d3e",
         "enable_animation": true,
         "enable_hover_color": true,
         "active_background_color": "#111111",
