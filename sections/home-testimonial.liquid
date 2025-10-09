@@ -693,6 +693,93 @@
   }
 }
 
+/* ===== Mobile-only fixes for testimonial section ===== */
+@media (max-width: 767px){
+  /* Contain any horizontal bleed */
+  #shopify-section-{{section.id}}.home-testimonial-block,
+  #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-section-wrapper{
+    overflow-x: clip;
+  }
+
+  /* Force a single-column, centered stack per card */
+  #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial{
+    display:grid !important;
+    grid-template-columns: 1fr;
+    justify-items:center;
+    align-items:start;
+    text-align:center; /* keep centered on mobile */
+    gap: {{ section.settings.column_gap }}px;
+    min-width: 0; /* allow shrink */
+  }
+
+  /* Keep inner pieces centered and within the viewport */
+  #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-image,
+  #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content{
+    width:100% !important;
+    margin:0 auto !important;
+    min-width:0;
+    box-sizing: border-box;
+  }
+
+  /* Override any left/right alignment to center on mobile */
+  #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section 
+  .dt-sc-testimonial .dt-sc-testimonial-content.text-start,
+  #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section 
+  .dt-sc-testimonial .dt-sc-testimonial-content.text-end{
+    text-align:center !important;
+  }
+
+  /* Wrap long words/URLs; prevent text overflow */
+  #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-quote,
+  #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-quote p,
+  #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial .dt-sc-testimonial-content,
+  #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial cite,
+  #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial cite span{
+    overflow-wrap:anywhere;
+    word-break:break-word;
+  }
+
+  /* Small inner padding so text doesn’t touch edges */
+  #shopify-section-{{section.id}}.home-testimonial-block 
+  .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-testimonial-content-inner{
+    padding-left: clamp(12px, 3vw, 20px);
+    padding-right: clamp(12px, 3vw, 20px);
+    max-width:100%;
+    overflow:hidden;
+  }
+
+  /* Center author line & rating */
+  #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial cite{
+    justify-content:center !important;
+  }
+  #shopify-section-{{section.id}}.home-testimonial-block 
+  .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-author-info.style_2 cite span:before{
+    left:0; right:0; margin:0 auto; /* center the small separator line */
+  }
+  #shopify-section-{{section.id}}.home-testimonial-block 
+  .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-author-rating{
+    justify-content:center !important;
+  }
+
+  /* Images should never force overflow */
+  #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section img{
+    display:block;
+    max-width:100%;
+    height:auto;
+  }
+}
+
+/* Extra tiny screens: give slides side padding when inside swiper */
+@media (max-width: 420px){
+  #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-swiper-slider .swiper-wrapper .swiper-slide{
+    padding-left:12px;
+    padding-right:12px;
+    max-width:100%;
+    box-sizing:border-box;
+  }
+}
+
+
 </style>
 
 
