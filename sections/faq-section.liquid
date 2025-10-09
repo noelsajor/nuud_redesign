@@ -371,10 +371,7 @@ button svg, .dt-sc-btn svg  {
   .faq-container-{{ faq_uid }}{
     grid-template-columns:1fr;
     gap: {{ section.settings.mobile_gap }}px;
-    padding-top: calc({{ section.settings.section_padding }}px * .8);
-    padding-bottom: calc({{ section.settings.section_padding }}px * .8);
-    padding-left: calc({{ settings.gutter_width }}px * .6);
-    padding-right: calc({{ settings.gutter_width }}px * .6);
+    padding: 8px 0;
   }
   .faq-content-{{ faq_uid }}{
     text-align: {{ section.settings.mobile_text_alignment }};
