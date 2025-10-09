@@ -373,7 +373,7 @@
           "mega_menu_bg": "#ff679a",
           "submenu_color": "#ffffff",
           "submenu_hover_color": "#fff64f",
-          "menu_bottom_bg": "#efd219",
+          "menu_bottom_bg": "rgba(0,0,0,0)",
           "menu_bottom_border": "rgba(0,0,0,0)",
           "font_size": 20,
           "font_size_sub": 18,
