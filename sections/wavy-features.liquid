@@ -6,7 +6,7 @@
                 padding: {{ section.settings.section_padding_top }}px 20px {{ section.settings.section_padding_bottom }}px 20px;
                 {% if section.settings.animate_waves %}--wave-speed: {{ section.settings.wave_speed }}s; --wave-bob: {{ section.settings.wave_bob }}px;{% endif %}">
 
-  {%- comment -%} --------- TOP WAVE (seamless loop) --------- {%- endcomment -%}
+  {%- comment -%} --------- TOP WAVE (seamless loop via SVG user units) --------- {%- endcomment -%}
   {% if section.settings.show_top_wave %}
   <div class="wave-top" 
        style="top: -{{ section.settings.wave_overlap_top }}px; height: {{ section.settings.wave_overlap_top }}px;"
@@ -54,9 +54,17 @@
       {%- endcapture -%}
 
       <g class="wave-tiles">
-        {{ wave_path_top }}
-        <g transform="translate(1440,0)">{{ wave_path_top }}</g>
-        <g transform="translate(2880,0)">{{ wave_path_top }}</g> <!-- third tile -->
+        <g class="tile">{{ wave_path_top }}</g>
+        <g class="tile" transform="translate(1440,0)">{{ wave_path_top }}</g>
+        {% if section.settings.animate_waves %}
+        <animateTransform
+          attributeName="transform"
+          type="translate"
+          from="0 0"
+          to="-1440 0"
+          dur="{{ section.settings.wave_speed }}s"
+          repeatCount="indefinite" />
+        {% endif %}
       </g>
     </svg>
   </div>
@@ -147,7 +155,7 @@
     </div>
   </div>
 
-  {%- comment -%} --------- BOTTOM WAVE (seamless loop) --------- {%- endcomment -%}
+  {%- comment -%} --------- BOTTOM WAVE (seamless loop via SVG user units) --------- {%- endcomment -%}
   {% if section.settings.show_bottom_wave %}
   <div class="wave-bottom" 
        style="bottom: -{{ section.settings.wave_overlap_bottom }}px; height: {{ section.settings.wave_overlap_bottom }}px;"
@@ -195,9 +203,17 @@
       {%- endcapture -%}
 
       <g class="wave-tiles">
-        {{ wave_path_bottom }}
-        <g transform="translate(1440,0)">{{ wave_path_bottom }}</g>
-        <g transform="translate(2880,0)">{{ wave_path_bottom }}</g> <!-- third tile -->
+        <g class="tile">{{ wave_path_bottom }}</g>
+        <g class="tile" transform="translate(1440,0)">{{ wave_path_bottom }}</g>
+        {% if section.settings.animate_waves %}
+        <animateTransform
+          attributeName="transform"
+          type="translate"
+          from="0 0"
+          to="-1440 0"
+          dur="{{ section.settings.wave_speed }}s"
+          repeatCount="indefinite" />
+        {% endif %}
       </g>
     </svg>
   </div>
@@ -214,30 +230,11 @@
 }
 .wave-top svg, .wave-bottom svg { width: 100%; height: 100%; display: block; }
 
-/* Seamless wave loop (3 tiles, slide by -33.333%) */
-.features-wave-section.waves-animated .wave-top .wave-tiles,
-.features-wave-section.waves-animated .wave-bottom .wave-tiles{
-  animation: waveSlide var(--wave-speed, 8s) linear infinite;
-  will-change: transform;
-  backface-visibility: hidden;
-  transform: translate3d(0,0,0);
-  transform-box: view-box;
-  transform-origin: 0 50%;
-}
-
-/* Slight vertical bob for life */
+/* Horizontal slide is handled by SVG <animateTransform>; keep only vertical bob here */
 .features-wave-section.waves-animated .wave-top,
 .features-wave-section.waves-animated .wave-bottom{
   animation: waveBob var(--wave-speed, 8s) ease-in-out infinite alternate;
 }
-
-/* Move exactly one tile of a 3-tile track (1/3 of width) + tiny over-travel to hide seams */
-@keyframes waveSlide{
-  from { transform: translateX(0); }
-  to   { transform: translateX(calc(-33.333333% - 0.1px)); }
-}
-
-/* Vertical bob */
 @keyframes waveBob{ from{ transform: translateY(0); } to{ transform: translateY(var(--wave-bob, 8px)); } }
 
 /* Container — no max-width */
@@ -262,9 +259,12 @@
   will-change: transform;
   backface-visibility: hidden;
   transform: translate3d(0,0,0);
-  animation: none; /* applied only when .ticker-animated is present */
+  /* animation applied only when .ticker-animated is present */
+  animation: none;
 }
-.ticker-animated .ticker__track{ animation: marquee var(--ticker-speed) linear infinite; }
+.ticker-animated .ticker__track{
+  animation: marquee var(--ticker-speed) linear infinite;
+}
 .features-ticker.dir-ltr.ticker-animated .ticker__track{ animation-direction: reverse; } /* left → right */
 .features-ticker.dir-rtl.ticker-animated .ticker__track{ animation-direction: normal; }  /* right → left */
 
@@ -288,7 +288,12 @@
 }
 
 /* Items */
-.feature-item{ display: inline-flex; align-items: center; gap: 12px; margin: 0; }
+.feature-item{
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+}
 .feature-icon-wrapper{ flex-shrink:0; }
 .feature-icon, .feature-icon-image{ width:60px; height:60px; display:flex; align-items:center; justify-content:center; }
 .feature-icon svg{ width:100%; height:100%; display:block; }
@@ -297,7 +302,7 @@
 .feature-text, .feature-subtext{ margin:0; line-height:1.4; font-family: inherit; }
 .feature-subtext{ margin-top:4px; }
 
-/* The marquee track moves by half its width (two rows) */
+/* The magic: move the two-row track by exactly half its own width */
 @keyframes marquee{
   from { transform: translate3d(0,0,0); }
   to   { transform: translate3d(-50%,0,0); }
@@ -311,8 +316,6 @@
 /* Respect user motion preferences */
 @media (prefers-reduced-motion: reduce){
   .ticker__track,
-  .features-wave-section.waves-animated .wave-top .wave-tiles,
-  .features-wave-section.waves-animated .wave-bottom .wave-tiles,
   .features-wave-section.waves-animated .wave-top,
   .features-wave-section.waves-animated .wave-bottom{
     animation: none !important;
@@ -322,10 +325,16 @@
 
 /* Responsive */
 @media (max-width: 768px){
-  .section-title{ margin-bottom: 24px; }
+  .section-title{  margin-bottom: 24px; }
   .feature-icon, .feature-icon-image{ width:48px; height:48px; }
-  .ticker__row{ flex-direction: column; gap: 40px; }
-  .ticker__row li{ flex-direction: column; gap: 0; }
+  .ticker__row {
+    flex-direction: column;
+    gap: 40px;
+  }
+  .ticker__row li {
+    flex-direction: column;
+    gap: 0;
+  }
 }
 @media (max-width: 480px){
   .features-ticker{ --gap: {{ section.settings.marquee_gap | default: 40 | times: 0.7 }}px; }
