@@ -325,7 +325,7 @@
           "full": true,
           "spacing_both_ends": true,
           "use_sticky_header": true,
-          "use_sticky_mobile": true,
+          "use_sticky_mobile": false,
           "transparent_header": false,
           "show_announcement": false,
           "hide_announcement_mobile": true,
