@@ -673,6 +673,27 @@
   0%,100% { transform: translateY(0); }
   50% { transform: translateY(-12px); }
 }
+
+@media (max-width: 576px){
+  /* Non-slider layout: the wrapper itself spaces cards */
+  #shopify-section-{{section.id}}.home-testimonial-block
+  .dt-sc-testimonial-section:not(.swiper-wrapper){
+    display: grid;              /* ensure grid for single-column stack */
+    grid-template-columns: 1fr; /* single column on mobile */
+    gap: 32px !important;       /* <- requested spacing */
+  }
+
+  /* Slider layout: simulate gap via slide margins */
+  #shopify-section-{{section.id}}.home-testimonial-block
+  .dt-sc-swiper-slider .swiper-wrapper .swiper-slide{
+    margin-right: 32px !important;
+  }
+  #shopify-section-{{section.id}}.home-testimonial-block
+  .dt-sc-swiper-slider .swiper-wrapper .swiper-slide:last-child{
+    margin-right: 0 !important;
+  }
+}
+
 </style>
 
 
