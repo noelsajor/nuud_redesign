@@ -221,6 +221,31 @@
         "cart_button_radius": 25
       }
     },
+    "spacer_wave_KxbydU": {
+      "type": "spacer-wave",
+      "name": "Wave Spacer (Animated)",
+      "settings": {
+        "use_gradient": false,
+        "background_color": "#ffd8d8",
+        "background_gradient": "linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 100%)",
+        "spacer_padding_top": 40,
+        "spacer_padding_bottom": 0,
+        "show_top_wave": true,
+        "show_bottom_wave": false,
+        "wave_color": "#ffd8d8",
+        "wave_overlap_top": 100,
+        "wave_overlap_bottom": 100,
+        "wave_shape": "medium",
+        "wave_frequency": 2,
+        "wave_amplitude": 25,
+        "animate_waves": true,
+        "wave_speed": 12,
+        "wave_bob": 8,
+        "extra_space": false,
+        "extra_space_height": 40,
+        "z_index": 1
+      }
+    },
     "1654336925c509c587": {
       "type": "home-testimonial",
       "blocks": {
@@ -293,7 +318,7 @@
       "settings": {
         "full": true,
         "spacing_both_ends": false,
-        "padding": "100,100",
+        "padding": "0",
         "margin": "0,0",
         "show_background_image": false,
         "background_style": "fixed",
@@ -359,6 +384,31 @@
         "navigation_dot_color": "",
         "navigation_dot_active_color": "",
         "custom_class_name": ""
+      }
+    },
+    "spacer_wave_MWGrKn": {
+      "type": "spacer-wave",
+      "name": "Wave Spacer (Animated)",
+      "settings": {
+        "use_gradient": false,
+        "background_color": "#ffd8d8",
+        "background_gradient": "linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 100%)",
+        "spacer_padding_top": 0,
+        "spacer_padding_bottom": 40,
+        "show_top_wave": false,
+        "show_bottom_wave": true,
+        "wave_color": "#ffd8d8",
+        "wave_overlap_top": 100,
+        "wave_overlap_bottom": 100,
+        "wave_shape": "medium",
+        "wave_frequency": 2,
+        "wave_amplitude": 25,
+        "animate_waves": true,
+        "wave_speed": 12,
+        "wave_bob": 0,
+        "extra_space": false,
+        "extra_space_height": 40,
+        "z_index": 1
       }
     },
     "wavy_feed_AgMWDx": {
@@ -499,7 +549,7 @@
         "custom_class_name": ""
       }
     },
-    "spacer_wave_KxbydU": {
+    "spacer_wave_KYHWab": {
       "type": "spacer-wave",
       "name": "Wave Spacer (Animated)",
       "settings": {
@@ -674,7 +724,7 @@
         "custom_class_name": ""
       }
     },
-    "spacer_wave_MWGrKn": {
+    "spacer_wave_zA7HKx": {
       "type": "spacer-wave",
       "name": "Wave Spacer (Animated)",
       "settings": {
@@ -930,13 +980,15 @@
     "split_hero_section_b8mqcE",
     "wavy_features_MDYa7y",
     "2_test_section_claude_9VyBTH",
+    "spacer_wave_KxbydU",
     "1654336925c509c587",
+    "spacer_wave_MWGrKn",
     "wavy_feed_AgMWDx",
     "section_dwbELd",
     "categories_section_P7hBTB",
-    "spacer_wave_KxbydU",
+    "spacer_wave_KYHWab",
     "home_testimonial_gBtfKW",
-    "spacer_wave_MWGrKn",
+    "spacer_wave_zA7HKx",
     "best_sellers_collections_4dwEN8",
     "faq_section_8ifTKi",
     "1757879707bba2c8c8",
