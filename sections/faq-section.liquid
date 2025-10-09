@@ -170,12 +170,20 @@
   padding: 0px 16px 8px 0px;
 }
 
+/* ✅ Ensure FAQ questions use the theme's default typography */
+.faq-item-{{ faq_uid }},
+.faq-question-row-{{ faq_uid }},
+.faq-question-text-{{ faq_uid }},
+.faq-toggle-btn-{{ faq_uid }}{
+  font: inherit;
+  letter-spacing: inherit;
+}
+
 .faq-question-text-{{ faq_uid }}{
   flex: 1 1 auto;
   min-width: 0;
   /* no custom line-height or font settings; fully inherit */
 }
-
 
 /* Circular chevron button using equal padding (perfect circle) */
 .faq-toggle-btn-{{ faq_uid }}{
