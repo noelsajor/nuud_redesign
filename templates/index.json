@@ -140,12 +140,63 @@
             "subtext_color": "#666666",
             "subtext_size": 14
           }
+        },
+        "feature_rhf637": {
+          "type": "feature",
+          "settings": {
+            "icon_svg": "",
+            "icon_image": "shopify://shop_images/free_shiping.svg",
+            "icon_label": "Delivery truck icon representing free shipping",
+            "icon_color": "#881d3e",
+            "feature_text": "FREE SHIPPING OVER $75",
+            "text_color": "#881d3e",
+            "text_size": 18,
+            "text_weight": "600",
+            "feature_subtext": "",
+            "subtext_color": "#666666",
+            "subtext_size": 14
+          }
+        },
+        "feature_pGzKXG": {
+          "type": "feature",
+          "settings": {
+            "icon_svg": "",
+            "icon_image": "shopify://shop_images/free_shiping.svg",
+            "icon_label": "Delivery truck icon representing free shipping",
+            "icon_color": "#881d3e",
+            "feature_text": "FREE SHIPPING OVER $75",
+            "text_color": "#881d3e",
+            "text_size": 18,
+            "text_weight": "600",
+            "feature_subtext": "",
+            "subtext_color": "#666666",
+            "subtext_size": 14
+          }
+        },
+        "feature_wtiUUA": {
+          "type": "feature",
+          "settings": {
+            "icon_svg": "",
+            "icon_image": "shopify://shop_images/free_shiping.svg",
+            "icon_label": "Delivery truck icon representing free shipping",
+            "icon_color": "#881d3e",
+            "feature_text": "FREE SHIPPING OVER $75",
+            "text_color": "#881d3e",
+            "text_size": 18,
+            "text_weight": "600",
+            "feature_subtext": "",
+            "subtext_color": "#666666",
+            "subtext_size": 14
+          }
         }
       },
       "block_order": [
         "feature_mFcAyj",
         "feature_WCBeX8",
-        "feature_QRqdhh"
+        "feature_QRqdhh",
+        "feature_rhf637",
+        "feature_pGzKXG",
+        "feature_wtiUUA"
       ],
       "name": "Features with Waves",
       "settings": {
