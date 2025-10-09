@@ -212,7 +212,27 @@
   transition: background-color .2s ease, color .2s ease, transform .25s ease, box-shadow .25s ease;
 }
 
-/* Keep the SVG from stretching and ensure square icon */
+/* Perfect-circle toggle button (fixed size, no padding tricks) */
+.faq-toggle-btn-{{ faq_uid }}{
+  --faq-btn-size: 44px;         /* tap-friendly: 44–48px */
+  --faq-icon-size: 20px;
+
+  width: var(--faq-btn-size);
+  height: var(--faq-btn-size);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+
+  border: 0;
+  padding: 0;                   /* important: remove padding to keep circle perfect */
+  background: transparent;
+  color: {{ section.settings.icon_color }};
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color .2s ease, color .2s ease, transform .25s ease, box-shadow .25s ease;
+  box-sizing: border-box;       /* keep borders from changing size if you add any */
+}
+
 .faq-icon-{{ faq_uid }}{
   width: var(--faq-icon-size);
   height: var(--faq-icon-size);
@@ -221,11 +241,25 @@
   transition: transform .25s ease, color .2s ease;
 }
 
-/* Hover/active styles: only the circular button changes */
+/* Hover/active/keyboard focus states */
 .faq-toggle-btn-{{ faq_uid }}:hover{
   background-color: #ff679a;
   color: {{ section.settings.active_text_color }};
 }
+.faq-item-{{ faq_uid }}.active .faq-toggle-btn-{{ faq_uid }}{
+  background-color: #ff679a;
+  color: {{ section.settings.active_text_color }};
+}
+.faq-item-{{ faq_uid }}.active .faq-icon-{{ faq_uid }}{
+  transform: rotate(180deg);
+}
+
+/* Accessible focus outline */
+.faq-toggle-btn-{{ faq_uid }}:focus-visible{
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
 .faq-item-{{ faq_uid }}.active .faq-toggle-btn-{{ faq_uid }}{
   background-color: #ff679a;
   color: {{ section.settings.active_text_color }};
