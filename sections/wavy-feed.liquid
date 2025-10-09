@@ -307,6 +307,12 @@
   scroll-padding-inline: 6px;
 }
 
+/* Placeholders wrapper set to flex so placeholders align horizontally */
+.insta-skeletons {
+  display: flex;
+  gap: {{ section.settings.card_gap }}px;
+}
+
 .insta-slide {
   scroll-snap-align: start;
   position: relative;
