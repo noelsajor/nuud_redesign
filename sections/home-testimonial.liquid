@@ -54,7 +54,10 @@
        style="{% render 'bg-color-image-padding' %} background-size: {{- section.settings.background_size -}}; {% if section.settings.background_style == 'fixed' %}background-attachment: fixed;{% endif %} background-repeat:{% if section.settings.background_size == 'repeat' %}repeat{% else %}no-repeat;{% endif %}"
        {% include 'bg_image' %}>
 
-    {%- comment -%} Foreground container; keeps background full-width {%- endcomment -%}
+    {%- comment -%}
+      NEW: Constrain all foreground content (not background) inside a fixed container.
+      We intentionally do NOT wrap the .dt-sc-section-wrapper itself so its background spans full width.
+    {%- endcomment -%}
     <div class="max-container">
       <div class="row {{ section.settings.custom_class_name }}">
 
@@ -74,7 +77,7 @@
             {% assign review_type = block.settings.review_type | default: 'full' %}
 
             {% if review_type == 'photo' %}
-              {%- comment -%} PHOTO REVIEW CARD (no cropping) {%- endcomment -%}
+              {%- comment -%} PHOTO REVIEW CARD (flush image, inherits card border/radius) {%- endcomment -%}
               <div class="dt-sc-testimonial {% if section.settings.enable_slider %}swiper-slide{% endif %} review-type-photo {{section.settings.block_style}} {{section.settings.vertical_position}}">
                 <div class="dt-sc-testimonial-content {{section.settings.text_position}}">
                   <div class="dt-sc-testimonial-content-inner">
@@ -93,7 +96,7 @@
               </div>
 
             {% else %}
-              {%- comment -%} FULL REVIEW CARD (no cropping) {%- endcomment -%}
+              {%- comment -%} FULL REVIEW CARD (existing styles) {%- endcomment -%}
 
               {% if section.settings.block_style == 'style_1' %}
                 <div class="dt-sc-testimonial {% if section.settings.enable_slider %}swiper-slide{% endif %} {% if section.settings.reverse_column %}reverse{% endif %} {{section.settings.quote_style}} {{section.settings.block_style}} {{section.settings.vertical_position}}">
@@ -262,7 +265,7 @@
 {% endif %}
 
 <style>
-/* ===== Foreground content container (background stays full width) ===== */
+/* NEW: Foreground content container (background remains on .dt-sc-section-wrapper) */
 #shopify-section-{{section.id}}.home-testimonial-block .max-container{
   max-width:1280px;
   margin:0 auto;
@@ -286,67 +289,44 @@
 {% assign padding_top = padding[0] %}
 {% assign padding_bottom = padding[1] %}
 
-/* Keep variable for compatibility (no fixed ratio) */
+/* ---------- Global card aspect ratio variable (auto when not set) ---------- */
 #shopify-section-{{section.id}}.home-testimonial-block{
-  --card-aspect: auto;
+  --card-aspect: {% if section.settings.card_aspect_ratio == blank or section.settings.card_aspect_ratio == 'none' %}auto{% else %}{{ section.settings.card_aspect_ratio }}{% endif %};
 }
 
-/* ===== HEADING WEIGHT ===== */
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-heading .dt-sc-main-heading{
-  font-weight: 600; /* requested */
+/* Apply aspect ratio to full-review cards when user sets one */
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.overall_boxed .dt-sc-testimonial{
+  aspect-ratio: var(--card-aspect);
+}
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.content_boxed .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-testimonial-content-inner,
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.quote_boxed .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-testimonial-content-inner{
+  aspect-ratio: var(--card-aspect);
 }
 
-/* ===== NO-CROP RULES ===== */
-/* Remove aspect constraints everywhere */
-#shopify-section-{{section.id}}.home-testimonial-block 
-  .dt-sc-testimonial-section.overall_boxed .dt-sc-testimonial,
-#shopify-section-{{section.id}}.home-testimonial-block 
-  .dt-sc-testimonial-section.content_boxed .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-testimonial-content-inner,
-#shopify-section-{{section.id}}.home-testimonial-block 
-  .dt-sc-testimonial-section.quote_boxed .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-testimonial-content-inner,
-#shopify-section-{{section.id}}.home-testimonial-block 
-  .dt-sc-testimonial.review-type-photo {
-  aspect-ratio: auto !important;
-}
-
-/* Make each card fully visible; no clipping */
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial{
-  height:auto !important;
-  overflow: visible !important; /* ensure nothing gets cut */
-}
-
-/* Photo cards: grow by image, no clipping */
+/* Photo reviews: always have a solid aspect (fallback to 4/5 if editor setting is 'none') */
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial.review-type-photo{
   position: relative;
   display: block;
-  overflow: visible;
+  aspect-ratio: {% if section.settings.card_aspect_ratio == blank or section.settings.card_aspect_ratio == 'none' %}4/5{% else %}{{ section.settings.card_aspect_ratio }}{% endif %};
+  overflow:hidden;
+}
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.overall_boxed .dt-sc-testimonial.review-type-photo{ padding:0; }
+
+/* If using content/quote boxed on photo cards, keep border/radius but remove padding and clip */
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.content_boxed .dt-sc-testimonial.review-type-photo .dt-sc-testimonial-content .dt-sc-testimonial-content-inner,
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.quote_boxed .dt-sc-testimonial.review-type-photo .dt-sc-testimonial-content .dt-sc-testimonial-content-inner{
+  padding:0; overflow:hidden; height:100%;
 }
 
-/* Photo wrapper + image: intrinsic sizing, contain */
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-photo{ 
-  position: relative; inset:auto; width:100%; height:auto; 
-}
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-photo img{
-  display:block; width:100%; height:auto !important; 
-  object-fit: contain !important; object-position:center; 
-  border-radius: inherit;
+/* Ensure quote_boxed photo card has a card shell (border/radius) */
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.quote_boxed .dt-sc-testimonial.review-type-photo .dt-sc-testimonial-content .dt-sc-testimonial-content-inner{
+  background: {{ section.settings.testimonial_background_color }};
+  color: {{ section.settings.testimonial_border_color }};
+  border: 1px solid currentcolor;
+  border-radius: {{section.settings.boxed_border_radius}}px;
 }
 
-/* Full review inner should size to content */
-#shopify-section-{{section.id}}.home-testimonial-block 
-  .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-testimonial-content-inner{
-  height:auto !important; overflow:visible !important;
-}
-
-/* Swiper should height-wrap content */
-#shopify-section-{{section.id}}.home-testimonial-block .swiper-container,
-#shopify-section-{{section.id}}.home-testimonial-block .swiper-wrapper,
-#shopify-section-{{section.id}}.home-testimonial-block .swiper-slide{
-  height:auto !important;
-}
-#shopify-section-{{section.id}}.home-testimonial-block .swiper-slide{ display:block; }
-
-/* ===== Decorative & layout (unchanged) ===== */
+/* Section wrapper + decorative pieces */
 #shopify-section-{{section.id}}.home-testimonial-block{position:relative;}
 #shopify-section-{{section.id}}.home-testimonial-block:after{
   content: " ";
@@ -397,7 +377,7 @@
   #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-section-wrapper:after{display:none;}
 }
 
-/* Spacing on wrapper (background wrapper can still have its own spacing) */
+/* Spacing on wrapper (kept as in original; background wrapper can still have its own spacing) */
 @media only screen and (min-width: 1200px){
   #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-section-wrapper {
     margin-top:{{margin_top}}px; margin-bottom:{{margin_bottom}}px;
@@ -411,11 +391,8 @@
   }
 }
 
-/* Heading colors + weight */
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-heading .dt-sc-main-heading { 
-  color: {{ section.settings.section_heading_color }}; 
-  font-weight: 600; /* ensure bold-ish look */
-}
+/* Heading colors */
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-heading .dt-sc-main-heading { color: {{ section.settings.section_heading_color }}; }
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-heading .dt-sc-sub-heading { color: {{ section.settings.section_sub_heading_color }}; }
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-heading .dt-sc-heading-description { color: {{ section.settings.section_description_color }}; }
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-heading .dt-sc-btn {
@@ -446,7 +423,6 @@
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-swiper-slider.swiper-container .swiper-pagination-bullet { background: {{ section.settings.navigation_dot_color }}; }
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-swiper-slider.swiper-container .swiper-pagination-bullet.swiper-pagination-bullet-active { background: {{ section.settings.navigation_dot_active_color }}; }
 
-/* Grid spacing when not a slider */
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section:not(.swiper-wrapper) { margin: 0 auto 30px; gap: {{ section.settings.column_gap }}px; }
 
 /* Typography / layout for items */
@@ -506,21 +482,109 @@
   color: {{ section.settings.testimonial_content_color }};
 }
 
-/* Style 2 specifics & author layout */
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.quote_boxed .dt-sc-testimonial-content .dt-sc-testimonial-content-inner .dt-sc-testimonial-quote,
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.content_boxed .dt-sc-testimonial-content .dt-sc-testimonial-quote-content,
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.quote_boxed .dt-sc-testimonial-content .dt-sc-testimonial-quote-content { margin-bottom:10px; }
+
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2 .dt-sc-testimonial-content .dt-sc-testimonial-content-inner,
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.quote_boxed .dt-sc-testimonial.style_2 .dt-sc-testimonial-content .dt-sc-testimonial-content-inner .dt-sc-testimonial-quote-content {
+  background:none; border:none; box-shadow:none; padding:0; border-radius:0;
+}
+
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.content_boxed .dt-sc-testimonial.style_2 .dt-sc-testimonial-content .dt-sc-testimonial-content-inner .dt-sc-testimonial-quote-content,
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section.quote_boxed .dt-sc-testimonial.style_2 .dt-sc-testimonial-content .dt-sc-testimonial-content-inner .dt-sc-testimonial-quote {
+  background: {{ section.settings.testimonial_background_color }};
+  color: {{ section.settings.testimonial_border_color }};
+  border: 1px solid currentcolor;
+  padding: 25px;
+  border-radius: {{section.settings.boxed_border_radius }}px;
+  {% if section.settings.enable_box_shadow %} box-shadow: var(--DTboxShadow); {% endif %}
+}
+
+/* Photo fills the card */
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-photo { position:absolute; inset:0; width: 100%; height: 100%; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-photo img {
+  display:block; width:100%; height:100%; object-fit: cover; object-position:center; border-radius: inherit;
+}
+
+/* Author layout + separators */
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-image img {
+  width:100%; height:auto; border-radius: {{section.settings.border_radius}};
+}
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial cite { font-style:normal; display:flex; flex-wrap:wrap; align-items:center; margin:20px 0; width:100%; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial cite span { font-style:normal; display:flex; flex-wrap:wrap; align-items:center; font-weight:normal; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial cite span:before { display:block; content:"-"; position:relative; color: {{section.settings.testimonial_author_separator_color }}; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-author-info:not(.style_2) cite span:before { margin: 0 5px; }
+
+/* Column widths */
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-image {
+  width: calc({{leftColumn}}% - (calc({{section.settings.column_gap}}px)/2));
+}
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content {
+  width: calc({{rightColumn}}% - (calc({{section.settings.column_gap}}px)/2));
+}
+
+/* Alignment helpers */
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content p { margin-bottom:0; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content.text-start cite { justify-content:flex-start; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content.text-center cite { justify-content:center; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content.text-end cite { justify-content:flex-end; }
+
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.reverse { flex-direction: row-reverse; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content.text-center cite span { justify-content:center; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content.text-end cite span { justify-content:flex-end; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content.text-end cite span:before { right:0; left:auto; }
+
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-author-info.style_2 cite span { width:100%; padding-top:5px; position:relative; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-author-info.style_2 cite span:before {
+  content:""; display:block; position:absolute; width:50px; height:1px; top:10px; left:0; background: {{section.settings.testimonial_author_separator_color }};
+}
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content.text-end .dt-sc-author-info.style_2 cite span:before { left:auto; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content.text-center .dt-sc-author-info.style_2 cite span:before { right:0; margin:auto; }
+
+/* Style 2 specifics */
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2 { gap:30px; }
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2 .dt-sc-testimonial-content { width:100%; }
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2 .dt-sc-testimonial-content .dt-sc-testimonial-content-inner {
   margin:auto; width:100%; display:grid; gap: calc(.5*{{section.settings.column_gap}}px);
 }
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-image img { width:100%; height:auto; border-radius: {{section.settings.border_radius}}; }
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial cite { font-style:normal; display:flex; flex-wrap:wrap; align-items:center; margin:20px 0; width:100%; }
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial cite span { font-style:normal; display:flex; flex-wrap:wrap; align-items:center; font-weight:normal; }
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial cite span:before { display:block; content:"-"; position:relative; color: {{section.settings.testimonial_author_separator_color }}; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2[class*="quote-icon-in"] .dt-sc-testimonial-image { width:auto; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2[class*="quote-icon-in-image"] .dt-sc-testimonial-image:before { top:5px; left:5px; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2[class*="quote-icon-in-image"] .dt-sc-testimonial-content.text-end .dt-sc-testimonial-image:before { right:5px; left:auto; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2[class*="quote-icon-in-content"] .dt-sc-testimonial-content.text-center .dt-sc-testimonial-quote-content:before { left:0; right:0; margin:auto; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2[class*="quote-icon-in-image"] .dt-sc-testimonial-content.text-center .dt-sc-testimonial-image:before { left:-40%; right:0; margin:auto; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2[class*="quote-icon-in-content"] .dt-sc-testimonial-content.text-end .dt-sc-testimonial-quote-content:before { margin-left:auto; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2 .dt-sc-testimonial-content .dt-sc-author-info { display:flex; width:100%; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2 .dt-sc-testimonial-content .dt-sc-author-info cite { margin-top:0; width:auto; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2 .dt-sc-testimonial-content .dt-sc-author-info img { width:75px; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2 .dt-sc-testimonial-content .dt-sc-author-info.style_1 .dt-sc-testimonial-image { width:auto; margin-right: calc(.5 * {{section.settings.column_gap}}px); }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2 .dt-sc-testimonial-content.text-center .dt-sc-author-info { justify-content:center; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2 .dt-sc-testimonial-content.text-end .dt-sc-author-info { justify-content:stretch; flex-direction:row-reverse; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2 .dt-sc-testimonial-content .dt-sc-author-info.style_2 { flex-direction:column; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2 .dt-sc-testimonial-content .dt-sc-author-info.style_2 cite { margin-top: calc(.5 * {{section.settings.column_gap}}px); }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2 .dt-sc-testimonial-image{ width:auto; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2 .dt-sc-testimonial-content.text-center .dt-sc-testimonial-image { margin:auto; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2 .dt-sc-testimonial-content.text-center .dt-sc-author-info.style_2 img { margin:auto; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2 .dt-sc-testimonial-content.text-end .dt-sc-author-info.style_2 img { margin-left:auto; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2.reverse .dt-sc-testimonial-content .dt-sc-author-info { grid-row-start:1; }
 
 /* Style 3 grid */
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3 { gap:30px; display:grid; }
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3 .dt-sc-testimonial-image { width:30%; max-width:150px; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-center .dt-sc-testimonial-image { margin:auto; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-end .dt-sc-testimonial-image { margin-left:auto; }
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3 .dt-sc-testimonial-content { width:100%; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.reverse .dt-sc-testimonial-content { grid-row-start:1; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-center,
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-center cite { justify-content:center; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-end,
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-end cite { justify-content:flex-end; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-center .dt-sc-testimonial-content .dt-sc-author-info cite span { justify-content:center; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-center .dt-sc-testimonial-content .dt-sc-author-info cite span:before,
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-end .dt-sc-testimonial-content .dt-sc-author-info cite span:before { right:0; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-end .dt-sc-testimonial-content .dt-sc-author-info cite span { justify-content:flex-end; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-center .dt-sc-testimonial-content .dt-sc-author-info.style_2 cite span:before { right:0; left:0; margin:auto; }
+#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_3.text-end .dt-sc-testimonial-content .dt-sc-author-info.style_2 cite span:before { right:0; left:auto; }
 
 /* Swiper spacing */
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-swiper-slider.swiper-container[class*=navigation-bottom] { padding-bottom: 50px; }
@@ -590,10 +654,24 @@
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="four-star-rating"]:after { content:"\f005" "\f005" "\f005" "\f005" "\f006"; }
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-author-rating div[class*="four-half-star-rating"]:after { content:"\f005" "\f005" "\f005" "\f005" "\f123"; }
 
-/* Keyframes */
-@keyframes dt-swing2 { 0% { transform: translateY(20px); } 100% { transform: translateY(-20px); } }
-@keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+/* Mobile stack for grid cards */
+@media (max-width: 576px){
+  #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial { display:grid; gap: {{section.settings.column_gap}}px; }
+  #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-image,
+  #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content { width:100%; }
+}
+
+/* Keyframes (unchanged) */
+@keyframes dt-swing2 {
+  0% { transform: translateY(20px); }
+  100% { transform: translateY(-20px); }
+}
+@keyframes bounce {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
 </style>
+
 
 {% schema %}
 {
