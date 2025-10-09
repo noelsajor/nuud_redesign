@@ -238,7 +238,11 @@
 
 /* Typography (inherit theme fonts entirely) */
 .faq-subheading-{{ faq_uid }}{ margin:0; }
-.faq-heading-{{ faq_uid }}{ margin:0; line-height:1.15; }
+.faq-heading-{{ faq_uid }}{
+  margin:0;
+  line-height:1.15;
+  font-weight: 600; /* requested weight */
+}
 .faq-body-{{ faq_uid }} p{ margin: 0 0 1em; }
 
 /* Responsive */
