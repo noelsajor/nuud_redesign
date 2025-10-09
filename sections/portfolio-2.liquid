@@ -81,17 +81,17 @@
                 <div class="dt-sc-blog-content">
                   <h3 class="dt-sc-blog-title wow animated fadeInDown"><a href="{{ article.url }}">{{ article.title }}</a></h3>
 
-                  <div class="dt-sc-blog-meta {% if section.settings.enable_blog_icons %}with-meta-icons{% endif %} wow animated fadeInDown">
+                  <div class="dt-sc-blog-meta wow animated fadeInDown">
                     {% if section.settings.blog_show_author %}
                       <p class="dt-sc-blog-author">
-                        {% if section.settings.enable_blog_icons %}<span class="fa fa-user"></span>{% else %}{% include 'icon-author' %}{% endif %}
+                        {% include 'icon-author' %}
                         <span>{{ 'blogs.article.by_author' | t: author: article.author }}</span>
                       </p>
                     {% endif %}
 
                     {% if section.settings.blog_show_date %}
                       <p class="dt-sc-blog-date">
-                        {% if section.settings.enable_blog_icons %}<span class="fa fa-calendar"></span>{% else %}{% include 'icon-date' %}{% endif %}
+                        {% include 'icon-date' %}
                         {{ article.published_at | time_tag: format: 'date' }}
                       </p>
                     {% endif %}
@@ -106,7 +106,7 @@
 
                     {% if section.settings.blog_show_tag and article.tags.size > 0 %}
                       <p class="dt-sc-blog-tags">
-                        {% if section.settings.enable_blog_icons %}<span class="fa fa-tags"></span>{% else %}{% include 'icon-tag' %}{% endif %}
+                        {% include 'icon-tag' %}
                         {% for tag in article.tags %}
                           <a href="{{ blog.url }}/tagged/{{ tag | handle }}" class="article__grid-tag">{{ tag }}</a>
                         {% endfor %}
@@ -146,7 +146,7 @@
         itemSelector: '.isotope-selector',
         percentPosition: true,
         layoutMode: 'masonry',
-        fitWidth: true,               // <-- helps centering the grid
+        fitWidth: true,
         masonry: { gutter: {{ section.settings.gallery_spacing }} }
       });
     });
@@ -160,6 +160,8 @@
 </script>
 
 <style>
+  /* No font-family declarations anywhere – uses theme defaults */
+
   /* Center the whole Isotope container within the section */
   #shopify-section-{{section.id}}.blog-portfolio .isotope-grid{
     margin-left:auto; margin-right:auto;
@@ -226,12 +228,15 @@
   }
 
   #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item { {% if section.settings.enable_box_shadow %} box-shadow: var(--DTboxShadow); {% endif %} }
+
+  /* Link + text colors (no font overrides) */
   #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item .dt-sc-blog-content a:not(dt-sc-btn){ color: {{section.settings.blog_link_color}}; }
   #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item .dt-sc-blog-content a:not(dt-sc-btn):hover{ color: {{section.settings.blog_link_hover_color}}; }
+
   #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item .dt-sc-blog-content .dt-sc-blog-description,
   #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item .dt-sc-blog-content .dt-sc-blog-meta *:not(svg){ color: {{section.settings.blog_text_color}}; }
   #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item .dt-sc-blog-content .dt-sc-blog-meta p svg{ fill: {{section.settings.blog_icon_color}}; }
-  #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item .dt-sc-blog-content .dt-sc-blog-meta p i{ color: {{section.settings.blog_icon_color}}; }
+
   #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item .dt-sc-blog-content a.dt-sc-btn{
     background-color: {{section.settings.blog_button_bg_color}}; color: {{section.settings.blog_button_text_color}};
   }
@@ -249,7 +254,7 @@
     background-color: {{section.settings.blog_button_bg_color_overlay}}; color: {{section.settings.blog_button_text_color_overlay}};
   }
   #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item.overlay-style .dt-sc-blog-content a.dt-sc-btn:hover{
-    background-color: {{section.settings.blog_button_bg_hover_color_overlay}}; color: {{section.settings.blog_button_text_hover_color_overlay}};
+    background-color: {{section.settings.blog_button_bg_hover_color_overlay}}; color: {{section.settings.blog_button_hover_text_color_overlay }};
   }
 
   /* Section spacing */
@@ -328,7 +333,6 @@
     { "type": "checkbox", "id": "blog_show_tag", "label": "Enable tag", "default": false },
     { "type": "checkbox", "id": "blog_show_button", "label": "Enable Blog Button", "default": true },
     { "type": "checkbox", "id": "blog_show_description", "label": "Enable Blog Description", "default": true },
-    { "type": "checkbox", "id": "enable_blog_icons", "label": "Enable Font Awesome Icons for Meta Elements", "default": false },
 
     { "type": "select", "id": "block_banner_style", "label": "Banner Style (Not for Masonry Grid)", "default": "grid-style",
       "options": [
