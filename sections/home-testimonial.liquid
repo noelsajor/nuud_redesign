@@ -693,6 +693,51 @@
   }
 }
 
+/* Center EVERYTHING on mobile for this section */
+@media (max-width: 767px){
+
+  /* 1) Make each testimonial a single, centered column */
+  #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial{
+    display: grid !important;
+    grid-template-columns: 1fr;
+    justify-items: center;   /* centers image/content blocks */
+    text-align: center;      /* centers text */
+    gap: {{ section.settings.column_gap }}px;
+  }
+
+  /* 2) Ensure both image and content are centered and full-width */
+  #shopify-section-{{section.id}}.home-testimonial-block
+  .dt-sc-testimonial .dt-sc-testimonial-image,
+  #shopify-section-{{section.id}}.home-testimonial-block
+  .dt-sc-testimonial .dt-sc-testimonial-content{
+    width: 100% !important;
+    margin: 0 auto !important;
+  }
+
+  /* 3) Override any left/right alignment classes to center */
+  #shopify-section-{{section.id}}.home-testimonial-block
+  .dt-sc-testimonial .dt-sc-testimonial-content.text-start,
+  #shopify-section-{{section.id}}.home-testimonial-block
+  .dt-sc-testimonial .dt-sc-testimonial-content.text-end{
+    text-align: center !important;
+  }
+
+  /* 4) Center author line and rating row */
+  #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial cite{
+    justify-content: center !important;
+  }
+  #shopify-section-{{section.id}}.home-testimonial-block
+  .dt-sc-testimonial .dt-sc-author-rating{
+    justify-content: center !important;
+  }
+
+  /* 5) Nice padding so centered text doesn’t touch the edges */
+  #shopify-section-{{section.id}}.home-testimonial-block
+  .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-testimonial-content-inner{
+    padding-left: clamp(12px, 3vw, 20px);
+    padding-right: clamp(12px, 3vw, 20px);
+  }
+}
 
 
 </style>
