@@ -173,7 +173,7 @@
         "marquee_speed": 8,
         "marquee_direction": "rtl",
         "marquee_gap": 80,
-        "marquee_pause": true
+        "marquee_pause": false
       }
     },
     "2_test_section_claude_9VyBTH": {
