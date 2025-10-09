@@ -124,11 +124,33 @@
         <button class="insta-nav insta-nav--prev" aria-label="Previous posts" type="button">&larr;</button>
 
         <div class="insta-track" id="instaTrack-{{ section.id }}" tabindex="0">
-          <!-- Slides appended by JS -->
-          <div class="insta-skeletons" aria-hidden="true">
-            {% for i in (1..6) %}
-              <div class="insta-slide skeleton">
-                <div class="square"></div>
+          <!-- Placeholder carousel shown until IG feed loads -->
+          <div class="insta-skeletons" aria-live="polite">
+            {% assign ph_count = 8 %}
+            {% for i in (1..ph_count) %}
+              <div class="insta-slide placeholder" role="option" aria-label="Placeholder post {{ i }}">
+                <a href="#" tabindex="-1" aria-hidden="true">
+                  <div class="insta-imgwrap">
+                    <img
+                      class="insta-img"
+                      alt="Placeholder post {{ i }}"
+                      loading="eager"
+                      decoding="async"
+                      src="data:image/svg+xml;utf8,
+                        <svg xmlns='http://www.w3.org/2000/svg' width='1200' height='1200' viewBox='0 0 1200 1200'>
+                          <defs>
+                            <linearGradient id='g' x1='0' x2='1' y1='0' y2='1'>
+                              <stop offset='0%' stop-color='%23f2f2f2'/>
+                              <stop offset='100%' stop-color='%23e6e6e6'/>
+                            </linearGradient>
+                          </defs>
+                          <rect width='1200' height='1200' fill='url(%23g)'/>
+                          <circle cx='600' cy='600' r='220' fill='%23ffffff' opacity='0.65'/>
+                          <rect x='390' y='540' width='420' height='320' rx='24' ry='24' fill='%23ffffff' opacity='0.85'/>
+                          <circle cx='600' cy='460' r='90' fill='%23ffffff' opacity='0.85'/>
+                        </svg>" />
+                  </div>
+                </a>
               </div>
             {% endfor %}
           </div>
@@ -280,9 +302,9 @@
 .insta-nav:disabled { opacity: .4; cursor: default; }
 .insta-cta a { text-decoration: underline; }
 
-/* Skeletons */
-.skeleton .square { width: 100%; aspect-ratio: 1 / 1; background: linear-gradient(90deg, #ececec 25%, #f6f6f6 37%, #ececec 63%); background-size: 400% 100%; animation: shimmer 1.25s infinite linear; border-radius: {{ section.settings.card_radius }}px; }
-@keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: 0 0; } }
+/* Placeholder look (keeps your card radius/shadow) */
+.insta-slide.placeholder .insta-img { filter: grayscale(1); opacity: .9; }
+.insta-slide.placeholder a { pointer-events: none; }
 
 /* Keyframes */
 @keyframes wave-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
@@ -294,9 +316,7 @@
 @media (prefers-reduced-motion: reduce) {
   .wave-track.is-animating,
   .is-bobbing.wave-bob--top,
-  .is-bobbing.wave-bob--bottom {
-    animation: none !important;
-  }
+  .is-bobbing.wave-bob--bottom { animation: none !important; }
   .insta-track { scroll-behavior: auto; }
 }
 </style>
@@ -344,16 +364,13 @@
     stopAutoplay();
     timer = setInterval(() => scrollBySlides(1), autoplayInterval);
   }
-  function stopAutoplay() {
-    if (timer) clearInterval(timer);
-    timer = null;
-  }
+  function stopAutoplay() { if (timer) clearInterval(timer); timer = null; }
   track.addEventListener('mouseenter', stopAutoplay);
   track.addEventListener('mouseleave', startAutoplay);
   startAutoplay();
 
   // ---- Instagram fetching via proxy ----
-  const proxyUrl = {{ section.settings.proxy_url | json }}; // e.g. "/apps/instagram-feed?user_id=XXXXX&access_token=YYYYY"
+  const proxyUrl = {{ section.settings.proxy_url | json }}; // e.g. "/apps/instagram-feed?user_id=XXXXX"
   const maxItems = {{ section.settings.max_items | json }};
   const openInNew = true;
 
@@ -385,8 +402,11 @@
       out = out.concat(normalizeItems(first));
       if (maxItems && out.length > maxItems) out = out.slice(0, maxItems);
 
+      // Remove placeholders only (keep track)
+      const sk = track.querySelector('.insta-skeletons');
+      if (sk) sk.remove();
+
       // Render slides
-      track.innerHTML = ''; // clear skeletons
       if (!out.length) {
         track.innerHTML = '<p style="opacity:.7;padding:12px;">No Instagram posts to display.</p>';
         return;
@@ -400,7 +420,7 @@
         const a = document.createElement('a');
         a.href = it.href;
         if (openInNew) { a.target = '_blank'; a.rel = 'noopener nofollow'; }
-        a.ariaLabel = 'Open Instagram post';
+        a.setAttribute('aria-label', 'Open Instagram post');
 
         const wrap = document.createElement('div');
         wrap.className = 'insta-imgwrap';
@@ -420,7 +440,12 @@
       track.appendChild(frag);
     } catch (e) {
       console.error(e);
-      track.innerHTML = '<p style="opacity:.7;padding:12px;">Unable to load Instagram feed.</p>';
+      // Keep placeholders; optionally show a soft status message under the carousel
+      const status = document.createElement('p');
+      status.style.opacity = '.7';
+      status.style.padding = '12px 0 0';
+      status.textContent = 'Unable to load Instagram feed right now.';
+      carousel.parentElement.appendChild(status);
     }
   }
 
