@@ -192,90 +192,6 @@
   /* no custom line-height or font settings; fully inherit */
 }
 
-/* Circular chevron button using equal padding (perfect circle) */
-.faq-toggle-btn-{{ faq_uid }}{
-  --faq-icon-size: 20px;
-  --faq-btn-pad: 10px;
-
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--faq-btn-pad);
-  border: 0;
-  border-radius: 9999px;
-  background: transparent;
-  color: {{ section.settings.icon_color }};
-  line-height: 1;
-  box-sizing: content-box;
-  cursor: pointer;
-  transition: background-color .2s ease, color .2s ease, transform .25s ease, box-shadow .25s ease;
-}
-
-/* Perfect-circle toggle button (fixed size, no padding tricks) */
-.faq-toggle-btn-{{ faq_uid }}{
-  --faq-btn-size: 44px;         /* tap-friendly: 44–48px */
-  --faq-icon-size: 20px;
-
-  width: var(--faq-btn-size);
-  height: var(--faq-btn-size);
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-
-  border: 0;
-  padding: 0;                   /* important: remove padding to keep circle perfect */
-  background: transparent;
-  color: {{ section.settings.icon_color }};
-  line-height: 1;
-  cursor: pointer;
-  transition: background-color .2s ease, color .2s ease, transform .25s ease, box-shadow .25s ease;
-  box-sizing: border-box;       /* keep borders from changing size if you add any */
-}
-
-.faq-icon-{{ faq_uid }}{
-  width: var(--faq-icon-size);
-  height: var(--faq-icon-size);
-  display: block;
-  pointer-events: none;
-  transition: transform .25s ease, color .2s ease;
-}
-
-/* Hover/active/keyboard focus states */
-.faq-toggle-btn-{{ faq_uid }}:hover{
-  background-color: #ff679a;
-  color: {{ section.settings.active_text_color }};
-}
-.faq-item-{{ faq_uid }}.active .faq-toggle-btn-{{ faq_uid }}{
-  background-color: #ff679a;
-  color: {{ section.settings.active_text_color }};
-}
-.faq-item-{{ faq_uid }}.active .faq-icon-{{ faq_uid }}{
-  transform: rotate(180deg);
-}
-
-/* Accessible focus outline */
-.faq-toggle-btn-{{ faq_uid }}:focus-visible{
-  outline: 2px solid currentColor;
-  outline-offset: 2px;
-}
-
-.faq-item-{{ faq_uid }}.active .faq-toggle-btn-{{ faq_uid }}{
-  background-color: #ff679a;
-  color: {{ section.settings.active_text_color }};
-}
-.faq-item-{{ faq_uid }}.active .faq-icon-{{ faq_uid }}{ transform: rotate(180deg); }
-
-/* Do NOT recolor the LI container on hover/active */
-.faq-item-{{ faq_uid }}{
-  transition: background-color .2s ease, border-color .2s ease;
-}
-.faq-item-{{ faq_uid }}:hover,
-.faq-item-{{ faq_uid }}.active{
-  background-color: {{ section.settings.question_background }} !important;
-  border-color: {{ section.settings.question_border_color }} !important;
-}
-
 /* Force a true circle and prevent flex/grid stretch */
 .faq-question-row-{{ faq_uid }}{
   display:flex;
@@ -340,6 +256,8 @@
   outline: 2px solid currentColor;
   outline-offset: 2px;
 }
+
+
 
 
 /* Answer panel — height animation when enabled */
