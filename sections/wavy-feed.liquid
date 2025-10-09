@@ -218,48 +218,6 @@
             {% endif %}
           </svg>
         </div>
-        <!-- strip B (clone) -->
-        <div class="wave-strip" aria-hidden="true">
-          <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" role="presentation" focusable="false">
-            {% assign freq = section.settings.wave_frequency %}
-            {% assign amp = section.settings.wave_amplitude %}
-            {% if freq == 1 %}
-              {% case section.settings.wave_shape %}
-                {% when 'gentle' %}<path d="M0,0 L0,{{ amp | minus: 10 }} Q720,{{ amp | plus: amp | minus: 10 }} 1440,{{ amp | minus: 10 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
-                {% when 'medium' %}<path d="M0,0 L0,{{ amp }} Q720,{{ amp | plus: amp }} 1440,{{ amp }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
-                {% when 'dramatic' %}<path d="M0,0 L0,{{ amp | plus: 10 }} Q720,{{ amp | plus: amp | plus: 20 }} 1440,{{ amp | plus: 10 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
-                {% when 'sharp' %}<path d="M0,0 L0,{{ amp }} L720,{{ amp | plus: amp }} L1440,{{ amp }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
-                {% when 'rounded' %}<path d="M0,0 L0,{{ amp | minus: 5 }} C480,{{ amp | plus: amp | minus: 5 }} 960,{{ amp | plus: amp | minus: 5 }} 1440,{{ amp | minus: 5 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
-              {% endcase %}
-            {% elsif freq == 2 %}
-              {% case section.settings.wave_shape %}
-                {% when 'gentle' %}<path d="M0,0 L0,{{ amp | minus: 10 }} Q360,{{ amp | plus: amp | minus: 10 }} 720,{{ amp | minus: 10 }} T1440,{{ amp | minus: 10 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
-                {% when 'medium' %}<path d="M0,0 L0,{{ amp }} Q360,{{ amp | plus: amp }} 720,{{ amp }} T1440,{{ amp }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
-                {% when 'dramatic' %}<path d="M0,0 L0,{{ amp | plus: 10 }} Q360,{{ amp | plus: amp | plus: 20 }} 720,{{ amp | plus: 10 }} T1440,{{ amp | plus: 10 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
-                {% when 'sharp' %}<path d="M0,0 L0,{{ amp }} L360,{{ amp | plus: amp }} L720,{{ amp }} L1080,{{ amp | plus: amp }} L1440,{{ amp }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
-                {% when 'rounded' %}<path d="M0,0 L0,{{ amp | minus: 5 }} C240,{{ amp | plus: amp | minus: 5 }} 480,{{ amp | plus: amp | minus: 5 }} 720,{{ amp | minus: 5 }} C960,{{ amp | minus: amp | minus: 5 }} 1200,{{ amp | minus: amp | minus: 5 }} 1440,{{ amp | minus: 5 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
-              {% endcase %}
-            {% elsif freq == 3 %}
-              {% case section.settings.wave_shape %}
-                {% when 'gentle' %}<path d="M0,0 L0,{{ amp | minus: 10 }} Q240,{{ amp | plus: amp | minus: 10 }} 480,{{ amp | minus: 10 }} T960,{{ amp | minus: 10 }} T1440,{{ amp | minus: 10 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
-                {% when 'medium' %}<path d="M0,0 L0,{{ amp }} Q240,{{ amp | plus: amp }} 480,{{ amp }} T960,{{ amp }} T1440,{{ amp }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
-                {% when 'dramatic' %}<path d="M0,0 L0,{{ amp | plus: 10 }} Q240,{{ amp | plus: amp | plus: 20 }} 480,{{ amp | plus: 10 }} T960,{{ amp | plus: 10 }} T1440,{{ amp | plus: 10 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
-                {% when 'sharp' %}<path d="M0,0 L0,{{ amp }} L240,{{ amp | plus: amp }} L480,{{ amp }} L720,{{ amp | plus: amp }} L960,{{ amp }} L1200,{{ amp | plus: amp }} L1440,{{ amp }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
-                {% when 'rounded' %}<path d="M0,0 L0,{{ amp | minus: 5 }} C160,{{ amp | plus: amp | minus: 5 }} 320,{{ amp | plus: amp | minus: 5 }} 480,{{ amp | minus: 5 }} C640,{{ amp | minus: amp | minus: 5 }} 800,{{ amp | minus: amp | minus: 5 }} 960,{{ amp | minus: 5 }} C1120,{{ amp | plus: amp | minus: 5 }} 1280,{{ amp | plus: amp | minus: 5 }} 1440,{{ amp | minus: 5 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
-              {% endcase %}
-            {% elsif freq == 4 %}
-              {% case section.settings.wave_shape %}
-                {% when 'gentle' %}<path d="M0,0 L0,{{ amp | minus: 10 }} Q180,{{ amp | plus: amp | minus: 10 }} 360,{{ amp | minus: 10 }} T720,{{ amp | minus: 10 }} T1080,{{ amp | minus: 10 }} T1440,{{ amp | minus: 10 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
-                {% when 'medium' %}<path d="M0,0 L0,{{ amp }} Q180,{{ amp | plus: amp }} 360,{{ amp }} T720,{{ amp }} T1080,{{ amp }} T1440,{{ amp }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
-                {% when 'dramatic' %}<path d="M0,0 L0,{{ amp | plus: 10 }} Q180,{{ amp | plus: amp | plus: 20 }} 360,{{ amp | plus: 10 }} T720,{{ amp | plus: 10 }} T1080,{{ amp | plus: 10 }} T1440,{{ amp | plus: 10 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
-                {% when 'sharp' %}<path d="M0,0 L0,{{ amp }} L180,{{ amp | plus: amp }} L360,{{ amp }} L540,{{ amp | plus: amp }} L720,{{ amp }} L900,{{ amp | plus: amp }} L1080,{{ amp }} L1260,{{ amp | plus: amp }} L1440,{{ amp }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
-                {% when 'rounded' %}<path d="M0,0 L0,{{ amp | minus: 5 }} C120,{{ amp | plus: amp | minus: 5 }} 240,{{ amp | plus: amp | minus: 5 }} 360,{{ amp | minus: 5 }} C480,{{ amp | minus: amp | minus: 5 }} 600,{{ amp | minus: amp | minus: 5 }} 720,{{ amp | minus: 5 }} C840,{{ amp | plus: amp | minus: 5 }} 960,{{ amp | plus: amp | minus: 5 }} 1080,{{ amp | minus: 5 }} C1200,{{ amp | minus: amp | minus: 5 }} 1320,{{ amp | minus: amp | minus: 5 }} 1440,{{ amp | minus: 5 }} L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
-              {% endcase %}
-            {% else %}
-              <path d="M0,0 L0,50 Q360,70 720,50 T1440,50 L1440,0 Z" fill="{{ section.settings.wave_color }}"/>
-            {% endif %}
-          </svg>
-        </div>
       </div>
     </div>
   </div>
