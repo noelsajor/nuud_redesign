@@ -671,69 +671,6 @@
   50% { transform: translateY(-12px); }
 }
 </style>
-<style>
-/* ===== No-crop overrides for testimonial cards ===== */
-#shopify-section-{{section.id}}.home-testimonial-block{
-  --card-aspect: auto !important; /* neutralize any fixed ratio */
-}
-
-/* Kill all aspect-ratio constraints on cards/inners */
-#shopify-section-{{section.id}}.home-testimonial-block 
-  .dt-sc-testimonial-section.overall_boxed .dt-sc-testimonial,
-#shopify-section-{{section.id}}.home-testimonial-block 
-  .dt-sc-testimonial-section.content_boxed .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-testimonial-content-inner,
-#shopify-section-{{section.id}}.home-testimonial-block 
-  .dt-sc-testimonial-section.quote_boxed .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-testimonial-content-inner,
-#shopify-section-{{section.id}}.home-testimonial-block 
-  .dt-sc-testimonial.review-type-photo {
-  aspect-ratio: auto !important;
-}
-
-/* Let photo cards expand to image’s intrinsic height; no clipping */
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial.review-type-photo{
-  overflow: visible !important;
-}
-
-/* Ensure the photo itself never crops */
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-photo{
-  position: relative;            /* was absolute; absolute often forces cropping */
-  inset: auto;                   /* reset */
-  width: 100%;
-  height: auto;                  /* grow with image */
-}
-#shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-photo img{
-  width: 100%;
-  height: auto !important;       /* keep full image */
-  object-fit: contain !important;/* no cropping */
-  object-position: center;
-  border-radius: inherit;
-  display: block;
-}
-
-/* Full review cards: allow content to dictate height */
-#shopify-section-{{section.id}}.home-testimonial-block 
-  .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content .dt-sc-testimonial-content-inner{
-  height: auto !important;
-  overflow: visible !important;
-}
-
-/* Swiper slides should auto-size to content height (no forced equal heights) */
-#shopify-section-{{section.id}}.home-testimonial-block .swiper-container,
-#shopify-section-{{section.id}}.home-testimonial-block .swiper-wrapper,
-#shopify-section-{{section.id}}.home-testimonial-block .swiper-slide{
-  height: auto !important;
-}
-#shopify-section-{{section.id}}.home-testimonial-block .swiper-slide{
-  display: block; /* avoid flex stretching that can mask cropping issues */
-}
-
-/* If any theme rule adds fixed heights, neutralize them here */
-#shopify-section-{{section.id}}.home-testimonial-block 
-  .dt-sc-testimonial-section .dt-sc-testimonial{
-  height: auto !important;
-  overflow: visible !important;
-}
-</style>
 
 
 {% schema %}
