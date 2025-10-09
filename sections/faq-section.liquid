@@ -161,7 +161,6 @@
 }
 
 .faq-questions-{{ faq_uid }}{
-  /* inherit theme typography entirely */
   display:flex;
   flex-direction:column;
   gap: {{ section.settings.question_gap }}px;
@@ -170,7 +169,7 @@
   padding:0;
 }
 
-/* Optional: if you truly want to force this font, keep this. */
+/* Optional: if you truly want to force this font, keep it. */
 .faq-question-text-{{ faq_uid }}{
   font-family:'Bricolage Grotesque' !important;
   font-weight:400;
@@ -182,22 +181,21 @@
    ------------------------- */
 .faq-question-row-{{ faq_uid }}{
   display:flex;
-  align-items:center;           /* prevent stretch */
+  align-items:center;              /* prevent stretch */
   justify-content:space-between;
   gap:12px;
   width:100%;
-  padding:0 12px;               /* no top/bottom padding to avoid fake ovals */
+  padding:0 12px;                  /* no top/bottom padding => avoids fake ovals */
   cursor:default;
 }
 
-/* Let text set vertical rhythm (instead of the row) */
+/* Let text set vertical rhythm */
 .faq-question-text-{{ faq_uid }}{
   flex:1 1 auto;
   min-width:0;
-  margin:8px 0;                 /* replaces row's vertical padding */
+  margin:8px 0;                    /* replaces row vertical padding */
 }
 
-/* Inherit theme typography for all clickable pieces */
 .faq-item-{{ faq_uid }},
 .faq-question-row-{{ faq_uid }},
 .faq-toggle-btn-{{ faq_uid }}{
@@ -206,79 +204,115 @@
 }
 
 /* =========================
-   Toggle Button (Perfect Circle)
+   Toggle Button — PERFECT CIRCLE (bulletproof)
    ========================= */
 .faq-toggle-btn-{{ faq_uid }}{
-  --faq-btn-size: 44px;         /* adjust 40–48px as you like */
+  --faq-btn-size: 44px;            /* 40–48px is good for tap targets */
   --faq-icon-size: 20px;
 
-  flex:0 0 auto;
-  align-self:center;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
+  /* Do not let any parent layout stretch or scale it */
+  flex:0 0 auto !important;
+  align-self:center !important;
 
-  inline-size: var(--faq-btn-size);
-  block-size: var(--faq-btn-size);
-  min-inline-size: var(--faq-btn-size);
-  min-block-size: var(--faq-btn-size);
-  max-inline-size: var(--faq-btn-size);
-  max-block-size: var(--faq-btn-size);
-  aspect-ratio: 1 / 1;          /* extra guard against ovals */
+  /* Grid centers more rigidly than flex inside odd resets */
+  display:inline-grid !important;
+  place-items:center !important;
 
-  padding:0;                    /* no padding math */
-  border:0;
-  border-radius:50%;
-  box-sizing:border-box;        /* borders won’t change size */
-  background:transparent;
+  /* Hard size in both axes + guards */
+  inline-size: var(--faq-btn-size) !important;
+  block-size: var(--faq-btn-size) !important;
+  min-inline-size: var(--faq-btn-size) !important;
+  min-block-size: var(--faq-btn-size) !important;
+  max-inline-size: var(--faq-btn-size) !important;
+  max-block-size: var(--faq-btn-size) !important;
 
-  color: {{ section.settings.icon_color }}; /* ensure visible by default */
-  line-height:1;
+  aspect-ratio: 1 / 1;             /* extra guard against ovals */
+
+  /* Absolute resets so themes can’t sneak in */
+  padding:0 !important;
+  border:0 !important;
+  border-radius:50% !important;
+  box-sizing:border-box !important;
+  background:transparent !important;
+  background-clip: padding-box !important;
+
+  color: {{ section.settings.icon_color }} !important;  /* default visible color */
+  line-height:0 !important;         /* kill inline height artifacts */
+  font-size:0 !important;           /* avoid text metrics affecting height */
+  text-indent:0 !important;
+
   cursor:pointer;
-  transition: background-color .2s ease, color .2s ease, transform .25s ease, box-shadow .25s ease;
-  appearance:none;
-  overflow:hidden;              /* circular clip even if children overflow */
+  appearance:none !important;
+
+  /* Neutralize any inherited transforms that squash circles */
+  transform:none !important;
+  transform-origin:center center !important;
+
+  /* Prevent outside influence */
+  isolation:isolate;
+  contain: layout paint size;
+
+  transition: background-color .2s ease, color .2s ease, box-shadow .25s ease;
+  overflow:hidden;                   /* circular clip even if children overflow */
 }
 
-/* Icon sizing + paint guards to beat global svg resets */
+/* =========================
+   Icon — Always visible and crisp
+   ========================= */
 .faq-toggle-btn-{{ faq_uid }} > .faq-icon-{{ faq_uid }}{
   width: var(--faq-icon-size) !important;
   height: var(--faq-icon-size) !important;
   max-width:none !important;
   max-height:none !important;
-  flex:0 0 auto;
-  display:block;
-  pointer-events:none;
-  stroke: currentColor !important;  /* keep visible under theme resets */
+  flex:0 0 auto !important;
+  display:block !important;
+  pointer-events:none !important;
+
+  /* Paint guards: if the theme sets svg/path fill/stroke, override it */
+  stroke: currentColor !important;
   fill: none !important;
+  stroke-width: 2px !important;
+  vector-effect: non-scaling-stroke;  /* keep line thickness consistent */
+
+  /* No surprise transforms from elsewhere */
+  transform:none !important;
+  transform-origin:center center !important;
+
   transition: transform .25s ease, color .2s ease;
 }
 
-/* Ensure inner shapes also inherit stroke color */
+/* Ensure inner shapes inherit stroke */
 .faq-toggle-btn-{{ faq_uid }} .faq-icon-{{ faq_uid }} polyline,
 .faq-toggle-btn-{{ faq_uid }} .faq-icon-{{ faq_uid }} line,
 .faq-toggle-btn-{{ faq_uid }} .faq-icon-{{ faq_uid }} path{
   stroke: currentColor !important;
   fill: none !important;
+  stroke-width: 2px !important;
+  vector-effect: non-scaling-stroke;
 }
 
-/* States */
+/* =========================
+   States
+   ========================= */
 .faq-toggle-btn-{{ faq_uid }}:hover{
-  background-color:#ff679a;
-  color: {{ section.settings.active_text_color }}; /* e.g., white */
+  background-color:#ff679a !important;
+  color: {{ section.settings.active_text_color }} !important; /* e.g., white */
 }
+
 .faq-item-{{ faq_uid }}.active .faq-toggle-btn-{{ faq_uid }}{
-  background-color:#ff679a;
-  color: {{ section.settings.active_text_color }};
+  background-color:#ff679a !important;
+  color: {{ section.settings.active_text_color }} !important;
 }
+
+/* Only rotate the icon, never scale the button */
 .faq-item-{{ faq_uid }}.active .faq-icon-{{ faq_uid }}{
-  transform: rotate(180deg);
+  transform: rotate(180deg) !important;
 }
 
 /* Accessible focus outline */
 .faq-toggle-btn-{{ faq_uid }}:focus-visible{
-  outline:2px solid currentColor;
-  outline-offset:2px;
+  outline:2px solid currentColor !important;
+  outline-offset:2px !important;
 }
 
 /* =========================
@@ -299,7 +333,6 @@
   overflow:hidden;
   height:0; /* closed baseline */
 }
-
 {% if section.settings.enable_animation %}
 .faq-answer-{{ faq_uid }}{ transition: height .25s ease; }
 @media (prefers-reduced-motion: reduce){
@@ -314,7 +347,6 @@
 .faq-heading-{{ faq_uid }}{
   margin:0;
   font-weight:600;
-  /* no extra size/weight overrides to keep theme defaults */
 }
 .faq-body-{{ faq_uid }} p{ margin:0 0 1em; }
 
@@ -360,6 +392,7 @@
   border:0;
 }
 </style>
+
 
 
 <script>
