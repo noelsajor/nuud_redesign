@@ -52,7 +52,7 @@
     <div class="faq-content-{{ faq_uid }}">
       {% if section.settings.subheading != blank %}
         <p class="faq-subheading-{{ faq_uid }}"
-           style="color: {{ section.settings.subheading_color }}; font-size: {{ section.settings.subheading_size }}px;">
+           style="color: {{ section.settings.subheading_color }};">
           {{ section.settings.subheading }}
         </p>
       {% endif %}
@@ -60,7 +60,7 @@
       {% if section.settings.heading != blank %}
         <h2 id="faq-title-{{ faq_uid }}"
             class="faq-heading-{{ faq_uid }}"
-            style="color: {{ section.settings.heading_color }}; font-size: {{ section.settings.heading_size }}px;">
+            style="color: {{ section.settings.heading_color }};">
           {{ section.settings.heading }}
         </h2>
       {% else %}
@@ -69,7 +69,7 @@
 
       {% if section.settings.body != blank %}
         <div class="faq-body-{{ faq_uid }}"
-             style="color: {{ section.settings.body_color }}; font-size: {{ section.settings.body_size }}px;">
+             style="color: {{ section.settings.body_color }};">
           {{ section.settings.body }}
         </div>
       {% endif %}
@@ -99,7 +99,6 @@
                     class="faq-question-text-{{ faq_uid }}"
                     style="
                       color: {{ section.settings.question_color }};
-                      font-size: {{ section.settings.question_size }}px;
                       padding: {{ section.settings.question_padding }}px;
                     ">
                 {{ q }}
@@ -131,7 +130,6 @@
               <div class="faq-answer-content-{{ faq_uid }}"
                    style="
                      color: {{ section.settings.answer_color }};
-                     font-size: {{ section.settings.answer_size }}px;
                      padding: {{ section.settings.answer_padding }}px;
                    ">
                 {{ a }}
@@ -164,7 +162,7 @@
 .faq-question-row-{{ faq_uid }}{
   display: flex;
   align-items: center;
-  justify-content: space-between;  /* <- requested: space between text & icon */
+  justify-content: space-between;
   width: 100%;
   gap: 12px;
   cursor: default;
@@ -173,26 +171,25 @@
 .faq-question-text-{{ faq_uid }}{
   flex: 1 1 auto;
   min-width: 0;
-  line-height: 1.4;
+  line-height: 1.4; /* respects theme font, only adjusts rhythm */
 }
 
 /* Circular chevron button using equal padding (perfect circle) */
 .faq-toggle-btn-{{ faq_uid }}{
-  /* Tweak these if you want a larger/smaller circle */
-  --faq-icon-size: 20px;  /* chevron size */
-  --faq-btn-pad: 10px;    /* equal padding makes total width==height */
+  --faq-icon-size: 20px;
+  --faq-btn-pad: 10px;
 
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: var(--faq-btn-pad);       /* equal padding for perfect circle */
+  padding: var(--faq-btn-pad);
   border: 0;
-  border-radius: 9999px;             /* circle */
+  border-radius: 9999px;
   background: transparent;
   color: {{ section.settings.icon_color }};
   line-height: 1;
-  box-sizing: content-box;           /* width/height = icon + padding */
+  box-sizing: content-box;
   cursor: pointer;
   transition: background-color .2s ease, color .2s ease, transform .25s ease, box-shadow .25s ease;
 }
@@ -239,7 +236,7 @@
 }
 {% endif %}
 
-/* Typography */
+/* Typography (inherit theme fonts entirely) */
 .faq-subheading-{{ faq_uid }}{ margin:0; }
 .faq-heading-{{ faq_uid }}{ margin:0; line-height:1.15; }
 .faq-body-{{ faq_uid }} p{ margin: 0 0 1em; }
@@ -429,13 +426,6 @@
     { "type": "color", "id": "answer_background", "label": "Answer background", "default": "#fafafa" },
     { "type": "color", "id": "question_border_color", "label": "Question border color", "default": "#dddddd" },
     { "type": "color", "id": "icon_color", "label": "Icon color", "default": "#333333" },
-
-    { "type": "header", "content": "Typography" },
-    { "type": "range", "id": "subheading_size", "label": "Subheading font size", "min": 12, "max": 24, "step": 1, "unit": "px", "default": 16 },
-    { "type": "range", "id": "heading_size", "label": "Heading font size", "min": 20, "max": 48, "step": 2, "unit": "px", "default": 32 },
-    { "type": "range", "id": "body_size", "label": "Body font size", "min": 14, "max": 20, "step": 1, "unit": "px", "default": 16 },
-    { "type": "range", "id": "question_size", "label": "Question font size", "min": 14, "max": 24, "step": 1, "unit": "px", "default": 18 },
-    { "type": "range", "id": "answer_size", "label": "Answer font size", "min": 14, "max": 20, "step": 1, "unit": "px", "default": 16 },
 
     { "type": "header", "content": "Animation" },
     {
