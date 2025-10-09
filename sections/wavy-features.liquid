@@ -366,6 +366,58 @@
 </style>
 
 <script>
+(function(){
+  const section = document.currentScript.closest('.features-wave-section');
+  if(!section) return;
+
+  const ticker = section.querySelector('.features-ticker.ticker-animated');
+  if(!ticker) return;
+
+  const track = ticker.querySelector('.ticker__track');
+  if(!track) return;
+
+  // Ensure we have two rows (A + B). If merchant removed B, clone it.
+  let rows = track.querySelectorAll('.ticker__row');
+  if(rows.length === 1){
+    track.appendChild(rows[0].cloneNode(true));
+    rows = track.querySelectorAll('.ticker__row');
+  }
+  const rowA = rows[0];
+
+  function setDistance(){
+    // Use scrollWidth to include flex-gap + images
+    const distance = rowA ? rowA.scrollWidth : 0;
+    if(distance > 0){
+      track.style.setProperty('--distance', distance + 'px');
+      // Switch to pixel animation
+      ticker.classList.add('px-ready');
+    } else {
+      // Keep percent fallback
+      ticker.classList.remove('px-ready');
+    }
+  }
+
+  // Recompute once everything is ready
+  const onReady = () => requestAnimationFrame(()=>requestAnimationFrame(setDistance));
+
+  if (document.readyState === 'complete') onReady();
+  else window.addEventListener('load', onReady, { once: true });
+
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(onReady);
+
+  // Re-run when any image inside the track finishes loading
+  track.querySelectorAll('img').forEach(img=>{
+    if (!img.complete) img.addEventListener('load', onReady, { once: true });
+  });
+
+  // Re-run on resize
+  let rAF; window.addEventListener('resize', () => {
+    cancelAnimationFrame(rAF); rAF = requestAnimationFrame(onReady);
+  });
+})();
+</script>
+
+<script>
 /**
  * Pixel-perfect marquee: measure Row A width and animate exactly that distance.
  * Prevents the tiny gap that can appear with %-based loops due to reflow/rounding.
