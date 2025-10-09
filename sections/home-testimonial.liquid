@@ -695,7 +695,14 @@
 
 /* Center EVERYTHING on mobile for this section */
 @media (max-width: 767px){
-  background_color: #000000; 
+    /* 1) Make each testimonial a single, centered column */
+  #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial{
+    display: grid !important;
+    grid-template-columns: 1fr;
+    justify-items: center;   /* centers image/content blocks */
+    text-align: center;      /* centers text */
+    gap: {{ section.settings.column_gap }}px;
+  }
 
 }
 
