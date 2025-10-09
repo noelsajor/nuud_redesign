@@ -723,7 +723,7 @@
         "mobile_text_alignment": "left",
         "question_gap": 16,
         "question_padding": 20,
-        "answer_padding": 30,
+        "answer_padding": 10,
         "border_radius": 8,
         "question_border_radius_custom": "35,35,35,35",
         "subheading_color": "#666666",
