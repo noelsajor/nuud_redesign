@@ -224,17 +224,6 @@
     "1654336925c509c587": {
       "type": "home-testimonial",
       "blocks": {
-        "7bd69ef4-78eb-421b-9782-9be8d5d46fc2": {
-          "type": "content",
-          "settings": {
-            "review_type": "full",
-            "quote": "<p>Porem ipsum dolor sit amet, ctetur adipiscing elit, sed do. Lorem ipsum dolor sit amet.</p>",
-            "icon": "shopify://shop_images/SpicyLove.png",
-            "author": "Author Name",
-            "job": "Author Designation",
-            "star": "3"
-          }
-        },
         "content_ATGPYr": {
           "type": "content",
           "settings": {
@@ -243,21 +232,10 @@
             "author": "Author Name",
             "job": "Author Designation",
             "star": "3",
-            "photo": "shopify://shop_images/Rectangle_96_e03b2b75-8d2a-4e0d-994b-12bed3406c3f.png"
+            "photo": "shopify://shop_images/hero_mobile.webp"
           }
         },
-        "content_d99CYk": {
-          "type": "content",
-          "settings": {
-            "review_type": "full",
-            "quote": "<p>Porem ipsum dolor sit amet, ctetur adipiscing elit, sed do. Lorem ipsum dolor sit amet.</p>",
-            "icon": "shopify://shop_images/SpicyLove.png",
-            "author": "Author Name",
-            "job": "Author Designation",
-            "star": "3"
-          }
-        },
-        "content_CBwdHX": {
+        "content_GXFG8W": {
           "type": "content",
           "settings": {
             "review_type": "photo",
@@ -265,21 +243,10 @@
             "author": "Author Name",
             "job": "Author Designation",
             "star": "3",
-            "photo": "shopify://shop_images/Rectangle_97.png"
+            "photo": "shopify://shop_images/hero_mobile.webp"
           }
         },
-        "content_CNPyjX": {
-          "type": "content",
-          "settings": {
-            "review_type": "full",
-            "quote": "<p>Porem ipsum dolor sit amet, ctetur adipiscing elit, sed do. Lorem ipsum dolor sit amet.</p>",
-            "icon": "shopify://shop_images/SpicyLove.png",
-            "author": "Author Name",
-            "job": "Author Designation",
-            "star": "3"
-          }
-        },
-        "content_pFdJJD": {
+        "content_NDfzB9": {
           "type": "content",
           "settings": {
             "review_type": "photo",
@@ -287,17 +254,38 @@
             "author": "Author Name",
             "job": "Author Designation",
             "star": "3",
-            "photo": "shopify://shop_images/Rectangle_97.png"
+            "photo": "shopify://shop_images/hero_mobile.webp"
+          }
+        },
+        "content_iVD6qQ": {
+          "type": "content",
+          "settings": {
+            "review_type": "photo",
+            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
+            "author": "Author Name",
+            "job": "Author Designation",
+            "star": "3",
+            "photo": "shopify://shop_images/hero_mobile.webp"
+          }
+        },
+        "content_gNMcYC": {
+          "type": "content",
+          "settings": {
+            "review_type": "photo",
+            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
+            "author": "Author Name",
+            "job": "Author Designation",
+            "star": "3",
+            "photo": "shopify://shop_images/hero_mobile.webp"
           }
         }
       },
       "block_order": [
-        "7bd69ef4-78eb-421b-9782-9be8d5d46fc2",
         "content_ATGPYr",
-        "content_d99CYk",
-        "content_CBwdHX",
-        "content_CNPyjX",
-        "content_pFdJJD"
+        "content_GXFG8W",
+        "content_NDfzB9",
+        "content_iVD6qQ",
+        "content_gNMcYC"
       ],
       "custom_css": [
         ".overall_boxed {border: none;}"
