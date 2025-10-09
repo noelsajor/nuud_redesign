@@ -292,10 +292,32 @@
 
 /* -------- Instagram Carousel (scroll-snap) -------- */
 .insta-carousel { position: relative; display: flex; align-items: center; gap: 12px; }
-.insta-track { position: relative; overflow-x: auto; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; display: grid; grid-auto-flow: column; grid-auto-columns: calc(100% / var(--vis)); gap: {{ section.settings.card_gap }}px; padding: 6px; scroll-behavior: smooth; outline: none; }
-.insta-track:focus { box-shadow: 0 0 0 3px rgba(0,0,0,.08) inset; }
-.insta-slide { scroll-snap-align: start; position: relative; border-radius: {{ section.settings.card_radius }}px; overflow: hidden; background: {{ section.settings.card_bg }}; box-shadow: 0 10px 18px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.06); }
-.insta-slide a { display: block; width: 100%; height: 100%; }
+/* Horizontal carousel layout */
+.insta-track {
+  position: relative;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  display: flex;                /* <— make it a row */
+  gap: {{ section.settings.card_gap }}px;
+  padding: 6px;
+  scroll-behavior: smooth;
+  outline: none;
+  white-space: nowrap;          /* extra safety vs. theme overrides */
+}
+
+.insta-slide {
+  scroll-snap-align: start;
+  position: relative;
+  border-radius: {{ section.settings.card_radius }}px;
+  overflow: hidden;
+  background: {{ section.settings.card_bg }};
+  box-shadow: 0 10px 18px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.06);
+
+  /* size each slide so exactly --vis items fit the viewport width */
+  flex: 0 0 calc(100% / var(--vis));   /* <— key line for horizontal cards */
+}
+
 .insta-imgwrap { position: relative; width: 100%; aspect-ratio: 1 / 1; } /* square */
 .insta-img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .insta-nav { background: #fff; border: 1px solid rgba(0,0,0,.1); border-radius: 999px; width: 42px; height: 42px; font-size: 18px; line-height: 40px; text-align: center; box-shadow: 0 6px 12px rgba(0,0,0,.08); cursor: pointer; }
