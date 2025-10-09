@@ -215,13 +215,25 @@
 /* Seamless wave loop */
 .features-wave-section.waves-animated .wave-top .wave-tiles,
 .features-wave-section.waves-animated .wave-bottom .wave-tiles {
+  /* CHANGED: keep same animation name but prep for % transforms */
   animation: waveSlide var(--wave-speed, 8s) linear infinite;
+  will-change: transform;
+  transform: translate3d(0,0,0);
+  /* Ensure % transforms are relative to the element's own bbox in SVG */
+  transform-box: fill-box;
+  transform-origin: 0 50%;
 }
 .features-wave-section.waves-animated .wave-top,
 .features-wave-section.waves-animated .wave-bottom {
   animation: waveBob var(--wave-speed, 8s) ease-in-out infinite alternate;
 }
-@keyframes waveSlide { from { transform: translateX(0); } to { transform: translateX(-1440px); } }
+
+/* CHANGED: use -50% instead of fixed -1440px to match the two-tile setup */
+@keyframes waveSlide {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
 @keyframes waveBob   { from { transform: translateY(0); } to { transform: translateY(var(--wave-bob, 8px)); } }
 
 /* Container — no max-width */
@@ -337,6 +349,7 @@
   .ticker__track{ animation:none !important; transform:none !important; }
 }
 </style>
+
 
 {% schema %}
 {
