@@ -70,11 +70,11 @@
   </div>
   {% endif %}
 
-  {%- comment -%} --------- CONTENT: PERFECT MARQUEE (pixel-precise) --------- {%- endcomment -%}
+  {%- comment -%} --------- CONTENT: PERFECT MARQUEE --------- {%- endcomment -%}
   <div class="features-container">
     {% if section.settings.section_title != blank %}
       <h2 id="features-title" class="section-title"
-          style="color: {{ section.settings.title_color }}; text-align: {{ section.settings.title_alignment }}; font-size: {{ section.settings.title_size }}px;">
+          style="color: {{ section.settings.title_color }}; text-align: {{ section.settings.title_alignment }};">
         {{ section.settings.section_title }}
       </h2>
     {% else %}
@@ -104,11 +104,11 @@
 
               {% if block.settings.feature_text != blank %}
               <div class="feature-text-wrapper">
-                <p class="feature-text" style="color: {{ block.settings.text_color }}; font-size: {{ block.settings.text_size }}px; font-weight: {{ block.settings.text_weight }};">
+                <p class="feature-text" style="color: {{ block.settings.text_color }};">
                   {{ block.settings.feature_text }}
                 </p>
                 {% if block.settings.feature_subtext != blank %}
-                <p class="feature-subtext" style="color: {{ block.settings.subtext_color }}; font-size: {{ block.settings.subtext_size }}px;">
+                <p class="feature-subtext" style="color: {{ block.settings.subtext_color }};">
                   {{ block.settings.feature_subtext }}
                 </p>
                 {% endif %}
@@ -137,11 +137,11 @@
 
               {% if block.settings.feature_text != blank %}
               <div class="feature-text-wrapper">
-                <p class="feature-text" style="color: {{ block.settings.text_color }}; font-size: {{ block.settings.text_size }}px; font-weight: {{ block.settings.text_weight }};">
+                <p class="feature-text" style="color: {{ block.settings.text_color }};">
                   {{ block.settings.feature_text }}
                 </p>
                 {% if block.settings.feature_subtext != blank %}
-                <p class="feature-subtext" style="color: {{ block.settings.subtext_color }}; font-size: {{ block.settings.subtext_size }}px;">
+                <p class="feature-subtext" style="color: {{ block.settings.subtext_color }};">
                   {{ block.settings.feature_subtext }}
                 </p>
                 {% endif %}
@@ -243,7 +243,7 @@
 /* Section Title */
 .section-title { margin: 0 0 32px 0; line-height: 1.2; font-family: inherit; }
 
-/* ---------- PERFECT MARQUEE (pixel-precise) ---------- */
+/* ---------- PERFECT MARQUEE ---------- */
 .features-ticker{
   overflow: hidden;
   width: 100%;
@@ -253,32 +253,36 @@
 }
 .ticker__track{
   display: flex;
+  justify-content: center;
   flex-wrap: nowrap;
   width: max-content;
   will-change: transform;
   backface-visibility: hidden;
   transform: translate3d(0,0,0);
+  /* animation applied only when .ticker-animated is present */
   animation: none;
-  /* Distance set via JS: --distance equals Row A scrollWidth in px */
 }
 .ticker-animated .ticker__track{
-  animation: marqueePX var(--ticker-speed) linear infinite;
+  animation: marquee var(--ticker-speed) linear infinite;
 }
 .features-ticker.dir-ltr.ticker-animated .ticker__track{ animation-direction: reverse; } /* left → right */
 .features-ticker.dir-rtl.ticker-animated .ticker__track{ animation-direction: normal; }  /* right → left */
 
-/* Each row = one full set of features. Put a single gap between A and B. */
+/* Each row = one full set of features; duplicating 2x makes -50% a perfect loop point */
 .ticker__row{
   flex: none;
   display: flex;
   align-items: center;
   gap: var(--gap);
+  /* IMPORTANT: remove trailing padding that broke the seam */
+  /* padding-right: var(--gap); */ 
   white-space: nowrap;
-  margin: 0;
-  padding: 0;
-  list-style: none;
 }
-.ticker__row + .ticker__row{ margin-left: var(--gap); } /* identical spacing between the two halves */
+/* Symmetric spacer so A↔B join is identical on both sides */
+.ticker__row::after{
+  content: "";
+  flex: 0 0 var(--gap);
+}
 
 /* Static fallback when animation is disabled */
 .features-ticker:not(.ticker-animated) .ticker__track{ width: 100%; }
@@ -286,7 +290,9 @@
   justify-content: center;
   flex-wrap: wrap;
   white-space: normal;
+  /* no need for spacer when static */
 }
+.features-ticker:not(.ticker-animated) .ticker__row::after{ display:none; }
 
 /* Items */
 .feature-item{
@@ -303,10 +309,10 @@
 .feature-text, .feature-subtext{ margin:0; line-height:1.4; font-family: inherit; }
 .feature-subtext{ margin-top:4px; }
 
-/* Move by the exact pixel width of Row A */
-@keyframes marqueePX{
+/* Move the two-row track by half its width (A+B) */
+@keyframes marquee{
   from { transform: translate3d(0,0,0); }
-  to   { transform: translate3d(calc(-1 * var(--distance, 0px)),0,0); }
+  to   { transform: translate3d(-50%,0,0); }
 }
 
 /* Hover pause (optional via setting) */
@@ -330,6 +336,7 @@
   .feature-icon, .feature-icon-image{ width:48px; height:48px; }
   .ticker__row { flex-direction: column; gap: 40px; }
   .ticker__row li { flex-direction: column; gap: 0; }
+  /* keep spacer even in column to preserve identical halves */
 }
 @media (max-width: 480px){
   .features-ticker{ --gap: {{ section.settings.marquee_gap | default: 40 | times: 0.7 }}px; }
@@ -344,78 +351,7 @@
 
 .features-ticker { font-kerning: none; text-rendering: optimizeSpeed; }
 
-/* Fallback: always moves with -50% so it never “stops” if JS fails */
-.ticker-animated .ticker__track{
-  animation: marqueePercent var(--ticker-speed) linear infinite;
-}
-
-/* When JS measures distance, we flip to pixel-precise */
-.ticker-animated.px-ready .ticker__track{
-  animation: marqueePX var(--ticker-speed) linear infinite;
-}
-
-@keyframes marqueePercent{
-  from { transform: translate3d(0,0,0); }
-  to   { transform: translate3d(-50%,0,0); }
-}
-@keyframes marqueePX{
-  from { transform: translate3d(0,0,0); }
-  to   { transform: translate3d(calc(-1 * var(--distance, 0px)),0,0); }
-}
-
 </style>
-
-<script>
-(function(){
-  const section = document.currentScript.closest('.features-wave-section');
-  if(!section) return;
-
-  const ticker = section.querySelector('.features-ticker.ticker-animated');
-  if(!ticker) return;
-
-  const track = ticker.querySelector('.ticker__track');
-  if(!track) return;
-
-  // Ensure we have two rows (A + B). If merchant removed B, clone it.
-  let rows = track.querySelectorAll('.ticker__row');
-  if(rows.length === 1){
-    track.appendChild(rows[0].cloneNode(true));
-    rows = track.querySelectorAll('.ticker__row');
-  }
-  const rowA = rows[0];
-
-  function setDistance(){
-    // Use scrollWidth to include flex-gap + images
-    const distance = rowA ? rowA.scrollWidth : 0;
-    if(distance > 0){
-      track.style.setProperty('--distance', distance + 'px');
-      // Switch to pixel animation
-      ticker.classList.add('px-ready');
-    } else {
-      // Keep percent fallback
-      ticker.classList.remove('px-ready');
-    }
-  }
-
-  // Recompute once everything is ready
-  const onReady = () => requestAnimationFrame(()=>requestAnimationFrame(setDistance));
-
-  if (document.readyState === 'complete') onReady();
-  else window.addEventListener('load', onReady, { once: true });
-
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(onReady);
-
-  // Re-run when any image inside the track finishes loading
-  track.querySelectorAll('img').forEach(img=>{
-    if (!img.complete) img.addEventListener('load', onReady, { once: true });
-  });
-
-  // Re-run on resize
-  let rAF; window.addEventListener('resize', () => {
-    cancelAnimationFrame(rAF); rAF = requestAnimationFrame(onReady);
-  });
-})();
-</script>
 
 
 {% schema %}
