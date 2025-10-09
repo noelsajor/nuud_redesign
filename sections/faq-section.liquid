@@ -143,145 +143,184 @@
 </section>
 
 <style>
-/* Layout */
+/* =========================
+   FAQ — Layout & Structure
+   ========================= */
 .faq-container-{{ faq_uid }}{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display:grid;
+  grid-template-columns:1fr 1fr;
   gap: {{ section.settings.section_gap }}px;
   padding-left: {{ settings.gutter_width }}px;
   padding-right: {{ settings.gutter_width }}px;
 }
-.faq-content-{{ faq_uid }}{ display:flex; flex-direction:column; gap:16px; }
+
+.faq-content-{{ faq_uid }}{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
 .faq-questions-{{ faq_uid }}{
   /* inherit theme typography entirely */
-  display:flex; flex-direction:column;
+  display:flex;
+  flex-direction:column;
   gap: {{ section.settings.question_gap }}px;
-  list-style:none; margin:0; padding:0;
-
-
+  list-style:none;
+  margin:0;
+  padding:0;
 }
 
+/* Optional: if you truly want to force this font, keep this. */
 .faq-question-text-{{ faq_uid }}{
-  font-family: 'Bricolage Grotesque' !important;
-  font-weight: 400;
-  font-size: 20px;
+  font-family:'Bricolage Grotesque' !important;
+  font-weight:400;
+  font-size:20px;
 }
 
-/* Question row spacing: text at start, icon button at end */
+/* -------------------------
+   Question row (single rule)
+   ------------------------- */
 .faq-question-row-{{ faq_uid }}{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  gap: 12px;
-  cursor: default;
-  padding: 0px 16px 8px 8px;
+  display:flex;
+  align-items:center;           /* prevent stretch */
+  justify-content:space-between;
+  gap:12px;
+  width:100%;
+  padding:0 12px;               /* no top/bottom padding to avoid fake ovals */
+  cursor:default;
 }
 
-/* ✅ Ensure FAQ questions use the theme's default typography */
+/* Let text set vertical rhythm (instead of the row) */
+.faq-question-text-{{ faq_uid }}{
+  flex:1 1 auto;
+  min-width:0;
+  margin:8px 0;                 /* replaces row's vertical padding */
+}
+
+/* Inherit theme typography for all clickable pieces */
 .faq-item-{{ faq_uid }},
 .faq-question-row-{{ faq_uid }},
 .faq-toggle-btn-{{ faq_uid }}{
-  font: inherit;
-  letter-spacing: inherit;
+  font:inherit;
+  letter-spacing:inherit;
 }
 
-.faq-question-text-{{ faq_uid }}{
-  flex: 1 1 auto;
-  min-width: 0;
-  /* no custom line-height or font settings; fully inherit */
-}
-
-/* Force a true circle and prevent flex/grid stretch */
-.faq-question-row-{{ faq_uid }}{
-  display:flex;
-  align-items:center;           /* avoid stretch */
-  justify-content:space-between;
-  gap:12px;
-}
-
-/* Perfect circle + no stretching from parent */
+/* =========================
+   Toggle Button (Perfect Circle)
+   ========================= */
 .faq-toggle-btn-{{ faq_uid }}{
   --faq-btn-size: 44px;         /* adjust 40–48px as you like */
   --faq-icon-size: 20px;
 
-  flex: 0 0 auto;               /* don't grow/shrink */
-  align-self: center;           /* center in the row */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  flex:0 0 auto;
+  align-self:center;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
 
-  width: var(--faq-btn-size);
-  height: var(--faq-btn-size);
+  inline-size: var(--faq-btn-size);
+  block-size: var(--faq-btn-size);
+  min-inline-size: var(--faq-btn-size);
+  min-block-size: var(--faq-btn-size);
+  max-inline-size: var(--faq-btn-size);
+  max-block-size: var(--faq-btn-size);
   aspect-ratio: 1 / 1;          /* extra guard against ovals */
-  padding: 0;                    /* no padding math */
-  border: 0;
-  border-radius: 50%;
-  box-sizing: border-box;        /* borders won’t change size */
-  background: transparent;
+
+  padding:0;                    /* no padding math */
+  border:0;
+  border-radius:50%;
+  box-sizing:border-box;        /* borders won’t change size */
+  background:transparent;
 
   color: {{ section.settings.icon_color }}; /* ensure visible by default */
-  line-height: 1;
-  cursor: pointer;
+  line-height:1;
+  cursor:pointer;
   transition: background-color .2s ease, color .2s ease, transform .25s ease, box-shadow .25s ease;
-  appearance: none;
+  appearance:none;
+  overflow:hidden;              /* circular clip even if children overflow */
 }
 
-/* Lock the SVG size and visibility */
-.faq-icon-{{ faq_uid }}{
-  width: var(--faq-icon-size);
-  height: var(--faq-icon-size);
-  flex: 0 0 auto;
-  display: block;
-  stroke: currentColor;          /* follows button color */
-  pointer-events: none;
+/* Icon sizing + paint guards to beat global svg resets */
+.faq-toggle-btn-{{ faq_uid }} > .faq-icon-{{ faq_uid }}{
+  width: var(--faq-icon-size) !important;
+  height: var(--faq-icon-size) !important;
+  max-width:none !important;
+  max-height:none !important;
+  flex:0 0 auto;
+  display:block;
+  pointer-events:none;
+  stroke: currentColor !important;  /* keep visible under theme resets */
+  fill: none !important;
   transition: transform .25s ease, color .2s ease;
 }
 
-/* Hover/active states */
+/* Ensure inner shapes also inherit stroke color */
+.faq-toggle-btn-{{ faq_uid }} .faq-icon-{{ faq_uid }} polyline,
+.faq-toggle-btn-{{ faq_uid }} .faq-icon-{{ faq_uid }} line,
+.faq-toggle-btn-{{ faq_uid }} .faq-icon-{{ faq_uid }} path{
+  stroke: currentColor !important;
+  fill: none !important;
+}
+
+/* States */
 .faq-toggle-btn-{{ faq_uid }}:hover{
-  background-color: #ff679a;
-  color: {{ section.settings.active_text_color }}; /* e.g., white so icon stays visible */
+  background-color:#ff679a;
+  color: {{ section.settings.active_text_color }}; /* e.g., white */
 }
 .faq-item-{{ faq_uid }}.active .faq-toggle-btn-{{ faq_uid }}{
-  background-color: #ff679a;
+  background-color:#ff679a;
   color: {{ section.settings.active_text_color }};
 }
 .faq-item-{{ faq_uid }}.active .faq-icon-{{ faq_uid }}{
   transform: rotate(180deg);
 }
 
-/* Keyboard focus: accessible ring */
+/* Accessible focus outline */
 .faq-toggle-btn-{{ faq_uid }}:focus-visible{
-  outline: 2px solid currentColor;
-  outline-offset: 2px;
+  outline:2px solid currentColor;
+  outline-offset:2px;
 }
 
+/* =========================
+   Item Container & Answers
+   ========================= */
+.faq-item-{{ faq_uid }}{
+  transition: background-color .2s ease, border-color .2s ease;
+}
 
-
+.faq-item-{{ faq_uid }}:hover,
+.faq-item-{{ faq_uid }}.active{
+  background-color: {{ section.settings.question_background }} !important;
+  border-color: {{ section.settings.question_border_color }} !important;
+}
 
 /* Answer panel — height animation when enabled */
 .faq-answer-{{ faq_uid }}{
-  overflow: hidden;
-  height: 0; /* closed baseline */
+  overflow:hidden;
+  height:0; /* closed baseline */
 }
+
 {% if section.settings.enable_animation %}
 .faq-answer-{{ faq_uid }}{ transition: height .25s ease; }
 @media (prefers-reduced-motion: reduce){
-  .faq-answer-{{ faq_uid }}, .faq-icon-{{ faq_uid }}{ transition: none !important; }
+  .faq-answer-{{ faq_uid }}, .faq-icon-{{ faq_uid }}{ transition:none !important; }
 }
 {% endif %}
 
-/* Typography (fully inherit theme fonts) */
+/* =========================
+   Typography (inherit theme)
+   ========================= */
 .faq-subheading-{{ faq_uid }}{ margin:0; }
 .faq-heading-{{ faq_uid }}{
   margin:0;
-  font-weight: 600;
-  /* no font-weight or size overrides */
+  font-weight:600;
+  /* no extra size/weight overrides to keep theme defaults */
 }
-.faq-body-{{ faq_uid }} p{ margin: 0 0 1em; }
+.faq-body-{{ faq_uid }} p{ margin:0 0 1em; }
 
-/* Responsive */
+/* =========================
+   Responsive
+   ========================= */
 @media screen and (max-width: {{ settings.lap_container_width }}px){
   .faq-container-{{ faq_uid }}{ max-width: {{ settings.lap_container_width }}px; }
 }
@@ -294,22 +333,34 @@
 }
 @media (max-width: 768px){
   .faq-container-{{ faq_uid }}{
-    grid-template-columns: 1fr;
+    grid-template-columns:1fr;
     gap: {{ section.settings.mobile_gap }}px;
     padding-top: calc({{ section.settings.section_padding }}px * .8);
     padding-bottom: calc({{ section.settings.section_padding }}px * .8);
     padding-left: calc({{ settings.gutter_width }}px * .6);
     padding-right: calc({{ settings.gutter_width }}px * .6);
   }
-  .faq-content-{{ faq_uid }}{ text-align: {{ section.settings.mobile_text_alignment }}; }
+  .faq-content-{{ faq_uid }}{
+    text-align: {{ section.settings.mobile_text_alignment }};
+  }
 }
 
-/* SR-only utility */
+/* =========================
+   SR-only utility
+   ========================= */
 .sr-only{
-  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
-  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+  border:0;
 }
 </style>
+
 
 <script>
   (function() {
