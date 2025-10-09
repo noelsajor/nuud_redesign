@@ -153,7 +153,7 @@
         "background_color": "#fdf8e1",
         "background_gradient": "linear-gradient(135deg, rgba(255, 196, 225, 1), rgba(180, 213, 255, 1) 100%)",
         "section_padding_top": 80,
-        "section_padding_bottom": 120,
+        "section_padding_bottom": 80,
         "section_title": "",
         "title_color": "#881d3e",
         "title_size": 48,
