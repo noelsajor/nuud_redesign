@@ -560,9 +560,9 @@
       "type": "faq-section",
       "name": "FAQ section",
       "settings": {
-        "subheading": "NUUD Respond",
+        "subheading": "",
         "heading": "Frequently Asked Questions",
-        "body": "<p>Find answers to the most common questions about our products and services.</p>",
+        "body": "<p>Find answers to the most common questions about our products and services. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</p>",
         "question_1": "What is your return policy?",
         "answer_1": "<p>We offer a 30-day return policy for all unused items in their original packaging.</p>",
         "question_2": "How long does shipping take?",
@@ -676,7 +676,7 @@
       "settings": {
         "full": false,
         "spacing_both_ends": false,
-        "padding": "40,80",
+        "padding": "100,100",
         "margin": "0,0",
         "show_background_image": false,
         "background_style": "none",
