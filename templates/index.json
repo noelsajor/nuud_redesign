@@ -693,7 +693,7 @@
         "wave_amplitude": 25,
         "animate_waves": true,
         "wave_speed": 12,
-        "wave_bob": 8,
+        "wave_bob": 0,
         "extra_space": false,
         "extra_space_height": 40,
         "z_index": 1
