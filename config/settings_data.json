@@ -490,8 +490,6 @@
           "top_space": 0,
           "footer_bg_clr": "#a7e4b2",
           "color_opacity": 1,
-          "image_2": "shopify://shop_images/SpicyLove.png",
-          "image_3": "shopify://shop_images/for-him.webp",
           "image_4": "shopify://shop_images/for-her.webp",
           "show_footer_title": false,
           "footer_heading_clr": "#881d3e",
