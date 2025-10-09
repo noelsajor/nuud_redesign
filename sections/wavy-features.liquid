@@ -274,8 +274,14 @@
   display: flex;
   align-items: center;
   gap: var(--gap);
-  padding-right: var(--gap);
+  /* IMPORTANT: remove trailing padding that broke the seam */
+  /* padding-right: var(--gap); */ 
   white-space: nowrap;
+}
+/* Symmetric spacer so A↔B join is identical on both sides */
+.ticker__row::after{
+  content: "";
+  flex: 0 0 var(--gap);
 }
 
 /* Static fallback when animation is disabled */
@@ -284,8 +290,9 @@
   justify-content: center;
   flex-wrap: wrap;
   white-space: normal;
-  padding-right: 0;
+  /* no need for spacer when static */
 }
+.features-ticker:not(.ticker-animated) .ticker__row::after{ display:none; }
 
 /* Items */
 .feature-item{
@@ -302,7 +309,7 @@
 .feature-text, .feature-subtext{ margin:0; line-height:1.4; font-family: inherit; }
 .feature-subtext{ margin-top:4px; }
 
-/* The magic: move the two-row track by exactly half its own width */
+/* Move the two-row track by half its width (A+B) */
 @keyframes marquee{
   from { transform: translate3d(0,0,0); }
   to   { transform: translate3d(-50%,0,0); }
@@ -327,14 +334,9 @@
 @media (max-width: 768px){
   .section-title{  margin-bottom: 24px; }
   .feature-icon, .feature-icon-image{ width:48px; height:48px; }
-  .ticker__row {
-    flex-direction: column;
-    gap: 40px;
-  }
-  .ticker__row li {
-    flex-direction: column;
-    gap: 0;
-  }
+  .ticker__row { flex-direction: column; gap: 40px; }
+  .ticker__row li { flex-direction: column; gap: 0; }
+  /* keep spacer even in column to preserve identical halves */
 }
 @media (max-width: 480px){
   .features-ticker{ --gap: {{ section.settings.marquee_gap | default: 40 | times: 0.7 }}px; }
@@ -347,6 +349,7 @@
   .ticker__track{ animation:none !important; transform:none !important; }
 }
 </style>
+
 
 {% schema %}
 {
