@@ -425,8 +425,8 @@
 
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section:not(.swiper-wrapper) { margin: 0 auto 30px; gap: {{ section.settings.column_gap }}px; }
 
-.dt-sc-swiper-slider.swiper-container.swiper-container {
-  overflow: visible !important;
+.dt-sc-swiper-slider.swiper-container.swiper-container *[class*="swiper-container"] {
+  overflow: visible;
 }
 /* Typography / layout for items */
 #shopify-section-{{section.id}}.home-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial { display:flex; justify-content:space-between; }
