@@ -276,6 +276,72 @@
   border-color: {{ section.settings.question_border_color }} !important;
 }
 
+/* Force a true circle and prevent flex/grid stretch */
+.faq-question-row-{{ faq_uid }}{
+  display:flex;
+  align-items:center;           /* avoid stretch */
+  justify-content:space-between;
+  gap:12px;
+}
+
+/* Perfect circle + no stretching from parent */
+.faq-toggle-btn-{{ faq_uid }}{
+  --faq-btn-size: 44px;         /* adjust 40–48px as you like */
+  --faq-icon-size: 20px;
+
+  flex: 0 0 auto;               /* don't grow/shrink */
+  align-self: center;           /* center in the row */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: var(--faq-btn-size);
+  height: var(--faq-btn-size);
+  aspect-ratio: 1 / 1;          /* extra guard against ovals */
+  padding: 0;                    /* no padding math */
+  border: 0;
+  border-radius: 50%;
+  box-sizing: border-box;        /* borders won’t change size */
+  background: transparent;
+
+  color: {{ section.settings.icon_color }}; /* ensure visible by default */
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color .2s ease, color .2s ease, transform .25s ease, box-shadow .25s ease;
+  appearance: none;
+}
+
+/* Lock the SVG size and visibility */
+.faq-icon-{{ faq_uid }}{
+  width: var(--faq-icon-size);
+  height: var(--faq-icon-size);
+  flex: 0 0 auto;
+  display: block;
+  stroke: currentColor;          /* follows button color */
+  pointer-events: none;
+  transition: transform .25s ease, color .2s ease;
+}
+
+/* Hover/active states */
+.faq-toggle-btn-{{ faq_uid }}:hover{
+  background-color: #ff679a;
+  color: {{ section.settings.active_text_color }}; /* e.g., white so icon stays visible */
+}
+.faq-item-{{ faq_uid }}.active .faq-toggle-btn-{{ faq_uid }}{
+  background-color: #ff679a;
+  color: {{ section.settings.active_text_color }};
+}
+.faq-item-{{ faq_uid }}.active .faq-icon-{{ faq_uid }}{
+  transform: rotate(180deg);
+}
+
+/* Keyboard focus: accessible ring */
+.faq-toggle-btn-{{ faq_uid }}:focus-visible{
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+
 /* Answer panel — height animation when enabled */
 .faq-answer-{{ faq_uid }}{
   overflow: hidden;
