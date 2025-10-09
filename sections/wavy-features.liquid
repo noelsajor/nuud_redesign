@@ -343,6 +343,26 @@
 }
 
 .features-ticker { font-kerning: none; text-rendering: optimizeSpeed; }
+
+/* Fallback: always moves with -50% so it never “stops” if JS fails */
+.ticker-animated .ticker__track{
+  animation: marqueePercent var(--ticker-speed) linear infinite;
+}
+
+/* When JS measures distance, we flip to pixel-precise */
+.ticker-animated.px-ready .ticker__track{
+  animation: marqueePX var(--ticker-speed) linear infinite;
+}
+
+@keyframes marqueePercent{
+  from { transform: translate3d(0,0,0); }
+  to   { transform: translate3d(-50%,0,0); }
+}
+@keyframes marqueePX{
+  from { transform: translate3d(0,0,0); }
+  to   { transform: translate3d(calc(-1 * var(--distance, 0px)),0,0); }
+}
+
 </style>
 
 <script>
