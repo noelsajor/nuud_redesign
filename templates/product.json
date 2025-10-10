@@ -531,7 +531,7 @@
         "boxed_styles": "overall_boxed",
         "enable_box_shadow": false,
         "reverse_column": false,
-        "text_position": "text-start",
+        "text_position": "text-center",
         "quote_style": "no-quote-icon",
         "author_info_style": "style_2",
         "border_radius": "50%",
