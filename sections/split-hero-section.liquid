@@ -179,6 +179,7 @@ Compute RGBA for category card background (opacity controlled in settings)
         {% endif %}
       </div>
 
+      {% if section.settings.show_right_image %}
       <!-- Right column -->
       <div class="ai-split-section-right-{{ uid }}">
         <div class="ai-split-section-right-image-{{ uid }}">
@@ -201,6 +202,7 @@ Compute RGBA for category card background (opacity controlled in settings)
           {% endif %}
         </div>
       </div>
+      {% endif %}
     </div>
   </div>
 </section>
@@ -229,7 +231,10 @@ Compute RGBA for category card background (opacity controlled in settings)
 }
 .ai-split-section-container-{{ uid }}{
   max-width: 1200px; margin:0 auto;
-  display:grid; grid-template-columns: 1fr 1fr; gap:60px; align-items:center; min-height:400px;
+  display:grid;
+  grid-template-columns: {% if section.settings.show_right_image %}1fr 1fr{% else %}1fr{% endif %};
+  gap:{% if section.settings.show_right_image %}60px{% else %}32px{% endif %};
+  align-items:center; min-height:400px;
 }
 
 /* Left column text alignment */
@@ -438,13 +443,12 @@ Compute RGBA for category card background (opacity controlled in settings)
 }
 
 @media (max-width: 768px){
-  /* Stack areas in this order: heading → categories → image */
   .ai-split-section-container-{{ uid }}{
     display: grid;
     grid-template-columns: 1fr;
     grid-template-areas:
       "heading"
-      "image"
+      {% if section.settings.show_right_image %}"image"{% endif %}
       "categories";
     align-items: start;
     justify-items: stretch;   /* full width */
@@ -510,7 +514,8 @@ Compute RGBA for category card background (opacity controlled in settings)
     border-radius: 16px;
   }
 
-  /* Right image goes last, full width */
+  /* Right image goes last, full width — only if it exists */
+  {% if section.settings.show_right_image %}
   .ai-split-section-right-{{ uid }}{
     grid-area: image;
     display: block;
@@ -523,6 +528,7 @@ Compute RGBA for category card background (opacity controlled in settings)
     border-radius: {{ section.settings.right_image_radius }}px;
     overflow: hidden;
   }
+  {% endif %}
 
   /* Section padding a bit tighter on mobile */
   .ai-split-section-content-{{ uid }}{
@@ -530,7 +536,7 @@ Compute RGBA for category card background (opacity controlled in settings)
     min-height: auto;
   }
 
-    /* For real images */
+  /* For real images */
   .ai-split-section-category-image-{{ uid }} img{
     /* When overflow is enabled, this origin makes the scale “grow” upward */
     transform-origin: center bottom !important;
@@ -549,8 +555,6 @@ Compute RGBA for category card background (opacity controlled in settings)
     background: transparent;
   }
 }
-
-
 </style>
 
 <script>
@@ -708,6 +712,7 @@ Compute RGBA for category card background (opacity controlled in settings)
     { "type": "color", "id": "description_color", "label": "Description color", "default": "#666666" },
 
     { "type": "header", "content": "Right side image" },
+    { "type": "checkbox", "id": "show_right_image", "label": "Show right side image", "default": true },
     { "type": "image_picker", "id": "right_image", "label": "Right side image" },
     { "type": "range", "id": "right_image_radius", "min": 0, "max": 30, "step": 1, "unit": "px", "label": "Image border radius", "default": 8 },
     { "type": "checkbox", "id": "enable_float_animation", "label": "Enable floating animation", "default": true },
