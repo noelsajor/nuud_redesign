@@ -658,6 +658,31 @@
         "image_hover_rotate_deg": 6
       }
     },
+    "spacer_wave_AzjPHt": {
+      "type": "spacer-wave",
+      "name": "Wave Spacer (Animated)",
+      "settings": {
+        "use_gradient": false,
+        "background_color": "#ffd8d8",
+        "background_gradient": "linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 100%)",
+        "spacer_padding_top": 40,
+        "spacer_padding_bottom": 0,
+        "show_top_wave": true,
+        "show_bottom_wave": false,
+        "wave_color": "#ffd8d8",
+        "wave_overlap_top": 100,
+        "wave_overlap_bottom": 100,
+        "wave_shape": "medium",
+        "wave_frequency": 2,
+        "wave_amplitude": 25,
+        "animate_waves": true,
+        "wave_speed": 12,
+        "wave_bob": 8,
+        "extra_space": false,
+        "extra_space_height": 40,
+        "z_index": 1
+      }
+    },
     "home_testimonial_gBtfKW": {
       "type": "home-testimonial",
       "blocks": {
@@ -1072,6 +1097,7 @@
     "section_dwbELd",
     "spacer_wave_KYHWab",
     "split_hero_section_bWwYT8",
+    "spacer_wave_AzjPHt",
     "home_testimonial_gBtfKW",
     "spacer_wave_zA7HKx",
     "best_sellers_collections_4dwEN8",
