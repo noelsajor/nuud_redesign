@@ -866,7 +866,7 @@
       "name": "Best Sellers Collection",
       "settings": {
         "collection": "frontpage",
-        "products_to_show": 3,
+        "products_to_show": 4,
         "min_product_width": 275,
         "background_color": "#fdf8e1",
         "container_background_color": "rgba(0,0,0,0)",
