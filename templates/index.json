@@ -351,7 +351,7 @@
         "border_radius": "50%",
         "boxed_border_radius": "32",
         "column_gap": "32",
-        "content_width": "50/50",
+        "content_width": "",
         "lap_content_width": "20/80",
         "vertical_position": "vertical-center",
         "card_aspect_ratio": "1/1",
