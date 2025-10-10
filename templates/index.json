@@ -499,7 +499,7 @@
         "background_style": "parallax",
         "background_overlay_color": "#000000",
         "background_overlay_opacity": 0,
-        "image_overflow": 20,
+        "image_overflow": 80,
         "heading": "Shop By Category",
         "subheading": "",
         "body_text": "",
