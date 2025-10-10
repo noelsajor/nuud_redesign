@@ -337,6 +337,9 @@
   .ticker__row { flex-direction: column; gap: 40px; }
   .ticker__row li { flex-direction: column; gap: 0; }
   /* keep spacer even in column to preserve identical halves */
+  .features-wave-section waves-animated {
+    padding:240px 20px 20px 20px;
+  }
 }
 @media (max-width: 480px){
   .features-ticker{ --gap: {{ section.settings.marquee_gap | default: 40 | times: 0.7 }}px; }
