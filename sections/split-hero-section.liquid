@@ -137,10 +137,26 @@ Compute RGBA for category card background (opacity controlled in settings)
                             {{ 'collection-apparel-1' | placeholder_svg_tag }}
                           </div>
                         {% endif %}
+
+                        {% if show_title %}
+                          <!-- Visible overlay on hover/focus (no typography overrides) -->
+                          <div class="ai-category-title-overlay-{{ uid }}" aria-hidden="true">
+                            <span class="ai-category-title-text-{{ uid }}">
+                              {% if category_title != blank %}
+                                {{ category_title }}
+                              {% elsif category != blank %}
+                                {{ category.title }}
+                              {% else %}
+                                Category {{ i }}
+                              {% endif %}
+                            </span>
+                          </div>
+                        {% endif %}
                       </div>
 
                       {% if show_title %}
-                        <h4 class="ai-split-section-category-title-{{ uid }}">
+                        <!-- Semantic title for SEO and screen readers -->
+                        <h4 class="ai-sr-only-{{ uid }}">
                           {% if category_title != blank %}
                             {{ category_title }}
                           {% elsif category != blank %}
@@ -235,8 +251,6 @@ Compute RGBA for category card background (opacity controlled in settings)
   margin:0; line-height:1.6;
 }
 
-.ai-split-section-category-title-template--25476761125173splitherosectionb8mqce {font-weight: 600;}
-
 /* Categories alignment wrapper */
 .ai-split-section-categories-wrapper-{{ uid }}{
   display:flex;
@@ -274,6 +288,10 @@ Compute RGBA for category card background (opacity controlled in settings)
   background-color: {{ section.settings.category_hover_bg_color }};
   transform: translateY(-2px);
 }
+.ai-split-section-category-{{ uid }}:focus-visible{
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
 .ai-split-section-category-{{ uid }}--shadow{ box-shadow: 0 4px 12px rgba(0,0,0,.1); }
 .ai-split-section-category-{{ uid }}--shadow:hover{ box-shadow: 0 8px 24px rgba(0,0,0,.15); }
 
@@ -282,7 +300,7 @@ Compute RGBA for category card background (opacity controlled in settings)
   width:100%; aspect-ratio: {{ section.settings.category_aspect_ratio }};
   margin-bottom:8px; border-radius: {{ section.settings.category_image_radius }}px;
   background-color: {{ section.settings.category_image_bg_color }};
-  {% if section.settings.enable_image_overflow %}overflow:visible; position:relative;{% else %}overflow:hidden;{% endif %}
+  {% if section.settings.enable_image_overflow %}overflow:visible; position:relative;{% else %}overflow:hidden; position:relative;{% endif %}
 }
 .ai-split-section-category-image-{{ uid }} img{
   width:100%; height:100%; object-fit: {{ section.settings.image_fit }};
@@ -344,8 +362,45 @@ Compute RGBA for category card background (opacity controlled in settings)
 }
 .ai-split-section-category-placeholder-{{ uid }} svg{ width:30px; height:30px; opacity:.5; }
 
-/* Use theme typography by default */
-.ai-split-section-category-title-{{ uid }}{ margin:0; position:relative; z-index:3; }
+/* ==== HOVER TITLE OVERLAY (keeps theme typography) ==== */
+.ai-category-title-overlay-{{ uid }}{
+  position:absolute; inset:0;
+  display:flex; align-items:flex-end; justify-content:center;
+  padding:12px;
+  background: linear-gradient(0deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 60%);
+  opacity:0; transform: translateY(8px);
+  transition: opacity .35s cubic-bezier(.22,1,.36,1), transform .35s cubic-bezier(.22,1,.36,1);
+  pointer-events:none;
+  border-radius: {{ section.settings.category_image_radius }}px;
+}
+.ai-category-title-text-{{ uid }}{
+  color:#fff; text-align:center;
+}
+.ai-split-section-category-{{ uid }}:hover .ai-category-title-overlay-{{ uid }},
+.ai-split-section-category-{{ uid }}:focus-visible .ai-category-title-overlay-{{ uid }}{
+  opacity:1; transform: translateY(0);
+}
+/* Always show titles on touch devices with no hover */
+@media (hover: none){
+  .ai-category-title-overlay-{{ uid }}{ opacity:1; transform:none; }
+}
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .ai-category-title-overlay-{{ uid }}{ transition:none; }
+}
+
+/* Screen-reader-only helper */
+.ai-sr-only-{{ uid }}{
+  position:absolute !important;
+  width:1px !important;
+  height:1px !important;
+  padding:0 !important;
+  margin:-1px !important;
+  overflow:hidden !important;
+  clip: rect(0,0,0,0) !important;
+  white-space: nowrap !important;
+  border:0 !important;
+}
 
 /* Right image (floating) */
 .ai-split-section-right-{{ uid }}{ position:relative; }
@@ -388,12 +443,12 @@ Compute RGBA for category card background (opacity controlled in settings)
   .ai-split-section-container-{{ uid }}{
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-areas: 
+    grid-template-areas:
       "heading"
       "image"
       "categories";
     align-items: start;
-    justify-items: center; /* center items horizontally */
+    justify-items: center;
   }
 
   .ai-split-section-content-template--25476761125173splitherosectionb8mqce {
@@ -422,27 +477,26 @@ Compute RGBA for category card background (opacity controlled in settings)
   /* Right image in the middle row, centered */
   .ai-split-section-right-{{ uid }}{
     grid-area: image;
-    display: block; /* ensure visible on mobile */
+    display: block;
   }
   .ai-split-section-right-image-{{ uid }}{
-    max-width: 720px; /* optional cap */
+    max-width: 720px;
     width: 100%;
   }
 
   /* Categories last, centered */
   .ai-split-section-categories-wrapper-{{ uid }}{
     grid-area: categories;
-    justify-content: center; /* center the whole block */
+    justify-content: center;
     width: 100%;
   }
 
-  /* Make category grid single-column and centered (adjust as you like) */
+  /* Make category grid single/two-column on mobile */
   .ai-split-section-categories-{{ uid }}{
     display: grid;
-    grid-template-columns: 1fr, 2fr;
+    grid-template-columns: repeat({{ section.settings.categories_per_row_mobile }}, 1fr);
     gap: 12px;
     width: 100%;
-   
     margin: 0 auto;
   }
 
@@ -516,7 +570,7 @@ Compute RGBA for category card background (opacity controlled in settings)
 
       // Only hijack when the gesture is mostly horizontal
       if (Math.abs(dx) > Math.abs(dy)) {
-        e.preventDefault(); // allow horizontal drag without vertical scroll stealing
+        e.preventDefault();
         scroller.scrollLeft = startScroll - dx;
         if (Math.abs(dx) > 6) moved = true;
       }
