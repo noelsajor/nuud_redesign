@@ -51,7 +51,7 @@
         "inner_bg_color": "#ffd8d8",
         "inner_bg_radius": 32,
         "inner_bg_padding": 64,
-        "gallery_type": "thumbnails_horizontal",
+        "gallery_type": "thumbnails_hide",
         "vertical_style": "dt-sc-product-vertical-thumb-left",
         "enable_zoom": true,
         "zoom_type": "inner",
@@ -649,7 +649,7 @@
       "name": "Wave Spacer (Animated)",
       "settings": {
         "use_gradient": false,
-        "background_color": "transparent",
+        "background_color": "rgba(0,0,0,0)",
         "background_gradient": "linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 100%)",
         "spacer_padding_top": 0,
         "spacer_padding_bottom": 0,
