@@ -365,7 +365,7 @@
         "testimonial_quote_icon_color": "",
         "enable_slider": true,
         "enable_auto_height": true,
-        "items_per_view": 4,
+        "items_per_view": 3,
         "items_laptop_view": 3,
         "items_tablet_view": 1,
         "items_mobile_view": 1,
