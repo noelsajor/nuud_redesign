@@ -935,6 +935,27 @@
   /*------------------------------------------------------------*/
   /* Mobile Menu */
   /*------------------------------------------------------------*/
+
+  /* Mobile logo size override */
+@media (max-width: {{ section.settings.mobile_screen_width }}px) {
+  /* Image itself (overrides inline max-width on <img>) */
+  header #AccessibleNav .logo > a > img,
+  #header .sticky-header-active #AccessibleNav .logo > a > img {
+    max-width: 80px !important; /* ← set your mobile size */
+    height: auto;
+  }
+
+  /* Logo wrapper constraints when secondary menu is enabled */
+  .logo-alignment.secondary-menu-enabled #AccessibleNav > .logo {
+    max-width: 80px !important; /* match the image size */
+  }
+
+  /* General logo wrapper (covers other alignments) */
+  header #AccessibleNav .logo {
+    max-width: 80px !important;
+  }
+}
+
   .mobile-nav-container .menu-trigger { cursor: pointer; height: 30px; line-height: 30px; /* padding: 0 5px 0 10px;*/ }
   .mobile-nav-container .menu-trigger > i,
   .mobile-nav-container .menu-trigger > span { display: inline-block; font-size: 16px; padding: 0 5px; vertical-align: middle; }
