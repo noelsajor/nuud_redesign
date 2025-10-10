@@ -54,93 +54,95 @@ Heading size is not user-configurable; it follows theme defaults.
           {% endif %}
 
           <div class="category-showcase__grid">
-            {% for i in (1..3) %}
-              {% liquid
-                assign collection_key   = 'category_' | append: i | append: '_collection'
-                assign title_key        = 'category_' | append: i | append: '_title'
-                assign description_key  = 'category_' | append: i | append: '_description'
-                assign image_key        = 'category_' | append: i | append: '_image'
+  {% assign uid = section.id | replace: '_', '' | downcase %}
 
-                assign collection   = section.settings[collection_key]
-                assign custom_title = section.settings[title_key]
-                assign description  = section.settings[description_key]
-                assign image        = section.settings[image_key]
+  {% for i in (1..3) %}
+    {% liquid
+      assign collection_key   = 'category_' | append: i | append: '_collection'
+      assign title_key        = 'category_' | append: i | append: '_title'
+      assign description_key  = 'category_' | append: i | append: '_description'
+      assign image_key        = 'category_' | append: i | append: '_image'
 
-                if collection != blank
-                  assign category_url = collection.url
-                  assign category_title = collection.title
-                else
-                  assign category_url = '#'
-                  assign category_title = custom_title
-                endif
+      assign collection   = section.settings[collection_key]
+      assign custom_title = section.settings[title_key]
+      assign description  = section.settings[description_key]
+      assign image        = section.settings[image_key]
 
-                if custom_title != blank
-                  assign display_title = custom_title
-                else
-                  assign display_title = category_title
-                endif
-              %}
+      if collection != blank
+        assign category_url = collection.url
+        assign category_title = collection.title
+      else
+        assign category_url = '#'
+        assign category_title = custom_title
+      endif
 
-              <a href="{{ category_url }}" class="category-card" data-category="{{ i }}">
-                <div class="category-card__image-wrap">
-                  {% if image %}
-                    <img
-                      src="{{ image | image_url: width: 900 }}"
-                      srcset="
-                        {{ image | image_url: width: 480 }} 480w,
-                        {{ image | image_url: width: 720 }} 720w,
-                        {{ image | image_url: width: 900 }} 900w,
-                        {{ image | image_url: width: 1200 }} 1200w
-                      "
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      alt="{{ image.alt | escape }}"
-                      class="category-card__image"
-                      loading="lazy"
-                      width="{{ image.width }}"
-                      height="{{ image.height }}"
-                    >
-                  {% elsif collection and collection.featured_image %}
-                    <img
-                      src="{{ collection.featured_image | image_url: width: 900 }}"
-                      srcset="
-                        {{ collection.featured_image | image_url: width: 480 }} 480w,
-                        {{ collection.featured_image | image_url: width: 720 }} 720w,
-                        {{ collection.featured_image | image_url: width: 900 }} 900w,
-                        {{ collection.featured_image | image_url: width: 1200 }} 1200w
-                      "
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      alt="{{ collection.featured_image.alt | escape }}"
-                      class="category-card__image"
-                      loading="lazy"
-                      width="{{ collection.featured_image.width }}"
-                      height="{{ collection.featured_image.height }}"
-                    >
-                  {% else %}
-                    <div class="category-card__image-placeholder">
-                      {{ 'collection-1' | placeholder_svg_tag }}
-                      {% if collection == blank and custom_title == blank %}
-                        <div class="category-card__empty-state">Add a collection or title</div>
-                      {% endif %}
-                    </div>
-                  {% endif %}
+      if custom_title != blank
+        assign display_title = custom_title
+      else
+        assign display_title = category_title
+      endif
+    %}
 
-                  <div class="category-card__overlay">
-                    {% if display_title != blank %}
-                      <h3 class="category-card__title">{{ display_title }}</h3>
-                    {% endif %}
-                    {% if description != blank %}
-                      <p class="category-card__description">{{ description }}</p>
-                    {% endif %}
-                    <span class="category-card__cta">
-                      {{ section.settings.cta_text }}
-                      <span class="category-card__cta-arrow">→</span>
-                    </span>
-                  </div>
-                </div>
-              </a>
-            {% endfor %}
+    <a href="{{ category_url }}"
+       class="category-card ai-cat-{{ uid }}"
+       data-category="{{ i }}">
+      <div class="ai-cat__imgbox-{{ uid }}">
+        {% if image %}
+          <img
+            src="{{ image | image_url: width: 900 }}"
+            srcset="
+              {{ image | image_url: width: 480 }} 480w,
+              {{ image | image_url: width: 720 }} 720w,
+              {{ image | image_url: width: 900 }} 900w,
+              {{ image | image_url: width: 1200 }} 1200w
+            "
+            sizes="(max-width: 768px) 100vw, 33vw"
+            alt="{{ image.alt | escape }}"
+            loading="lazy"
+            width="{{ image.width }}"
+            height="{{ image.height }}"
+          >
+        {% elsif collection and collection.featured_image %}
+          <img
+            src="{{ collection.featured_image | image_url: width: 900 }}"
+            srcset="
+              {{ collection.featured_image | image_url: width: 480 }} 480w,
+              {{ collection.featured_image | image_url: width: 720 }} 720w,
+              {{ collection.featured_image | image_url: width: 900 }} 900w,
+              {{ collection.featured_image | image_url: width: 1200 }} 1200w
+            "
+            sizes="(max-width: 768px) 100vw, 33vw"
+            alt="{{ collection.featured_image.alt | escape }}"
+            loading="lazy"
+            width="{{ collection.featured_image.width }}"
+            height="{{ collection.featured_image.height }}"
+          >
+        {% else %}
+          <div class="ai-cat__placeholder-{{ uid }}">
+            {{ 'collection-1' | placeholder_svg_tag }}
+            {% if collection == blank and custom_title == blank %}
+              <div class="category-card__empty-state">Add a collection or title</div>
+            {% endif %}
           </div>
-        </div>
+        {% endif %}
+
+        {% comment %}
+          Hover/focus gradient overlay with title (keeps theme typography).
+          We intentionally do NOT render description/CTA here to match the new card style.
+        {% endcomment %}
+        {% if display_title != blank %}
+          <div class="ai-cat__overlay-{{ uid }}" aria-hidden="true">
+            <span class="ai-cat__title-{{ uid }}">
+              {{ display_title }}
+            </span>
+          </div>
+          <h4 class="ai-cat__sr-only-{{ uid }}">{{ display_title }}</h4>
+        {% endif %}
+      </div>
+    </a>
+  {% endfor %}
+</div>
+
 
         {% if section.settings.see_all_text != blank and section.settings.see_all_link != blank %}
           <div class="category-showcase__footer" data-align="{{ section.settings.text_alignment }}">
@@ -396,6 +398,84 @@ Heading size is not user-configurable; it follows theme defaults.
     transition: none !important;
   }
 }
+
+/* ==== Minimal styles for the new AI-style category cards (scoped) ==== */
+#shopify-section-{{ section.id }}.home-category-block .ai-cat-{{ uid }}{
+  /* reuse your card sizing/hover lift from .category-card */
+  border-radius: var(--radius);
+  overflow: visible;
+}
+
+#shopify-section-{{ section.id }}.home-category-block .ai-cat__imgbox-{{ uid }}{
+  position: relative;
+  height: calc(100% + var(--overflow));
+  margin-top: calc(-1 * var(--overflow));
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: {{ section.settings.card_background }};
+}
+
+#shopify-section-{{ section.id }}.home-category-block .ai-cat__imgbox-{{ uid }} img{
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: {{ section.settings.image_fit }};
+  transition: transform .45s cubic-bezier(.22,1,.36,1);
+}
+#shopify-section-{{ section.id }}.home-category-block .category-card:hover .ai-cat__imgbox-{{ uid }} img{
+  transform: scale(1.05) rotate(0.5deg);
+}
+
+/* Placeholder keeps previous empty-state behavior */
+#shopify-section-{{ section.id }}.home-category-block .ai-cat__placeholder-{{ uid }}{
+  width: 100%; height: 100%;
+  background: #f4f4f4;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius);
+  position: relative;
+}
+#shopify-section-{{ section.id }}.home-category-block .ai-cat__placeholder-{{ uid }} svg{
+  width: 80px; height: 80px; opacity: .5;
+}
+
+/* Gradient hover overlay with title */
+#shopify-section-{{ section.id }}.home-category-block .ai-cat__overlay-{{ uid }}{
+  position: absolute; inset: 0;
+  display: flex; align-items: flex-end; justify-content: center;
+  padding: 14px;
+  background: linear-gradient(0deg, rgba(0,0,0,.18) 0%, rgba(0,0,0,0) 60%);
+  opacity: 0; transform: translateY(10px);
+  transition: opacity .35s cubic-bezier(.22,1,.36,1), transform .35s cubic-bezier(.22,1,.36,1);
+  pointer-events: none;
+  border-radius: var(--radius);
+}
+#shopify-section-{{ section.id }}.home-category-block .ai-cat__title-{{ uid }}{
+  color: #fff;
+  font-weight: 600;
+  /* no font-family override -> respects theme typography */
+  font-size: {{ section.settings.title_size }}px;
+  text-align: center;
+  line-height: 1.2;
+}
+#shopify-section-{{ section.id }}.home-category-block .category-card:hover .ai-cat__overlay-{{ uid }},
+#shopify-section-{{ section.id }}.home-category-block .category-card:focus-visible .ai-cat__overlay-{{ uid }}{
+  opacity: 1; transform: translateY(0);
+}
+
+/* Always show overlay on touch-only devices */
+@media (hover: none){
+  #shopify-section-{{ section.id }}.home-category-block .ai-cat__overlay-{{ uid }}{
+    opacity: 1; transform: none;
+  }
+}
+
+/* Screen-reader-only title for accessibility */
+#shopify-section-{{ section.id }}.home-category-block .ai-cat__sr-only-{{ uid }}{
+  position:absolute!important; width:1px!important; height:1px!important;
+  padding:0!important; margin:-1px!important; overflow:hidden!important;
+  clip: rect(0,0,0,0)!important; white-space:nowrap!important; border:0!important;
+}
+
 </style>
 
 <script>
