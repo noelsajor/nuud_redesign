@@ -616,7 +616,7 @@
         "description_size": 16,
         "description_color": "#666666",
         "show_right_image": true,
-        "right_image": "shopify://shop_images/Rectangle_184.png",
+        "right_image": "shopify://shop_images/hero_BG.webp",
         "right_image_radius": 30,
         "enable_float_animation": false,
         "float_intensity": 12,
