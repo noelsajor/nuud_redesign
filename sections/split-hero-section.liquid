@@ -83,8 +83,12 @@ Compute RGBA for category card background (opacity controlled in settings)
   {% endif %}
 
   <div class="ai-split-section-content-{{ uid }}">
-    <div class="ai-split-section-container-{{ uid }}">
-      <!-- Left column -->
+    <div
+      class="ai-split-section-container-{{ uid }}"
+      data-order-desktop="{{ section.settings.columns_order_desktop }}"
+      data-order-mobile="{{ section.settings.columns_order_mobile }}"
+    >
+      <!-- Left (content) column -->
       <div class="ai-split-section-left-{{ uid }}">
         {% if section.settings.heading != blank %}
           <h1 class="ai-split-section-heading-{{ uid }}">{{ section.settings.heading }}</h1>
@@ -146,7 +150,6 @@ Compute RGBA for category card background (opacity controlled in settings)
                         {% endif %}
 
                         {% if show_title %}
-                          <!-- Visible overlay on hover/focus (no typography overrides) -->
                           <div class="ai-category-title-overlay-{{ uid }}" aria-hidden="true">
                             <span class="ai-category-title-text-{{ uid }}">
                               {% if category_title != blank %}
@@ -162,7 +165,6 @@ Compute RGBA for category card background (opacity controlled in settings)
                       </div>
 
                       {% if show_title %}
-                        <!-- Semantic title for SEO and screen readers -->
                         <h4 class="ai-sr-only-{{ uid }}">
                           {% if category_title != blank %}
                             {{ category_title }}
@@ -186,7 +188,7 @@ Compute RGBA for category card background (opacity controlled in settings)
         {% endif %}
       </div>
 
-      <!-- Right column: ALWAYS rendered to preserve 2-col grid -->
+      <!-- Right (image) column — always rendered to preserve 2-col grid -->
       <div class="ai-split-section-right-{{ uid }}{% unless has_right_image %} ai-split-section-right--off-{{ uid }}{% endunless %}">
         <div class="ai-split-section-right-image-{{ uid }}">
           {% if section.settings.show_right_image %}
@@ -200,7 +202,6 @@ Compute RGBA for category card background (opacity controlled in settings)
                 {% unless section.settings.enable_float_animation %}style="animation:none"{% endunless %}
               >
             {% else %}
-              <!-- Editor shows a placeholder when toggle is ON but no image set -->
               <div class="ai-split-section-right-placeholder-{{ uid }}">
                 {{ 'image' | placeholder_svg_tag }}
                 <div class="ai-split-section-empty-state-{{ uid }}">
@@ -209,12 +210,10 @@ Compute RGBA for category card background (opacity controlled in settings)
               </div>
             {% endif %}
           {% else %}
-            <!-- Toggle is OFF: keep column to preserve layout but hide visuals -->
             <div class="ai-sr-only-{{ uid }}" aria-hidden="true">Right image disabled</div>
           {% endif %}
         </div>
       </div>
-      <!-- /Right column -->
     </div>
   </div>
 </section>
@@ -242,19 +241,22 @@ Compute RGBA for category card background (opacity controlled in settings)
   min-height:500px;
 }
 
-/* ALWAYS keep two columns on desktop to avoid layout shift */
+/* Grid: always 2 columns on desktop; order controlled by data attribute */
 .ai-split-section-container-{{ uid }}{
   max-width: 1200px; margin:0 auto;
   display:grid;
   grid-template-columns: 1fr 1fr;
+  grid-template-areas: "left right";
   gap: 60px;
   align-items:center; min-height:400px;
 }
-
-/* Left column text alignment */
-.ai-split-section-left-{{ uid }}{
-  display:flex; flex-direction:column; gap:24px; text-align: {{ section.settings.content_alignment }};
+.ai-split-section-container-{{ uid }}[data-order-desktop="image-content"]{
+  grid-template-areas: "right left";
 }
+
+/* Assign areas */
+.ai-split-section-left-{{ uid }}{ grid-area: left; display:flex; flex-direction:column; gap:24px; text-align: {{ section.settings.content_alignment }}; }
+.ai-split-section-right-{{ uid }}{ grid-area: right; position:relative; }
 
 /* Typography (sizes/colors controlled by settings) */
 .ai-split-section-heading-{{ uid }}{
@@ -381,7 +383,7 @@ Compute RGBA for category card background (opacity controlled in settings)
 }
 .ai-split-section-category-placeholder-{{ uid }} svg{ width:30px; height:30px; opacity:.5; }
 
-/* ==== HOVER TITLE OVERLAY (keeps theme typography) ==== */
+/* Hover title overlay */
 .ai-category-title-overlay-{{ uid }}{
   position:absolute; inset:0;
   display:flex; align-items:flex-end; justify-content:center;
@@ -406,21 +408,7 @@ Compute RGBA for category card background (opacity controlled in settings)
   .ai-category-title-overlay-{{ uid }}{ transition:none; }
 }
 
-/* Screen-reader-only helper */
-.ai-sr-only-{{ uid }}{
-  position:absolute !important;
-  width:1px !important;
-  height:1px !important;
-  padding:0 !important;
-  margin:-1px !important;
-  overflow:hidden !important;
-  clip: rect(0,0,0,0) !important;
-  white-space: nowrap !important;
-  border:0 !important;
-}
-
 /* Right image (floating) */
-.ai-split-section-right-{{ uid }}{ position:relative; }
 .ai-split-section-right-image-{{ uid }}{
   width:100%; height:100%; min-height:400px; border-radius: {{ section.settings.right_image_radius }}px; overflow:hidden;
 }
@@ -442,7 +430,7 @@ Compute RGBA for category card background (opacity controlled in settings)
 
 /* When the right image is toggled OFF, keep the column space on desktop */
 .ai-split-section-right--off-{{ uid }}{
-  visibility: hidden;      /* preserves layout space */
+  visibility: hidden; /* preserves layout space */
   pointer-events: none;
   min-height: 0;
 }
@@ -453,7 +441,7 @@ Compute RGBA for category card background (opacity controlled in settings)
   50%{ transform: translateY(-{{ section.settings.float_intensity }}px); }
 }
 
-/* Respect reduced motion */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce){
   .ai-split-section-right-image-{{ uid }} img,
   .ai-split-section-right-placeholder-{{ uid }} svg{ animation:none !important; }
@@ -461,92 +449,27 @@ Compute RGBA for category card background (opacity controlled in settings)
   .ai-split-section-category-image-{{ uid }} img{ transition: none !important; }
 }
 
-/* Mobile layout */
+/* ===== Mobile stacking with configurable order ===== */
 @media (max-width: 768px){
   .ai-split-section-container-{{ uid }}{
-    display: grid;
     grid-template-columns: 1fr;
-    grid-template-areas:
-      "heading"
-      "image"
-      "categories";
-    align-items: start;
-    justify-items: stretch;
     gap: 20px;
   }
-
-  /* Let the left column's children participate in the grid areas */
-  .ai-split-section-left-{{ uid }}{
-    display: contents;
+  /* default mobile order */
+  .ai-split-section-container-{{ uid }}[data-order-mobile="content-image"]{
+    grid-template-areas:
+      "left"
+      "right";
+  }
+  .ai-split-section-container-{{ uid }}[data-order-mobile="image-content"]{
+    grid-template-areas:
+      "right"
+      "left";
   }
 
-  /* Heading block spans full width */
-  .ai-split-section-heading-{{ uid }},
-  .ai-split-section-subheading-{{ uid }},
-  .ai-split-section-description-{{ uid }}{
-    grid-area: heading;
-    text-align: left;
-    width: 100%;
-
-    font-size: clamp(2rem, 20vw, 4.5rem);
-    line-height: 1.1;
-    font-weight: 700;
-
-    line-height: 1;
-    word-break: keep-all;
-    overflow-wrap: normal;
-    hyphens: auto;
-  }
-
-  /* Categories now sit right after heading */
-  .ai-split-section-categories-wrapper-{{ uid }}{
-    grid-area: categories;
-    justify-content: center;
-    width: 100%;
-  }
-
-  /* Responsive grid using your mobile setting (1–3 columns) */
-  .ai-split-section-categories-{{ uid }}{
-    display: grid;
-    grid-template-columns: repeat({{ section.settings.categories_per_row_mobile }}, 1fr);
-    gap: 12px;
-    width: 100%;
-    margin: 0 auto;
-  }
-
-  .ai-split-section-category-{{ uid }}{
-    text-align: center;
-    padding: 4px;
-  }
-
-  .ai-split-section-category-image-{{ uid }}{
-    aspect-ratio: 1 / 1; /* override desktop ratio for mobile */
-    margin-bottom: 0;
-  }
-
-  .ai-category-title-overlay-{{ uid }}{
-    padding: 4px;
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.07) 0%, rgba(0,0,0,0) 55%);
-    border-radius: 16px;
-  }
-
-  /* Right image goes last, full width */
-  .ai-split-section-right-{{ uid }}{
-    grid-area: image;
-    display: block;
-    width: 100%;
-  }
-  .ai-split-section-right-image-{{ uid }}{
-    width: 100%;
-    max-width: none;
-    min-height: 320px;
-    border-radius: {{ section.settings.right_image_radius }}px;
-    overflow: hidden;
-  }
-
-  /* If right image is OFF, collapse it on mobile to avoid empty space */
+  /* Collapse the image column entirely on mobile when disabled */
   [data-has-right-image="false"] .ai-split-section-right-{{ uid }}{
-    display: none;
+    display:none;
   }
 
   .ai-split-section-content-{{ uid }}{
@@ -554,64 +477,8 @@ Compute RGBA for category card background (opacity controlled in settings)
     min-height: auto;
   }
 
-  .ai-split-section-category-image-{{ uid }} img{
-    transform-origin: center bottom !important;
-  }
-  .ai-split-section-category-placeholder-{{ uid }}{
-    transform-origin: center bottom !important;
-  }
+  .ai-split-section-category-image-{{ uid }}{ aspect-ratio: 1 / 1; }
 }
-
-/* === HOVER / OVERFLOW FIX PATCH === */
-.ai-split-section-container-{{ uid }}{
-  position: relative;     /* create a local stacking context */
-  overflow: visible;      /* allow card hovers to bleed if needed */
-}
-
-/* Make sure the content (cards) stacks above the image column */
-.ai-split-section-left-{{ uid }}{ position: relative; z-index: 3; }
-.ai-split-section-right-{{ uid }}{ position: relative; z-index: 2; }
-.ai-split-section-right-image-{{ uid }}{ z-index: 1; }
-
-/* Let the grid of cards and each card allow overflowed hover effects */
-.ai-split-section-categories-{{ uid }}{ overflow: visible; }
-.ai-split-section-category-{{ uid }}{
-  position: relative;     /* needed so z-index on hover works */
-  overflow: visible;      /* prevent clipping rotated/scaled image */
-  will-change: transform;
-}
-
-/* Lift hovered card above neighbors and force GPU compositing for smoothness */
-.ai-split-section-category-{{ uid }}:hover{
-  z-index: 5;
-  transform: translateY(-2px) translateZ(0);
-}
-
-/* Ensure the overlay sits above the image */
-.ai-category-title-overlay-{{ uid }}{ z-index: 4; }
-
-/* Restore conditional overflow + initial scale for the image box
-   so the “image overflow” setting behaves correctly */
-.ai-split-section-category-image-{{ uid }}{
-  overflow: {% if section.settings.enable_image_overflow %}visible{% else %}hidden{% endif %};
-}
-.ai-split-section-category-image-{{ uid }} img{
-  {% if section.settings.enable_image_overflow %}
-    transform: scale({{ section.settings.image_overflow_scale }});
-    {% case section.settings.image_overflow_direction %}
-      {% when 'top' %}transform-origin:center bottom;
-      {% when 'bottom' %}transform-origin:center top;
-      {% when 'left' %}transform-origin:right center;
-      {% when 'right' %}transform-origin:left center;
-      {% when 'top-left' %}transform-origin:right bottom;
-      {% when 'top-right' %}transform-origin:left bottom;
-      {% when 'bottom-left' %}transform-origin:right top;
-      {% when 'bottom-right' %}transform-origin:left top;
-      {% else %}transform-origin:center center;
-    {% endcase %}
-  {% endif %}
-}
-
 </style>
 
 <script>
@@ -752,6 +619,22 @@ Compute RGBA for category card background (opacity controlled in settings)
     { "type": "checkbox", "id": "enable_grad_color_4", "label": "Add color 4", "default": false },
     { "type": "color", "id": "grad_color_4", "label": "Gradient color 4", "default": "#a1c4fd" },
     { "type": "range", "id": "grad_stop_4", "label": "Stop 4 (%)", "min": 0, "max": 100, "step": 1, "default": 100, "unit": "%" },
+
+    { "type": "header", "content": "Layout order" },
+    { "type": "select", "id": "columns_order_desktop", "label": "Desktop columns order",
+      "options": [
+        { "value": "content-image", "label": "Content | Image" },
+        { "value": "image-content", "label": "Image | Content" }
+      ],
+      "default": "content-image"
+    },
+    { "type": "select", "id": "columns_order_mobile", "label": "Mobile order",
+      "options": [
+        { "value": "content-image", "label": "Content then Image" },
+        { "value": "image-content", "label": "Image then Content" }
+      ],
+      "default": "content-image"
+    },
 
     { "type": "header", "content": "Content" },
     { "type": "select", "id": "content_alignment", "label": "Content alignment",
