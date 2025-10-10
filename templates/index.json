@@ -55,7 +55,7 @@
         "category_aspect_ratio": "1/1",
         "image_fit": "contain",
         "enable_image_overflow": true,
-        "image_overflow_scale": 1.5,
+        "image_overflow_scale": 1,
         "image_overflow_direction": "top",
         "enable_category_1": true,
         "category_1": "",
