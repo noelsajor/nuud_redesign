@@ -545,7 +545,7 @@
         "button_margin": 40,
         "border_radius": 30,
         "card_aspect_ratio": "4/5",
-        "image_fit": "cover",
+        "image_fit": "contain",
         "custom_class_name": ""
       }
     },
