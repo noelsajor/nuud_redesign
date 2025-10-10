@@ -646,7 +646,7 @@
         "category_4": "frontpage",
         "category_4_image": "shopify://shop_images/all-nuud-sex-vape-pleasure-lubrication.png",
         "category_4_title": "All",
-        "show_category_4_title": false,
+        "show_category_4_title": true,
         "category_bg_color": "#ffffff",
         "category_bg_opacity": 12,
         "category_hover_bg_color": "#a7e4b2",
