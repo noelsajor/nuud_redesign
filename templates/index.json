@@ -601,7 +601,7 @@
         "enable_grad_color_4": false,
         "grad_color_4": "#fff650",
         "grad_stop_4": 100,
-        "content_alignment": "left",
+        "content_alignment": "center",
         "heading": "Our Main Categories",
         "heading_size": 80,
         "heading_color": "#ffffff",
