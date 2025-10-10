@@ -51,7 +51,7 @@
         "inner_bg_color": "#ffd8d8",
         "inner_bg_radius": 32,
         "inner_bg_padding": 64,
-        "gallery_type": "thumbnails_vertical",
+        "gallery_type": "thumbnails_hide",
         "vertical_style": "dt-sc-product-vertical-thumb-left",
         "enable_zoom": true,
         "zoom_type": "inner",
