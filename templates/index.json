@@ -618,7 +618,7 @@
         "show_right_image": true,
         "right_image": "shopify://shop_images/hero_BG.webp",
         "right_image_radius": 30,
-        "enable_float_animation": false,
+        "enable_float_animation": true,
         "float_intensity": 12,
         "float_duration": 4,
         "show_categories": true,
