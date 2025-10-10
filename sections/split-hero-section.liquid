@@ -298,7 +298,7 @@ Compute RGBA for category card background (opacity controlled in settings)
 /* Category image box */
 .ai-split-section-category-image-{{ uid }}{
   width:100%; aspect-ratio: {{ section.settings.category_aspect_ratio }};
-  margin-bottom:8px; border-radius: {{ section.settings.category_image_radius }}px;
+  margin-bottom:0; border-radius: {{ section.settings.category_image_radius }}px;
   background-color: {{ section.settings.category_image_bg_color }};
   {% if section.settings.enable_image_overflow %}overflow:visible; position:relative;{% else %}overflow:hidden; position:relative;{% endif %}
 }
