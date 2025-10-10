@@ -561,6 +561,57 @@ Compute RGBA for category card background (opacity controlled in settings)
     transform-origin: center bottom !important;
   }
 }
+
+/* === HOVER / OVERFLOW FIX PATCH === */
+.ai-split-section-container-{{ uid }}{
+  position: relative;     /* create a local stacking context */
+  overflow: visible;      /* allow card hovers to bleed if needed */
+}
+
+/* Make sure the content (cards) stacks above the image column */
+.ai-split-section-left-{{ uid }}{ position: relative; z-index: 3; }
+.ai-split-section-right-{{ uid }}{ position: relative; z-index: 2; }
+.ai-split-section-right-image-{{ uid }}{ z-index: 1; }
+
+/* Let the grid of cards and each card allow overflowed hover effects */
+.ai-split-section-categories-{{ uid }}{ overflow: visible; }
+.ai-split-section-category-{{ uid }}{
+  position: relative;     /* needed so z-index on hover works */
+  overflow: visible;      /* prevent clipping rotated/scaled image */
+  will-change: transform;
+}
+
+/* Lift hovered card above neighbors and force GPU compositing for smoothness */
+.ai-split-section-category-{{ uid }}:hover{
+  z-index: 5;
+  transform: translateY(-2px) translateZ(0);
+}
+
+/* Ensure the overlay sits above the image */
+.ai-category-title-overlay-{{ uid }}{ z-index: 4; }
+
+/* Restore conditional overflow + initial scale for the image box
+   so the “image overflow” setting behaves correctly */
+.ai-split-section-category-image-{{ uid }}{
+  overflow: {% if section.settings.enable_image_overflow %}visible{% else %}hidden{% endif %};
+}
+.ai-split-section-category-image-{{ uid }} img{
+  {% if section.settings.enable_image_overflow %}
+    transform: scale({{ section.settings.image_overflow_scale }});
+    {% case section.settings.image_overflow_direction %}
+      {% when 'top' %}transform-origin:center bottom;
+      {% when 'bottom' %}transform-origin:center top;
+      {% when 'left' %}transform-origin:right center;
+      {% when 'right' %}transform-origin:left center;
+      {% when 'top-left' %}transform-origin:right bottom;
+      {% when 'top-right' %}transform-origin:left bottom;
+      {% when 'bottom-left' %}transform-origin:right top;
+      {% when 'bottom-right' %}transform-origin:left top;
+      {% else %}transform-origin:center center;
+    {% endcase %}
+  {% endif %}
+}
+
 </style>
 
 <script>
