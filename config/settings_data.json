@@ -9,16 +9,16 @@
  */
 {
   "current": {
-    "favicon": "shopify://shop_images/fav.png",
+    "favicon": "shopify://shop_images/favicon.svg",
     "preloader_enable": true,
-    "preloader": "shopify://shop_images/Faryita-Loading-screen.gif",
+    "preloader": "shopify://shop_images/4M3umgpySN.gif",
     "enable_scroll_to_top": true,
     "enable_rtl": false,
     "container_width": 1250,
     "tab_container_width": 960,
     "fullwidth_gap": 6,
     "gutter_width": 30,
-    "overall_border_radius": 0,
+    "overall_border_radius": 24,
     "header_font": "bricolage_grotesque_n4",
     "h1_size": 96,
     "h2_size": 45,
@@ -157,6 +157,7 @@
     "text": "Just",
     "text1": "away from Free Shipping",
     "enable_this": true,
+    "rvp_limit": 3,
     "enable_fake_visitors": true,
     "min_count": 10,
     "max_count": 100,
