@@ -50,7 +50,7 @@
         "show_categories": true,
         "categories_alignment": "left",
         "categories_per_row": "3",
-        "categories_per_row_mobile": "2",
+        "categories_per_row_mobile": "3",
         "enable_category_shadow": false,
         "category_aspect_ratio": "1/1",
         "image_fit": "contain",
