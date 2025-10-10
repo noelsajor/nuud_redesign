@@ -366,7 +366,6 @@
 {% endunless %}
 
 <style>
-
   .shopify-payment-button__button--unbranded {
     background: #ff679a !important;
     color: white !important;
@@ -376,31 +375,21 @@
     border:none;
   }
 
-  .template-product
-  .product_payments_btns button,
-  .template-product
-  .product_payments_btns
-  .dt-sc-btn,
-  .template-product
-  .product-form__item--submit button {
+  .template-product .product_payments_btns button,
+  .template-product .product_payments_btns .dt-sc-btn,
+  .template-product .product-form__item--submit button {
     background:#2d0288;
     color: white;
   }
 
-  .dt-sc-qty {
-    gap: 16px ;
-  }
+  .dt-sc-qty { gap: 16px; }
 
-  .StickySidebar {
-    color: #881d3e;
-  }
-
+  .StickySidebar { color: #881d3e; }
 
   .dt-sc-accordion-container .dt-sc-accordion-btn {
     background: none;
     border-bottom: 2px solid #881d3e;
   }
-
 
   /* -------- Section Background (full width) -------- */
   #shopify-section-{{ section.id }}.main-product-template {
@@ -431,7 +420,7 @@
     padding: {{ section.settings.inner_bg_padding | default: 0 }}px;
   }
 
-  /* Decorative images */
+  /* Decorative images (send behind content + non-interactive) */
   #shopify-section-{{section.id}}.main-product-template:before{
     content: " ";
     position: absolute;
@@ -446,6 +435,8 @@
     top:-250px;
     left:0;
     animation: dt-swing ease-in-out 2s infinite alternate;
+    pointer-events: none;
+    z-index: -1; /* ensure behind gallery */
   }
 
   #shopify-section-{{section.id}}.main-product-template:after{
@@ -462,7 +453,8 @@
     bottom:0;
     left:0;
     animation: dt-swing ease-in-out 2s infinite alternate;
-    z-index: -1;
+    pointer-events: none;
+    z-index: -1; /* already behind, keep consistent */
   }
 
   #shopify-product-reviews .spr-container *{color:var(--DT_Blog_Button_Text_Color);}
@@ -471,8 +463,10 @@
 
   .product-single__media model-viewer { margin: 0 auto; width: auto;}
 
-  .main-swiper-container.swiper-gallery-inline-slider .swiper-slide { pointer-events:none; }
-  .main-swiper-container.swiper-gallery-inline-slider .swiper-slide.swiper-slide-active { pointer-events:all; }
+  /* Previously disabled pointer events on non-active slides can block interactions.
+     We'll restore pointer events for inline sliders to keep media clickable. */
+  .main-swiper-container.swiper-gallery-inline-slider .swiper-slide { pointer-events:auto; }
+  .main-swiper-container.swiper-gallery-inline-slider .swiper-slide.swiper-slide-active { pointer-events:auto; }
 
   .main-product-template .product-item-caption-qty, .main-product-template .cart_table .qty-box-set { border:none; }
 
@@ -494,6 +488,42 @@
   @keyframes dt-swing {
     0% { transform: translateY(15px); }
     100% { transform: translateY(-15px); }
+  }
+
+  /* ---- FIXES: Keep gallery above background shapes ---- */
+  #shopify-section-{{section.id}} .product-page-row,
+  #shopify-section-{{section.id}} .product-gallery-{{ section.id }}{
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---- FIXES: Predictable media sizing (no stretching) ---- */
+  #shopify-section-{{section.id}} .product-item-wrap img,
+  #shopify-section-{{section.id}} .product-item-wrap video,
+  #shopify-section-{{section.id}} .product-item-wrap .shopify-model-viewer-ui,
+  #shopify-section-{{section.id}} .product-item-wrap model-viewer {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    display: block;
+  }
+
+  /* Keep images contained within the slide without cropping */
+  #shopify-section-{{section.id}} .product-item-wrap .swiper-slide img{
+    object-fit: contain;
+  }
+
+  /* Optional: stabilize and standardize slide stage ratio */
+  #shopify-section-{{section.id}} .product-item-wrap .swiper-slide{
+    aspect-ratio: 1 / 1; /* adjust to 3/4 or 4/5 if your catalog is taller */
+  }
+
+  /* ---- FIXES: Avoid zero-height while media lazy-loads ---- */
+  #product-gallery .product-item-wrap{
+    min-height: 360px;
+  }
+  @media (max-width: 767px){
+    #product-gallery .product-item-wrap{ min-height: 280px; }
   }
 </style>
 
@@ -528,7 +558,6 @@
 
 /* ---- Accordion/Tabs: transparent header + colored bottom border ---- */
 #shopify-section-{{ section.id }} .product-tab{
-  /* customize this to your brand color; falls back to theme border */
   --accordion-line: var(--DTColor_Border, #e5e5e5);
 }
 
@@ -559,7 +588,6 @@
 /* Optional: remove the line on the last header
 #shopify-section-{{ section.id }} .product-tab details:last-of-type > summary{ border-bottom: 0; }
 */
-
 </style>
 
 <script>
@@ -567,15 +595,15 @@
     $(".tablinks").on("click", function(){
       $(".dt-sc-tabs").toggleClass("expanded");
     });
-  });
 
-  // Update subtotal when quantity changes
-  $('.quantity-btn-number').on('change', function() {
-    var qty = parseFloat($('.quantity-btn-number').val()) || 1;
-    var priceText = $('.product-price-current span').text();
-    var numeric = priceText.replace(/[^0-9.]/g, '');
-    var subtotal = qty * parseFloat(numeric || 0);
-    $('.sub-total strong').html(Shopify.formatMoney((subtotal*100), DT_THEME.moneyFormat));
+    // Update subtotal when quantity changes
+    $('.quantity-btn-number').on('change', function() {
+      var qty = parseFloat($('.quantity-btn-number').val()) || 1;
+      var priceText = $('.product-price-current span').text();
+      var numeric = priceText.replace(/[^0-9.]/g, '');
+      var subtotal = qty * parseFloat(numeric || 0);
+      $('.sub-total strong').html(Shopify.formatMoney((subtotal*100), DT_THEME.moneyFormat));
+    });
   });
 </script>
 
