@@ -464,6 +464,9 @@ Compute RGBA for category card background (opacity controlled in settings)
     text-align: left;
     width: 100%;
     line-height: 1;
+    word-break: keep-all;     /* prefer not breaking inside words */
+  overflow-wrap: normal;    /* don't force breaks in long tokens */
+  hyphens: none;
    
 
   }
