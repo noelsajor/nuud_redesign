@@ -557,7 +557,7 @@
         "padding_top": 120,
         "padding_bottom": 40,
         "image_alignment": "center",
-        "background_effect": "none",
+        "background_effect": "parallax",
         "use_gradient": true,
         "background_color": "#ff679a",
         "grad_type": "linear",
