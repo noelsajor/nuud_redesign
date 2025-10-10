@@ -519,10 +519,18 @@ Compute RGBA for category card background (opacity controlled in settings)
     padding: 28px 16px 40px 16px;
     min-height: auto;
   }
+
+    /* For real images */
+  .ai-split-section-category-image-{{ uid }} img{
+    /* When overflow is enabled, this origin makes the scale “grow” upward */
+    transform-origin: center bottom !important;
+  }
+
+  /* For placeholder SVG box too */
+  .ai-split-section-category-placeholder-{{ uid }}{
+    transform-origin: center bottom !important;
+  }
 }
-
-
-
 </style>
 
 <script>
