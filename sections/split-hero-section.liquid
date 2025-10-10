@@ -37,6 +37,7 @@ Compute RGBA for category card background (opacity controlled in settings)
   id="split-hero-{{ uid }}"
   class="ai-split-section-{{ uid }}"
   data-bg-effect="{{ section.settings.background_effect }}"
+  data-show-right-image="{{ section.settings.show_right_image }}"
   style="
     {% if section.settings.use_gradient and gradient_bg != blank %}
       background: {{ gradient_bg | strip | strip_newlines }};
@@ -49,6 +50,8 @@ Compute RGBA for category card background (opacity controlled in settings)
     --hover-rotate-deg: {{ section.settings.image_hover_rotate_deg }}deg;
   "
 >
+  <!-- show_right_image: {{ section.settings.show_right_image }} -->
+
   {% if section.settings.background_image %}
     <div class="ai-split-section-bg-{{ uid }} ai-split-section-bg-{{ uid }}--{{ section.settings.background_effect }}">
       {% if section.settings.background_effect == 'fixed' %}
@@ -76,7 +79,14 @@ Compute RGBA for category card background (opacity controlled in settings)
   {% endif %}
 
   <div class="ai-split-section-content-{{ uid }}">
-    <div class="ai-split-section-container-{{ uid }}">
+    <div
+      class="ai-split-section-container-{{ uid }}"
+      style="
+        max-width: 1200px; margin:0 auto; display:grid; align-items:center; min-height:400px;
+        grid-template-columns: {% if section.settings.show_right_image %}1fr 1fr{% else %}1fr{% endif %};
+        gap: {% if section.settings.show_right_image %}60px{% else %}32px{% endif %};
+      "
+    >
       <!-- Left column -->
       <div class="ai-split-section-left-{{ uid }}">
         {% if section.settings.heading != blank %}
@@ -139,7 +149,7 @@ Compute RGBA for category card background (opacity controlled in settings)
                         {% endif %}
 
                         {% if show_title %}
-                          <!-- Visible overlay on hover/focus (no typography overrides) -->
+                          <!-- Visible overlay on hover/focus -->
                           <div class="ai-category-title-overlay-{{ uid }}" aria-hidden="true">
                             <span class="ai-category-title-text-{{ uid }}">
                               {% if category_title != blank %}
@@ -229,20 +239,13 @@ Compute RGBA for category card background (opacity controlled in settings)
   padding: {{ section.settings.padding_top }}px 20px {{ section.settings.padding_bottom }}px 20px;
   min-height:500px;
 }
-.ai-split-section-container-{{ uid }}{
-  max-width: 1200px; margin:0 auto;
-  display:grid;
-  grid-template-columns: {% if section.settings.show_right_image %}1fr 1fr{% else %}1fr{% endif %};
-  gap:{% if section.settings.show_right_image %}60px{% else %}32px{% endif %};
-  align-items:center; min-height:400px;
-}
 
 /* Left column text alignment */
 .ai-split-section-left-{{ uid }}{
   display:flex; flex-direction:column; gap:24px; text-align: {{ section.settings.content_alignment }};
 }
 
-/* Theme typography (sizes/colors controlled by settings) */
+/* Typography sizes/colors controlled by settings */
 .ai-split-section-heading-{{ uid }}{
   font-size: {{ section.settings.heading_size }}px; color: {{ section.settings.heading_color }};
   margin:0; line-height:1.2; font-weight: 800 ;
@@ -328,7 +331,7 @@ Compute RGBA for category card background (opacity controlled in settings)
   {% endif %}
 }
 
-/* Subtle rotation on hover */
+/* Hover rotation */
 .ai-split-section-category-{{ uid }}:hover .ai-split-section-category-image-{{ uid }} img{
   {% if section.settings.enable_image_hover_rotate %}
     {% if section.settings.enable_image_overflow %}
@@ -367,7 +370,7 @@ Compute RGBA for category card background (opacity controlled in settings)
 }
 .ai-split-section-category-placeholder-{{ uid }} svg{ width:30px; height:30px; opacity:.5; }
 
-/* ==== HOVER TITLE OVERLAY (keeps theme typography) ==== */
+/* Hover title overlay */
 .ai-category-title-overlay-{{ uid }}{
   position:absolute; inset:0;
   display:flex; align-items:flex-end; justify-content:center;
@@ -378,14 +381,9 @@ Compute RGBA for category card background (opacity controlled in settings)
   pointer-events:none;
   border-radius: {{ section.settings.category_image_radius }}px;
 }
-.ai-category-title-text-{{ uid }}{
-  color:#fff; text-align:center; font-family: 'Bricolage Grotesque'; font-size: 32px; font-weight:600;
-}
-.ai-split-section-category-{{ uid }}:hover .ai-category-title-overlay-{{ uid }},
-.ai-split-section-category-{{ uid }}:focus-visible .ai-category-title-overlay-{{ uid }}{
-  opacity:1; transform: translateY(0);
-}
-/* Always show titles on touch devices with no hover */
+.ai-category-title-text-{{ uid }}{ color:#fff; text-align:center; }
+
+/* Touch devices always show overlay */
 @media (hover: none){
   .ai-category-title-overlay-{{ uid }}{ opacity:1; transform:none; }
 }
@@ -434,6 +432,11 @@ Compute RGBA for category card background (opacity controlled in settings)
   50%{ transform: translateY(-{{ section.settings.float_intensity }}px); }
 }
 
+/* Safety net: if the toggle is off, hide right column even if markup leaked */
+.ai-split-section-{{ uid }}[data-show-right-image="false"] .ai-split-section-right-{{ uid }}{
+  display:none !important;
+}
+
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce){
   .ai-split-section-right-image-{{ uid }} img,
@@ -442,51 +445,40 @@ Compute RGBA for category card background (opacity controlled in settings)
   .ai-split-section-category-image-{{ uid }} img{ transition: none !important; }
 }
 
+/* Mobile layout controlled by data attribute */
 @media (max-width: 768px){
-  .ai-split-section-container-{{ uid }}{
-    display: grid;
+  .ai-split-section-{{ uid }} .ai-split-section-container-{{ uid }}{
     grid-template-columns: 1fr;
-    grid-template-areas:
-      "heading"
-      {% if section.settings.show_right_image %}"image"{% endif %}
-      "categories";
+    grid-template-areas: "heading" "categories";
     align-items: start;
-    justify-items: stretch;   /* full width */
-    gap: 20px;                /* tighter, mobile-friendly spacing */
+    justify-items: stretch;
+    gap: 20px;
+  }
+  .ai-split-section-{{ uid }}[data-show-right-image="true"] .ai-split-section-container-{{ uid }}{
+    grid-template-areas: "heading" "image" "categories";
   }
 
-  /* Let the left column's children participate in the grid areas */
-  .ai-split-section-left-{{ uid }}{
-    display: contents;
-  }
+  .ai-split-section-left-{{ uid }}{ display: contents; }
 
-  /* Heading block spans full width */
   .ai-split-section-heading-{{ uid }},
   .ai-split-section-subheading-{{ uid }},
   .ai-split-section-description-{{ uid }}{
     grid-area: heading;
     text-align: left;
     width: 100%;
-
-    font-size: clamp(2rem, 20vw, 4.5rem);
-    line-height: 1.1;
+    line-height: 1.2;
     font-weight: 700;
-    
-    line-height: 1;
-    word-break: keep-all;     /* prefer not breaking inside words */
-    overflow-wrap: normal;    /* don't force breaks in long tokens */
-    hyphens: auto; 
-
+    word-break: keep-all;
+    overflow-wrap: normal;
+    hyphens: auto;
   }
 
-  /* Categories now sit right after heading */
   .ai-split-section-categories-wrapper-{{ uid }}{
     grid-area: categories;
-    justify-content: center;   /* center the grid within the container */
+    justify-content: center;
     width: 100%;
   }
 
-  /* Responsive grid using your mobile setting (1 or 2 columns) */
   .ai-split-section-categories-{{ uid }}{
     display: grid;
     grid-template-columns: repeat({{ section.settings.categories_per_row_mobile }}, 1fr);
@@ -495,65 +487,35 @@ Compute RGBA for category card background (opacity controlled in settings)
     margin: 0 auto;
   }
 
-  /* Make each card comfy on touch */
-  .ai-split-section-category-{{ uid }}{
-    text-align: center;
-    padding: 4px;
-  }
+  .ai-split-section-category-{{ uid }}{ text-align: center; padding: 4px; }
 
-  /* Slightly squarer images read better on small screens */
   .ai-split-section-category-image-{{ uid }}{
-    aspect-ratio: 1 / 1; /* override desktop ratio for mobile */
+    aspect-ratio: 1 / 1;
     margin-bottom: 0;
   }
 
-  /* Keep the overlay text comfortably sized without overriding theme fonts */
   .ai-category-title-overlay-{{ uid }}{
     padding: 4px;
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.07) 0%, rgba(0,0,0,0) 55%);
     border-radius: 16px;
   }
 
-  /* Right image goes last, full width — only if it exists */
-  {% if section.settings.show_right_image %}
-  .ai-split-section-right-{{ uid }}{
-    grid-area: image;
-    display: block;
-    width: 100%;
-  }
+  .ai-split-section-right-{{ uid }}{ grid-area: image; display:block; width:100%; }
   .ai-split-section-right-image-{{ uid }}{
     width: 100%;
-    max-width: none;   /* allow full width */
-    min-height: 320px; /* a bit shorter on mobile */
+    max-width: none;
+    min-height: 320px;
     border-radius: {{ section.settings.right_image_radius }}px;
     overflow: hidden;
   }
-  {% endif %}
 
-  /* Section padding a bit tighter on mobile */
   .ai-split-section-content-{{ uid }}{
     padding: 28px 16px 40px 16px;
     min-height: auto;
   }
 
-  /* For real images */
-  .ai-split-section-category-image-{{ uid }} img{
-    /* When overflow is enabled, this origin makes the scale “grow” upward */
-    transform-origin: center bottom !important;
-  }
-
-  /* For placeholder SVG box too */
-  .ai-split-section-category-placeholder-{{ uid }}{
-    transform-origin: center bottom !important;
-  }
-
-  .ai-category-title-text-template--25476761125173splitherosectionb8mqce {
-    font-size: 20px;
-  }
-
-  .ai-category-title-text-template--25476761125173splitherosectionb8mqce {
-    background: transparent;
-  }
+  .ai-split-section-category-image-{{ uid }} img{ transform-origin: center bottom !important; }
+  .ai-split-section-category-placeholder-{{ uid }}{ transform-origin: center bottom !important; }
 }
 </style>
 
@@ -583,12 +545,10 @@ Compute RGBA for category card background (opacity controlled in settings)
     var scroller = section.querySelector('.ai-split-section-categories-{{ uid }}');
     if (!scroller) return;
 
-    // Ensure momentum on iOS
     scroller.style.webkitOverflowScrolling = 'touch';
 
     var isPointerDown = false, startX = 0, startY = 0, startScroll = 0, moved = false;
 
-    // Pointer events (modern browsers)
     scroller.addEventListener('pointerdown', function(e){
       isPointerDown = true; moved = false;
       startX = e.clientX; startY = e.clientY; startScroll = scroller.scrollLeft;
@@ -618,7 +578,6 @@ Compute RGBA for category card background (opacity controlled in settings)
       var dx = e.touches[0].pageX - startX;
       var dy = e.touches[0].pageY - startY;
 
-      // Only hijack when the gesture is mostly horizontal
       if (Math.abs(dx) > Math.abs(dy)) {
         e.preventDefault();
         scroller.scrollLeft = startScroll - dx;
@@ -626,7 +585,7 @@ Compute RGBA for category card background (opacity controlled in settings)
       }
     }, { passive: false });
 
-    scroller.addEventListener('touchend', function(){ /* momentum continues */ }, { passive: true });
+    scroller.addEventListener('touchend', function(){}, { passive: true });
 
     // Prevent accidental link taps while dragging
     scroller.addEventListener('click', function(e){
@@ -717,7 +676,7 @@ Compute RGBA for category card background (opacity controlled in settings)
     { "type": "range", "id": "right_image_radius", "min": 0, "max": 30, "step": 1, "unit": "px", "label": "Image border radius", "default": 8 },
     { "type": "checkbox", "id": "enable_float_animation", "label": "Enable floating animation", "default": true },
     { "type": "range", "id": "float_intensity", "min": 5, "max": 30, "step": 1, "unit": "px", "label": "Float intensity", "default": 15 },
-    { "type": "range", "id": "float_duration", "min": 2, "max": 8, "step": 1, "unit": "s", "label": "Float duration", "default": 4 },
+    { "type": "range", "id": "float_duration", "min": 2, "max": 8, "step": 1, "label": "Float duration (seconds)", "default": 4 },
 
     { "type": "header", "content": "Categories" },
     { "type": "checkbox", "id": "show_categories", "label": "Show categories", "default": true },
