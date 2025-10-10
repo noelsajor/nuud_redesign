@@ -19,6 +19,8 @@
     <!-- content for header -->
     {{ content_for_header }}       
     <!-- content for header -->
+    {%- comment -%} Load our reset AFTER the main CSS so it wins the cascade {%- endcomment -%}
+    {{ 'seo-html.css' | asset_url | stylesheet_tag }}
   </head>
   <body id="{{ page_title | handle }}" class="{% if settings.enable_rtl %}rtl-enabled{% endif %} {% if customer %}customer-logged-in {% endif %}template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }} {% unless tempate contains 'index' %} others {% endunless %}">
 
