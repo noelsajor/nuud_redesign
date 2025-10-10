@@ -29,11 +29,54 @@
             {%- assign product_images_length = product.media | size -%}
 
             <div class="product-page-row">
-              <div class="product_images_length-{{product_images_length}} {{ product_image_width }} product-gallery-{{ section.id }} sidebar-sticky zoom-type-{{ section.settings.zoom_type}}" id="product-gallery" data-zoom-method="{{ section.settings.zoom_type }}">
-                <div class="product-item-wrap slider-{{ section.id }} {% if section.settings.gallery_type == 'thumbnails_vertical' %} swiper-gallery-vertical {{ section.settings.vertical_style }}{% endif %} {% if section.settings.gallery_type == 'thumbnails_horizontal' %} swiper-gallery-inline{% endif %}" id="slider" data-dT_media_group>
-                  {% render 'thumbnails' %}
+              <!-- ===================== REPLACED GALLERY START ===================== -->
+              <div class="product_images_length-{{product_images_length}} {{ product_image_width }} product-gallery-{{ section.id }}" id="product-gallery" data-zoom-method="{{ section.settings.zoom_type }}">
+                <div class="product-media product-media-{{ section.id }}">
+                  {%- assign initial_media = product.selected_or_first_available_variant.featured_media | default: product.featured_media -%}
+
+                  <!-- MAIN STAGE -->
+                  <div class="product-media__main" id="FeaturedMedia-{{ section.id }}" data-current-media-id="{{ initial_media.id }}">
+                    {%- if initial_media.media_type == 'image' -%}
+                      {{ initial_media | image_url: width: 1600 | image_tag:
+                          loading: 'eager',
+                          fetchpriority: 'high',
+                          sizes: '(min-width: 992px) 700px, 100vw',
+                          widths: '700,900,1200,1600',
+                          class: 'product-media__img' }}
+                    {%- elsif initial_media.media_type == 'video' or initial_media.media_type == 'external_video' -%}
+                      {{ initial_media | video_tag: controls: true, class: 'product-media__video' }}
+                    {%- elsif initial_media.media_type == 'model' -%}
+                      {{ initial_media | model_viewer_tag: class: 'product-media__model' }}
+                    {%- endif -%}
+                  </div>
+
+                  <!-- THUMBNAILS -->
+                  <div class="product-media__thumbs" role="list" aria-label="Product media thumbnails">
+                    {%- for media in product.media -%}
+                      <button
+                        type="button"
+                        class="product-media__thumb{% if media.id == initial_media.id %} is-active{% endif %}"
+                        role="listitem"
+                        aria-current="{% if media.id == initial_media.id %}true{% else %}false{% endif %}"
+                        data-media-id="{{ media.id }}"
+                        data-media-type="{{ media.media_type }}"
+                        aria-label="Show media {{ forloop.index }}"
+                      >
+                        {%- if media.media_type == 'image' -%}
+                          {{ media | image_url: width: 240 | image_tag: loading: 'lazy', widths: '120,160,240', class: 'product-media__thumb-img' }}
+                        {%- elsif media.media_type == 'video' or media.media_type == 'external_video' -%}
+                          {{ media | image_url: width: 240 | image_tag: loading: 'lazy', widths: '120,160,240', class: 'product-media__thumb-img' }}
+                          <span class="product-media__thumb-badge" aria-hidden="true">▶</span>
+                        {%- elsif media.media_type == 'model' -%}
+                          {{ media | image_url: width: 240 | image_tag: loading: 'lazy', widths: '120,160,240', class: 'product-media__thumb-img' }}
+                          <span class="product-media__thumb-badge" aria-hidden="true">3D</span>
+                        {%- endif -%}
+                      </button>
+                    {%- endfor -%}
+                  </div>
                 </div>
               </div>
+              <!-- ===================== REPLACED GALLERY END ===================== -->
 
               <div class="product-description-product-template product-description-{{ section.id }} sidebar-sticky" id="product-description">
                 <div class="product-item-caption-white sidebar_{{ section.id }}" id="sidebar">
@@ -366,8 +409,6 @@
 {% endunless %}
 
 <style>
-
-  
   .shopify-payment-button__button--unbranded {
     background: #ff679a !important;
     color: white !important;
@@ -465,33 +506,6 @@
 
   .product-single__media model-viewer { margin: 0 auto; width: auto;}
 
-  /* Previously disabled pointer events on non-active slides can block interactions.
-     We'll restore pointer events for inline sliders to keep media clickable. */
-  .main-swiper-container.swiper-gallery-inline-slider .swiper-slide { pointer-events:auto; }
-  .main-swiper-container.swiper-gallery-inline-slider .swiper-slide.swiper-slide-active { pointer-events:auto; }
-
-  .main-product-template .product-item-caption-qty, .main-product-template .cart_table .qty-box-set { border:none; }
-
-  @media only screen and (max-width:576px){
-    .dt-sc-tabs .tablinks{display:none;border-bottom:1px solid;}
-    .dt-sc-tabs .active{display:block;}
-    .expanded .tablinks{display:block;}
-  }
-
-  @media only screen and (max-width:991px) {
-    #shopify-section-{{section.id}}.main-product-template:before{
-      width:400px !important;height:500px !important;background-size:contain !important;
-    }
-    #shopify-section-{{section.id}}.main-product-template:after{
-      width:200px !important;height:300px !important;background-size:contain !important;
-    }
-  }
-
-  @keyframes dt-swing {
-    0% { transform: translateY(15px); }
-    100% { transform: translateY(-15px); }
-  }
-
   /* ---- FIXES: Keep gallery above background shapes ---- */
   #shopify-section-{{section.id}} .product-page-row,
   #shopify-section-{{section.id}} .product-gallery-{{ section.id }}{
@@ -527,6 +541,92 @@
   @media (max-width: 767px){
     #product-gallery .product-item-wrap{ min-height: 280px; }
   }
+
+  @keyframes dt-swing {
+    0% { transform: translateY(15px); }
+    100% { transform: translateY(-15px); }
+  }
+
+  /* ================= SIMPLE PRODUCT GALLERY (NEW) ================= */
+  #shopify-section-{{ section.id }} .product-media {
+    display: grid;
+    gap: 16px;
+  }
+  #shopify-section-{{ section.id }} .product-media__main {
+    width: 100%;
+    position: relative;
+    background: transparent;
+  }
+  #shopify-section-{{ section.id }} .product-media__img,
+  #shopify-section-{{ section.id }} .product-media__video,
+  #shopify-section-{{ section.id }} .product-media__model {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    object-fit: contain;
+  }
+  /* Stage ratio — change padding-top to 125% (4:5) or 133% (3:4) if your images are tall */
+  #shopify-section-{{ section.id }} .product-media__main::before {
+    content: "";
+    display: block;
+    padding-top: 100%;
+  }
+  #shopify-section-{{ section.id }} .product-media__main > * {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  #shopify-section-{{ section.id }} .product-media__thumbs {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(64px, 96px);
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: thin;
+  }
+  @media (min-width: 768px) {
+    #shopify-section-{{ section.id }} .product-media__thumbs {
+      justify-content: start;
+    }
+  }
+  #shopify-section-{{ section.id }} .product-media__thumb {
+    position: relative;
+    border: 1px solid rgba(0,0,0,0.08);
+    background: transparent;
+    padding: 0;
+    border-radius: 8px;
+    cursor: pointer;
+    line-height: 0;
+    transition: transform .15s ease, border-color .15s ease;
+  }
+  #shopify-section-{{ section.id }} .product-media__thumb:focus-visible { outline: 2px solid #2D0288; outline-offset: 2px; }
+  #shopify-section-{{ section.id }} .product-media__thumb:hover { transform: translateY(-1px); }
+  #shopify-section-{{ section.id }} .product-media__thumb.is-active { border-color: #2D0288; }
+  #shopify-section-{{ section.id }} .product-media__thumb-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+  }
+  #shopify-section-{{ section.id }} .product-media__thumb-badge {
+    position: absolute;
+    right: 6px; bottom: 6px;
+    font-size: 12px;
+    line-height: 1;
+    padding: 3px 6px;
+    border-radius: 6px;
+    background: rgba(0,0,0,.65);
+    color: #fff;
+  }
+  /* Scope swiper resets to this section only (avoid global impact) */
+  #shopify-section-{{ section.id }} .product-item-wrap .swiper-slide,
+  #shopify-section-{{ section.id }} .main-swiper-container { all: unset; }
 </style>
 
 {%- comment -%} Mobile full-width container + Accordion line style (overrides) {%- endcomment -%}
@@ -607,6 +707,72 @@
       $('.sub-total strong').html(Shopify.formatMoney((subtotal*100), DT_THEME.moneyFormat));
     });
   });
+</script>
+
+<!-- ========= SIMPLE GALLERY SWAP LOGIC (section-scoped) ========= -->
+<script>
+(function(){
+  const sectionId = "{{ section.id }}";
+  const sectionRoot = document.getElementById(`shopify-section-{{ section.id }}`) || document;
+  const featured = sectionRoot.querySelector(`#FeaturedMedia-${sectionId}`);
+  const thumbsWrap = sectionRoot.querySelector(`.product-media__thumbs`);
+  if (!featured || !thumbsWrap) return;
+
+  function swapToThumb(btn){
+    const id = btn.getAttribute('data-media-id');
+    if (!id || featured.getAttribute('data-current-media-id') === id) return;
+
+    const type = btn.getAttribute('data-media-type');
+    const thumbImg = btn.querySelector('img');
+
+    featured.innerHTML = '';
+
+    if (type === 'image' && thumbImg){
+      const big = new Image();
+      big.className = 'product-media__img';
+      big.decoding = 'async';
+      big.loading = 'eager';
+      big.sizes = '(min-width: 992px) 700px, 100vw';
+      big.src = thumbImg.currentSrc || thumbImg.src;
+      featured.appendChild(big);
+    } else {
+      // For video / model types, fall back to re-render via <img> preview (fast + simple)
+      if (thumbImg){
+        const big = new Image();
+        big.className = 'product-media__img';
+        big.decoding = 'async';
+        big.loading = 'eager';
+        big.sizes = '(min-width: 992px) 700px, 100vw';
+        big.src = thumbImg.currentSrc || thumbImg.src;
+        featured.appendChild(big);
+      }
+    }
+
+    featured.setAttribute('data-current-media-id', id);
+
+    thumbsWrap.querySelectorAll('.product-media__thumb').forEach(t => {
+      const active = t === btn;
+      t.classList.toggle('is-active', active);
+      t.setAttribute('aria-current', active ? 'true' : 'false');
+    });
+  }
+
+  thumbsWrap.addEventListener('click', function(e){
+    const btn = e.target.closest('.product-media__thumb');
+    if (btn) swapToThumb(btn);
+  });
+
+  // Respect variant featured media when your theme emits "variant:change"
+  document.addEventListener('variant:change', function(e){
+    try {
+      const v = e.detail && e.detail.variant ? e.detail.variant : null;
+      const mediaId = v && v.featured_media ? String(v.featured_media.id) : null;
+      if (!mediaId) return;
+      const matchBtn = thumbsWrap.querySelector(`.product-media__thumb[data-media-id="${mediaId}"]`);
+      if (matchBtn) swapToThumb(matchBtn);
+    } catch(err){}
+  });
+})();
 </script>
 
 {% schema %}
