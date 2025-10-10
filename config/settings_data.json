@@ -127,7 +127,7 @@
     "enable_timer": true,
     "timer_button_bg": "#f78d2c",
     "sidebar_width": 360,
-    "product_page_sidebar": "right-sidebar",
+    "product_page_sidebar": "full-width",
     "product_sidebar_mobile": true,
     "collection_sidebar_use": "left-sidebar",
     "collection_sidebar_mobile": false,
