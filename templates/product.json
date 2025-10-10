@@ -139,6 +139,7 @@
         "feature_LKcLyn",
         "feature_CFEUDX"
       ],
+      "disabled": true,
       "name": "Features with Waves",
       "settings": {
         "use_gradient": false,
