@@ -94,7 +94,7 @@
     "title_image_enable": false,
     "title_image": "shopify://shop_images/titleicon01.png",
     "title_image_position": "place_on_top",
-    "use_breadcrumb": true,
+    "use_breadcrumb": false,
     "breadcrumb_image": "shopify://shop_images/breadcrumb_bc57e145-dc2e-410c-9c11-4c22d1a357eb.png",
     "color_image_overlay": "rgba(0,0,0,0)",
     "breadcrumb_text_color": "#2d0288",
