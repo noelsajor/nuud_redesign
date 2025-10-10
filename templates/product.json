@@ -101,10 +101,44 @@
             "subtext_color": "#666666",
             "subtext_size": 14
           }
+        },
+        "feature_LKcLyn": {
+          "type": "feature",
+          "settings": {
+            "icon_svg": "",
+            "icon_image": "shopify://shop_images/free_returns.svg",
+            "icon_label": "FREE RETURNS",
+            "icon_color": "#8b1538",
+            "feature_text": "FREE RETURNS",
+            "text_color": "#8b1538",
+            "text_size": 18,
+            "text_weight": "600",
+            "feature_subtext": "",
+            "subtext_color": "#666666",
+            "subtext_size": 14
+          }
+        },
+        "feature_CFEUDX": {
+          "type": "feature",
+          "settings": {
+            "icon_svg": "",
+            "icon_image": "shopify://shop_images/free_shiping.svg",
+            "icon_label": "FREE SHIPPING",
+            "icon_color": "#8b1538",
+            "feature_text": "FREE SHIPPING",
+            "text_color": "#8b1538",
+            "text_size": 18,
+            "text_weight": "600",
+            "feature_subtext": "",
+            "subtext_color": "#666666",
+            "subtext_size": 14
+          }
         }
       },
       "block_order": [
-        "feature_FDgc79"
+        "feature_FDgc79",
+        "feature_LKcLyn",
+        "feature_CFEUDX"
       ],
       "name": "Features with Waves",
       "settings": {
