@@ -588,7 +588,7 @@
         "use_gradient": true,
         "background_color": "#ffd8d8",
         "grad_type": "linear",
-        "grad_angle": 155,
+        "grad_angle": 180,
         "radial_position": "center center",
         "grad_color_1": "#ff4881",
         "grad_stop_1": 30,
