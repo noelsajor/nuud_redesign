@@ -540,6 +540,65 @@ Compute RGBA for category card background (opacity controlled in settings)
     transform-origin: center bottom !important;
   }
 }
+
+/* ---------------------------
+   MOBILE: push image upward + strengthen title readability
+   --------------------------- */
+#split-hero-{{ uid }}{
+  /* tweak this one knob to move the image farther upward on mobile */
+  --mobile-overflow-nudge: 12%; /* try 8–18% */
+}
+
+@media (max-width: 768px){
+  /* Ensure the image crops at the bottom while we push it up */
+  .ai-split-section-category-image-{{ uid }}{
+    overflow: hidden; /* even if overflow mode is on, clip bottom for readability */
+  }
+
+  /* Push the image up more so the title area is clear */
+  .ai-split-section-category-image-{{ uid }} img{
+    transform-origin: center bottom !important;
+    transform:
+      translateY(calc(-1 * var(--mobile-overflow-nudge)))
+      scale({{ section.settings.image_overflow_scale }}) !important;
+  }
+
+  /* Keep the same on hover (with optional rotation) */
+  .ai-split-section-category-{{ uid }}:hover .ai-split-section-category-image-{{ uid }} img{
+    {% if section.settings.enable_image_hover_rotate %}
+      transform:
+        translateY(calc(-1 * var(--mobile-overflow-nudge)))
+        scale({{ section.settings.image_overflow_scale }})
+        rotate(var(--hover-rotate-deg)) !important;
+    {% else %}
+      transform:
+        translateY(calc(-1 * var(--mobile-overflow-nudge)))
+        scale({{ section.settings.image_overflow_scale }}) !important;
+    {% endif %}
+  }
+
+  /* Strengthen the gradient behind the title for contrast */
+  .ai-category-title-overlay-{{ uid }}{
+    padding: 12px; /* a bit more breathing room */
+    background: linear-gradient(
+      0deg,
+      rgba(0,0,0,0.70) 0%,   /* stronger at the very bottom */
+      rgba(0,0,0,0.35) 35%,  /* softer mid fade */
+      rgba(0,0,0,0.00) 60%
+    );
+  }
+}
+
+/* OPTIONAL: if an image is still busy, add a subtle pill behind the text.
+   Toggle by uncommenting these two rules. */
+/*
+.ai-category-title-text-{{ uid }}{
+  background: rgba(0,0,0,.55);
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+*/
+
 </style>
 
 <script>
