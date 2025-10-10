@@ -559,7 +559,7 @@
         "image_alignment": "center",
         "background_effect": "fixed",
         "use_gradient": false,
-        "background_color": "#ffd8d8",
+        "background_color": "#ff679a",
         "grad_type": "linear",
         "grad_angle": 155,
         "radial_position": "center center",
