@@ -1,0 +1,42 @@
+/* 1) Reset everything inside to UA defaults, so theme CSS stops bleeding in */
+.seo-html, .seo-html :where(*) {
+  all: revert;
+}
+
+/* 2) Sane web defaults you probably still want */
+.seo-html {
+  /* inherit your theme font and color if you want it to blend */
+  font: inherit;
+  color: inherit;
+  /* keep layout predictable inside */
+  box-sizing: border-box;
+}
+.seo-html :where(img, video, iframe) {
+  max-width: 100%;
+  height: auto;
+}
+.seo-html :where(table) {
+  width: 100%;
+  border-collapse: collapse;
+}
+.seo-html :where(h1, h2, h3, h4, h5, h6) {
+  /* optional: make headings match theme scale a bit nicer */
+  font-weight: inherit;
+  line-height: 1.2;
+  margin: 0.5em 0 0.25em;
+}
+.seo-html :where(p, ul, ol, blockquote, pre, table) {
+  margin: 0.75em 0;
+}
+.seo-html :where(a) {
+  color: inherit;           /* or your brand color if desired */
+  text-decoration: underline;
+}
+.seo-html :where(ul, ol) {
+  padding-inline-start: 1.25em;
+}
+.seo-html :where(*),
+.seo-html :where(*::before),
+.seo-html :where(*::after) {
+  box-sizing: inherit;
+}
