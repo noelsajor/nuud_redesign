@@ -106,10 +106,10 @@
           "type": "feature",
           "settings": {
             "icon_svg": "",
-            "icon_image": "shopify://shop_images/free_returns.svg",
-            "icon_label": "FREE RETURNS",
+            "icon_image": "shopify://shop_images/Secure_checkout.svg",
+            "icon_label": "SECURE CHECKOUT",
             "icon_color": "#8b1538",
-            "feature_text": "FREE RETURNS",
+            "feature_text": "SECURE CHECKOUT",
             "text_color": "#8b1538",
             "text_size": 18,
             "text_weight": "600",
