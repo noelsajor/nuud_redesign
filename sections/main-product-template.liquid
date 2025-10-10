@@ -8,33 +8,89 @@
 {% assign padding_bottom = padding[1] %}
 {% assign current_variant = product.selected_or_first_available_variant %}
 
+/* ------ Compute stage aspect ratio + image-fit vars ------ */
+{% assign ar = section.settings.stage_aspect_ratio | default: '4-5' %}
+{% case ar %}
+  {% when 'none' %}{% assign stage_ar = 'auto' %}
+  {% when '1-1' %}{% assign stage_ar = '1 / 1' %}
+  {% when '4-5' %}{% assign stage_ar = '4 / 5' %}
+  {% when '3-4' %}{% assign stage_ar = '3 / 4' %}
+  {% when '2-3' %}{% assign stage_ar = '2 / 3' %}
+  {% else %}{% assign stage_ar = '4 / 5' %}
+{% endcase %}
+{% assign image_fit = section.settings.image_fit | default: 'contain' %}
+
 <div class="{% render 'container-settings' %}">
-  <!-- OUTER PADDING/MARGIN WRAPPER (controlled by settings: padding/margin) -->
   <div class="outer-pad-{{ section.id }}">
-    <!-- Inner background wrapper (card) -->
     <div class="inner-bg-{{ section.id }}">
       <div class="row {% for block in section.blocks -%}{%- case block.type -%}{%- when 'fbt' -%} fbt_hide_primary_cart_btn{%- endcase -%}{%- endfor -%}">
         <div class="{{settings.product_page_sidebar}} {% if settings.product_page_sidebar == 'full-width' %} no-sidebar {% else %}has-sidebar{% endif  %}">
           <div class="product-template-content">
             <div class="text-center sidebar_btn">
-              <!-- default theme button; removed custom dt-sc class -->
               <button type="button" class="toggleIcon {% if settings.product_sidebar_mobile %} hidden {% endif %}" aria-label="Toggle sidebar">
                 <i class="fa fa-caret-right" aria-hidden="true"></i>
               </button>
             </div>
 
-            {%- assign product_thumb_size = '160x160' -%}
-            {%- assign enable_zoom = section.settings.enable_zoom -%}
-            {%- assign product_image_width = 'product_image_width' -%}
             {%- assign product_images_length = product.media | size -%}
 
             <div class="product-page-row">
-              <div class="product_images_length-{{product_images_length}} {{ product_image_width }} product-gallery-{{ section.id }} sidebar-sticky zoom-type-{{ section.settings.zoom_type}}" id="product-gallery" data-zoom-method="{{ section.settings.zoom_type }}">
-                <div class="product-item-wrap slider-{{ section.id }} {% if section.settings.gallery_type == 'thumbnails_vertical' %} swiper-gallery-vertical {{ section.settings.vertical_style }}{% endif %} {% if section.settings.gallery_type == 'thumbnails_horizontal' %} swiper-gallery-inline{% endif %}" id="slider" data-dT_media_group>
-                  {% render 'thumbnails' %}
-                </div>
+              <!-- ======= MEDIA: Big hero + below-thumbs ======= -->
+              <div class="product_images_length-{{product_images_length}} product-gallery-{{ section.id }} sidebar-sticky" id="product-gallery" data-gallery>
+                {% assign featured = product.featured_media | default: product.media.first %}
+                <figure class="media-stage" style="--stage-ar: {{ stage_ar }}; --image-fit: {{ image_fit }};">
+                  {% if featured and featured.media_type == 'image' %}
+                    <img
+                      id="HeroImage-{{ section.id }}"
+                      src="{{ featured | img_url: 'master' }}"
+                      alt="{{ featured.alt | escape }}"
+                      width="{{ featured.width }}"
+                      height="{{ featured.height }}"
+                      loading="eager"
+                    >
+                  {% else %}
+                    {%- comment -%} Fallback if first media isn’t an image {%- endcomment -%}
+                    {% assign first_image = product.images.first %}
+                    {% if first_image %}
+                      <img
+                        id="HeroImage-{{ section.id }}"
+                        src="{{ first_image | img_url: 'master' }}"
+                        alt="{{ first_image.alt | escape }}"
+                        width="{{ first_image.width }}"
+                        height="{{ first_image.height }}"
+                        loading="eager"
+                      >
+                    {% endif %}
+                  {% endif %}
+                </figure>
+
+                {% if product.media.size > 1 %}
+                  <ul class="thumbs" role="list" aria-label="{{ 'products.product.media' | t }}">
+                    {% for m in product.media %}
+                      {% if m.media_type == 'image' %}
+                        <li class="thumb-item">
+                          <button
+                            type="button"
+                            class="thumb-btn{% if m.id == featured.id %} is-active{% endif %}"
+                            data-media-id="{{ m.id }}"
+                            data-image="{{ m | img_url: 'master' }}"
+                            aria-label="{{ 'products.product.media_thumbnail' | t }} {{ forloop.index }}"
+                            aria-pressed="{% if m.id == featured.id %}true{% else %}false{% endif %}"
+                          >
+                            <img
+                              src="{{ m | img_url: '160x160' }}"
+                              alt="{{ m.alt | escape }}"
+                              width="160" height="160" loading="lazy"
+                            >
+                          </button>
+                        </li>
+                      {% endif %}
+                    {% endfor %}
+                  </ul>
+                {% endif %}
               </div>
 
+              <!-- ======= PRODUCT INFO ======= -->
               <div class="product-description-product-template product-description-{{ section.id }} sidebar-sticky" id="product-description">
                 <div class="product-item-caption-white sidebar_{{ section.id }}" id="sidebar">
                   <div class="product-meta-block">
@@ -49,6 +105,7 @@
                         {%- when 'price' -%}
                           <div class="product-price">
                             <p class="product-price-label product-label">{{ "products.product.price" | t }}</p>
+                            {% assign current_variant = product.selected_or_first_available_variant %}
                             <ul class="price-list">
                               <li id="ProductPrice-{{ section.id }}" class="product-price-current">
                                 <span class="money">{{ current_variant.price | money }}</span>
@@ -74,7 +131,6 @@
                                   {%- endif -%}
                                 </span>
                               {%- endcapture -%}
-
                               {%- if current_variant.unit_price_measurement -%}
                                 {{ current_variant.unit_price | money }}{{- unit_price_separator -}}{{- unit_price_base_unit -}}
                               {%- endif -%}
@@ -105,7 +161,6 @@
                         {{ section.settings.choose_label }}:
                         {% assign words = product.title | split: ' ' %}
                         {{ words | last }}
-                        {% assign firstWord = words | last %}
                       </p>
                     {% endif %}
                     <div data-section-type="advanced-product-link-section">
@@ -242,7 +297,6 @@
                       <div class="product-attributes dt-sc-qty">
                         <p class="product-label">{{ 'products.product.quantity' | t }}</p>
                         <div class="quantity product-form__item product-form__item--quantity product-item-caption-qty">
-                          <!-- keep structure; no theme-override classes added -->
                           <button class="quantity-btn quantity-btn-minus btn-number btn-number-{{ section.id }}" type="button" data-type="minus" data-field="quant[1]">&#45;</button>
                           <input type="text" id="Quantity-{{ section.id }}" name="quantity" value="1" class="quantity-btn-number form-control input-number input-number-{{ section.id }} product-form__input" pattern="[0-9]*">
                           <button class="quantity-btn quantity-btn-plus btn-number btn-number-{{ section.id }}" type="button" data-type="plus" data-field="quant[1]">&#43;</button>
@@ -252,11 +306,8 @@
 
                     <div class="product-form__item product-form__item--submit product_payments_btns">
                       {% unless section.settings.hide_addtocart %}
-                        <!-- default Shopify button classes -->
-                        <button type="submit"
-                                name="add"
-                                id="AddToCart-{{ section.id }}"
-                                class="product-form__submit button {% if product.options.size == 1 and product.variants[0].title == 'Default Title' and product.variants.size == 1 %} product-form__cart-submit--small{% endif %}">
+                        <button type="submit" name="add" id="AddToCart-{{ section.id }}"
+                          class="product-form__submit button {% if product.options.size == 1 and product.variants[0].title == 'Default Title' and product.variants.size == 1 %} product-form__cart-submit--small{% endif %}">
                           {{ 'products.product.add_to_cart' | t }}
                         </button>
                       {% endunless %}
@@ -266,7 +317,6 @@
                           {%- if product.handle != blank -%}
                             <div>
                               <dtx-wishlist>
-                                <!-- no custom dt-sc styling -->
                                 <a href="javascript:void(0);" class="add-wishlist" data-product_handle="{{ product.handle }}">
                                   <span class="visually-hidden">Add to wishlist</span>
                                 </a>
@@ -337,8 +387,8 @@
           </div>
         {%- endunless -%}
       </div>
-    </div> <!-- /inner-bg-{{ section.id }} -->
-  </div> <!-- /outer-pad-{{ section.id }} -->
+    </div>
+  </div>
 </div>
 
 {% render 'dT_product_bundle' %}
@@ -366,47 +416,26 @@
 {% endunless %}
 
 <style>
-
-    .shopify-payment-button__button--unbranded {
-    background: #ff679a !important;
-    color: white !important;
-  }
-
-  .product-item-caption-qty input.input-number, .cart_table .qty-box-set .quantity-selector {
-    border:none;
-  }
-
+  .shopify-payment-button__button--unbranded { background:#ff679a !important; color:#fff !important; }
+  .product-item-caption-qty input.input-number, .cart_table .qty-box-set .quantity-selector { border:none; }
   .template-product .product_payments_btns button,
   .template-product .product_payments_btns .dt-sc-btn,
-  .template-product .product-form__item--submit button {
-    background:#2d0288;
-    color: white;
-  }
+  .template-product .product-form__item--submit button { background:#2d0288; color:#fff; }
+  .dt-sc-qty { gap:16px; }
+  .StickySidebar { color:#881d3e; }
+  .dt-sc-accordion-container .dt-sc-accordion-btn { background:none; border-bottom:2px solid #881d3e; }
 
-  .dt-sc-qty { gap: 16px; }
+  /* Section wrapper */
+  #shopify-section-{{ section.id }}.main-product-template { background: {{ section.settings.section_bg_color | default: 'transparent' }}; position:relative; }
 
-  .StickySidebar { color: #881d3e; }
-
-  .dt-sc-accordion-container .dt-sc-accordion-btn {
-    background: none;
-    border-bottom: 2px solid #881d3e;
-  }
-
-  /* -------- Section Background (full width) -------- */
-  #shopify-section-{{ section.id }}.main-product-template {
-    background: {{ section.settings.section_bg_color | default: 'transparent' }};
-    position: relative;
-  }
-
-  /* -------- OUTER PADDING / MARGIN (outside inner card) -------- */
-  .outer-pad-{{ section.id }} {
+  .outer-pad-{{ section.id }}{
     margin-top: {{ margin_top | default: 0 }}px;
     margin-bottom: {{ margin_bottom | default: 0 }}px;
     padding-top: {{ padding_top | default: 0 }}px;
     padding-bottom: {{ padding_bottom | default: 0 }}px;
   }
-  @media only screen and (max-width: 1199px) {
-    .outer-pad-{{ section.id }} {
+  @media (max-width:1199px){
+    .outer-pad-{{ section.id }}{
       margin-top: {{ margin_top | divided_by: 2 | default: 0 }}px;
       margin-bottom: {{ margin_bottom | divided_by: 2 | default: 0 }}px;
       padding-top: {{ padding_top | divided_by: 2 | default: 0 }}px;
@@ -414,198 +443,110 @@
     }
   }
 
-  /* -------- Inner Card Background & Padding -------- */
   .inner-bg-{{ section.id }}{
     background: {{ section.settings.inner_bg_color | default: 'transparent' }};
     border-radius: {{ section.settings.inner_bg_radius | default: 0 }}px;
     padding: {{ section.settings.inner_bg_padding | default: 0 }}px;
   }
 
-  /* Decorative images (send behind content + non-interactive) */
-  #shopify-section-{{section.id}}.main-product-template:before{
-    content: " ";
-    position: absolute;
-    width:504px;
-    height:768px;
-    {% if section.settings.before_image != blank %}
-      background-image:url({{ section.settings.before_image | img_url:'master' }});
-    {% endif %}
-    background-size: auto;
-    background-repeat: no-repeat;
-    background-position: left top;
-    top:-250px;
-    left:0;
-    animation: dt-swing ease-in-out 2s infinite alternate;
-    pointer-events: none;
-    z-index: -1; /* ensure behind gallery */
+  /* Layout: gallery left / info right (stacks on mobile) */
+  #shopify-section-{{section.id}} .product-page-row{
+    display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(16px,3vw,32px);
   }
+  @media (max-width: 991px){ #shopify-section-{{section.id}} .product-page-row{ grid-template-columns:1fr; } }
 
+  /* Decorative shapes behind */
+  #shopify-section-{{section.id}}.main-product-template:before,
   #shopify-section-{{section.id}}.main-product-template:after{
-    content: " ";
-    position: absolute;
-    width:240px;
-    height:534px;
-    {% if section.settings.after_image != blank %}
-      background-image:url({{ section.settings.after_image | img_url:'master' }});
-    {% endif %}
-    background-size: auto;
-    background-repeat: no-repeat;
-    background-position: left bottom;
-    bottom:0;
-    left:0;
+    pointer-events:none; z-index:-1; position:absolute; content:" "; background-repeat:no-repeat;
     animation: dt-swing ease-in-out 2s infinite alternate;
-    pointer-events: none;
-    z-index: -1; /* already behind, keep consistent */
+  }
+  #shopify-section-{{section.id}}.main-product-template:before{
+    width:504px; height:768px; top:-250px; left:0; background-position:left top; background-size:auto;
+    {% if section.settings.before_image != blank %}background-image:url({{ section.settings.before_image | img_url:'master' }});{% endif %}
+  }
+  #shopify-section-{{section.id}}.main-product-template:after{
+    width:240px; height:534px; bottom:0; left:0; background-position:left bottom; background-size:auto;
+    {% if section.settings.after_image != blank %}background-image:url({{ section.settings.after_image | img_url:'master' }});{% endif %}
+  }
+  @media (max-width:991px){
+    #shopify-section-{{section.id}}.main-product-template:before{ width:400px !important; height:500px !important; background-size:contain !important; }
+    #shopify-section-{{section.id}}.main-product-template:after{ width:200px !important; height:300px !important; background-size:contain !important; }
+  }
+  @keyframes dt-swing { 0%{ transform:translateY(15px) } 100%{ transform:translateY(-15px) } }
+
+  /* ===== Big hero + thumbs ===== */
+  [data-gallery]{ position:relative; z-index:1; }
+  .media-stage{
+    position:relative; width:100%; background:transparent;
+    aspect-ratio: var(--stage-ar); /* stable stage */
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+    min-height: 420px;
+  }
+  @media (max-width: 767px){ .media-stage{ min-height:300px; } }
+
+  .media-stage img{
+    max-width:100%; max-height:100%; width:auto; height:auto; display:block;
+    object-fit: var(--image-fit);
   }
 
-  #shopify-product-reviews .spr-container *{color:var(--DT_Blog_Button_Text_Color);}
-  .spr-form-input-text, .spr-form-input-email, .spr-form-input-textarea{color:var(--DT_Blog_Button_Text_Color);background:transparent !important;border-color:var(--DT_Blog_Button_Text_Color) !important;}
-  .template-product .swatch .swatch-element.not_color label{border-color:var(--DT_Blog_Button_Text_Color) }
-
-  .product-single__media model-viewer { margin: 0 auto; width: auto;}
-
-  /* Previously disabled pointer events on non-active slides can block interactions.
-     We'll restore pointer events for inline sliders to keep media clickable. */
-  .main-swiper-container.swiper-gallery-inline-slider .swiper-slide { pointer-events:auto; }
-  .main-swiper-container.swiper-gallery-inline-slider .swiper-slide.swiper-slide-active { pointer-events:auto; }
-
-  .main-product-template .product-item-caption-qty, .main-product-template .cart_table .qty-box-set { border:none; }
-
-  @media only screen and (max-width:576px){
-    .dt-sc-tabs .tablinks{display:none;border-bottom:1px solid;}
-    .dt-sc-tabs .active{display:block;}
-    .expanded .tablinks{display:block;}
+  .thumbs{
+    margin: 12px 0 0 0; padding:0; list-style:none;
+    display:grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap:10px;
   }
-
-  @media only screen and (max-width:991px) {
-    #shopify-section-{{section.id}}.main-product-template:before{
-      width:400px !important;height:500px !important;background-size:contain !important;
-    }
-    #shopify-section-{{section.id}}.main-product-template:after{
-      width:200px !important;height:300px !important;background-size:contain !important;
-    }
+  @media (min-width: 768px){
+    .thumbs{ grid-template-columns: repeat(6, 1fr); }
   }
-
-  @keyframes dt-swing {
-    0% { transform: translateY(15px); }
-    100% { transform: translateY(-15px); }
+  .thumb-item{ margin:0; }
+  .thumb-btn{
+    width:100%; aspect-ratio:1 / 1; border:1px solid var(--DTColor_Border, #e5e5e5);
+    background:#fff; padding:0; border-radius:8px; overflow:hidden; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
   }
+  .thumb-btn:hover{ transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,.08); border-color:#bbb; }
+  .thumb-btn.is-active{ outline:2px solid #2D0288; outline-offset:2px; }
+  .thumb-btn img{ max-width:100%; max-height:100%; object-fit:cover; display:block; }
 
-  /* ---- FIXES: Keep gallery above background shapes ---- */
-  #shopify-section-{{section.id}} .product-page-row,
-  #shopify-section-{{section.id}} .product-gallery-{{ section.id }}{
-    position: relative;
-    z-index: 1;
-  }
-
-  /* ---- FIXES: Predictable media sizing (no stretching) ---- */
-  #shopify-section-{{section.id}} .product-item-wrap img,
-  #shopify-section-{{section.id}} .product-item-wrap video,
-  #shopify-section-{{section.id}} .product-item-wrap .shopify-model-viewer-ui,
-  #shopify-section-{{section.id}} .product-item-wrap model-viewer {
-    width: 100%;
-    height: auto;
-    max-width: 100%;
-    display: block;
-  }
-
-  /* Keep images contained within the slide without cropping */
-  #shopify-section-{{section.id}} .product-item-wrap .swiper-slide img{
-    object-fit: contain;
-  }
-
-  /* Optional: stabilize and standardize slide stage ratio */
-  #shopify-section-{{section.id}} .product-item-wrap .swiper-slide{
-    aspect-ratio: 1 / 1; /* adjust to 3/4 or 4/5 if your catalog is taller */
-  }
-
-  /* ---- FIXES: Avoid zero-height while media lazy-loads ---- */
-  #product-gallery .product-item-wrap{
-    min-height: 360px;
-  }
-  @media (max-width: 767px){
-    #product-gallery .product-item-wrap{ min-height: 280px; }
-  }
-</style>
-
-{%- comment -%} Mobile full-width container + Accordion line style (overrides) {%- endcomment -%}
-<style>
-/* ---- Full-width container on mobile (this section only) ---- */
-@media (max-width: 767px){
-  /* remove container max width + side padding */
-  #shopify-section-{{ section.id }} [class*="container"]{
-    width: 100% !important;
-    max-width: none !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-  /* neutralize .row negative margins */
-  #shopify-section-{{ section.id }} .row{
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-  }
-  /* let the inner card bleed edge-to-edge */
-  #shopify-section-{{ section.id }} .outer-pad-{{ section.id }}{
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-  /* keep a comfortable inner gutter on phones */
-  #shopify-section-{{ section.id }} .inner-bg-{{ section.id }}{
-    border-radius: 0;
-    padding-left: max(16px, env(safe-area-inset-left));
-    padding-right: max(16px, env(safe-area-inset-right));
-  }
-}
-
-/* ---- Accordion/Tabs: transparent header + colored bottom border ---- */
-#shopify-section-{{ section.id }} .product-tab{
-  --accordion-line: var(--DTColor_Border, #e5e5e5);
-}
-
-/* Details/Summary headers and tab headers */
-#shopify-section-{{ section.id }} .product-tab details > summary,
-#shopify-section-{{ section.id }} .dt-sc-tabs .tablinks{
-  background: transparent !important;
-  box-shadow: none !important;
-  border: 0 !important;
-  padding-left: 0;
-  padding-right: 0;
-  border-bottom: 2px solid var(--accordion-line);
-}
-
-/* Keep open state transparent */
-#shopify-section-{{ section.id }} .product-tab details[open] > summary{
-  background: transparent !important;
-}
-
-/* Content/body areas transparent, no borders */
-#shopify-section-{{ section.id }} .product-tab details > div,
-#shopify-section-{{ section.id }} .dt-sc-tabs .tabcontent{
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-}
-
-/* Optional: remove the line on the last header
-#shopify-section-{{ section.id }} .product-tab details:last-of-type > summary{ border-bottom: 0; }
-*/
+  /* Clean up */
+  .main-product-template .product-item-caption-qty,
+  .main-product-template .cart_table .qty-box-set { border:none; }
 </style>
 
 <script>
-  $(document).ready(function(){
-    $(".tablinks").on("click", function(){
-      $(".dt-sc-tabs").toggleClass("expanded");
-    });
+  (function(){
+    // Simple, dependency-free gallery swapper
+    var root = document.querySelector('#shopify-section-{{ section.id }} [data-gallery]');
+    if(!root) return;
 
-    // Update subtotal when quantity changes
-    $('.quantity-btn-number').on('change', function() {
-      var qty = parseFloat($('.quantity-btn-number').val()) || 1;
-      var priceText = $('.product-price-current span').text();
-      var numeric = priceText.replace(/[^0-9.]/g, '');
-      var subtotal = qty * parseFloat(numeric || 0);
-      $('.sub-total strong').html(Shopify.formatMoney((subtotal*100), DT_THEME.moneyFormat));
+    var hero = root.querySelector('#HeroImage-{{ section.id }}');
+    var thumbs = root.querySelectorAll('.thumb-btn');
+
+    function setActive(btn){
+      thumbs.forEach(function(b){
+        b.classList.toggle('is-active', b === btn);
+        b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+      });
+    }
+
+    function swapTo(btn){
+      var src = btn.getAttribute('data-image');
+      if(hero && src){
+        // Prevent layout jump: keep stage size; swap src when image is ready
+        var img = new Image();
+        img.onload = function(){ hero.src = src; hero.alt = btn.querySelector('img')?.alt || hero.alt; };
+        img.src = src;
+        setActive(btn);
+      }
+    }
+
+    thumbs.forEach(function(btn){
+      btn.addEventListener('click', function(){ swapTo(btn); });
+      btn.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); swapTo(btn); }
+      });
     });
-  });
+  })();
 </script>
 
 {% schema %}
@@ -628,29 +569,22 @@
     { "type": "image_picker", "id": "after_image", "label": "After image", "info": "Size: 1920x1280" },
 
     { "type": "header", "content": "Media" },
-    { "type": "paragraph", "content": "Learn more about media types in Shopify Help Center." },
-    { "type": "select", "id": "gallery_type", "label": "Gallery type", "options": [
-        { "value": "thumbnails_vertical", "label": "Thumbnails vertical" },
-        { "value": "thumbnails_horizontal", "label": "Thumbnails horizontal" },
-        { "value": "thumbnails_hide", "label": "Hide thumbnails" }
+    { "type": "paragraph", "content": "Hero image on top + clickable thumbnails under it." },
+    { "type": "select", "id": "stage_aspect_ratio", "label": "Stage aspect ratio", "options": [
+        { "value": "none", "label": "None (auto height)" },
+        { "value": "1-1", "label": "1 : 1 (square)" },
+        { "value": "4-5", "label": "4 : 5 (portrait – recommended)" },
+        { "value": "3-4", "label": "3 : 4" },
+        { "value": "2-3", "label": "2 : 3" }
       ],
-      "default": "thumbnails_horizontal"
+      "default": "4-5"
     },
-    { "type": "radio", "id": "vertical_style", "label": "Thumb placement", "options": [
-        { "value": "dt-sc-product-vertical-thumb-left", "label": "Left" },
-        { "value": "dt-sc-product-vertical-thumb-right", "label": "Right" }
+    { "type": "select", "id": "image_fit", "label": "Image fit", "options": [
+        { "value": "contain", "label": "Contain (no crop)" },
+        { "value": "cover", "label": "Cover (fills stage, may crop)" }
       ],
-      "default": "dt-sc-product-vertical-thumb-left"
+      "default": "contain"
     },
-    { "type": "checkbox", "id": "enable_zoom", "label": "Enable image zoom", "default": true },
-    { "type": "radio", "id": "zoom_type", "label": "Zoom Style", "options": [
-        { "value": "cloud", "label": "Cloud" },
-        { "value": "inner", "label": "Inner" },
-        { "value": "outer", "label": "Outer" }
-      ],
-      "default": "cloud"
-    },
-    { "type": "checkbox", "id": "enable_video_looping", "label": "Enable video looping", "default": false },
 
     { "type": "header", "content": "Product Meta" },
     { "type": "radio", "id": "meta-lable-style", "label": "Meta lable Style", "options": [
