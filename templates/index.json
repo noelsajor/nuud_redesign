@@ -616,7 +616,7 @@
         "float_intensity": 12,
         "float_duration": 4,
         "show_categories": true,
-        "categories_alignment": "left",
+        "categories_alignment": "center",
         "categories_per_row": "3",
         "categories_per_row_mobile": "3",
         "enable_category_shadow": false,
