@@ -55,7 +55,7 @@
         "category_aspect_ratio": "1/1",
         "image_fit": "cover",
         "enable_image_overflow": true,
-        "image_overflow_scale": 1.8,
+        "image_overflow_scale": 1.3,
         "image_overflow_direction": "top",
         "enable_category_1": true,
         "category_1": "for-her",
