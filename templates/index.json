@@ -223,6 +223,7 @@
     },
     "spacer_wave_KxbydU": {
       "type": "spacer-wave",
+      "disabled": true,
       "name": "Wave Spacer (Animated)",
       "settings": {
         "use_gradient": false,
@@ -324,7 +325,7 @@
         "background_style": "fixed",
         "background_size": "auto",
         "enable_overlay": true,
-        "background_color": "#ffd8d8",
+        "background_color": "#fdf8e1",
         "overlay_transparency": "1",
         "mask_image_color": "rgba(0,0,0,0)",
         "section_heading": "Check Our Feed",
@@ -388,6 +389,7 @@
     },
     "spacer_wave_MWGrKn": {
       "type": "spacer-wave",
+      "disabled": true,
       "name": "Wave Spacer (Animated)",
       "settings": {
         "use_gradient": false,
