@@ -82,93 +82,6 @@
         "collection": "advanced-product-tagging"
       }
     },
-    "wavy_features_FXPJ84": {
-      "type": "wavy-features",
-      "blocks": {
-        "feature_FDgc79": {
-          "type": "feature",
-          "settings": {
-            "icon_svg": "",
-            "icon_image": "shopify://shop_images/free_returns.svg",
-            "icon_label": "FREE RETURNS",
-            "icon_color": "#8b1538",
-            "feature_text": "FREE RETURNS",
-            "text_color": "#8b1538",
-            "text_size": 18,
-            "text_weight": "600",
-            "feature_subtext": "",
-            "subtext_color": "#666666",
-            "subtext_size": 14
-          }
-        },
-        "feature_LKcLyn": {
-          "type": "feature",
-          "settings": {
-            "icon_svg": "",
-            "icon_image": "shopify://shop_images/Secure_checkout.svg",
-            "icon_label": "SECURE CHECKOUT",
-            "icon_color": "#8b1538",
-            "feature_text": "SECURE CHECKOUT",
-            "text_color": "#8b1538",
-            "text_size": 18,
-            "text_weight": "600",
-            "feature_subtext": "",
-            "subtext_color": "#666666",
-            "subtext_size": 14
-          }
-        },
-        "feature_CFEUDX": {
-          "type": "feature",
-          "settings": {
-            "icon_svg": "",
-            "icon_image": "shopify://shop_images/free_shiping.svg",
-            "icon_label": "FREE SHIPPING",
-            "icon_color": "#8b1538",
-            "feature_text": "FREE SHIPPING",
-            "text_color": "#8b1538",
-            "text_size": 18,
-            "text_weight": "600",
-            "feature_subtext": "",
-            "subtext_color": "#666666",
-            "subtext_size": 14
-          }
-        }
-      },
-      "block_order": [
-        "feature_FDgc79",
-        "feature_LKcLyn",
-        "feature_CFEUDX"
-      ],
-      "disabled": true,
-      "name": "Features with Waves",
-      "settings": {
-        "use_gradient": false,
-        "background_color": "#ffd8d8",
-        "background_gradient": "linear-gradient(135deg, rgba(255, 196, 225, 1), rgba(180, 213, 255, 1) 100%)",
-        "section_padding_top": 80,
-        "section_padding_bottom": 80,
-        "section_title": "",
-        "title_color": "#8b1538",
-        "title_size": 32,
-        "title_alignment": "center",
-        "wave_shape": "medium",
-        "show_top_wave": true,
-        "show_bottom_wave": true,
-        "wave_color": "#ffd8d8",
-        "wave_overlap_top": 100,
-        "wave_overlap_bottom": 100,
-        "wave_frequency": 4,
-        "wave_amplitude": 40,
-        "animate_waves": true,
-        "wave_speed": 10,
-        "wave_bob": 0,
-        "animate_features": false,
-        "marquee_speed": 20,
-        "marquee_direction": "rtl",
-        "marquee_gap": 40,
-        "marquee_pause": true
-      }
-    },
     "home_specification_block_zQq98J": {
       "type": "home-specification-block",
       "blocks": {
@@ -461,6 +374,53 @@
         "button_border_radius": 0
       }
     },
+    "faq_section_HdUrdH": {
+      "type": "faq-section",
+      "name": "FAQ Section",
+      "settings": {
+        "subheading": "FAQ",
+        "heading": "Frequently Asked Questions",
+        "body": "<p>Find answers to the most common questions about our products and services.</p>",
+        "question_1": "What is your return policy?",
+        "answer_1": "<p>We offer a 30-day return policy for all unused items in their original packaging.</p>",
+        "question_2": "How long does shipping take?",
+        "answer_2": "<p>Standard shipping takes 3-5 business days. Express shipping is available for 1-2 business days.</p>",
+        "question_3": "Do you offer international shipping?",
+        "answer_3": "<p>Yes, we ship to most countries worldwide. Shipping costs and delivery times vary by location.</p>",
+        "question_4": "",
+        "answer_4": "",
+        "question_5": "",
+        "answer_5": "",
+        "question_6": "",
+        "answer_6": "",
+        "section_background_color": "rgba(0,0,0,0)",
+        "overlay_color": "#000000",
+        "overlay_opacity": 0,
+        "background_color": "rgba(0,0,0,0)",
+        "section_padding": 80,
+        "section_gap": 40,
+        "mobile_gap": 30,
+        "mobile_text_alignment": "left",
+        "question_gap": 16,
+        "question_padding": 20,
+        "answer_padding": 30,
+        "border_radius": 8,
+        "question_border_radius_custom": "35,35,35,35",
+        "subheading_color": "#666666",
+        "heading_color": "#881d3e",
+        "body_color": "#333333",
+        "question_color": "#2d0288",
+        "answer_color": "#2d0288",
+        "question_background": "#a7e4b2",
+        "answer_background": "rgba(0,0,0,0)",
+        "question_border_color": "rgba(0,0,0,0)",
+        "icon_color": "#2d0288",
+        "enable_animation": true,
+        "enable_hover_color": true,
+        "active_background_color": "#111111",
+        "active_text_color": "#ffffff"
+      }
+    },
     "spacer_wave_3R7jfg": {
       "type": "spacer-wave",
       "name": "Wave Spacer (Animated)",
@@ -636,53 +596,6 @@
         "z_index": 1
       }
     },
-    "faq_section_HdUrdH": {
-      "type": "faq-section",
-      "name": "FAQ Section",
-      "settings": {
-        "subheading": "FAQ",
-        "heading": "Frequently Asked Questions",
-        "body": "<p>Find answers to the most common questions about our products and services.</p>",
-        "question_1": "What is your return policy?",
-        "answer_1": "<p>We offer a 30-day return policy for all unused items in their original packaging.</p>",
-        "question_2": "How long does shipping take?",
-        "answer_2": "<p>Standard shipping takes 3-5 business days. Express shipping is available for 1-2 business days.</p>",
-        "question_3": "Do you offer international shipping?",
-        "answer_3": "<p>Yes, we ship to most countries worldwide. Shipping costs and delivery times vary by location.</p>",
-        "question_4": "",
-        "answer_4": "",
-        "question_5": "",
-        "answer_5": "",
-        "question_6": "",
-        "answer_6": "",
-        "section_background_color": "rgba(0,0,0,0)",
-        "overlay_color": "#000000",
-        "overlay_opacity": 0,
-        "background_color": "rgba(0,0,0,0)",
-        "section_padding": 80,
-        "section_gap": 40,
-        "mobile_gap": 30,
-        "mobile_text_alignment": "left",
-        "question_gap": 16,
-        "question_padding": 20,
-        "answer_padding": 30,
-        "border_radius": 8,
-        "question_border_radius_custom": "35,35,35,35",
-        "subheading_color": "#666666",
-        "heading_color": "#881d3e",
-        "body_color": "#333333",
-        "question_color": "#2d0288",
-        "answer_color": "#2d0288",
-        "question_background": "#a7e4b2",
-        "answer_background": "rgba(0,0,0,0)",
-        "question_border_color": "rgba(0,0,0,0)",
-        "icon_color": "#2d0288",
-        "enable_animation": true,
-        "enable_hover_color": true,
-        "active_background_color": "#111111",
-        "active_text_color": "#ffffff"
-      }
-    },
     "product-recommendations": {
       "type": "product-recommendations",
       "settings": {
@@ -722,7 +635,6 @@
   },
   "order": [
     "main",
-    "wavy_features_FXPJ84",
     "home_specification_block_zQq98J",
     "gallery_wqjam9",
     "17128268426b408274",
