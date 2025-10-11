@@ -47,7 +47,7 @@
         "full": false,
         "spacing_both_ends": false,
         "padding": "40,0",
-        "margin": "0,240",
+        "margin": "240,240",
         "section_bg_color": "rgba(0,0,0,0)",
         "inner_bg_color": "#ffd8d8",
         "inner_bg_radius": 32,
