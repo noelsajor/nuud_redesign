@@ -44,3 +44,8 @@
   box-sizing: inherit;
 }
 
+/* Strong, specific, and matches the pseudo-element */
+.seo-html :is(p,h1,h2,h3,h4,h5,h6)::first-letter {
+  initial-letter: unset !important;
+  -webkit-initial-letter: unset !important;
+}
