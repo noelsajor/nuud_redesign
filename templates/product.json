@@ -604,6 +604,7 @@
     },
     "product-recommendations": {
       "type": "product-recommendations",
+      "disabled": true,
       "settings": {
         "full": false,
         "spacing_both_ends": false,
