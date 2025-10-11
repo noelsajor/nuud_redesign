@@ -44,24 +44,3 @@
   box-sizing: inherit;
 }
 
-/* Kill any drop-cap on product pages */
-.template-product .rte p::first-letter,
-.template-product .product-rte-description p::first-letter,
-.template-product .product-attributes p::first-letter,
-.template-product .product-tab p::first-letter {
-  initial-letter: unset !important;        /* Safari/Chromium */
-  -webkit-initial-letter: unset !important;
-  float: none !important;
-  font-size: inherit !important;
-  line-height: inherit !important;
-  font-weight: inherit !important;
-  color: inherit !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  background: transparent !important;
-  text-transform: none !important;
-}
-
-/* Nuclear option for product pages */
-.template-product .rte p:first-letter,
-.template-product .rte p::first-letter { all: unset !important; }
