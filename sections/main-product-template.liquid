@@ -94,8 +94,7 @@
                             <p class="product-price-label product-label">{{ "products.product.price" | t }}</p>
                             <ul class="price-list">
                               <li id="ProductPrice-{{ section.id }}" class="product-price-current">
-                                <!-- Add data-price-cents to make JS subtotal reliable in editor -->
-                                <span class="money" data-price-cents="{{ current_variant.price | times: 100 }}">{{ current_variant.price | money }}</span>
+                                <span class="money">{{ current_variant.price | money }}</span>
                               </li>
                               <li id="ComparePrice-{{ section.id }}" class="product-price-list">
                                 <span class="money">
@@ -153,8 +152,7 @@
                       </p>
                     {% endif %}
                     <div data-section-type="advanced-product-link-section">
-                      <!-- FIX: remove undefined block.id -->
-                      <div class="dT_vDynamicPWrap-{{ section.id }} dT_vProdWrap">
+                      <div class="dT_vDynamicPWrap-{{ section.id }}-block-{{ block.id}} dT_vProdWrap">
                         <ul class="adv-product-list">
                           {% assign swiperSlideClass = "carousel-block-list" %}
                           {% assign block_collection = collections[section.settings.collection] %}
@@ -273,7 +271,7 @@
 
                     <div class="sub-total">
                       <p class="product-label">{{ 'products.product.total' | t }}</p>
-                      <strong data-subtotal>{{ current_variant.price | money }}</strong>
+                      <strong>{{ current_variant.price | money }}</strong>
                     </div>
 
                     {% if section.settings.show_product_quantity %}
@@ -286,10 +284,11 @@
                     {% if section.settings.show_quantity_selector %}
                       <div class="product-attributes dt-sc-qty">
                         <p class="product-label">{{ 'products.product.quantity' | t }}</p>
-                        <div class="quantity product-form__item product-form__item--quantity product-item-caption-qty" data-qty>
-                          <button class="quantity-btn quantity-btn-minus btn-number btn-number-{{ section.id }}" type="button" data-type="minus" aria-label="Decrease quantity">&#45;</button>
-                          <input type="text" id="Quantity-{{ section.id }}" name="quantity" value="1" class="quantity-btn-number form-control input-number input-number-{{ section.id }} product-form__input" inputmode="numeric" pattern="[0-9]*" aria-label="Quantity">
-                          <button class="quantity-btn quantity-btn-plus btn-number btn-number-{{ section.id }}" type="button" data-type="plus" aria-label="Increase quantity">&#43;</button>
+                        <div class="quantity product-form__item product-form__item--quantity product-item-caption-qty">
+                          <!-- keep structure; no theme-override classes added -->
+                          <button class="quantity-btn quantity-btn-minus btn-number btn-number-{{ section.id }}" type="button" data-type="minus" data-field="quant[1]">&#45;</button>
+                          <input type="text" id="Quantity-{{ section.id }}" name="quantity" value="1" class="quantity-btn-number form-control input-number input-number-{{ section.id }} product-form__input" pattern="[0-9]*">
+                          <button class="quantity-btn quantity-btn-plus btn-number btn-number-{{ section.id }}" type="button" data-type="plus" data-field="quant[1]">&#43;</button>
                         </div>
                       </div>
                     {% endif %}
@@ -346,7 +345,7 @@
                           </div>
                         {% endif %}
                       {%- when 'social-sharing' -%}
-                        {% assign share_url = product.selected_or_first_available_variant.url | default: product.url | prepend: request.origin %}
+                        {% assign share_url = product.selected_variant.url | default: product.url | prepend: request.origin %}
                         {% render 'product-share-button', share_url: share_url %}
                     {% endcase %}
                   {% endfor %}
@@ -693,82 +692,53 @@
 */
 </style>
 
-<!-- ========= SIMPLE GALLERY & SUBTOTAL LOGIC (Editor-safe, section-scoped) ========= -->
 <script>
-(function(){
-  var SECTION_ID = "{{ section.id }}";
-  var MONEY_FORMAT = {{ shop.money_format | json }};
-
-  function qs(root, sel){ return root.querySelector(sel); }
-  function qsa(root, sel){ return Array.prototype.slice.call(root.querySelectorAll(sel)); }
-
-  function formatMoney(cents){
-    try { return Shopify.formatMoney(cents, MONEY_FORMAT); }
-    catch(e){ return (cents/100).toFixed(2); }
-  }
-
-  function initSection(sectionEl){
-    if(!sectionEl) return;
-
-    // Tabs expand toggle (no jQuery)
-    qsa(sectionEl, ".tablinks").forEach(function(btn){
-      btn.addEventListener("click", function(){
-        var tabs = qs(sectionEl, ".dt-sc-tabs");
-        if(tabs) tabs.classList.toggle("expanded");
-      });
+  $(document).ready(function(){
+    $(".tablinks").on("click", function(){
+      $(".dt-sc-tabs").toggleClass("expanded");
     });
 
-    // Quantity + Subtotal
-    var qtyWrap = qs(sectionEl, "[data-qty]");
-    var qtyInput = qs(sectionEl, ".quantity-btn-number");
-    var subtotalEl = qs(sectionEl, "[data-subtotal]");
-    var priceSpan = qs(sectionEl, ".product-price-current .money");
+    // Update subtotal when quantity changes
+    $('.quantity-btn-number').on('change', function() {
+      var qty = parseFloat($('.quantity-btn-number').val()) || 1;
+      var priceText = $('.product-price-current span').text();
+      var numeric = priceText.replace(/[^0-9.]/g, '');
+      var subtotal = qty * parseFloat(numeric || 0);
+      $('.sub-total strong').html(Shopify.formatMoney((subtotal*100), DT_THEME.moneyFormat));
+    });
+  });
+</script>
 
-    function getPriceCents(){
-      if(!priceSpan) return 0;
-      var centsAttr = priceSpan.getAttribute("data-price-cents");
-      if(centsAttr) return parseInt(centsAttr, 10) || 0;
-      // Fallback: parse text if needed
-      var numeric = (priceSpan.textContent || "").replace(/[^0-9.]/g, "");
-      return Math.round(parseFloat(numeric || "0") * 100);
-    }
+<!-- ========= SIMPLE GALLERY SWAP LOGIC (section-scoped) ========= -->
+<script>
+(function(){
+  const sectionId = "{{ section.id }}";
+  const sectionRoot = document.getElementById(`shopify-section-{{ section.id }}`) || document;
+  const featured = sectionRoot.querySelector(`#FeaturedMedia-${sectionId}`);
+  const thumbsWrap = sectionRoot.querySelector(`.product-media__thumbs`);
+  if (!featured || !thumbsWrap) return;
 
-    function setSubtotal(){
-      if(!subtotalEl) return;
-      var qty = parseFloat(qtyInput && qtyInput.value ? qtyInput.value : "1") || 1;
-      var subtotalCents = Math.max(1, qty) * getPriceCents();
-      subtotalEl.innerHTML = formatMoney(subtotalCents);
-    }
+  function swapToThumb(btn){
+    const id = btn.getAttribute('data-media-id');
+    if (!id || featured.getAttribute('data-current-media-id') === id) return;
 
-    if(qtyWrap && qtyInput){
-      qtyWrap.addEventListener("click", function(e){
-        var btn = e.target.closest("button[data-type]");
-        if(!btn) return;
-        var t = btn.getAttribute("data-type");
-        var v = parseInt(qtyInput.value || "1", 10) || 1;
-        if(t === "minus") v = Math.max(1, v - 1);
-        if(t === "plus") v = v + 1;
-        qtyInput.value = String(v);
-        setSubtotal();
-      });
-      qtyInput.addEventListener("input", setSubtotal);
-      setSubtotal();
-    }
+    const type = btn.getAttribute('data-media-type');
+    const thumbImg = btn.querySelector('img');
 
-    // Simple gallery swap
-    var featured = qs(sectionEl, "#FeaturedMedia-" + SECTION_ID);
-    var thumbsWrap = qs(sectionEl, ".product-media__thumbs");
-    function swapToThumb(btn){
-      if(!featured || !btn) return;
-      var id = btn.getAttribute("data-media-id");
-      if(!id || featured.getAttribute("data-current-media-id") === id) return;
+    featured.innerHTML = '';
 
-      var type = btn.getAttribute("data-media-type");
-      var thumbImg = btn.querySelector("img");
-      featured.innerHTML = "";
-
-      if(thumbImg){
-        var big = new Image();
+    if (type === 'image' && thumbImg){
+      const big = new Image();
+      big.className = 'product-media__img';
+      big.decoding = 'async';
+      big.loading = 'eager';
+      big.sizes = '(min-width: 992px) 700px, 100vw';
+      big.src = thumbImg.currentSrc || thumbImg.src;
+      featured.appendChild(big);
+    } else {
+      // For video / model types, fall back to re-render via <img> preview (fast + simple)
+      if (thumbImg){
+        const big = new Image();
         big.className = 'product-media__img';
         big.decoding = 'async';
         big.loading = 'eager';
@@ -776,56 +746,31 @@
         big.src = thumbImg.currentSrc || thumbImg.src;
         featured.appendChild(big);
       }
-      featured.setAttribute('data-current-media-id', id);
-
-      qsa(thumbsWrap, '.product-media__thumb').forEach(function(t){
-        var active = (t === btn);
-        t.classList.toggle('is-active', active);
-        t.setAttribute('aria-current', active ? 'true' : 'false');
-      });
     }
 
-    if(thumbsWrap){
-      thumbsWrap.addEventListener("click", function(e){
-        var btn = e.target.closest(".product-media__thumb");
-        if(btn) swapToThumb(btn);
-      });
-    }
+    featured.setAttribute('data-current-media-id', id);
 
-    // Respect variant featured media (listen to common events)
-    document.addEventListener('variant:change', function(e){
-      try {
-        var v = e.detail && e.detail.variant ? e.detail.variant : null;
-        var mediaId = v && v.featured_media ? String(v.featured_media.id) : null;
-        if(!mediaId || !thumbsWrap) return;
-        var matchBtn = thumbsWrap.querySelector('.product-media__thumb[data-media-id="'+mediaId+'"]');
-        if(matchBtn) swapToThumb(matchBtn);
-        // Update price cents + subtotal when variant changes
-        if(priceSpan && v && typeof v.price === 'number'){
-          priceSpan.setAttribute('data-price-cents', v.price);
-          priceSpan.textContent = formatMoney(v.price);
-          setSubtotal();
-        }
-      } catch(err){}
+    thumbsWrap.querySelectorAll('.product-media__thumb').forEach(t => {
+      const active = t === btn;
+      t.classList.toggle('is-active', active);
+      t.setAttribute('aria-current', active ? 'true' : 'false');
     });
   }
 
-  // Initial init (works in storefront & editor)
-  var sectionRoot = document.getElementById('shopify-section-{{ section.id }}') || document;
-  initSection(sectionRoot);
-
-  // Re-init inside Theme Editor when section reloads/selects
-  document.addEventListener('shopify:section:load', function(e){
-    if(e && e.detail && e.detail.sectionId === "{{ section.id }}"){
-      var el = document.getElementById('shopify-section-{{ section.id }}');
-      initSection(el);
-    }
+  thumbsWrap.addEventListener('click', function(e){
+    const btn = e.target.closest('.product-media__thumb');
+    if (btn) swapToThumb(btn);
   });
-  document.addEventListener('shopify:section:select', function(e){
-    if(e && e.detail && e.detail.sectionId === "{{ section.id }}"){
-      var el = document.getElementById('shopify-section-{{ section.id }}');
-      initSection(el);
-    }
+
+  // Respect variant featured media when your theme emits "variant:change"
+  document.addEventListener('variant:change', function(e){
+    try {
+      const v = e.detail && e.detail.variant ? e.detail.variant : null;
+      const mediaId = v && v.featured_media ? String(v.featured_media.id) : null;
+      if (!mediaId) return;
+      const matchBtn = thumbsWrap.querySelector(`.product-media__thumb[data-media-id="${mediaId}"]`);
+      if (matchBtn) swapToThumb(matchBtn);
+    } catch(err){}
   });
 })();
 </script>
