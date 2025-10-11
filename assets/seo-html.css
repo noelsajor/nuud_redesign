@@ -19,7 +19,7 @@
   width: 100%;
   border-collapse: collapse;
 }
-.seo-html :where(h1, h2, h3, h4, h5, h6) {
+.seo-html :where(p,h1, h2, h3, h4, h5, h6) {
   /* optional: make headings match theme scale a bit nicer */
   font-weight: inherit;
   line-height: 1.2;
@@ -29,7 +29,7 @@
   margin: 0.75em 0;
 }
 .seo-html :where(a) {
-  color: inherit;           /* or your brand color if desired */
+  color: #881d3e;           /* or your brand color if desired */
   text-decoration: underline;
 }
 .seo-html :where(ul, ol) {
