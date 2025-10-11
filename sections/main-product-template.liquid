@@ -638,6 +638,24 @@
       padding-bottom: 2px;
     }
   }
+
+    /* Mobile-only: hide horizontal scrollbar in the swipe gallery */
+  @media (max-width: 991.98px){
+    #shopify-section-{{ section.id }} .media-scroller{
+      /* still scrollable */
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+
+      /* hide in all browsers */
+      scrollbar-width: none;           /* Firefox */
+      -ms-overflow-style: none;        /* IE/Edge legacy */
+    }
+    #shopify-section-{{ section.id }} .media-scroller::-webkit-scrollbar{
+      display: none;                   /* Chrome/Safari/Opera */
+      height: 0;
+      background: transparent;
+    }
+  }
 </style>
 
 <!-- ========= GALLERY + DOTS + SUBTOTAL LOGIC (Editor-safe, section-scoped) ========= -->
