@@ -44,25 +44,24 @@
   box-sizing: inherit;
 }
 
-  /* Disable any drop-cap/first-letter styling inside this product section */
-  #shopify-section-{{ section.id }} .product-item-caption-desc p:first-letter,
-  #shopify-section-{{ section.id }} .product-item-caption-desc p::first-letter,
-  #shopify-section-{{ section.id }} .product-attributes p:first-letter,
-  #shopify-section-{{ section.id }} .product-attributes p::first-letter,
-  #shopify-section-{{ section.id }} .product-tab .rte p:first-letter,
-  #shopify-section-{{ section.id }} .product-tab .rte p::first-letter,
-  #shopify-section-{{ section.id }} .rte p:first-letter,
-  #shopify-section-{{ section.id }} .rte p::first-letter {
-    float: none !important;
-    font-size: inherit !important;
-    line-height: inherit !important;
-    font-weight: inherit !important;
-    color: inherit !important;
-    background: transparent !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    text-transform: none !important;
-    /* Safari/Chromium drop-cap property (if used anywhere) */
-    initial-letter: unset !important;
-    -webkit-initial-letter: unset !important;
-  }
+/* Kill any drop-cap on product pages */
+.template-product .rte p::first-letter,
+.template-product .product-rte-description p::first-letter,
+.template-product .product-attributes p::first-letter,
+.template-product .product-tab p::first-letter {
+  initial-letter: unset !important;        /* Safari/Chromium */
+  -webkit-initial-letter: unset !important;
+  float: none !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  font-weight: inherit !important;
+  color: inherit !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  text-transform: none !important;
+}
+
+/* Nuclear option for product pages */
+.template-product .rte p:first-letter,
+.template-product .rte p::first-letter { all: unset !important; }
