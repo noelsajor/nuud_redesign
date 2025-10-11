@@ -161,6 +161,7 @@
         "class_q4eqmj",
         "class_Wmrw8r"
       ],
+      "disabled": true,
       "name": "Specification block",
       "settings": {
         "full": false,
@@ -277,6 +278,7 @@
         "image_eR36Wk",
         "image_9xp3Aq"
       ],
+      "disabled": true,
       "name": "Gallery",
       "settings": {
         "full": false,
@@ -305,10 +307,12 @@
     },
     "17128268426b408274": {
       "type": "apps",
+      "disabled": true,
       "settings": {}
     },
     "section_D8hWVF": {
       "type": "section",
+      "disabled": true,
       "name": "Hero Section",
       "settings": {
         "section_aria_label": "Hero section with promotional content",
@@ -343,6 +347,7 @@
     },
     "section_PQTKwy": {
       "type": "section",
+      "disabled": true,
       "name": "Hero Section",
       "settings": {
         "section_aria_label": "Hero section with promotional content",
