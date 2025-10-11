@@ -601,6 +601,43 @@
 #shopify-section-{{ section.id }} .dt-sc-tabs .tabcontent{
   background: transparent !important; border: 0 !important; box-shadow: none !important;
 }
+
+  /* --- Desktop-only overrides (≥992px) --- */
+  @media (min-width: 992px){
+    /* 1) Hide the mobile/tablet scroller + dots on desktop */
+    #shopify-section-{{ section.id }} .media-scroller,
+    #shopify-section-{{ section.id }} .media-dots{
+      display: none !important;
+      visibility: hidden !important;
+      height: 0 !important;
+      overflow: hidden !important;
+    }
+
+    /* 2) Place DESKTOP MAIN STAGE first, then DESKTOP THUMBNAILS (vertical stacking) */
+    #shopify-section-{{ section.id }} .product-media{
+      display: grid;
+      grid-template-areas:
+        "stage"
+        "thumbs";
+      gap: 12px;
+      align-items: start;
+    }
+    #shopify-section-{{ section.id }} .desktop-stage{
+      display: block !important;
+      grid-area: stage;
+      order: 1; /* safety if order is used elsewhere */
+    }
+    #shopify-section-{{ section.id }} .desktop-thumbs{
+      display: grid !important;
+      grid-area: thumbs;
+      order: 2;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(64px, 96px);
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+  }
 </style>
 
 <!-- ========= GALLERY + DOTS + SUBTOTAL LOGIC (Editor-safe, section-scoped) ========= -->
