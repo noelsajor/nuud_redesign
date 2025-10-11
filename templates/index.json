@@ -177,6 +177,70 @@
         "marquee_pause": false
       }
     },
+    "home_marquee_section_mYxjNi": {
+      "type": "home-marquee-section",
+      "blocks": {
+        "image_DWbxzi": {
+          "type": "image",
+          "settings": {
+            "block_heading": "Main Heading",
+            "link": ""
+          }
+        },
+        "image_YqKECg": {
+          "type": "image",
+          "settings": {
+            "block_heading": "Main Heading",
+            "link": ""
+          }
+        },
+        "image_YU7c6L": {
+          "type": "image",
+          "settings": {
+            "block_heading": "Main Heading",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_DWbxzi",
+        "image_YqKECg",
+        "image_YU7c6L"
+      ],
+      "name": "Home Marquee Section",
+      "settings": {
+        "full": false,
+        "spacing_both_ends": false,
+        "padding": "0,0",
+        "margin": "0,0",
+        "show_background_image": false,
+        "background_style": "none",
+        "background_size": "auto",
+        "enable_overlay": true,
+        "background_color": "#fdf8e1",
+        "overlay_transparency": "1",
+        "section_heading": "",
+        "section_sub_heading": "",
+        "section_description": "",
+        "section_button_text": "",
+        "section_button_link": "",
+        "section_heading_color": "",
+        "section_sub_heading_color": "",
+        "section_description_color": "",
+        "section_button_bg_color": "",
+        "section_button_text_color": "",
+        "section_button_hover_bg_color": "",
+        "section_button_hover_text_color": "",
+        "heading_position": "text-center",
+        "column_gap": "30",
+        "layout_style": "style_1",
+        "speed": "2",
+        "enable_reverse_animation": false,
+        "block_background_color": "",
+        "block_heading_color": "",
+        "custom_class_name": ""
+      }
+    },
     "2_test_section_claude_9VyBTH": {
       "type": "best-sellers-collections",
       "name": "Best Sellers Collection",
@@ -1086,75 +1150,12 @@
         "extra_space_height": 40,
         "z_index": 1
       }
-    },
-    "home_marquee_section_mYxjNi": {
-      "type": "home-marquee-section",
-      "blocks": {
-        "image_DWbxzi": {
-          "type": "image",
-          "settings": {
-            "block_heading": "Main Heading",
-            "link": ""
-          }
-        },
-        "image_YqKECg": {
-          "type": "image",
-          "settings": {
-            "block_heading": "Main Heading",
-            "link": ""
-          }
-        },
-        "image_YU7c6L": {
-          "type": "image",
-          "settings": {
-            "block_heading": "Main Heading",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "image_DWbxzi",
-        "image_YqKECg",
-        "image_YU7c6L"
-      ],
-      "name": "Home Marquee Section",
-      "settings": {
-        "full": false,
-        "spacing_both_ends": false,
-        "padding": "0,0",
-        "margin": "0,0",
-        "show_background_image": false,
-        "background_style": "none",
-        "background_size": "auto",
-        "enable_overlay": true,
-        "background_color": "#a7e4b2",
-        "overlay_transparency": "1",
-        "section_heading": "",
-        "section_sub_heading": "",
-        "section_description": "",
-        "section_button_text": "",
-        "section_button_link": "",
-        "section_heading_color": "",
-        "section_sub_heading_color": "",
-        "section_description_color": "",
-        "section_button_bg_color": "",
-        "section_button_text_color": "",
-        "section_button_hover_bg_color": "",
-        "section_button_hover_text_color": "",
-        "heading_position": "text-center",
-        "column_gap": "30",
-        "layout_style": "style_1",
-        "speed": "2",
-        "enable_reverse_animation": false,
-        "block_background_color": "",
-        "block_heading_color": "",
-        "custom_class_name": ""
-      }
     }
   },
   "order": [
     "split_hero_section_b8mqcE",
     "wavy_features_MDYa7y",
+    "home_marquee_section_mYxjNi",
     "2_test_section_claude_9VyBTH",
     "spacer_wave_KxbydU",
     "1654336925c509c587",
@@ -1172,7 +1173,6 @@
     "1757879707bba2c8c8",
     "portfolio_2_JwTwMq",
     "home_newsletter_PPedY3",
-    "spacer_wave_DjDLyz",
-    "home_marquee_section_mYxjNi"
+    "spacer_wave_DjDLyz"
   ]
 }
