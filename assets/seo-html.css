@@ -25,6 +25,8 @@
   line-height: 1.2;
   margin: 0.5em 0 0.25em;
   text-transform: none !important;
+  initial-letter: unset !important;
+  -webkit-initial-letter: unset !important;
 }
 .seo-html :where(p, ul, ol, blockquote, pre, table) {
   margin: 0.75em 0;
