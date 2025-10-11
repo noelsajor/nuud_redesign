@@ -11,13 +11,20 @@
   {% endif %}
 
   <div class="row">
-    <!-- This empty container will be populated via fetch -->
+    <!-- Will be populated via fetch -->
     <div
       class="product-recommendations"
       id="product-recommendations-{{ section.id }}"
       data-product-id="{{ product.id }}"
       data-section-id="{{ section.id }}"
       data-limit="4">
+      <!-- Optional: small skeleton -->
+      <div class="recs-skeleton" aria-hidden="true" style="display:flex;gap:12px;">
+        <div style="height:180px;flex:1;background:#f3f3f3;border-radius:12px;"></div>
+        <div style="height:180px;flex:1;background:#f3f3f3;border-radius:12px;"></div>
+        <div style="height:180px;flex:1;background:#f3f3f3;border-radius:12px;"></div>
+        <div style="height:180px;flex:1;background:#f3f3f3;border-radius:12px;"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -41,13 +48,14 @@
     }
   }
   #shopify-section-{{ section.id }} .swiper-wrapper{ list-style:none; margin:0; padding:0; }
+  #shopify-section-{{ section.id }} .recs-empty{ text-align:center; padding:16px 0; opacity:.7; }
 </style>
 
 <script>
 (function(){
   var hostSel = '#product-recommendations-{{ section.id }}';
 
-  var initSwiper = function(scope){
+  function initSwiper(scope){
     if (typeof window.Swiper !== 'function') return;
     var container = scope.querySelector('.swiper-container');
     if (!container) return;
@@ -70,9 +78,9 @@
         1280: { slidesPerView: 4 }
       }
     });
-  };
+  }
 
-  var loadRecs = function(){
+  function loadRecs(){
     var host = document.querySelector(hostSel);
     if (!host) return;
 
@@ -80,8 +88,10 @@
     var sectionId = host.getAttribute('data-section-id');
     var limit = host.getAttribute('data-limit') || 4;
 
-    // If not on a product page, show nothing.
-    if (!productId) return;
+    if (!productId) {
+      host.innerHTML = '<p class="recs-empty">Product recommendations appear on product pages.</p>';
+      return;
+    }
 
     var url = '/recommendations/products?section_id=' + encodeURIComponent(sectionId) +
               '&product_id=' + encodeURIComponent(productId) +
@@ -93,27 +103,36 @@
         var tmp = document.createElement('div');
         tmp.innerHTML = html;
 
-        var inner = tmp.querySelector('#recs-inner-{{ section.id }}');
-        if (!inner) return; // no recommendations returned
+        // IMPORTANT: we now search a STATIC marker (#recs-inner), not suffixed by section.id,
+        // because the server-rendered response gets a NEW section.id.
+        var inner = tmp.querySelector('#recs-inner');
+        if (!inner) {
+          host.innerHTML = '<p class="recs-empty">No recommendations available for this product.</p>';
+          return;
+        }
 
         host.innerHTML = inner.innerHTML;
         initSwiper(host);
       })
-      .catch(function(){ /* silently fail */ });
-  };
+      .catch(function(){
+        host.innerHTML = '<p class="recs-empty">Couldn’t load recommendations right now.</p>';
+      });
+  }
 
   document.addEventListener('shopify:section:load', function(e){
     if (e && e.detail && e.detail.sectionId === '{{ section.id }}') loadRecs();
   });
+
   setTimeout(loadRecs, 150);
 })();
 </script>
 
 {%- comment -%}
-  The markup below ONLY renders when this section is requested through
+  The block below only renders when THIS section is requested through
   /recommendations/products?... because only then `recommendations` is populated.
+  NOTE: Use a STATIC id (#recs-inner) so client JS can find it even if the server assigns a new section.id.
 {%- endcomment -%}
-<div id="recs-inner-{{ section.id }}">
+<div id="recs-inner">
 {%- if recommendations and recommendations.products_count > 0 -%}
   <div class="swiper-container dT_VProdRecommendations">
     <ul class="swiper-wrapper">
