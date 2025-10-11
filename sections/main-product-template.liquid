@@ -9,9 +9,7 @@
 {% assign current_variant = product.selected_or_first_available_variant %}
 
 <div class="{% render 'container-settings' %}">
-  <!-- OUTER PADDING/MARGIN WRAPPER (controlled by settings: padding/margin) -->
   <div class="outer-pad-{{ section.id }}">
-    <!-- Inner background wrapper (card) -->
     <div class="inner-bg-{{ section.id }}">
       <div class="row {% for block in section.blocks -%}{%- case block.type -%}{%- when 'fbt' -%} fbt_hide_primary_cart_btn{%- endcase -%}{%- endfor -%}">
         <div class="{{settings.product_page_sidebar}} {% if settings.product_page_sidebar == 'full-width' %} no-sidebar {% else %}has-sidebar{% endif  %}">
@@ -33,12 +31,8 @@
               <div class="product_images_length-{{product_images_length}} {{ product_image_width }} product-gallery-{{ section.id }}" id="product-gallery" data-zoom-method="{{ section.settings.zoom_type }}">
                 <div class="product-media product-media-{{ section.id }}">
 
-                  {%- comment -%}
-                  DESKTOP GALLERY (>=768px)
-                  - Order: MAIN first (order:1), THUMBS after (order:2)
-                  {%- endcomment -%}
+                  {%- comment -%} DESKTOP (main first, thumbs after) {%- endcomment -%}
                   <div class="product-media--desktop" aria-label="Product media desktop">
-                    <!-- MAIN STAGE -->
                     <div class="product-media__main" id="FeaturedMedia-{{ section.id }}" data-current-media-id="{{ initial_media.id }}">
                       {%- if initial_media.media_type == 'image' -%}
                         {{ initial_media | image_url: width: 1600 | image_tag:
@@ -54,7 +48,6 @@
                       {%- endif -%}
                     </div>
 
-                    <!-- THUMBNAILS (DESKTOP ONLY) -->
                     <div class="product-media__thumbs" role="list" aria-label="Product media thumbnails">
                       {%- for media in product.media -%}
                         <button
@@ -66,13 +59,10 @@
                           data-media-type="{{ media.media_type }}"
                           aria-label="Show media {{ forloop.index }}"
                         >
-                          {%- if media.media_type == 'image' -%}
-                            {{ media | image_url: width: 240 | image_tag: loading: 'lazy', widths: '120,160,240', class: 'product-media__thumb-img', alt: media.alt | escape }}
-                          {%- elsif media.media_type == 'video' or media.media_type == 'external_video' -%}
-                            {{ media | image_url: width: 240 | image_tag: loading: 'lazy', widths: '120,160,240', class: 'product-media__thumb-img', alt: media.alt | escape }}
+                          {{ media | image_url: width: 240 | image_tag: loading: 'lazy', widths: '120,160,240', class: 'product-media__thumb-img', alt: media.alt | escape }}
+                          {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
                             <span class="product-media__thumb-badge" aria-hidden="true">▶</span>
                           {%- elsif media.media_type == 'model' -%}
-                            {{ media | image_url: width: 240 | image_tag: loading: 'lazy', widths: '120,160,240', class: 'product-media__thumb-img', alt: media.alt | escape }}
                             <span class="product-media__thumb-badge" aria-hidden="true">3D</span>
                           {%- endif -%}
                         </button>
@@ -80,11 +70,7 @@
                     </div>
                   </div>
 
-                  {%- comment -%}
-                  MOBILE GALLERY (<768px)
-                  - Horizontal scroll-snap carousel + dots
-                  - Thumbs are replaced by dots
-                  {%- endcomment -%}
+                  {%- comment -%} MOBILE: swipeable slides + mobile thumbs (no dots) {%- endcomment -%}
                   <div class="product-media--mobile" aria-label="Product media mobile">
                     <div class="product-media__carousel" id="MobileCarousel-{{ section.id }}" role="region" aria-roledescription="carousel" aria-label="Product images">
                       <ul class="product-media__slides" id="MobileSlides-{{ section.id }}">
@@ -107,17 +93,18 @@
                       </ul>
                     </div>
 
-                    <!-- DOTS PAGINATION (MOBILE ONLY) -->
-                    <div class="product-media__dots" id="MobileDots-{{ section.id }}" role="tablist" aria-label="Choose image">
+                    <!-- MOBILE THUMB STRIP (pagination) -->
+                    <div class="product-media__thumbs product-media__thumbs--mobile" id="MobileThumbs-{{ section.id }}" role="list" aria-label="Choose image">
                       {%- for media in product.media -%}
                         <button
                           type="button"
-                          class="product-media__dot{% if media.id == initial_media.id %} is-active{% endif %}"
-                          role="tab"
-                          aria-selected="{% if media.id == initial_media.id %}true{% else %}false{% endif %}"
-                          aria-controls="MobileSlides-{{ section.id }}"
+                          class="product-media__thumb product-media__thumb--mobile{% if media.id == initial_media.id %} is-active{% endif %}"
+                          role="listitem"
+                          aria-current="{% if media.id == initial_media.id %}true{% else %}false{% endif %}"
                           data-index="{{ forloop.index0 }}"
-                          aria-label="Go to slide {{ forloop.index }}">
+                          aria-label="Go to image {{ forloop.index }}"
+                        >
+                          {{ media | image_url: width: 160 | image_tag: loading: 'lazy', widths: '80,120,160', class: 'product-media__thumb-img', alt: media.alt | escape }}
                         </button>
                       {%- endfor -%}
                     </div>
@@ -132,10 +119,8 @@
                   <div class="product-meta-block">
                     {%- for block in section.blocks -%}
                       {%- case block.type -%}
-                        {%- when '@app' -%}
-                          {% render block %}
-                        {%- when 'title' -%}
-                          <h3 class="product-title">{{ product.title | escape }}</h3>
+                        {%- when '@app' -%}{% render block %}
+                        {%- when 'title' -%}<h3 class="product-title">{{ product.title | escape }}</h3>
                         {%- when 'price' -%}
                           <div class="product-price">
                             <p class="product-price-label product-label">{{ "products.product.price" | t }}</p>
@@ -332,10 +317,7 @@
 
                     <div class="product-form__item product-form__item--submit product_payments_btns">
                       {% unless section.settings.hide_addtocart %}
-                        <button type="submit"
-                                name="add"
-                                id="AddToCart-{{ section.id }}"
-                                class="product-form__submit button {% if product.options.size == 1 and product.variants[0].title == 'Default Title' and product.variants.size == 1 %} product-form__cart-submit--small{% endif %}">
+                        <button type="submit" name="add" id="AddToCart-{{ section.id }}" class="product-form__submit button {% if product.options.size == 1 and product.variants[0].title == 'Default Title' and product.variants.size == 1 %} product-form__cart-submit--small{% endif %}">
                           {{ 'products.product.add_to_cart' | t }}
                         </button>
                       {% endunless %}
@@ -370,8 +352,7 @@
 
                   {%- for block in section.blocks -%}
                     {%- case block.type -%}
-                      {%- when 'notify-form' -%}
-                        {% include 'notify-form', product: product %}
+                      {%- when 'notify-form' -%}{% include 'notify-form', product: product %}
                       {%- when 'badge' -%}
                         {% if block.settings.image != blank %}
                           <div class="secure-badges">
@@ -385,26 +366,18 @@
                     {% endcase %}
                   {% endfor %}
 
-                  {%- if settings.enable_fake_visitors -%}
-                    {% render 'fake-visitors' %}
-                  {%- endif -%}
-                  {%- if settings.enable_fake_sales -%}
-                    {% render 'social-proof-sales' %}
-                  {%- endif -%}
+                  {%- if settings.enable_fake_visitors -%}{% render 'fake-visitors' %}{%- endif -%}
+                  {%- if settings.enable_fake_sales -%}{% render 'social-proof-sales' %}{%- endif -%}
 
                   {%- if section.settings.tab_position == "right" -%}
-                    <div class="product-tab">
-                      {% render 'product-tab' %}
-                    </div>
+                    <div class="product-tab">{% render 'product-tab' %}</div>
                   {%- endif -%}
                 </div>
               </div>
             </div> <!-- /product-page-row -->
 
             {%- if section.settings.tab_position == "bottom" -%}
-              <div class="product-tab">
-                {% render 'product-tab' %}
-              </div>
+              <div class="product-tab">{% render 'product-tab' %}</div>
             {%- endif -%}
           </div>
         </div>
@@ -415,21 +388,17 @@
           </div>
         {%- endunless -%}
       </div>
-    </div> <!-- /inner-bg-{{ section.id }} -->
-  </div> <!-- /outer-pad-{{ section.id }} -->
+    </div>
+  </div>
 </div>
 
 {% render 'dT_product_bundle' %}
-{% if section.settings.enable_enquiry %}
-  {% render 'enquiry-form' %}
-{% endif %}
+{% if section.settings.enable_enquiry %}{% render 'enquiry-form' %}{% endif %}
 
 {%- for block in section.blocks -%}
   {%- case block.type -%}
     {%- when 'size_chart' -%}
-      {% if product.options contains 'Size' %}
-        {% render 'size-chart' %}
-      {% endif %}
+      {% if product.options contains 'Size' %}{% render 'size-chart' %}{% endif %}
   {% endcase %}
 {% endfor %}
 
@@ -437,10 +406,7 @@
   <script type="application/json" id="ProductJson-{{ section.id }}">{{ product | json }}</script>
   <script type="application/json" id="ModelJson-{{ section.id }}">{{ product.media | where: 'media_type', 'model' | json }}</script>
   <script type="application/json" id="ProductTemplate-{{ product.id }}">{ "template": "product-template" } </script>
-
-  {% if section.settings.enable_sticky_cart %}
-    {% render 'sticky_cart' %}
-  {% endif %}
+  {% if section.settings.enable_sticky_cart %}{% render 'sticky_cart' %}{% endif %}
 {% endunless %}
 
 <style>
@@ -449,18 +415,15 @@
   .template-product .product_payments_btns button,
   .template-product .product_payments_btns .dt-sc-btn,
   .template-product .product-form__item--submit button { background:#2d0288; color: white; }
-
   .dt-sc-qty { gap: 16px; }
   .StickySidebar { color: #881d3e; }
   .dt-sc-accordion-container .dt-sc-accordion-btn { background: none; border-bottom: 2px solid #881d3e; }
 
-  /* -------- Section Background (full width) -------- */
   #shopify-section-{{ section.id }}.main-product-template {
     background: {{ section.settings.section_bg_color | default: 'transparent' }};
     position: relative;
   }
 
-  /* -------- OUTER PADDING / MARGIN (outside inner card) -------- */
   .outer-pad-{{ section.id }} {
     margin-top: {{ margin_top | default: 0 }}px;
     margin-bottom: {{ margin_bottom | default: 0 }}px;
@@ -476,20 +439,16 @@
     }
   }
 
-  /* -------- Inner Card Background & Padding -------- */
   .inner-bg-{{ section.id }}{
     background: {{ section.settings.inner_bg_color | default: 'transparent' }};
     border-radius: {{ section.settings.inner_bg_radius | default: 0 }}px;
     padding: {{ section.settings.inner_bg_padding | default: 0 }}px;
   }
 
-  /* Decorative images behind content */
   #shopify-section-{{section.id}}.main-product-template:before{
     content: " ";
     position: absolute; width:504px; height:768px;
-    {% if section.settings.before_image != blank %}
-      background-image:url({{ section.settings.before_image | img_url:'master' }});
-    {% endif %}
+    {% if section.settings.before_image != blank %}background-image:url({{ section.settings.before_image | img_url:'master' }});{% endif %}
     background-size: auto; background-repeat: no-repeat; background-position: left top;
     top:-250px; left:0; animation: dt-swing ease-in-out 2s infinite alternate;
     pointer-events: none; z-index: -1;
@@ -497,141 +456,93 @@
   #shopify-section-{{section.id}}.main-product-template:after{
     content: " ";
     position: absolute; width:240px; height:534px;
-    {% if section.settings.after_image != blank %}
-      background-image:url({{ section.settings.after_image | img_url:'master' }});
-    {% endif %}
+    {% if section.settings.after_image != blank %}background-image:url({{ section.settings.after_image | img_url:'master' }});{% endif %}
     background-size: auto; background-repeat: no-repeat; background-position: left bottom;
     bottom:0; left:0; animation: dt-swing ease-in-out 2s infinite alternate;
     pointer-events: none; z-index: -1;
   }
 
-  #shopify-product-reviews .spr-container *{color:var(--DT_Blog_Button_Text_Color);}
-  .spr-form-input-text, .spr-form-input-email, .spr-form-input-textarea{color:var(--DT_Blog_Button_Text_Color);background:transparent !important;border-color:var(--DT_Blog_Button_Text_Color) !important;}
-  .template-product .swatch .swatch-element.not_color label{border-color:var(--DT_Blog_Button_Text_Color) }
-
-  /* Maintain z-index of gallery */
   #shopify-section-{{section.id}} .product-page-row,
-  #shopify-section-{{section.id}} .product-gallery-{{ section.id }}{
-    position: relative; z-index: 1;
-  }
+  #shopify-section-{{section.id}} .product-gallery-{{ section.id }}{ position: relative; z-index: 1; }
 
-  /* ================= GALLERY LAYOUT ================= */
-  #shopify-section-{{ section.id }} .product-media {
-    display: block;
-  }
-
-  /* Desktop group visible on desktop only */
+  /* Layout visibility */
   #shopify-section-{{ section.id }} .product-media--desktop { display: none; }
   #shopify-section-{{ section.id }} .product-media--mobile { display: block; }
-
   @media (min-width: 768px){
     #shopify-section-{{ section.id }} .product-media--desktop { display: grid; gap: 16px; }
     #shopify-section-{{ section.id }} .product-media--mobile { display: none; }
-  }
-
-  /* Ensure order: MAIN then THUMBS (desktop) */
-  @media (min-width: 768px){
     #shopify-section-{{ section.id }} .product-media__main { order: 1; }
     #shopify-section-{{ section.id }} .product-media__thumbs { order: 2; }
   }
 
-  /* Main stage */
-  #shopify-section-{{ section.id }} .product-media__main {
-    width: 100%; position: relative; background: transparent;
-  }
+  /* Stage */
+  #shopify-section-{{ section.id }} .product-media__main{ width:100%; position:relative; background:transparent; }
   #shopify-section-{{ section.id }} .product-media__img,
   #shopify-section-{{ section.id }} .product-media__video,
-  #shopify-section-{{ section.id }} .product-media__model {
-    display: block; width: 100%; height: auto; max-width: 100%; object-fit: contain;
-  }
-  #shopify-section-{{ section.id }} .product-media__main::before {
-    content: ""; display: block; padding-top: 100%;
-  }
-  #shopify-section-{{ section.id }} .product-media__main > * {
-    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
-  }
+  #shopify-section-{{ section.id }} .product-media__model{ display:block; width:100%; height:auto; max-width:100%; object-fit:contain; }
+  #shopify-section-{{ section.id }} .product-media__main::before{ content:""; display:block; padding-top:100%; }
+  #shopify-section-{{ section.id }} .product-media__main > *{ position:absolute; inset:0; width:100%; height:100%; object-fit:contain; }
 
-  /* Desktop thumbs row */
+  /* Desktop thumbs */
   @media (min-width: 768px){
-    #shopify-section-{{ section.id }} .product-media__thumbs {
-      display: grid;
-      grid-auto-flow: column;
-      grid-auto-columns: minmax(64px, 96px);
-      gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: thin;
-      justify-content: start;
+    #shopify-section-{{ section.id }} .product-media__thumbs{
+      display:grid; grid-auto-flow:column; grid-auto-columns:minmax(64px,96px);
+      gap:8px; overflow-x:auto; padding-bottom:2px; scrollbar-width:thin; justify-content:start;
     }
   }
-  #shopify-section-{{ section.id }} .product-media__thumb {
-    position: relative; border: 1px solid rgba(0,0,0,0.08); background: transparent;
-    padding: 0; border-radius: 8px; cursor: pointer; line-height: 0;
-    transition: transform .15s ease, border-color .15s ease;
+  #shopify-section-{{ section.id }} .product-media__thumb{
+    position:relative; border:1px solid rgba(0,0,0,0.08); background:transparent;
+    padding:0; border-radius:8px; cursor:pointer; line-height:0; transition:transform .15s ease, border-color .15s ease;
   }
-  #shopify-section-{{ section.id }} .product-media__thumb:focus-visible { outline: 2px solid #2D0288; outline-offset: 2px; }
-  #shopify-section-{{ section.id }} .product-media__thumb:hover { transform: translateY(-1px); }
-  #shopify-section-{{ section.id }} .product-media__thumb.is-active { border-color: #ff679a; }
-  #shopify-section-{{ section.id }} .product-media__thumb-img {
-    display: block; width: 100%; height: 100%; object-fit: cover; aspect-ratio: 1 / 1; border-radius: 8px;
+  #shopify-section-{{ section.id }} .product-media__thumb:focus-visible{ outline:2px solid #2D0288; outline-offset:2px; }
+  #shopify-section-{{ section.id }} .product-media__thumb:hover{ transform:translateY(-1px); }
+  #shopify-section-{{ section.id }} .product-media__thumb.is-active{ border-color:#ff679a; }
+  #shopify-section-{{ section.id }} .product-media__thumb-img{
+    display:block; width:100%; height:100%; object-fit:cover; aspect-ratio:1/1; border-radius:8px;
   }
-  #shopify-section-{{ section.id }} .product-media__thumb-badge {
-    position: absolute; right: 6px; bottom: 6px; font-size: 12px; line-height: 1; padding: 3px 6px; border-radius: 6px;
-    background: rgba(0,0,0,.65); color: #fff;
+  #shopify-section-{{ section.id }} .product-media__thumb-badge{
+    position:absolute; right:6px; bottom:6px; font-size:12px; line-height:1; padding:3px 6px; border-radius:6px; background:rgba(0,0,0,.65); color:#fff;
   }
 
-  /* ============ MOBILE CAROUSEL ============ */
-  #shopify-section-{{ section.id }} .product-media__carousel {
-    overflow-x: auto; -webkit-overflow-scrolling: touch;
+  /* Mobile carousel */
+  #shopify-section-{{ section.id }} .product-media__carousel{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  #shopify-section-{{ section.id }} .product-media__slides{
+    display:flex; gap:8px; padding:0; margin:0; list-style:none; scroll-snap-type:x mandatory; scroll-behavior:smooth;
   }
-  #shopify-section-{{ section.id }} .product-media__slides {
-    display: flex; gap: 8px; padding: 0; margin: 0; list-style: none;
-    scroll-snap-type: x mandatory; scroll-behavior: smooth;
-  }
-  #shopify-section-{{ section.id }} .product-media__slide {
-    flex: 0 0 100%; scroll-snap-align: center; position: relative;
-  }
-  #shopify-section-{{ section.id }} .product-media__slide::before {
-    content: ""; display: block; padding-top: 100%;
-  }
-  #shopify-section-{{ section.id }} .product-media__slide > * {
-    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
-  }
+  #shopify-section-{{ section.id }} .product-media__slide{ flex:0 0 100%; scroll-snap-align:center; position:relative; }
+  #shopify-section-{{ section.id }} .product-media__slide::before{ content:""; display:block; padding-top:100%; }
+  #shopify-section-{{ section.id }} .product-media__slide > *{ position:absolute; inset:0; width:100%; height:100%; object-fit:contain; }
 
-  /* Dots (mobile only) */
-  #shopify-section-{{ section.id }} .product-media__dots {
-    display: flex; gap: 8px; justify-content: center; align-items: center; padding: 10px 0 0;
+  /* Mobile thumb strip */
+  #shopify-section-{{ section.id }} .product-media__thumbs--mobile{
+    display:flex; gap:8px; overflow-x:auto; padding:8px 0 0; scrollbar-width:thin; justify-content:center;
   }
-  #shopify-section-{{ section.id }} .product-media__dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    border: 1px solid rgba(0,0,0,.35); background: transparent;
-    padding: 0; line-height: 0;
-  }
-  #shopify-section-{{ section.id }} .product-media__dot.is-active {
-    background: #2D0288; border-color: #2D0288;
-  }
+  #shopify-section-{{ section.id }} .product-media__thumb--mobile{ min-width:56px; }
+  #shopify-section-{{ section.id }} .product-media__thumb--mobile.is-active{ border-color:#2D0288; }
 
-  /* Avoid zero-height while media lazy-loads */
-  #product-gallery .product-item-wrap{ min-height: 360px; }
-  @media (max-width: 767px){ #product-gallery .product-item-wrap{ min-height: 280px; } }
+  /* Avoid zero-height while lazy-loads */
+  #product-gallery .product-item-wrap{ min-height:360px; }
+  @media (max-width: 767px){ #product-gallery .product-item-wrap{ min-height:280px; } }
 
-  @keyframes dt-swing { 0% { transform: translateY(15px); } 100% { transform: translateY(-15px); } }
+  @keyframes dt-swing { 0%{transform:translateY(15px);} 100%{transform:translateY(-15px);} }
 
-  /* Editor/mobile container adjustments */
+  /* Mobile container tweaks */
   @media (max-width: 767px){
-    #shopify-section-{{ section.id }} [class*="container"]{ width: 100% !important; max-width: none !important; padding-left: 0 !important; padding-right: 0 !important; }
-    #shopify-section-{{ section.id }} .row{ margin-left: 0 !important; margin-right: 0 !important; }
-    #shopify-section-{{ section.id }} .outer-pad-{{ section.id }}{ padding-left: 0 !important; padding-right: 0 !important; }
-    #shopify-section-{{ section.id }} .inner-bg-{{ section.id }}{ border-radius: 0; padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+    #shopify-section-{{ section.id }} [class*="container"]{ width:100% !important; max-width:none !important; padding-left:0 !important; padding-right:0 !important; }
+    #shopify-section-{{ section.id }} .row{ margin-left:0 !important; margin-right:0 !important; }
+    #shopify-section-{{ section.id }} .outer-pad-{{ section.id }}{ padding-left:0 !important; padding-right:0 !important; }
+    #shopify-section-{{ section.id }} .inner-bg-{{ section.id }}{ border-radius:0; padding-left:max(16px, env(safe-area-inset-left)); padding-right:max(16px, env(safe-area-inset-right)); }
   }
 
   /* Tabs line style */
   #shopify-section-{{ section.id }} .product-tab{ --accordion-line: var(--DTColor_Border, #e5e5e5); }
   #shopify-section-{{ section.id }} .product-tab details > summary,
-  #shopify-section-{{ section.id }} .dt-sc-tabs .tablinks{ background: transparent !important; box-shadow: none !important; border: 0 !important; padding-left: 0; padding-right: 0; border-bottom: 2px solid var(--accordion-line); }
-  #shopify-section-{{ section.id }} .product-tab details[open] > summary{ background: transparent !important; }
+  #shopify-section-{{ section.id }} .dt-sc-tabs .tablinks{ background:transparent !important; box-shadow:none !important; border:0 !important; padding-left:0; padding-right:0; border-bottom:2px solid var(--accordion-line); }
+  #shopify-section-{{ section.id }} .product-tab details[open] > summary{ background:transparent !important; }
   #shopify-section-{{ section.id }} .product-tab details > div,
-  #shopify-section-{{ section.id }} .dt-sc-tabs .tabcontent{ background: transparent !important; border: 0 !important; box-shadow: none !important; }
+  #shopify-section-{{ section.id }} .dt-sc-tabs .tabcontent{ background:transparent !important; border:0 !important; box-shadow:none !important; }
 </style>
 
-<!-- ========= GALLERY + SUBTOTAL LOGIC (Editor-safe, section-scoped) ========= -->
 <script>
 (function(){
   var SECTION_ID = "{{ section.id }}";
@@ -640,11 +551,8 @@
   function qs(root, sel){ return root.querySelector(sel); }
   function qsa(root, sel){ return Array.prototype.slice.call(root.querySelectorAll(sel)); }
 
-  // Money formatter
   function formatMoney(cents){
-    if (window.Shopify && typeof Shopify.formatMoney === 'function') {
-      return Shopify.formatMoney(cents, MONEY_FORMAT);
-    }
+    if (window.Shopify && typeof Shopify.formatMoney === 'function') return Shopify.formatMoney(cents, MONEY_FORMAT);
     var amount = (cents / 100).toFixed(2);
     try {
       var placeholderRe = new RegExp('\\{\\{\\s*[^}]+\\s*\\}\\}', 'g');
@@ -675,23 +583,18 @@
     }
     if(qtyWrap && qtyInput){
       qtyWrap.addEventListener("click", function(e){
-        var btn = e.target.closest("button[data-type]");
-        if(!btn) return;
+        var btn = e.target.closest("button[data-type]"); if(!btn) return;
         var t = btn.getAttribute("data-type");
         var v = parseInt(qtyInput.value || "1", 10) || 1;
-        if(t === "minus") v = Math.max(1, v - 1);
-        if(t === "plus") v = v + 1;
+        if(t === "minus") v = Math.max(1, v - 1); if(t === "plus") v = v + 1;
         qtyInput.value = String(v); setSubtotal();
       });
       qtyInput.addEventListener("input", setSubtotal);
       setSubtotal();
     }
-
-    // Sync on variant change
     document.addEventListener('variant:change', function(e){
       var v = e.detail && e.detail.variant ? e.detail.variant : null;
-      if(!v) return;
-      if(priceSpan && typeof v.price === 'number'){
+      if(priceSpan && v && typeof v.price === 'number'){
         priceSpan.setAttribute('data-price-cents', v.price);
         priceSpan.textContent = formatMoney(v.price);
         setSubtotal();
@@ -699,7 +602,6 @@
     });
   }
 
-  // Desktop thumbs -> swap main
   function initDesktopGallery(sectionEl){
     var featured = qs(sectionEl, "#FeaturedMedia-" + SECTION_ID);
     var thumbsWrap = qs(sectionEl, ".product-media__thumbs");
@@ -708,7 +610,6 @@
     function swapToThumb(btn){
       var id = btn.getAttribute("data-media-id");
       if(!id || featured.getAttribute("data-current-media-id") === id) return;
-      // Basic swap using thumb src (fast). For higher res, you could map data attributes.
       var thumbImg = btn.querySelector("img");
       featured.innerHTML = "";
       if(thumbImg){
@@ -733,7 +634,6 @@
       if(btn) swapToThumb(btn);
     });
 
-    // Variant change: sync to matching media id if present
     document.addEventListener('variant:change', function(e){
       var v = e.detail && e.detail.variant ? e.detail.variant : null;
       var mediaId = v && v.featured_media ? String(v.featured_media.id) : null;
@@ -744,38 +644,37 @@
     });
   }
 
-  // Mobile: scroll-snap carousel + dots
+  // Mobile: scroll-snap + mobile thumbs (pagination)
   function initMobileCarousel(sectionEl){
     var carousel = qs(sectionEl, "#MobileCarousel-" + SECTION_ID);
     var slides = qs(sectionEl, "#MobileSlides-" + SECTION_ID);
-    var dotsWrap = qs(sectionEl, "#MobileDots-" + SECTION_ID);
-    if(!carousel || !slides || !dotsWrap) return;
+    var thumbs = qs(sectionEl, "#MobileThumbs-" + SECTION_ID);
+    if(!carousel || !slides || !thumbs) return;
 
-    var dotButtons = qsa(dotsWrap, ".product-media__dot");
+    var thumbBtns = qsa(thumbs, ".product-media__thumb--mobile");
     var slideItems = qsa(slides, ".product-media__slide");
 
     function setActive(index){
-      dotButtons.forEach(function(btn, i){
+      thumbBtns.forEach(function(btn, i){
         var active = i === index;
         btn.classList.toggle("is-active", active);
-        btn.setAttribute("aria-selected", active ? "true" : "false");
+        btn.setAttribute("aria-current", active ? "true" : "false");
       });
     }
 
-    // Click on dot -> scroll to slide
-    dotsWrap.addEventListener("click", function(e){
-      var btn = e.target.closest(".product-media__dot");
+    // Tap thumb -> scroll to slide
+    thumbs.addEventListener("click", function(e){
+      var btn = e.target.closest(".product-media__thumb--mobile");
       if(!btn) return;
       var idx = parseInt(btn.getAttribute("data-index"), 10) || 0;
       var target = slideItems[idx];
       if(target){
-        var offsetLeft = target.offsetLeft;
-        carousel.scrollTo({ left: offsetLeft, behavior: 'smooth' });
+        carousel.scrollTo({ left: target.offsetLeft, behavior: 'smooth' });
         setActive(idx);
       }
     });
 
-    // Update dot on scroll (nearest slide)
+    // Scroll -> update active thumb
     var ticking = false;
     carousel.addEventListener("scroll", function(){
       if(ticking) return;
@@ -783,7 +682,6 @@
         var scrollLeft = carousel.scrollLeft;
         var width = carousel.clientWidth;
         var index = 0;
-        // Find nearest slide
         for(var i=0; i<slideItems.length; i++){
           var s = slideItems[i];
           if(Math.abs(s.offsetLeft - scrollLeft) <= width/2){ index = i; break; }
@@ -795,18 +693,15 @@
       ticking = true;
     });
 
-    // Variant change: jump to featured media slide if available
+    // Variant change -> jump to corresponding slide
     document.addEventListener('variant:change', function(e){
       var v = e.detail && e.detail.variant ? e.detail.variant : null;
       var mediaId = v && v.featured_media ? String(v.featured_media.id) : null;
       if(!mediaId) return;
-      var idx = slideItems.findIndex(function(li){
-        var img = li.querySelector('img, video, model-viewer');
-        return !!img; // we don't have media-id here, so just go to same index as desktop if needed
-      });
-      // Fallback: if ids aren’t mapped per slide, we can approximate by desktop dot order
-      // but since dots match product.media order, we can find index by media position:
-      var indexByOrder = {{ product.media | json }}.findIndex(function(m){ return String(m.id) === mediaId; });
+
+      // Find media order index by id
+      var mediaList = {{ product.media | map: 'id' | json }};
+      var indexByOrder = mediaList.indexOf(parseInt(mediaId,10));
       if(indexByOrder > -1 && slideItems[indexByOrder]){
         var target = slideItems[indexByOrder];
         carousel.scrollTo({ left: target.offsetLeft, behavior: 'smooth' });
@@ -825,7 +720,6 @@
   var sectionRoot = document.getElementById('shopify-section-{{ section.id }}') || document;
   initSection(sectionRoot);
 
-  // Re-init for Theme Editor actions
   document.addEventListener('shopify:section:load', function(e){
     if(e && e.detail && e.detail.sectionId === "{{ section.id }}"){
       var el = document.getElementById('shopify-section-{{ section.id }}');
