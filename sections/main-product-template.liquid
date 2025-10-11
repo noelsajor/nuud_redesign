@@ -687,9 +687,24 @@
   function qs(root, sel){ return root.querySelector(sel); }
   function qsa(root, sel){ return Array.prototype.slice.call(root.querySelectorAll(sel)); }
 
+  // Formats cents using shop.money_format. No literal {{ or }} in source.
   function formatMoney(cents){
-    try { return Shopify.formatMoney(cents, MONEY_FORMAT); }
-    catch(e){ return (cents/100).toFixed(2); }
+    if (window.Shopify && typeof Shopify.formatMoney === 'function') {
+      return Shopify.formatMoney(cents, MONEY_FORMAT);
+    }
+    var amount = (cents / 100).toFixed(2);
+    try {
+      // Build the placeholder regex dynamically so Liquid can't see braces.
+      var placeholderRe = new RegExp('\\{\\{\\s*[^}]+\\s*\\}\\}', 'g');
+      var fmt = (typeof MONEY_FORMAT === 'string' && MONEY_FORMAT.length) ? MONEY_FORMAT : ('$' + ('{' + '{amount}' + '}'));
+      if (!placeholderRe.test(fmt)) {
+        // If format lacks a placeholder, prepend a default currency style.
+        fmt = '$' + ('{' + '{amount}' + '}');
+      }
+      return fmt.replace(placeholderRe, amount);
+    } catch(e){
+      return amount;
+    }
   }
 
   function initSection(sectionEl){
@@ -736,12 +751,13 @@
         setSubtotal();
       });
       qtyInput.addEventListener("input", setSubtotal);
-      setSubtotal();
+      setSubtotal(); // ensure correct value on first paint
     }
 
     // Simple gallery swap
     var featured = qs(sectionEl, "#FeaturedMedia-" + SECTION_ID);
     var thumbsWrap = qs(sectionEl, ".product-media__thumbs");
+
     function swapToThumb(btn){
       if(!featured || !btn) return;
       var id = btn.getAttribute("data-media-id");
@@ -774,7 +790,7 @@
       });
     }
 
-    // Respect variant featured media & price updates
+    // Variant change: sync media & price/subtotal
     document.addEventListener('variant:change', function(e){
       try {
         var v = e.detail && e.detail.variant ? e.detail.variant : null;
@@ -783,7 +799,6 @@
           var matchBtn = thumbsWrap.querySelector('.product-media__thumb[data-media-id="'+mediaId+'"]');
           if(matchBtn) swapToThumb(matchBtn);
         }
-        // Update price on variant change
         if(priceSpan && v && typeof v.price === 'number'){
           priceSpan.setAttribute('data-price-cents', v.price);
           priceSpan.textContent = formatMoney(v.price);
@@ -793,11 +808,10 @@
     });
   }
 
-  // Initial init (works in storefront & editor)
   var sectionRoot = document.getElementById('shopify-section-{{ section.id }}') || document;
   initSection(sectionRoot);
 
-  // Re-init inside Theme Editor when section reloads/selects
+  // Re-init inside Theme Editor
   document.addEventListener('shopify:section:load', function(e){
     if(e && e.detail && e.detail.sectionId === "{{ section.id }}"){
       var el = document.getElementById('shopify-section-{{ section.id }}');
@@ -812,6 +826,8 @@
   });
 })();
 </script>
+
+
 
 {% schema %}
 {
