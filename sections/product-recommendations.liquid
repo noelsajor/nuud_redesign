@@ -58,18 +58,19 @@
   function initSwiper(scope){
     if (typeof window.Swiper !== 'function') return;
     var container = scope.querySelector('.swiper-container');
+    var nextBtn = scope.querySelector('.swiper-button-next');
+    var prevBtn = scope.querySelector('.swiper-button-prev');
     if (!container) return;
 
     // eslint-disable-next-line no-new
     new Swiper(container, {
       slidesPerView: 4,
       loop: true,
-      draggable: true,
+      grabCursor: true,
       watchOverflow: true,
-      navigation: {
-        nextEl: scope.querySelector('.swiper-button-next'),
-        prevEl: scope.querySelector('.swiper-button-prev')
-      },
+      observer: true,
+      observeParents: true,
+      navigation: nextBtn && prevBtn ? { nextEl: nextBtn, prevEl: prevBtn } : undefined,
       breakpoints: {
         0:    { slidesPerView: 1 },
         480:  { slidesPerView: 2 },
@@ -93,9 +94,10 @@
       return;
     }
 
-    var url = '/recommendations/products?section_id=' + encodeURIComponent(sectionId) +
-              '&product_id=' + encodeURIComponent(productId) +
-              '&limit=' + encodeURIComponent(limit);
+    var url = '{{ routes.product_recommendations_url }}'
+      + '?section_id=' + encodeURIComponent(sectionId)
+      + '&product_id=' + encodeURIComponent(productId)
+      + '&limit=' + encodeURIComponent(limit);
 
     fetch(url)
       .then(function(r){ return r.text(); })
@@ -103,10 +105,9 @@
         var tmp = document.createElement('div');
         tmp.innerHTML = html;
 
-        // IMPORTANT: we now search a STATIC marker (#recs-inner), not suffixed by section.id,
-        // because the server-rendered response gets a NEW section.id.
+        // Find the static marker rendered by this section template
         var inner = tmp.querySelector('#recs-inner');
-        if (!inner) {
+        if (!inner || !inner.innerHTML.trim()) {
           host.innerHTML = '<p class="recs-empty">No recommendations available for this product.</p>';
           return;
         }
@@ -119,10 +120,14 @@
       });
   }
 
+  // Theme editor: reload only when this section changes
   document.addEventListener('shopify:section:load', function(e){
-    if (e && e.detail && e.detail.sectionId === '{{ section.id }}') loadRecs();
+    try {
+      if (e && e.detail && e.detail.sectionId === '{{ section.id }}') loadRecs();
+    } catch(_e){}
   });
 
+  // Initial load
   setTimeout(loadRecs, 150);
 })();
 </script>
@@ -133,7 +138,7 @@
   NOTE: Use a STATIC id (#recs-inner) so client JS can find it even if the server assigns a new section.id.
 {%- endcomment -%}
 <div id="recs-inner">
-{%- if recommendations and recommendations.products_count > 0 -%}
+{%- if recommendations and recommendations.performed and recommendations.products_count > 0 -%}
   <div class="swiper-container dT_VProdRecommendations">
     <ul class="swiper-wrapper">
       {%- for product in recommendations.products -%}
@@ -153,7 +158,7 @@
                 {% render 'deal-snippet', productID: product.id, product: product %}
               {% endif %}
 
-              <a href="{{ product.url | within: collection }}" class="grid-link product-group" aria-label="{{ product.title | escape }}">
+              <a href="{{ product.url }}" class="grid-link product-group" aria-label="{{ product.title | escape }}">
                 {% if on_sale and settings.collections_show_sale_circle %}
                   <div class="featured-tag">
                     <span class="badge badge--sale">
@@ -184,7 +189,7 @@
               </a>
 
               <div class="product_right_tag{% if on_sale %} offer_exist{% endif %}">
-                {% if on_sale %}{% render 'offer-price', product: this_variant %}{% endif %}
+                {% if on_sale %}{% render 'offer-price', product: product %}{% endif %}
               </div>
 
               <div class="ImageWrapper">
@@ -205,7 +210,7 @@
                   {% endif %}
 
                   {% if settings.enable_quick_view %}
-                    <div><a class="product-thumb-full-quick-view popup-product quick-view-btn dt-sc-btn" href="{{ product.url | within: collection }}" data-product-id="{{ product.id }}" data-slider-type="slider_gallery" data-effect="mfp-move-from-top" aria-label="Quick view {{ product.title | escape }}"></a></div>
+                    <div><a class="product-thumb-full-quick-view popup-product quick-view-btn dt-sc-btn" href="{{ product.url }}" data-product-id="{{ product.id }}" data-slider-type="slider_gallery" data-effect="mfp-move-from-top" aria-label="Quick view {{ product.title | escape }}"></a></div>
                   {% endif %}
                 </div>
               </div>
@@ -213,7 +218,7 @@
 
             <div class="product-detail {{ settings.item_aignment }}">
               {% if settings.display_vendor %}<p class="product-vendor"><span>{{ product.vendor }}</span></p>{% endif %}
-              <h3 class="grid-link__title"><a href="{{ product.url | within: collection }}">{{ product.title }}<span class="choosen-swatch"></span></a></h3>
+              <h3 class="grid-link__title"><a href="{{ product.url }}">{{ product.title }}<span class="choosen-swatch"></span></a></h3>
 
               {% if settings.product_button_style == 'icon' %}
                 {% render 'variant-tag-color', product: product %}
