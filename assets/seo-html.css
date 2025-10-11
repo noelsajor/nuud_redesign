@@ -7,7 +7,7 @@
 .seo-html {
   /* inherit your theme font and color if you want it to blend */
   font: inherit;
-  color: inherit;
+  color: #881d3e;
   /* keep layout predictable inside */
   box-sizing: border-box;
 }
@@ -29,7 +29,7 @@
   margin: 0.75em 0;
 }
 .seo-html :where(a) {
-  color: #881d3e;           /* or your brand color if desired */
+  color: inherit;           /* or your brand color if desired */
   text-decoration: underline;
 }
 .seo-html :where(ul, ol) {
