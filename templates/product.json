@@ -74,7 +74,7 @@
         "product_tab2": true,
         "product_tab2_heading": "Shipping Information",
         "page_content": "shipping-information",
-        "product_tab3": true,
+        "product_tab3": false,
         "product_tab3_heading": "Reviews",
         "enable_enquiry": false,
         "enable_sticky_cart": true,
