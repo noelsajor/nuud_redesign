@@ -592,6 +592,34 @@
 
 </script>
 
+<script>
+  (function($){
+    "use strict";
+    var mobileMax = {{ section.settings.mobile_screen_width }}; // px
+
+    function placeBurgerInLinks(){
+      var isMobile = window.innerWidth <= mobileMax;
+
+      if (!isMobile) return;
+
+      // icons wrapper and first burger inside #AccessibleNav
+      var $links  = $('#AccessibleNav .site-header__links').first();
+      var $burger = $('#AccessibleNav .mobile-nav-container').first();
+
+      if ($links.length && $burger.length && !$burger.parent().is($links)) {
+        // Remove stray duplicates to avoid double burgers
+        $('#header .mobile-nav-container').not($burger).remove();
+        // Move burger into the icons wrapper (becomes left-most)
+        $burger.prependTo($links);
+      }
+    }
+
+    $(document).ready(placeBurgerInLinks);
+    $(window).on('load resize', placeBurgerInLinks);
+  })(jQuery);
+</script>
+
+
 
 <style>
 
@@ -1150,12 +1178,6 @@
     header .header-contact a:hover { color: {{ section.settings.social_icon_hover_color }}; background-color: {{ section.settings.social_icon_hover_bg }};}
     header .dt-sc-header-top-bar .dt-sc-flex-space-between > *:not(:only-child){ min-width: auto; padding: 0; margin: 0; }
     header .header-contact li + li{padding-left: 1px; margin:1px;}
-
-    .hamburguer-button {
-      max-width: 100%;
-      padding-left: var(--DTGutter_Width) !important;
-      padding-right: var(--DTGutter_Width) !important;
-    }
 
     header .dt-sc-header-top-bar .dt-sc-flex-space-between > * { display: flex; /* flex: 1 1 100% !important; */ justify-content: center !important; padding: 5px 8px; text-align: center !important; }
     header .dt-sc-header-top-bar .dt-sc-flex-space-between > :last-child:not(:only-child) > * { justify-content: inherit; text-align: inherit; }
