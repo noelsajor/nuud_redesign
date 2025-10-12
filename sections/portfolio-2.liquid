@@ -251,11 +251,17 @@
   #shopify-section-{{section.id}} .blog-filter .filter-btn{
     line-height:1;
     cursor:pointer;
+    transition: background-color .2s ease, color .2s ease, opacity .2s ease;
   }
+  /* Make active look like hover (filled), remove outline */
+  #shopify-section-{{section.id}} .blog-filter .filter-btn:hover,
   #shopify-section-{{section.id}} .blog-filter .filter-btn.is-active{
-    opacity: .95;
-    outline: 2px solid currentColor;
-    outline-offset: 2px;
+    background-color: {{ section.settings.blog_button_bg_hover_color | default: section.settings.section_button_hover_bg_color }};
+    color: {{ section.settings.blog_button_text_hover_color | default: section.settings.section_button_hover_text_color }};
+    outline: none;
+    box-shadow: none;
+    border-color: transparent;
+    opacity: 1;
   }
 
   /* Base card sizing for Isotope items (desktop) */
@@ -366,6 +372,7 @@
     }
   }
 </style>
+
 
 {% schema %}
 {
