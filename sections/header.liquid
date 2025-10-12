@@ -592,32 +592,6 @@
 
 </script>
 
-<script>
-  (function($){
-    "use strict";
-    var mobileMax = {{ section.settings.mobile_screen_width }}; // px
-
-    function placeBurgerInLinks(){
-      var isMobile = window.innerWidth <= mobileMax;
-
-      if (!isMobile) return;
-
-      // icons wrapper and first burger inside #AccessibleNav
-      var $links  = $('#AccessibleNav .site-header__links').first();
-      var $burger = $('#AccessibleNav .mobile-nav-container').first();
-
-      if ($links.length && $burger.length && !$burger.parent().is($links)) {
-        // Remove stray duplicates to avoid double burgers
-        $('#header .mobile-nav-container').not($burger).remove();
-        // Move burger into the icons wrapper (becomes left-most)
-        $burger.prependTo($links);
-      }
-    }
-
-    $(document).ready(placeBurgerInLinks);
-    $(window).on('load resize', placeBurgerInLinks);
-  })(jQuery);
-</script>
 
 
 
@@ -1269,87 +1243,6 @@ header .site-header__cart-count{display:block !important;}
   }
       }
  
-/* ===== Mobile header layout: burger + search LEFT, logo CENTER, cart RIGHT ===== */
-@media (max-width: {{ section.settings.mobile_screen_width }}px) {
-
-  /* Anchor everything */
-  header #AccessibleNav,
-  #header .sticky-header-active #AccessibleNav {
-    position: relative;
-    display: block;
-    min-height: 56px; /* touch target height + logo */
-  }
-
-  /* Centered logo */
-  header #AccessibleNav .logo {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-    margin: 0;
-    text-align: center;
-    z-index: 2;
-  }
-  header #AccessibleNav .logo > a > img {
-    max-height: 36px; height: auto; width: auto;
-  }
-
-  /* Icons wrapper as positioning context */
-  header #AccessibleNav .site-header__links {
-    position: relative;
-    padding: 0;
-    margin: 0;
-  }
-
-  /* Burger (now moved inside .site-header__links via JS) – left-most */
-  header #AccessibleNav .site-header__links .mobile-nav-container {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 3;
-    margin: 0;
-  }
-
-  /* Search (just to the right of burger) – supports either class your theme uses */
-  header #AccessibleNav .site-header__links .site-header__search_icon,
-  header #AccessibleNav .site-header__links .dT_TopStickySearchBtn {
-    position: absolute;
-    left: 48px;      /* tweak gap from burger */
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 3;
-    margin: 0;
-  }
-
-  /* Cart on the right – supports drawer and non-drawer variants */
-  header #AccessibleNav .site-header__links .site-header__cart-toggle,
-  header #AccessibleNav .site-header__links #cart-number,
-  header #AccessibleNav .site-header__links .site-header__cart {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 3;
-    margin: 0;
-  }
-
-  /* Cart badge tidy */
-  header .site-header__cart-count { display: block !important; }
-  header .site-header__cart-count .CartCount { left: 14px; top: -10px; }
-
-  /* Hide everything except burger (already moved), search, and cart */
-  header #AccessibleNav .site-header__links a:not(.site-header__search_icon):not(.dT_TopStickySearchBtn):not(.site-header__cart-toggle):not(#cart-number):not(.site-header__cart),
-  header #AccessibleNav .site-header__links .dt-sc-header-toggle,
-  header #AccessibleNav .site-header__links .shopify-currency-form,
-  header #AccessibleNav .site-header__links .select-box,
-  header #AccessibleNav .site-header__links .custom-select {
-    display: none !important;
-  }
-
-  /* Remove legacy gaps */
-  #AccessibleNav > * { margin: 0 !important; padding: 0 !important; }
-}
 
 
 </style> 
