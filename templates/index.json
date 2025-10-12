@@ -625,7 +625,7 @@
         "category_aspect_ratio": "4/3",
         "image_fit": "contain",
         "enable_image_overflow": true,
-        "image_overflow_scale": 1.4,
+        "image_overflow_scale": 1.6,
         "image_overflow_direction": "top",
         "enable_category_1": true,
         "category_1": "for-woman",
