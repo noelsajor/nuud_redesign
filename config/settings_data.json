@@ -441,7 +441,7 @@
               "url": "#",
               "logo": "shopify://shop_images/Nuud_Pleasures_Logo.svg",
               "footer_logo_height": 36,
-              "container_width": 25,
+              "container_width": 50,
               "column_alignment": "text-start"
             }
           },
@@ -453,12 +453,13 @@
               "footer_contact_no": "0000 - 123 - 456789",
               "office_hours": "",
               "footer_contact_id": "info@example.com",
-              "container_width": 25,
+              "container_width": 50,
               "column_alignment": "text-start"
             }
           },
           "menu_BKWFjg": {
             "type": "menu",
+            "disabled": true,
             "settings": {
               "title": "Menu",
               "menu": "footer",
