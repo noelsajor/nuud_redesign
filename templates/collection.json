@@ -30,21 +30,12 @@
             "collection": "recent-products",
             "limit": 3
           }
-        },
-        "carousel_rVjELb": {
-          "type": "carousel",
-          "settings": {
-            "title": "Carousel heading test",
-            "collection": "all-products",
-            "limit": 5
-          }
         }
       },
       "block_order": [
         "4afe737c-35ed-432f-9c8a-f944ac644d37",
         "c1f14e69-83d1-4c5d-b400-b6466f295358",
-        "29bfbc1b-3c14-4598-bc93-0a77e4e0a6d3",
-        "carousel_rVjELb"
+        "29bfbc1b-3c14-4598-bc93-0a77e4e0a6d3"
       ],
       "settings": {
         "full": false,
