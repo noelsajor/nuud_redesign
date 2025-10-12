@@ -16,7 +16,7 @@
           "type": "menu",
           "settings": {
             "filter_title": "Custom Menu",
-            "linklist": "collection"
+            "linklist": ""
           }
         },
         "42b500f2-612f-47c7-bb2e-32d40dca5768": {
@@ -35,7 +35,6 @@
           "type": "image",
           "settings": {
             "title": "Heading",
-            "image": "shopify://shop_images/support-block-image.jpg",
             "link_text": "Shop Now",
             "link": ""
           }
@@ -59,7 +58,7 @@
       "settings": {
         "full": false,
         "spacing_both_ends": false,
-        "padding": "0,0",
+        "padding": "120,120",
         "margin": "0,0",
         "show_collection_image": false,
         "collections_sort_enable": true,
