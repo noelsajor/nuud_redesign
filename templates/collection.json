@@ -40,7 +40,7 @@
       "settings": {
         "full": false,
         "spacing_both_ends": false,
-        "padding": "30,120",
+        "padding": "80,120",
         "margin": "0,50",
         "show_collection_image": false,
         "banner_position": "with-in-container",
