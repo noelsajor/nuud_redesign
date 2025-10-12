@@ -56,9 +56,35 @@
         "rows": "4",
         "filter_type": "drawer"
       }
+    },
+    "spacer_wave_zpJMYU": {
+      "type": "spacer-wave",
+      "name": "Wave Spacer (Animated)",
+      "settings": {
+        "use_gradient": false,
+        "background_color": "transparent",
+        "background_gradient": "linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 100%)",
+        "spacer_padding_top": 0,
+        "spacer_padding_bottom": 0,
+        "show_top_wave": true,
+        "show_bottom_wave": false,
+        "wave_color": "#a7e4b2",
+        "wave_overlap_top": 100,
+        "wave_overlap_bottom": 100,
+        "wave_shape": "medium",
+        "wave_frequency": 2,
+        "wave_amplitude": 25,
+        "animate_waves": true,
+        "wave_speed": 12,
+        "wave_bob": 0,
+        "extra_space": false,
+        "extra_space_height": 40,
+        "z_index": 1
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "spacer_wave_zpJMYU"
   ]
 }
