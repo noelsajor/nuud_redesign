@@ -1,30 +1,27 @@
-<div id="hamburger-button" class="hamburger-button">
-<svg class="menu_icon_open" width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M4 5C3.44772 5 3 5.44772 3 6C3 6.55228 3.44772 7 4 7H20C20.5523 7 21 6.55228 21 6C21 5.44772 20.5523 5 20 
-5H4ZM3 12C3 11.4477 3.44772 11 4 11H20C20.5523 11 21 11.4477 21 12C21 12.5523 20.5523 13 20 13H4C3.44772 13 3 12.5523 3 12ZM3 18C3 17.4477 3.44772 17 4 17H20C20.5523 
-17 21 17.4477 21 18C21 18.5523 20.5523 19 20 19H4C3.44772 19 3 18.5523 3 18Z" fill="currentcolor"/>
-</svg>
-<svg class="menu_icon_close" width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.207 6.207a1 1 0 0 0-1.414-1.414L12 10.586 6.207 4.793a1 1 0 0 0-1.414 1.414L10.586 12l-5.793 5.793a1 1 0 1 0 1.414 1.414L12 13.414l5.793 5.793a1 1 0 0 0 1.414-1.414L13.414 12l5.793-5.793z" fill="currentcolor"/></svg>
-      </div>
-<nav id="wdt-mobile-menu" role="navigation" class="wdt-mobile-menu"> 
+<div id="hamburger-button" class="hamburger-button" aria-label="Open menu" aria-controls="wdt-mobile-menu" aria-expanded="false">
+  <svg class="menu_icon_open" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M4 5C3.44772 5 3 5.44772 3 6C3 6.55228 3.44772 7 4 7H20C20.5523 7 21 6.5523 21 6C21 5.4477 20.5523 5 20 5H4ZM3 12C3 11.4477 3.44772 11 4 11H20C20.5523 11 21 11.4477 21 12C21 12.5523 20.5523 13 20 13H4C3.44772 13 3 12.5523 3 12ZM3 18C3 17.4477 3.44772 17 4 17H20C20.5523 17 21 17.4477 21 18C21 18.5523 20.5523 19 20 19H4C3.44772 19 3 18.5523 3 18Z" fill="currentColor"/>
+  </svg>
+  <svg class="menu_icon_close" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M19.207 6.207a1 1 0 0 0-1.414-1.414L12 10.586 6.207 4.793a1 1 0 0 0-1.414 1.414L10.586 12l-5.793 5.793a1 1 0 1 0 1.414 1.414L12 13.414l5.793 5.793a1 1 0 0 0 1.414-1.414L13.414 12l5.793-5.793z" fill="currentColor"/>
+  </svg>
+</div>
+
+<nav id="wdt-mobile-menu" role="navigation" class="wdt-mobile-menu" aria-hidden="true">
   <ul>
     {%- for link in linklists[mobileMenu].links -%}
-      <li>        
+      <li>
         <a href="{{ link.url }}" class="parent-link" {% if link.active %}aria-current="page"{% endif %}>
           {{ link.title }}
-          {%- if link.links != blank -%}
-          <div class="icon_arrow_sec"></div>
-        {%- endif -%}
-        </a>        
+          {%- if link.links != blank -%}<div class="icon_arrow_sec" aria-hidden="true"></div>{%- endif -%}
+        </a>
         {%- if link.links != blank -%}
           <ul class="child-menu">
             {%- for child_link in link.links -%}
               <li>
                 <a href="{{ child_link.url }}" class="child-link" {% if child_link.active %}aria-current="page"{% endif %}>
                   {{ child_link.title }}
-                    {%- if child_link.links != blank -%}
-                       <div class="icon_arrow_sec"></div>
-                    {%- endif -%}
+                  {%- if child_link.links != blank -%}<div class="icon_arrow_sec" aria-hidden="true"></div>{%- endif -%}
                 </a>
                 {%- if child_link.links != blank -%}
                   <ul class="grandchild-menu">
@@ -45,9 +42,9 @@
     {%- endfor -%}
   </ul>
 </nav>
+
 <style>
 .hamburger-button {
-  /* display: none; */
   font-size: 2em;
   background: none;
   border: none;
@@ -56,179 +53,131 @@
   top: 32px;
   right: 15px;
   z-index: 1000;
-  background: transparent;
 }
+.hamburger-button svg { width: 1.6rem; height: 2rem; color: var(--DTBodyBGColor); }
 .wdt-mobile-menu {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  background: white;
+  position: fixed; inset: 0 0 0 auto;
+  width: 100%; height: 100%;
+  background: #fff;
   overflow-y: auto;
   z-index: 999;
   transform: translateX(-100%);
-    transition: all 0.4s ease;
+  transition: transform .4s ease;
   padding: 2rem;
 }
-  .hamburger-button svg {
-    width: 1.6rem;color: var(--DTBodyBGColor);
-    height: 2rem;
-}
-  button.hamburger-button:hover{
-    background: transparent; border: 0px solid transparent;
-  }
-  .wdt-mobile-menu ul li {
-    padding: .5rem 0;
-}
-  .wdt-mobile-menu ul li > a {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-  .hamburger-button.active {
-    position: fixed;
-}
-  button.hamburger-button svg line{
-    transition: all 0.3s linear;
-  }
-  svg.menu_icon_close {
-    position: absolute;
-    right: -10px;
-    /*top: 55%;
-    transform: translateY(-55%); */
-    transition: all 0.3s linear;
-    visibility: hidden;
-    opacity: 0;
-}
-  svg.menu_icon_open{
-    transition: all 0.3s linear;
-  }
-  .hamburger-button.active svg.menu_icon_open{
-    visibility: hidden;
-    opacity: 0;
-  }
-  .hamburger-button.active svg.menu_icon_close{
-    visibility: visible;
-    opacity: 1;
-  }
-  ul.child-menu > li {
-    display: none;
-  }
-  a.parent-link.active + ul.child-menu > li{
-  animation: fadeInUp 1s ease-out .05s both;
-    display: block;
-  }
-  .icon_arrow_sec {
-    position: relative;
-}
-  .icon_arrow_sec:after {
-    content: "";
-    background: white;
-    width: 15px;
-    height: 2px;
-    right: 0;
-    margin: auto;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    transition: all .3s linear;
-    opacity: 1;
-}
-  .icon_arrow_sec:before {
-    content: "";
-        height: 15px;
-        width: 2px;
-        position: absolute;
-        right: 6px;
-        background: white;
-        margin: auto;
-        top: 50%;
-        transform: translateY(-50%);
-        transition: all .3s linear;
-        opacity: 1;
-}
-  a.parent-link.active .icon_arrow_sec:before,
-  a.child-link.active .icon_arrow_sec:before{
-    transform: translateY(-50%) rotate(90deg);
-}
-  @keyframes fadeInUp{
-   0% {
-    opacity: 0;
-    transform: translate3d(0, 15%, 0);
-}
-  100%{
-    opacity: 1;
-    transform: none;
-  } 
-  }
+.wdt-mobile-menu.active { transform: translateX(0); }
+.hamburger-button.active { position: fixed; }
+svg.menu_icon_close { position: absolute; right: -10px; transition: .3s; visibility: hidden; opacity: 0; }
+.hamburger-button.active svg.menu_icon_open { visibility: hidden; opacity: 0; }
+.hamburger-button.active svg.menu_icon_close { visibility: visible; opacity: 1; }
 
-  @media (min-width: 1201px){
-    .hamburger-button{
-      display: none;
-    }
-  }
-@media (max-width: 767px) {
-  .hamburger-button {
-    display: block;
-  }
-  .wdt-mobile-menu.active {
-    transform: translateX(0);
-  }
-  .wdt-mobile-menu.active {
-    background:var(--DT_Button_BG_Hover_Color);
-  }
-  .wdt-mobile-menu ul.child-menu,
-  .wdt-mobile-menu ul.grandchild-menu {
-    display: none;
-  }
+.wdt-mobile-menu ul li { padding: .5rem 0; }
+.wdt-mobile-menu ul li > a { display: flex; align-items: center; justify-content: space-between; }
+
+ul.child-menu > li { display: none; }
+a.parent-link.active + ul.child-menu > li { display: block; animation: fadeInUp 1s ease-out .05s both; }
+
+.icon_arrow_sec { position: relative; min-width: 20px; height: 20px; margin-left: .5rem; }
+.icon_arrow_sec:after { content:""; background: currentColor; width: 15px; height: 2px; right: 0; position: absolute; top: 50%; transform: translateY(-50%); opacity: 1; }
+.icon_arrow_sec:before { content:""; height: 15px; width: 2px; position: absolute; right: 6px; background: currentColor; top: 50%; transform: translateY(-50%); opacity: 1; }
+a.parent-link.active .icon_arrow_sec:before,
+a.child-link.active .icon_arrow_sec:before { transform: translateY(-50%) rotate(90deg); }
+
+@keyframes fadeInUp{ 0%{opacity:0; transform:translate3d(0,15%,0);} 100%{opacity:1; transform:none;} }
+
+@media (min-width:1201px){ .hamburger-button{ display:none; } }
+@media (max-width:767px){
+  .hamburger-button{ display:block; }
+  .wdt-mobile-menu ul.child-menu, .wdt-mobile-menu ul.grandchild-menu{ display:none; }
   .wdt-mobile-menu .parent-link.active + .child-menu,
-  .wdt-mobile-menu .child-link.active + .grandchild-menu {
-    display: block;
-  }
+  .wdt-mobile-menu .child-link.active + .grandchild-menu{ display:block; }
 }
-  .wdt-mobile-menu.active {
-    transform: translateX(0);
-  }
-
-  .wdt-mobile-menu a:hover{
-        color: var(--DTLinkHoverColor);
-
-  }
+/* hover color */
+.wdt-mobile-menu a:hover { color: var(--DTLinkHoverColor); }
 </style>
-    <script>
-   document.addEventListener('DOMContentLoaded', function () {
-  let hBtn = document.querySelectorAll('#hamburger-button, #sticky-hamburger-button'); // Target both regular and sticky hamburger buttons
-  let menus = document.querySelectorAll('#wdt-mobile-menu, #sticky-wdt-mobile-menu'); // Target both menus
 
-  hBtn.forEach(button => {
-    button.addEventListener('click', function (event) {
-      menus.forEach(menu => menu.classList.toggle('active'));
-      hBtn.forEach(btn => btn.classList.toggle('active'));
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const buttons = document.querySelectorAll('#hamburger-button, #sticky-hamburger-button');
+  const menus   = document.querySelectorAll('#wdt-mobile-menu, #sticky-wdt-mobile-menu');
+
+  function toggleDrawer(forceOpen) {
+    menus.forEach(menu => {
+      const willOpen = typeof forceOpen === 'boolean' ? forceOpen : !menu.classList.contains('active');
+      menu.classList.toggle('active', willOpen);
+      menu.setAttribute('aria-hidden', String(!willOpen));
     });
-  });
-
-  document.querySelectorAll('.wdt-mobile-menu .parent-link, .sticky-wdt-mobile-menu .parent-link').forEach(function (parentLink) {
-    parentLink.addEventListener('click', function (event) {
-      event.preventDefault();
-      toggleMenu(parentLink, '.child-menu');
+    buttons.forEach(btn => {
+      const willOpen = menus[0]?.classList.contains('active');
+      btn.classList.toggle('active', willOpen);
+      btn.setAttribute('aria-expanded', String(willOpen));
     });
-  });
-
-  document.querySelectorAll('.wdt-mobile-menu .child-link, .sticky-wdt-mobile-menu .child-link').forEach(function (childLink) {
-    childLink.addEventListener('click', function (event) {
-      event.preventDefault();
-      toggleMenu(childLink, '.grandchild-menu');
-    });
-  });
-
-  function toggleMenu(link, menuClass) {
-    link.classList.toggle('active');
-    let menu = link.nextElementSibling;
-    if (menu && menu.matches(menuClass)) {
-      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-    }
   }
-});
 
-        </script>
+  // Open/close drawer
+  buttons.forEach(button => {
+    if (!button) return;
+    button.addEventListener('click', () => toggleDrawer());
+  });
+
+  // Close on ESC or outside click
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') toggleDrawer(false);
+  });
+  document.addEventListener('click', (e) => {
+    const anyMenu = document.querySelector('.wdt-mobile-menu.active, .sticky-wdt-mobile-menu.active');
+    if (!anyMenu) return;
+    if (!anyMenu.contains(e.target) && ![...buttons].some(b => b.contains(e.target))) {
+      toggleDrawer(false);
+    }
+  });
+
+  // Utility to open submenu on first tap, navigate on second tap
+  function setupHierarchicalLinks(selector, menuClass) {
+    document.querySelectorAll(selector).forEach(link => {
+      link.addEventListener('click', (e) => {
+        const next = link.nextElementSibling;
+        const hasSub = !!next && next.matches(menuClass);
+
+        // If there is NO submenu, let it navigate normally
+        if (!hasSub) return;
+
+        // If there IS a submenu and it's not open yet, open it and block navigation
+        if (!link.classList.contains('active')) {
+          e.preventDefault();
+          // Optionally close siblings for cleaner UX
+          closeSiblings(link, menuClass);
+          link.classList.add('active');
+          next.style.display = 'block';
+          return;
+        }
+        // If submenu already open, allow navigation on second tap (no preventDefault)
+      }, { passive: false });
+    });
+  }
+
+  function closeSiblings(link, menuClass) {
+    const li = link.closest('li');
+    if (!li) return;
+    const siblings = [...li.parentElement.children].filter(el => el !== li);
+    siblings.forEach(sib => {
+      const a = sib.querySelector(`${selectorForLinkClass(link)}.active`);
+      const sub = a && a.nextElementSibling && a.nextElementSibling.matches(menuClass) ? a.nextElementSibling : null;
+      if (a) a.classList.remove('active');
+      if (sub) sub.style.display = 'none';
+    });
+  }
+
+  function selectorForLinkClass(link) {
+    return link.classList.contains('child-link') ? 'a.child-link'
+         : link.classList.contains('parent-link') ? 'a.parent-link'
+         : 'a';
+  }
+
+  // Set up parent and child levels
+  setupHierarchicalLinks('.wdt-mobile-menu .parent-link, .sticky-wdt-mobile-menu .parent-link', '.child-menu');
+  setupHierarchicalLinks('.wdt-mobile-menu .child-link, .sticky-wdt-mobile-menu .child-link', '.grandchild-menu');
+
+  // Grandchild links just navigate — no handler needed
+});
+</script>
