@@ -556,6 +556,55 @@ Compute RGBA for category card background (opacity controlled in settings)
     background: transparent;
   }
 }
+
+/* --- Fix stacking without changing structure --- */
+
+/* Ensure the card creates a stacking context and can float over neighbors on hover */
+.ai-split-section-category-{{ uid }}{
+  position: relative;               /* already present, safe to repeat */
+  z-index: 1;                       /* base stacking */
+}
+.ai-split-section-category-{{ uid }}:hover{
+  z-index: 10;                      /* rise above siblings when hovering */
+}
+
+/* Image always BELOW the overlay */
+.ai-split-section-category-image-{{ uid }}{
+  position: relative;               /* container for z-index children */
+}
+
+/* If overflow is enabled, your img/placeholder had z-index:2; push them behind */
+.ai-split-section-category-image-{{ uid }} img{
+  z-index: 1 !important;            /* image below overlay */
+  position: relative;               /* keep transform/overflow behavior */
+}
+
+/* Same for the placeholder box when no image */
+.ai-split-section-category-placeholder-{{ uid }}{
+  z-index: 1 !important;            /* placeholder below overlay */
+  position: relative;
+}
+
+/* Overlay ABOVE the image + placeholder */
+.ai-category-title-overlay-{{ uid }}{
+  z-index: 3 !important;            /* overlay above image no matter what */
+  pointer-events: none;             /* clicks go to the <a> link underneath */
+}
+
+/* Optional: if the gradient overlay ever needs to sit above overflow edge cleanly */
+.ai-split-section-category-image-{{ uid }}::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: {{ section.settings.category_image_radius }}px;
+  z-index: 2;                       /* between IMG (1) and TITLE overlay (3) */
+  /* mirror the same subtle gradient used on .ai-category-title-overlay-{{ uid }} */
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.12) 0%, rgba(0,0,0,0) 60%);
+  pointer-events: none;
+}
+
+/* Keep hover rotation/scale exactly as you have it; the z-index order now holds */
+
 </style>
 
 <script>
