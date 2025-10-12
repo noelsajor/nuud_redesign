@@ -83,10 +83,32 @@
         <div class="row {{ section.settings.custom_class_name }}">
           {% render 'section-heading', class: section.id %}
 
+          {%- comment -%}
+            === FILTER BAR (clickable tags) ===
+            Uses section.settings.filter_tags (comma-separated). Example:
+            "For him, For her, For couples, Auto-exploration"
+          {%- endcomment -%}
+          {% assign filters_raw = section.settings.filter_tags | default: '' %}
+          {% assign filters = filters_raw | split: ',' %}
+          {% if filters_raw != blank %}
+            <div class="blog-filter" role="tablist" aria-label="Filter articles by tag">
+              <button class="filter-btn dt-sc-btn ctm-btn-padding is-active" data-filter="*">
+                {{ section.settings.filter_all_label | default: 'All' }}
+              </button>
+              {% for raw in filters %}
+                {% assign lbl = raw | strip %}
+                {% if lbl != blank %}
+                  {% assign h = lbl | handleize %}
+                  <button class="filter-btn dt-sc-btn ctm-btn-padding" data-filter=".tag-{{ h }}">{{ lbl }}</button>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
+
           {% unless blog.articles_count == 0 %}
             <div class="dt-sc-blog-section isotope-grid">
               {% for article in blogs[section.settings.blog].articles limit: section.settings.post_limit %}
-                <div class="isotope-selector dt-sc-blog-item {{ section.settings.text_position }} {{ item_style }} {{ section.settings.vertical_position }}"
+                <div class="isotope-selector dt-sc-blog-item {{ section.settings.text_position }} {{ item_style }} {{ section.settings.vertical_position }}{% for t in article.tags %} tag-{{ t | handle }}{% endfor %}"
                      {% if section.settings.block_banner_style == 'overlay-style' %}style="min-height:{{ section.settings.overlay_style_height }}px"{% endif %}>
                   <div class="dt-sc-blog-image {{ overlay_class }}">
                     {% if article.image %}
@@ -171,6 +193,15 @@
       });
     });
 
+    // Handle filter clicks
+    $('.blog-filter').on('click', 'button', function(e){
+      e.preventDefault();
+      var $btn = $(this);
+      var filterValue = $btn.attr('data-filter');
+      $grid.isotope({ filter: filterValue });
+      $btn.addClass('is-active').siblings().removeClass('is-active');
+    });
+
     var resizeTimer;
     $(window).on('resize orientationchange', function(){
       clearTimeout(resizeTimer);
@@ -206,7 +237,25 @@
 
   .dt-sc-main-heading {
     font-weight: 600;
+  }
 
+  /* ===== FILTER BAR ===== */
+  #shopify-section-{{section.id}} .blog-filter{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:center;
+    justify-content:center;
+    margin: 16px 0 28px;
+  }
+  #shopify-section-{{section.id}} .blog-filter .filter-btn{
+    line-height:1;
+    cursor:pointer;
+  }
+  #shopify-section-{{section.id}} .blog-filter .filter-btn.is-active{
+    opacity: .95;
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
   }
 
   /* Base card sizing for Isotope items (desktop) */
@@ -451,6 +500,10 @@
 
     { "type": "range", "id": "items_per_view", "label": "Slide per row (Set 1 for List Style)", "min": 1, "max": 5, "step": 1, "default": 2 },
     { "type": "text", "id": "column_gap", "label": "Column Gap (unit's not needed)", "default": "30" },
+
+    { "type": "header", "content": "Filters" },
+    { "type": "text", "id": "filter_all_label", "label": "All filter label", "default": "All" },
+    { "type": "text", "id": "filter_tags", "label": "Filter tags (comma-separated)", "default": "For him, For her, For couples, Auto-exploration", "info": "Matches article tags (case-insensitive). Example: For him, For her" },
 
     { "type": "header", "content": "Custom class" },
     { "type": "text", "id": "custom_class_name", "label": "Add your custom class name here" }
