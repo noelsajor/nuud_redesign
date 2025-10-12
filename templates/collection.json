@@ -44,7 +44,7 @@
         "margin": "0,50",
         "show_collection_image": false,
         "banner_position": "with-in-container",
-        "show_excerpt": true,
+        "show_excerpt": false,
         "show_sub_collection": false,
         "items": "3",
         "collections_sort_enable": false,
