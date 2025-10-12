@@ -348,7 +348,7 @@
           "menu_align": "logo_center",
           "mobile_screen_width": "1200",
           "show_header_social": true,
-          "search_type": "search-icon",
+          "search_type": "none",
           "enable_predictive_search": true,
           "enable_social_icon": false,
           "social_icon_color": "#ffffff",
