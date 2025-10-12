@@ -42,6 +42,7 @@
         "spacing_both_ends": false,
         "padding": "80,120",
         "margin": "0,50",
+        "background_color": "#fdf8e1",
         "show_collection_image": false,
         "banner_position": "with-in-container",
         "show_excerpt": false,
@@ -62,7 +63,7 @@
       "name": "Wave Spacer (Animated)",
       "settings": {
         "use_gradient": false,
-        "background_color": "transparent",
+        "background_color": "rgba(0,0,0,0)",
         "background_gradient": "linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 100%)",
         "spacer_padding_top": 0,
         "spacer_padding_bottom": 0,
