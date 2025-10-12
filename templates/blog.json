@@ -189,7 +189,7 @@
         "newsletter_description": "Few lines of short description goes here...",
         "news_style": "style-3",
         "space_in_between": "10px",
-        "newsletter_box_border_color": "#881d3e",
+        "newsletter_box_border_color": "rgba(0,0,0,0)",
         "newsletter_box_bg_color": "#ffffff",
         "newsletter_box_border_focus_color": "#881d3e",
         "newsletter_button_bg_color": "",
