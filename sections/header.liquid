@@ -1238,8 +1238,87 @@ header .site-header__cart-count{display:block !important;}
   }
       }
  
-  
+/* ==== MOBILE HEADER LAYOUT: logo centered, cart right, burger+search left ==== */
+@media (max-width: {{ section.settings.mobile_screen_width }}px) {
+  /* Make the nav a simple positioned bar */
+  header #AccessibleNav {
+    position: relative;
+    display: block;
+    min-height: 56px; /* enough height for icons + logo */
+  }
+
+  /* Center the logo */
+  header #AccessibleNav .logo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    margin: 0;
+    text-align: center;
+    z-index: 2; /* above background */
+  }
+  header #AccessibleNav .logo > a > img {
+    max-height: 36px;
+    width: auto;
+    height: auto;
+  }
+
+  /* Burger (left-most) */
+  header #AccessibleNav .mobile-nav-container {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+    z-index: 3;
+  }
+
+  /* Search (to the right of burger) */
+  header #AccessibleNav .site-header__links .site-header__search_icon {
+    position: absolute;
+    left: 48px;        /* adjust if you want a different gap from burger */
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+    z-index: 3;
+  }
+
+  /* Cart (right side) */
+  header #AccessibleNav .site-header__links .site-header__cart-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+    z-index: 3;
+  }
+
+  /* Keep the cart badge visible and placed nicely */
+  header .site-header__cart-count {
+    display: block !important;
+  }
+
+  /* Hide other header icons on mobile so only search & cart remain */
+  header #AccessibleNav .site-header__links a:not(.site-header__search_icon):not(.site-header__cart-toggle),
+  header #AccessibleNav .site-header__links .dt-sc-header-toggle,
+  header #AccessibleNav .site-header__links .shopify-currency-form,
+  header #AccessibleNav .site-header__links .select-box,
+  header #AccessibleNav .site-header__links .custom-select {
+    display: none !important;
+  }
+
+  /* Remove extra spacing the old layout added */
+  #AccessibleNav > * { margin: 0 !important; padding: 0 !important; }
+}
+
+/* Optional: ensure the same layout when the sticky clone is shown */
+@media (max-width: {{ section.settings.mobile_screen_width }}px) {
+  #header .sticky-header-active #AccessibleNav { position: relative; }
+}
+
 </style> 
+
+
 
 
 {% schema %}
