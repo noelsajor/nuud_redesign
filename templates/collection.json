@@ -34,8 +34,8 @@
         "carousel_rVjELb": {
           "type": "carousel",
           "settings": {
-            "title": "",
-            "collection": "",
+            "title": "Carousel heading test",
+            "collection": "all-products",
             "limit": 5
           }
         }
