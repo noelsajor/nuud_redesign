@@ -1238,16 +1238,18 @@ header .site-header__cart-count{display:block !important;}
   }
       }
  
-/* ==== MOBILE HEADER LAYOUT: logo centered, cart right, burger+search left ==== */
+/* ===== Mobile header layout: burger + search LEFT, logo CENTER, cart RIGHT ===== */
 @media (max-width: {{ section.settings.mobile_screen_width }}px) {
-  /* Make the nav a simple positioned bar */
-  header #AccessibleNav {
+
+  /* Make the nav a positioned bar to anchor absolute children */
+  header #AccessibleNav,
+  #header .sticky-header-active #AccessibleNav {
     position: relative;
     display: block;
-    min-height: 56px; /* enough height for icons + logo */
+    min-height: 56px; /* enough height for touch targets + logo */
   }
 
-  /* Center the logo */
+  /* Center the brand logo */
   header #AccessibleNav .logo {
     position: absolute;
     left: 50%;
@@ -1255,12 +1257,12 @@ header .site-header__cart-count{display:block !important;}
     transform: translate(-50%,-50%);
     margin: 0;
     text-align: center;
-    z-index: 2; /* above background */
+    z-index: 2;
   }
   header #AccessibleNav .logo > a > img {
     max-height: 36px;
-    width: auto;
     height: auto;
+    width: auto;
   }
 
   /* Burger (left-most) */
@@ -1273,18 +1275,21 @@ header .site-header__cart-count{display:block !important;}
     z-index: 3;
   }
 
-  /* Search (to the right of burger) */
-  header #AccessibleNav .site-header__links .site-header__search_icon {
+  /* Search (to the right of burger). Uses either class present in your theme */
+  header #AccessibleNav .site-header__links .site-header__search_icon,
+  header #AccessibleNav .site-header__links .dT_TopStickySearchBtn {
     position: absolute;
-    left: 48px;        /* adjust if you want a different gap from burger */
+    left: 48px;      /* tweak this gap to move closer/farther from burger */
     top: 50%;
     transform: translateY(-50%);
     margin: 0;
     z-index: 3;
   }
 
-  /* Cart (right side) */
-  header #AccessibleNav .site-header__links .site-header__cart-toggle {
+  /* Cart (right side). Handle both ajax-drawer and non-drawer variants */
+  header #AccessibleNav .site-header__links .site-header__cart-toggle,
+  header #AccessibleNav .site-header__links #cart-number,
+  header #AccessibleNav .site-header__links .site-header__cart {
     position: absolute;
     right: 12px;
     top: 50%;
@@ -1293,13 +1298,12 @@ header .site-header__cart-count{display:block !important;}
     z-index: 3;
   }
 
-  /* Keep the cart badge visible and placed nicely */
-  header .site-header__cart-count {
-    display: block !important;
-  }
+  /* Keep the cart badge visible and positioned nicely */
+  header .site-header__cart-count { display: block !important; }
+  header .site-header__cart-count .CartCount { left: 14px; top: -10px; }
 
-  /* Hide other header icons on mobile so only search & cart remain */
-  header #AccessibleNav .site-header__links a:not(.site-header__search_icon):not(.site-header__cart-toggle),
+  /* Hide other header icons/currency/etc. so only burger, search, cart remain */
+  header #AccessibleNav .site-header__links a:not(.site-header__search_icon):not(.dT_TopStickySearchBtn):not(.site-header__cart-toggle):not(#cart-number):not(.site-header__cart),
   header #AccessibleNav .site-header__links .dt-sc-header-toggle,
   header #AccessibleNav .site-header__links .shopify-currency-form,
   header #AccessibleNav .site-header__links .select-box,
@@ -1307,14 +1311,10 @@ header .site-header__cart-count{display:block !important;}
     display: none !important;
   }
 
-  /* Remove extra spacing the old layout added */
+  /* Remove legacy spacing from previous flex layout */
   #AccessibleNav > * { margin: 0 !important; padding: 0 !important; }
 }
 
-/* Optional: ensure the same layout when the sticky clone is shown */
-@media (max-width: {{ section.settings.mobile_screen_width }}px) {
-  #header .sticky-header-active #AccessibleNav { position: relative; }
-}
 
 </style> 
 
