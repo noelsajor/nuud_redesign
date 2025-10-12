@@ -287,6 +287,7 @@ Compute RGBA for category card background (opacity controlled in settings)
   will-change: transform, box-shadow;
   display:block; text-align:center; position:relative;
   {% if section.settings.enable_image_overflow %}overflow:visible;{% endif %}
+  max-width: 240px;
 }
 .ai-split-section-category-{{ uid }}:hover{
   color: {{ section.settings.category_hover_text_color }};
