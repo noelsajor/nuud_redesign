@@ -151,6 +151,9 @@
         "enable_auto_height": false,
         "items_per_view": 1,
         "column_gap": "30",
+        "enable_filter": false,
+        "filter_all_label": "All",
+        "filter_tags": "For him, For her, For couples, Auto-exploration",
         "custom_class_name": ""
       }
     },
