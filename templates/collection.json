@@ -16,7 +16,7 @@
           "type": "menu",
           "settings": {
             "filter_title": "Category",
-            "linklist": "category-menu"
+            "linklist": ""
           }
         },
         "c1f14e69-83d1-4c5d-b400-b6466f295358": {
@@ -42,20 +42,19 @@
         "spacing_both_ends": false,
         "padding": "30,0",
         "margin": "0,50",
-        "background_image": "shopify://shop_images/shop_bg.png",
-        "show_collection_image": true,
+        "show_collection_image": false,
         "banner_position": "with-in-container",
         "show_excerpt": true,
-        "show_sub_collection": true,
+        "show_sub_collection": false,
         "items": "3",
-        "collections_sort_enable": true,
+        "collections_sort_enable": false,
         "collections_view_enable": false,
-        "enable_items_per_page": true,
+        "enable_items_per_page": false,
         "collections_custom_cols": false,
         "pagination": "numbers",
         "grid": "3",
         "rows": "4",
-        "filter_type": "vertical"
+        "filter_type": "drawer"
       }
     }
   },
