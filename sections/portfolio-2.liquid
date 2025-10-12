@@ -84,13 +84,12 @@
           {% render 'section-heading', class: section.id %}
 
           {%- comment -%}
-            === FILTER BAR (clickable tags) ===
-            Uses section.settings.filter_tags (comma-separated). Example:
-            "For him, For her, For couples, Auto-exploration"
+            Filter bar appears only if enabled and tags provided.
+            Example tags: "For him, For her, For couples, Auto-exploration"
           {%- endcomment -%}
           {% assign filters_raw = section.settings.filter_tags | default: '' %}
           {% assign filters = filters_raw | split: ',' %}
-          {% if filters_raw != blank %}
+          {% if section.settings.enable_filter and filters_raw != blank %}
             <div class="blog-filter" role="tablist" aria-label="Filter articles by tag">
               <button class="filter-btn dt-sc-btn ctm-btn-padding is-active" data-filter="*">
                 {{ section.settings.filter_all_label | default: 'All' }}
@@ -193,14 +192,17 @@
       });
     });
 
-    // Handle filter clicks
-    $('.blog-filter').on('click', 'button', function(e){
-      e.preventDefault();
-      var $btn = $(this);
-      var filterValue = $btn.attr('data-filter');
-      $grid.isotope({ filter: filterValue });
-      $btn.addClass('is-active').siblings().removeClass('is-active');
-    });
+    // Handle filter clicks only if the bar exists
+    var $filterBar = $('.blog-filter');
+    if ($filterBar.length) {
+      $filterBar.on('click', 'button', function(e){
+        e.preventDefault();
+        var $btn = $(this);
+        var filterValue = $btn.attr('data-filter');
+        $grid.isotope({ filter: filterValue });
+        $btn.addClass('is-active').siblings().removeClass('is-active');
+      });
+    }
 
     var resizeTimer;
     $(window).on('resize orientationchange', function(){
@@ -253,7 +255,7 @@
     cursor:pointer;
     transition: background-color .2s ease, color .2s ease, opacity .2s ease;
   }
-  /* Make active look like hover (filled), remove outline */
+  /* Active looks like hover (filled), remove outline */
   #shopify-section-{{section.id}} .blog-filter .filter-btn:hover,
   #shopify-section-{{section.id}} .blog-filter .filter-btn.is-active{
     background-color: {{ section.settings.blog_button_bg_hover_color | default: section.settings.section_button_hover_bg_color }};
@@ -372,7 +374,6 @@
     }
   }
 </style>
-
 
 {% schema %}
 {
@@ -509,6 +510,7 @@
     { "type": "text", "id": "column_gap", "label": "Column Gap (unit's not needed)", "default": "30" },
 
     { "type": "header", "content": "Filters" },
+    { "type": "checkbox", "id": "enable_filter", "label": "Enable filter bar", "default": true },
     { "type": "text", "id": "filter_all_label", "label": "All filter label", "default": "All" },
     { "type": "text", "id": "filter_tags", "label": "Filter tags (comma-separated)", "default": "For him, For her, For couples, Auto-exploration", "info": "Matches article tags (case-insensitive). Example: For him, For her" },
 
