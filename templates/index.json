@@ -270,7 +270,7 @@
         "button_alignment": "center",
         "button_top_spacing": 80,
         "see_all_add_padding": false,
-        "show_badge": true,
+        "show_badge": false,
         "badge_image": "shopify://shop_images/SpicyLove.png",
         "badge_alt": "100% Fun Guaranteed",
         "badge_size": 120,
