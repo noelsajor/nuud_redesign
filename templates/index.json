@@ -706,7 +706,7 @@
         "content_width": "30/70",
         "lap_content_width": "20/80",
         "vertical_position": "vertical-center",
-        "card_aspect_ratio": "4/5",
+        "card_aspect_ratio": "none",
         "testimonial_border_color": "rgba(0,0,0,0)",
         "testimonial_background_color": "#ffffff",
         "testimonial_content_color": "#881d3e",
