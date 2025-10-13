@@ -493,7 +493,7 @@
           "footer_bg_clr": "#a7e4b2",
           "color_opacity": 1,
           "image_4": "shopify://shop_images/SpicyLove.png",
-          "show_footer_title": true,
+          "show_footer_title": false,
           "footer_heading_clr": "#881d3e",
           "footer_txt_clr": "#881d3e",
           "footer_link_clr": "#881d3e",
