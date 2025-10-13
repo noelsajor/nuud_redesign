@@ -450,9 +450,9 @@
             "settings": {
               "title": "Contact info",
               "footer_address": "Nuud Pleasures 19591 NE 10th ave North Miami, Florida 33179",
-              "footer_contact_no": "0000 - 123 - 456789",
+              "footer_contact_no": "",
               "office_hours": "",
-              "footer_contact_id": "info@example.com",
+              "footer_contact_id": "info@nuudpleasures.com",
               "container_width": 50,
               "column_alignment": "text-start"
             }
