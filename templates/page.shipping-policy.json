@@ -11,15 +11,48 @@
   "sections": {
     "main": {
       "type": "main-page",
+      "disabled": true,
       "settings": {
         "full": false,
         "spacing_both_ends": false,
         "padding": "0,0",
         "margin": "0,0"
       }
+    },
+    "home_html_text_ifLjWP": {
+      "type": "home-html-text",
+      "name": "Html Text",
+      "settings": {
+        "full": false,
+        "spacing_both_ends": false,
+        "padding": "0,0",
+        "margin": "0,0",
+        "show_background_image": false,
+        "background_style": "none",
+        "background_size": "auto",
+        "enable_overlay": false,
+        "background_color": "",
+        "overlay_transparency": "0.5",
+        "section_heading": "Html Text",
+        "section_sub_heading": "Sub Heading",
+        "section_description": "SHIPPINGComprehensive Guide to Our Shipping Policy at NUUDNUUD LLC is committed to excellence and the full satisfaction of our customers.  NUUD LLC proudly offers shipping services. Be assured we are doing everything in our power to get your order to you as soon as possible. Please consider any holidays that might impact delivery times. NUUD LLC also offers same-day dispatch.SHIPPINGAll orders for our products are processed and shipped out in 4-10 business days. Orders are not shipped or delivered on weekends or holidays. If we are experiencing a high volume of orders, shipments may be delayed by a few days. Please allow additional days in transit for delivery. If there will be a significant delay in the shipment of your order, we will contact you via email.SHIPPING RESTRICTIONSNUUD LLC does not ship vape products to the following states where HHC or intoxicating hemp-derived products are illegal or likely illegal as of January 1, 2025: Alaska, Arizona, Arkansas, California, Colorado, Delaware, Hawaii, Idaho, Illinois, Iowa, Kentucky, Maryland, Massachusetts, Michigan, Mississippi, Montana, Nevada, New York, North Dakota, Oregon, Rhode Island, Utah, Vermont, and Washington. By placing an order with NUUD LLC, you represent and warrant that: (1) your shipping and billing address is not located in any of these restricted states; (2) you are legally permitted to receive our products at your designated shipping address under all applicable laws; and (3) you assume full responsibility for ensuring compliance with your local regulations. NUUD LLC reserves the right to refuse or cancel any order, at our sole discretion, if we suspect non-compliance with this policy or applicable laws, without liability to you. For full legal disclaimers, product details, and customer responsibilities, see our Terms and Policies.WRONG ADDRESS DISCLAIMER It is the responsibility of the customers to make sure that the shipping address entered is correct. We do our best to speed up processing and shipping time, so there is always a small window to correct an incorrect shipping address. Please contact us immediately at info@nuudpleasures.com if you believe you have provided an incorrect shipping address.UNDELIVERABLE ORDERS  Orders that are returned to us as undeliverable because of incorrect shipping information are subject to a restocking fee to be determined by us.LOST/STOLEN PACKAGESNUUD LLC is not responsible for lost or stolen packages. If your tracking information states that your package was delivered to your address and you have not received it, please report to the local authorities. If the shipping carrier has lost your package, please file a claim with the shipping carrier.RETURN REQUEST DAYS NUUD LLC allows you to return its item(s) within a period of 5 days. Kindly be advised that the item(s) should be returned unopened and unused.OUT OF STOCK ITEM PROCESS  NUUD LLC has the following options in the event there are items which are out of stock: NUUD LLC will send available items first and send remaining items when items arrive back in stock.IMPORT DUTY AND TAXES  When dealing with NUUD LLC, you have the following options when it comes to taxes as well as import duties: You will be required to settle the requisite fees when the items are arriving in the destination country.ACCEPTANCEBy accessing our site and placing an order, you have willingly accepted the terms of this Shipping Policy.CONTACT INFORMATIONIn the event you have any questions or comments, please reach us via the following contacts:  Email - info@nuudpleasures.comNuud Pleasures 19591 NE 10th ave North Miami, Florida 33179info@nuudpleasures.com",
+        "section_button_text": "",
+        "section_button_link": "",
+        "section_heading_color": "",
+        "section_sub_heading_color": "",
+        "section_description_color": "",
+        "section_button_bg_color": "",
+        "section_button_text_color": "",
+        "section_button_hover_bg_color": "",
+        "section_button_hover_text_color": "",
+        "heading_position": "text-center",
+        "html": "<!--<div id='insta-feed'></div>-->",
+        "custom_class_name": ""
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "home_html_text_ifLjWP"
   ]
 }
