@@ -982,7 +982,7 @@
         "section_button_hover_bg_color": "",
         "section_button_hover_text_color": "",
         "heading_position": "text-start",
-        "blog": "news",
+        "blog": "blog",
         "blog_show_author": false,
         "blog_show_date": true,
         "blog_comments": false,
