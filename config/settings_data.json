@@ -316,34 +316,6 @@
               "button_4": "",
               "link_4": ""
             }
-          },
-          "tab_xREdTa": {
-            "type": "tab",
-            "settings": {
-              "mega_1": "",
-              "row_reverse": false,
-              "tab-menu": "horizontal",
-              "tab1_heading": "Headding",
-              "tab1": "",
-              "tab1_columns": "four-column",
-              "row_reverse_tab1": false,
-              "tab2_heading": "Headding",
-              "tab2": "",
-              "tab2_columns": "four-column",
-              "row_reverse_tab2": false,
-              "tab3_heading": "Headding",
-              "tab3": "",
-              "tab3_columns": "four-column",
-              "row_reverse_tab3": false,
-              "tab4_heading": "Headding",
-              "tab4": "",
-              "tab4_columns": "four-column",
-              "row_reverse_tab4": false,
-              "tab5_heading": "Headding",
-              "tab5": "",
-              "tab5_columns": "four-column",
-              "row_reverse_tab5": false
-            }
           }
         },
         "block_order": [
@@ -351,8 +323,7 @@
           "80f4e5a7-1dd9-42c2-8c7c-1558f35bd1c2",
           "57e64a97-4526-462d-a088-892d198fb4ae",
           "564c9f11-5d4d-4a8b-b7ca-ef0414753f9c",
-          "9a293b0b-5169-4de3-b9e6-78bcfd01de73",
-          "tab_xREdTa"
+          "9a293b0b-5169-4de3-b9e6-78bcfd01de73"
         ],
         "settings": {
           "full": false,
