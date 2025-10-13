@@ -396,7 +396,7 @@
       "modal-newsletter": {
         "type": "modal-newsletter",
         "settings": {
-          "enable_newsletter_modal": false,
+          "enable_newsletter_modal": true,
           "modal_popup_width": "800px",
           "dt_sc_cookie-expires": 4,
           "dt_sc_cookie-modal-delay": "1000",
@@ -469,23 +469,12 @@
               "column_alignment": "text-start",
               "footer_menu_style": "vertical"
             }
-          },
-          "5dd59adf-31fd-4091-b764-8a090fa9ab13": {
-            "type": "html",
-            "disabled": true,
-            "settings": {
-              "title": "Opening hours",
-              "html": "<table>\n\t<tbody>\n<tr>\n    <td>Monday</td>\n    <td>.................................</td>\n    <td>8am-9pm</td>\n  </tr>\n  <tr>\n    <td>Tuesday</td>\n    <td>.................................</td>\n    <td>8am-9pm</td>\n  </tr>\n  <tr>\n    <td>Wednesday</td>\n    <td>..........................</td>\n    <td>8am-9pm</td>\n  </tr>\n  <tr>\n   <td>Thursday</td>\n    <td>...............................</td>\n    <td>8am-9pm</td>\n  </tr>\n  <tr>\n    <td>Friday</td>\n    <td>.....................................</td>\n    <td>8am-9pm</td>\n  </tr>\n  <tr>\n    <td>Saturday</td>\n    <td>...............................</td>\n    <td>8am-9pm</td>\n  </tr>\n  <tr>\n    <td>Sunday</td>\n    <td>..................................</td>\n    <td>Closed</td>\n  </tr>\n\n</tbody>\n</table>",
-              "container_width": 22,
-              "column_alignment": "text-start"
-            }
           }
         },
         "block_order": [
           "40cc8690-9f76-4648-82d9-1632b26486a0",
           "a2c12a31-5695-4c33-9553-e3374eb8af4f",
-          "menu_BKWFjg",
-          "5dd59adf-31fd-4091-b764-8a090fa9ab13"
+          "menu_BKWFjg"
         ],
         "settings": {
           "full": true,
