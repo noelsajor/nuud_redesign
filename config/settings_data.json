@@ -463,11 +463,11 @@
           "menu_BKWFjg": {
             "type": "menu",
             "settings": {
-              "title": "Menu",
+              "title": "Navigation",
               "menu": "footer-menu",
               "container_width": 100,
               "column_alignment": "text-start",
-              "footer_menu_style": "Horizontal"
+              "footer_menu_style": "vertical"
             }
           },
           "5dd59adf-31fd-4091-b764-8a090fa9ab13": {
