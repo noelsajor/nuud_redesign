@@ -964,7 +964,7 @@
       "settings": {
         "full": false,
         "spacing_both_ends": false,
-        "padding": "100,100",
+        "padding": "100,40",
         "margin": "0,0",
         "show_background_image": false,
         "background_style": "none",
@@ -1028,7 +1028,7 @@
       "settings": {
         "full": false,
         "spacing_both_ends": false,
-        "padding": "100,100",
+        "padding": "120,100",
         "margin": "0,0",
         "show_background_image": false,
         "background_style": "none",
