@@ -488,6 +488,17 @@
             "star": "5"
           }
         },
+        "content_geJp9L": {
+          "type": "content",
+          "settings": {
+            "review_type": "photo",
+            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
+            "author": "Author Name",
+            "job": "Author Designation",
+            "star": "3",
+            "photo": "shopify://shop_images/Rectangle_97.png"
+          }
+        },
         "content_mH3FzN": {
           "type": "content",
           "settings": {
@@ -505,6 +516,7 @@
         "content_cykCyq",
         "content_7wPJbN",
         "content_CHjq6e",
+        "content_geJp9L",
         "content_mH3FzN"
       ],
       "name": "Testimonial",
