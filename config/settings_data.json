@@ -332,7 +332,7 @@
           "use_sticky_mobile": false,
           "transparent_header": false,
           "show_announcement": false,
-          "hide_announcement_mobile": false,
+          "hide_announcement_mobile": true,
           "home_page_only": true,
           "bg_color": "#a7e4b2",
           "text_color": "#881d3e",
