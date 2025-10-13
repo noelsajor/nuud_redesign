@@ -2,6 +2,7 @@
 
 {% assign margin = section.settings.margin | split: ',' %}
 {% assign margin_top = margin[0] %}
+{% assign margin_bottom = margin[1] %}
 {% assign padding = section.settings.padding | split: ',' %}
 {% assign padding_top = padding[0] %}
 {% assign padding_bottom = padding[1] %}
@@ -95,6 +96,32 @@
                     {%- endif -%}
                   </div>
                 </div>
+
+                {%- comment -%} Moved ADVANCED title + links under the gallery (LEFT column) {%- endcomment -%}
+                {% if section.settings.show_adv_product %}
+                  <div class="advanced-under-gallery-{{ section.id }}">
+                    {% if section.settings.choose_label != blank %}
+                      <p class="advanced-title">
+                        {{ section.settings.choose_label }}:
+                        {% assign words = product.title | split: ' ' %}
+                        {{ words | last }}
+                        {% assign firstWord = words | last %}
+                      </p>
+                    {% endif %}
+
+                    <div data-section-type="advanced-product-link-section">
+                      <div class="dT_vDynamicPWrap-{{ section.id }} dT_vProdWrap">
+                        <ul class="adv-product-list">
+                          {% assign swiperSlideClass = "carousel-block-list" %}
+                          {% assign block_collection = collections[section.settings.collection] %}
+                          {% for product in block_collection.products limit: 3 %}
+                            {% include 'adv-product-grid-item', product: product, swiperSlideClass: swiperSlideClass %}
+                          {% endfor %}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
               </div>
               <!-- ===================== UPDATED GALLERY END ===================== -->
 
@@ -162,27 +189,7 @@
                     {% endfor %}
                   </div>
 
-                  {% if section.settings.show_adv_product %}
-                    {% if section.settings.choose_label != blank %}
-                      <p class="advanced-title">
-                        {{ section.settings.choose_label }}:
-                        {% assign words = product.title | split: ' ' %}
-                        {{ words | last }}
-                        {% assign firstWord = words | last %}
-                      </p>
-                    {% endif %}
-                    <div data-section-type="advanced-product-link-section">
-                      <div class="dT_vDynamicPWrap-{{ section.id }} dT_vProdWrap">
-                        <ul class="adv-product-list">
-                          {% assign swiperSlideClass = "carousel-block-list" %}
-                          {% assign block_collection = collections[section.settings.collection] %}
-                          {% for product in block_collection.products limit: 3 %}
-                            {% include 'adv-product-grid-item', product: product, swiperSlideClass: swiperSlideClass %}
-                          {% endfor %}
-                        </ul>
-                      </div>
-                    </div>
-                  {% endif %}
+                  {#-- Advanced block REMOVED from here and placed under gallery --#}
 
                   {% capture product_form_config %}
                   {
@@ -538,9 +545,7 @@
   #shopify-section-{{ section.id }} .media-slide__img,
   #shopify-section-{{ section.id }} .media-slide__video,
   #shopify-section-{{ section.id }} .media-slide__model{
-    width: 100%; height: 100%; object-fit: contain; display: block;
-  }
-
+    width: 100%; height: 100%; object-fit: contain; display: block; }
   /* Dots */
   #shopify-section-{{ section.id }} .media-dots{
     display: flex; justify-content: center; gap: 8px; padding: 8px 0 2px;
@@ -572,6 +577,17 @@
   @media (max-width: 767px){ #product-gallery .product-item-wrap{ min-height: 280px; } }
 
   @keyframes dt-swing { 0% { transform: translateY(15px); } 100% { transform: translateY(-15px); } }
+
+  /* ======= NEW: advanced block under gallery spacing & grid ======= */
+  .advanced-under-gallery-{{ section.id }}{ margin-top: 16px; }
+  .advanced-under-gallery-{{ section.id }} .advanced-title{ margin: 0 0 8px 0; font-weight: 600; }
+  .advanced-under-gallery-{{ section.id }} .adv-product-list{
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px;
+  }
+  @media (max-width: 767px){
+    .advanced-under-gallery-{{ section.id }} .adv-product-list{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
 </style>
 
 {%- comment -%} Mobile full-width container + Accordion line style (overrides) {%- endcomment -%}
@@ -588,17 +604,9 @@
     padding-right: max(16px, env(safe-area-inset-right));
   }
 
-  .inner-bg-template--25476761977141__main {
-  padding: 16px;
-  }
-
-  .outer-pad-template--25476761977141__main {
-  padding: 0px;
-  }
-
-  .product-title {
-  font-size: 32px !important;
-  }
+  .inner-bg-template--25476761977141__main { padding: 16px; }
+  .outer-pad-template--25476761977141__main { padding: 0px; }
+  .product-title { font-size: 32px !important; }
 }
 
 /* Accordion/Tabs line style */
@@ -649,19 +657,14 @@
       padding-bottom: 2px;
     }
 
-      #shopify-section-template--25476761977141__main .desktop-stage img {
-      border-radius: 12px;
-    }
+    #shopify-section-template--25476761977141__main .desktop-stage img { border-radius: 12px; }
   }
 
-    /* Mobile-only: hide horizontal scrollbar in the swipe gallery */
+  /* Mobile-only: hide horizontal scrollbar in the swipe gallery */
   @media (max-width: 991.98px){
     #shopify-section-{{ section.id }} .media-scroller{
-      /* still scrollable */
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-
-      /* hide in all browsers */
       scrollbar-width: none;           /* Firefox */
       -ms-overflow-style: none;        /* IE/Edge legacy */
     }
@@ -671,10 +674,7 @@
       background: transparent;
     }
   }
-
 </style>
-
-
 
 <!-- ========= GALLERY + DOTS + SUBTOTAL LOGIC (Editor-safe, section-scoped) ========= -->
 <script>
