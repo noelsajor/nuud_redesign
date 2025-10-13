@@ -79,7 +79,7 @@
     "blog_text_color": "#881d3e",
     "blog_icon_color": "#a7e4b2",
     "blog_button_bg_color": "#2d0288",
-    "blog_button_text_color": "#881d3e",
+    "blog_button_text_color": "#ffffff",
     "blog_button_bg_hover_color": "rgba(0,0,0,0)",
     "blog_button_text_hover_color": "#2d0288",
     "blog_link_color_overlay": "#881d3e",
