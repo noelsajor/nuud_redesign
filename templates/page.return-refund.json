@@ -11,15 +11,48 @@
   "sections": {
     "main": {
       "type": "main-page",
+      "disabled": true,
       "settings": {
         "full": false,
         "spacing_both_ends": false,
         "padding": "0,0",
         "margin": "0,0"
       }
+    },
+    "home_html_text_qcfTzm": {
+      "type": "home-html-text",
+      "name": "Html Text",
+      "settings": {
+        "full": false,
+        "spacing_both_ends": false,
+        "padding": "120,120",
+        "margin": "0,0",
+        "show_background_image": false,
+        "background_style": "none",
+        "background_size": "auto",
+        "enable_overlay": false,
+        "background_color": "",
+        "overlay_transparency": "1",
+        "section_heading": "Return & Policy",
+        "section_sub_heading": "RETURN/REFUND",
+        "section_description": "",
+        "section_button_text": "",
+        "section_button_link": "",
+        "section_heading_color": "",
+        "section_sub_heading_color": "",
+        "section_description_color": "",
+        "section_button_bg_color": "",
+        "section_button_text_color": "",
+        "section_button_hover_bg_color": "",
+        "section_button_hover_text_color": "",
+        "heading_position": "text-center",
+        "html": "<!--<div id='insta-feed'></div>-->",
+        "custom_class_name": ""
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "home_html_text_qcfTzm"
   ]
 }
