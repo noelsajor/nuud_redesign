@@ -363,7 +363,7 @@
           "icon_hover_color": "#881d3e",
           "icon_bg": "rgba(0,0,0,0)",
           "icon_hover_bg": "rgba(0,0,0,0)",
-          "enable_menu_indicator": true,
+          "enable_menu_indicator": false,
           "pick_menu": "main-menu-1",
           "show_secondary_menu": false,
           "secondary_menu": "",
