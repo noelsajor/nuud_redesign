@@ -187,7 +187,7 @@
         "background_color": "#fdf8e1",
         "container_background_color": "rgba(0,0,0,0)",
         "section_padding_top": 40,
-        "section_padding_bottom": 80,
+        "section_padding_bottom": 40,
         "section_title": "Our Best Sellers",
         "title_color": "#881d3e",
         "title_bottom_spacing": 80,
@@ -291,146 +291,6 @@
         "cart_button_background": "#ff4881",
         "cart_button_text_color": "#ffffff",
         "cart_button_radius": 25
-      }
-    },
-    "1654336925c509c587": {
-      "type": "home-testimonial",
-      "blocks": {
-        "content_ATGPYr": {
-          "type": "content",
-          "settings": {
-            "review_type": "photo",
-            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
-            "author": "Author Name",
-            "job": "Author Designation",
-            "star": "3",
-            "photo": "shopify://shop_images/hero_mobile.webp"
-          }
-        },
-        "content_GXFG8W": {
-          "type": "content",
-          "settings": {
-            "review_type": "photo",
-            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
-            "author": "Author Name",
-            "job": "Author Designation",
-            "star": "3",
-            "photo": "shopify://shop_images/hero_mobile.webp"
-          }
-        },
-        "content_NDfzB9": {
-          "type": "content",
-          "settings": {
-            "review_type": "photo",
-            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
-            "author": "Author Name",
-            "job": "Author Designation",
-            "star": "3",
-            "photo": "shopify://shop_images/hero_mobile.webp"
-          }
-        },
-        "content_iVD6qQ": {
-          "type": "content",
-          "settings": {
-            "review_type": "photo",
-            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
-            "author": "Author Name",
-            "job": "Author Designation",
-            "star": "3",
-            "photo": "shopify://shop_images/hero_mobile.webp"
-          }
-        },
-        "content_gNMcYC": {
-          "type": "content",
-          "settings": {
-            "review_type": "photo",
-            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
-            "author": "Author Name",
-            "job": "Author Designation",
-            "star": "3",
-            "photo": "shopify://shop_images/hero_mobile.webp"
-          }
-        }
-      },
-      "block_order": [
-        "content_ATGPYr",
-        "content_GXFG8W",
-        "content_NDfzB9",
-        "content_iVD6qQ",
-        "content_gNMcYC"
-      ],
-      "custom_css": [
-        ".overall_boxed {border: none;}"
-      ],
-      "settings": {
-        "full": true,
-        "spacing_both_ends": false,
-        "padding": "0",
-        "margin": "0,0",
-        "show_background_image": false,
-        "background_style": "fixed",
-        "background_size": "auto",
-        "enable_overlay": true,
-        "background_color": "#fdf8e1",
-        "overlay_transparency": "1",
-        "mask_image_color": "rgba(0,0,0,0)",
-        "section_heading": "Check Our Feed",
-        "section_sub_heading": "",
-        "section_description": "",
-        "section_button_text": "",
-        "section_button_link": "",
-        "section_heading_color": "#881d3e",
-        "section_sub_heading_color": "#881d3e",
-        "section_description_color": "",
-        "section_button_bg_color": "rgba(0,0,0,0)",
-        "section_button_text_color": "",
-        "section_button_hover_bg_color": "",
-        "section_button_hover_text_color": "",
-        "heading_position": "text-start",
-        "grid": "1",
-        "block_style": "style_3",
-        "boxed_styles": "overall_boxed",
-        "enable_box_shadow": false,
-        "reverse_column": false,
-        "text_position": "text-center",
-        "quote_style": "no-quote-icon",
-        "author_info_style": "style_2",
-        "border_radius": "50%",
-        "boxed_border_radius": "32",
-        "column_gap": "32",
-        "content_width": "",
-        "lap_content_width": "20/80",
-        "vertical_position": "vertical-center",
-        "card_aspect_ratio": "1/1",
-        "testimonial_border_color": "rgba(0,0,0,0)",
-        "testimonial_background_color": "#ffffff",
-        "testimonial_content_color": "#881d3e",
-        "testimonial_review_color": "#f5ba2d",
-        "testimonial_author_text_color": "#881d3e",
-        "testimonial_author_designation_color": "#881d3e",
-        "testimonial_author_separator_color": "rgba(0,0,0,0)",
-        "testimonial_quote_icon_color": "",
-        "enable_slider": true,
-        "enable_auto_height": true,
-        "items_per_view": 3,
-        "items_laptop_view": 3,
-        "items_tablet_view": 1,
-        "items_mobile_view": 1,
-        "enable_center_mode": true,
-        "slider_autoplay": 3,
-        "dots": false,
-        "carousel_pagination_alignment": "center_pagination",
-        "carousel_pagination_bottom_alignment": "outside_element",
-        "arrows": false,
-        "nav_arrow_position": "center-navigation",
-        "center_nav_arrow_alignment": "outside_container",
-        "navigation_button_color": "#ffffff",
-        "navigation_button_icon_color": "#f76d3c",
-        "navigation_button_hover_color": "#fff64f",
-        "navigation_button_hover_icon_color": "#f76d3c",
-        "navigation_dot_color": "",
-        "navigation_dot_active_color": "",
-        "custom_class_name": ""
       }
     },
     "spacer_wave_MWGrKn": {
@@ -904,6 +764,146 @@
         "extra_space": false,
         "extra_space_height": 40,
         "z_index": 1
+      }
+    },
+    "1654336925c509c587": {
+      "type": "home-testimonial",
+      "blocks": {
+        "content_ATGPYr": {
+          "type": "content",
+          "settings": {
+            "review_type": "photo",
+            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
+            "author": "Author Name",
+            "job": "Author Designation",
+            "star": "3",
+            "photo": "shopify://shop_images/hero_mobile.webp"
+          }
+        },
+        "content_GXFG8W": {
+          "type": "content",
+          "settings": {
+            "review_type": "photo",
+            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
+            "author": "Author Name",
+            "job": "Author Designation",
+            "star": "3",
+            "photo": "shopify://shop_images/hero_mobile.webp"
+          }
+        },
+        "content_NDfzB9": {
+          "type": "content",
+          "settings": {
+            "review_type": "photo",
+            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
+            "author": "Author Name",
+            "job": "Author Designation",
+            "star": "3",
+            "photo": "shopify://shop_images/hero_mobile.webp"
+          }
+        },
+        "content_iVD6qQ": {
+          "type": "content",
+          "settings": {
+            "review_type": "photo",
+            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
+            "author": "Author Name",
+            "job": "Author Designation",
+            "star": "3",
+            "photo": "shopify://shop_images/hero_mobile.webp"
+          }
+        },
+        "content_gNMcYC": {
+          "type": "content",
+          "settings": {
+            "review_type": "photo",
+            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
+            "author": "Author Name",
+            "job": "Author Designation",
+            "star": "3",
+            "photo": "shopify://shop_images/hero_mobile.webp"
+          }
+        }
+      },
+      "block_order": [
+        "content_ATGPYr",
+        "content_GXFG8W",
+        "content_NDfzB9",
+        "content_iVD6qQ",
+        "content_gNMcYC"
+      ],
+      "custom_css": [
+        ".overall_boxed {border: none;}"
+      ],
+      "settings": {
+        "full": true,
+        "spacing_both_ends": false,
+        "padding": "0",
+        "margin": "0,0",
+        "show_background_image": false,
+        "background_style": "fixed",
+        "background_size": "auto",
+        "enable_overlay": true,
+        "background_color": "#fdf8e1",
+        "overlay_transparency": "1",
+        "mask_image_color": "rgba(0,0,0,0)",
+        "section_heading": "Check Our Feed",
+        "section_sub_heading": "",
+        "section_description": "",
+        "section_button_text": "",
+        "section_button_link": "",
+        "section_heading_color": "#881d3e",
+        "section_sub_heading_color": "#881d3e",
+        "section_description_color": "",
+        "section_button_bg_color": "rgba(0,0,0,0)",
+        "section_button_text_color": "",
+        "section_button_hover_bg_color": "",
+        "section_button_hover_text_color": "",
+        "heading_position": "text-start",
+        "grid": "1",
+        "block_style": "style_3",
+        "boxed_styles": "overall_boxed",
+        "enable_box_shadow": false,
+        "reverse_column": false,
+        "text_position": "text-center",
+        "quote_style": "no-quote-icon",
+        "author_info_style": "style_2",
+        "border_radius": "50%",
+        "boxed_border_radius": "32",
+        "column_gap": "32",
+        "content_width": "",
+        "lap_content_width": "20/80",
+        "vertical_position": "vertical-center",
+        "card_aspect_ratio": "1/1",
+        "testimonial_border_color": "rgba(0,0,0,0)",
+        "testimonial_background_color": "#ffffff",
+        "testimonial_content_color": "#881d3e",
+        "testimonial_review_color": "#f5ba2d",
+        "testimonial_author_text_color": "#881d3e",
+        "testimonial_author_designation_color": "#881d3e",
+        "testimonial_author_separator_color": "rgba(0,0,0,0)",
+        "testimonial_quote_icon_color": "",
+        "enable_slider": true,
+        "enable_auto_height": true,
+        "items_per_view": 3,
+        "items_laptop_view": 3,
+        "items_tablet_view": 1,
+        "items_mobile_view": 1,
+        "enable_center_mode": true,
+        "slider_autoplay": 3,
+        "dots": false,
+        "carousel_pagination_alignment": "center_pagination",
+        "carousel_pagination_bottom_alignment": "outside_element",
+        "arrows": false,
+        "nav_arrow_position": "center-navigation",
+        "center_nav_arrow_alignment": "outside_container",
+        "navigation_button_color": "#ffffff",
+        "navigation_button_icon_color": "#f76d3c",
+        "navigation_button_hover_color": "#fff64f",
+        "navigation_button_hover_icon_color": "#f76d3c",
+        "navigation_dot_color": "",
+        "navigation_dot_active_color": "",
+        "custom_class_name": ""
       }
     },
     "faq_section_8ifTKi": {
