@@ -593,8 +593,6 @@
 </script>
 
 
-
-
 <style>
 
   .site-header__links .select-box .select-box__current .select-box__value .select-box__input-text:after { content: ''; display: inline-block; position: relative; width: 8px; height: 8px; border-right: 1px solid currentcolor; border-bottom: 1px solid currentcolor; bottom: 4px;margin-left: 10px;-webkit-transform: rotate(45deg);transform: rotate(45deg); }
@@ -666,7 +664,7 @@
 
   header .dt-sc-toggle.open + .dt-sc-toggle-content { z-index:1; opacity: 1; visibility: visible; top:60px; }
 
-  header .dt-sc-header-toggle .dt-sc-toggle-content:before { content: ''; display: block; position: absolute; left: 0px; right: 0; bottom: 100%; width: 0; height: 0; border-bottom: 100px solid {{ section.settings.mega_menu_bg }}; border-top: 10px solid transparent; border-left: 10px solid transparent; border-right: 10px solid transparent; margin: auto; }
+  header .dt-sc-header-toggle .dt-sc-toggle-content:before { content: ''; display: block; position: absolute; left: 0px; right: 0; bottom: 100%; width: 0; height: 0; border-bottom: 10px solid {{ section.settings.mega_menu_bg }}; border-top: 10px solid transparent; border-left: 10px solid transparent; border-right: 10px solid transparent; margin: auto; }
   header .site-header__links .dt-sc-toggle-content a { color: {{ section.settings.submenu_color }}; border-radius: 0;justify-content: flex-start;padding: 5px 15px 6px; height: auto; font-size: 0.875em; background-color: {{ section.settings.mega_menu_bg }}; }
   header .site-header__links .dt-sc-toggle-content a:hover { color: {{ section.settings.submenu_hover_color }}; background-color: {{ section.settings.mega_menu_bg }}; }
   header .site-header__links .dt-sc-toggle-content li:not(:last-child) a{ border-bottom: 1px solid {{ settings.primary_color | color_modify: 'alpha', 0.12 }}; }
@@ -937,27 +935,6 @@
   /*------------------------------------------------------------*/
   /* Mobile Menu */
   /*------------------------------------------------------------*/
-
-  /* Mobile logo size override */
-@media (max-width: {{ section.settings.mobile_screen_width }}px) {
-  /* Image itself (overrides inline max-width on <img>) */
-  header #AccessibleNav .logo > a > img,
-  #header .sticky-header-active #AccessibleNav .logo > a > img {
-    max-width: 80px !important; /* ← set your mobile size */
-    height: auto;
-  }
-
-  /* Logo wrapper constraints when secondary menu is enabled */
-  .logo-alignment.secondary-menu-enabled #AccessibleNav > .logo {
-    max-width: 80px !important; /* match the image size */
-  }
-
-  /* General logo wrapper (covers other alignments) */
-  header #AccessibleNav .logo {
-    max-width: 80px !important;
-  }
-}
-
   .mobile-nav-container .menu-trigger { cursor: pointer; height: 30px; line-height: 30px; /* padding: 0 5px 0 10px;*/ }
   .mobile-nav-container .menu-trigger > i,
   .mobile-nav-container .menu-trigger > span { display: inline-block; font-size: 16px; padding: 0 5px; vertical-align: middle; }
@@ -1054,7 +1031,7 @@
   /*------------------------------------------------------------*/
   /* Responsive */
   /*------------------------------------------------------------*/
-  
+
   @media (min-width:{{section.settings.mobile_screen_width | plus: 1 }}px) {
 
     .tabs-nav.mobileTabs{display:none;}
@@ -1155,7 +1132,7 @@
 
     header .dt-sc-header-top-bar .dt-sc-flex-space-between > * { display: flex; /* flex: 1 1 100% !important; */ justify-content: center !important; padding: 5px 8px; text-align: center !important; }
     header .dt-sc-header-top-bar .dt-sc-flex-space-between > :last-child:not(:only-child) > * { justify-content: inherit; text-align: inherit; }
-    header .logo-alignment:not(.secondary-menu-enabled) #AccessibleNav { justify-content: center; }
+    header .logo-alignment:not(.secondary-menu-enabled) #AccessibleNav { justify-content: flex-start; }
 
     header #AccessibleNav { flex-wrap: wrap; }
     header #AccessibleNav > * { padding: 5px; }
@@ -1197,11 +1174,8 @@
 
     header #AccessibleNav .logo > a > img { max-width: 100% !important; }
     header .logo-alignment:not(.secondary-menu-enabled) #AccessibleNav { /*justify-content: space-between;*/ }
-    header #AccessibleNav > .site-header__links { width: 100%; justify-content: left; }
+    header #AccessibleNav > .site-header__links { width: 100%; justify-content: center; }
     #dT_top-sticky .dT_ProductProactiveSearch form { padding-left: 0; }
-    .site-header__wishlist {
-      display: none !important;
-    }
     
 
   }
@@ -1243,11 +1217,8 @@ header .site-header__cart-count{display:block !important;}
   }
       }
  
-
-
+  
 </style> 
-
-
 
 
 {% schema %}
