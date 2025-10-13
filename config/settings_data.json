@@ -462,13 +462,12 @@
           },
           "menu_BKWFjg": {
             "type": "menu",
-            "disabled": true,
             "settings": {
               "title": "Menu",
-              "menu": "footer",
-              "container_width": 20,
+              "menu": "footer-menu",
+              "container_width": 100,
               "column_alignment": "text-start",
-              "footer_menu_style": "vertical"
+              "footer_menu_style": "Horizontal"
             }
           },
           "5dd59adf-31fd-4091-b764-8a090fa9ab13": {
