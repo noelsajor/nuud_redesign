@@ -671,7 +671,6 @@
         "spacing_both_ends": false,
         "padding": "100,40",
         "margin": "0,0",
-        "image_2": "shopify://shop_images/SpicyLove.png",
         "show_background_image": false,
         "background_style": "fixed",
         "background_size": "auto",
