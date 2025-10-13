@@ -346,7 +346,7 @@
           "logo": "shopify://shop_images/Nuud_Pleasures_Logo_Vectorized_3.svg",
           "logo_max_width": 160,
           "menu_align": "logo_center",
-          "mobile_screen_width": "1200",
+          "mobile_screen_width": "960",
           "show_header_social": true,
           "search_type": "none",
           "enable_predictive_search": true,
