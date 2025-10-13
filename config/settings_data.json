@@ -368,7 +368,7 @@
           "icon_hover_bg": "rgba(0,0,0,0)",
           "enable_menu_indicator": false,
           "pick_menu": "main-menu-1",
-          "show_secondary_menu": false,
+          "show_secondary_menu": true,
           "secondary_menu": "",
           "header_bg": "#ff679a",
           "menu_color": "#ffffff",
