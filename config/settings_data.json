@@ -435,6 +435,19 @@
       "footer": {
         "type": "footer",
         "blocks": {
+          "newsletter_7URQ96": {
+            "type": "newsletter",
+            "settings": {
+              "title": "Sign up and save",
+              "richtext": "<p>Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>",
+              "newsletter_btn_color": "#206469",
+              "newsletter_btn_bg": "#206469",
+              "newsletter_btn_hover_color": "#206469",
+              "newsletter_btn_hover_bg": "#206469",
+              "container_width": 20,
+              "column_alignment": "text-start"
+            }
+          },
           "40cc8690-9f76-4648-82d9-1632b26486a0": {
             "type": "logo",
             "settings": {
@@ -472,6 +485,7 @@
           }
         },
         "block_order": [
+          "newsletter_7URQ96",
           "40cc8690-9f76-4648-82d9-1632b26486a0",
           "a2c12a31-5695-4c33-9553-e3374eb8af4f",
           "menu_BKWFjg"
