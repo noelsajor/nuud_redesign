@@ -341,7 +341,7 @@
           "announcement_height": 30,
           "topbar_bg": "rgba(0,0,0,0)",
           "disable_topbar": true,
-          "disable_topbar_mobile": false,
+          "disable_topbar_mobile": true,
           "header_mail": "sample@example.com",
           "header_phone": "9876543210",
           "header_contact": "#ffffff",
