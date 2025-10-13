@@ -538,7 +538,7 @@
         "block_style": "style_3",
         "boxed_styles": "overall_boxed",
         "enable_box_shadow": false,
-        "reverse_column": false,
+        "reverse_column": true,
         "text_position": "text-center",
         "quote_style": "no-quote-icon",
         "author_info_style": "style_2",
