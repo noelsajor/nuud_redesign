@@ -75,18 +75,29 @@
       background-color: {{ section.settings.background_color | default: 'transparent' }};
     "
   >
+    <!-- Single source of layout width -->
     <div class="max-container">
+      <!-- Neutral inner wrapper: no max-width -->
       <div class="inner-container">
         <div class="row {{ section.settings.custom_class_name }}">
           {% render 'section-heading', class: section.id %}
 
           {%- comment -%}
-            Filter bar: “active” state is forced with high specificity so desktop styles can’t override it.
+            Filter bar with CSS vars for active colors (used by JS painter).
           {%- endcomment -%}
           {% assign filters_raw = section.settings.filter_tags | default: '' %}
           {% assign filters = filters_raw | split: ',' %}
           {% if section.settings.enable_filter and filters_raw != blank %}
-            <div class="blog-filter" role="tablist" aria-label="Filter articles by tag">
+            <div
+              id="blog-filter-{{ section.id }}"
+              class="blog-filter"
+              role="tablist"
+              aria-label="Filter articles by tag"
+              style="
+                --filter-active-bg: {{ section.settings.blog_button_bg_hover_color | default: section.settings.section_button_hover_bg_color }};
+                --filter-active-fg: {{ section.settings.blog_button_text_hover_color | default: section.settings.section_button_hover_text_color }};
+              "
+            >
               <button
                 class="filter-btn dt-sc-btn ctm-btn-padding is-active"
                 data-filter="*"
@@ -182,6 +193,7 @@
         </div>
       </div>
     </div>
+    <!-- /max-container -->
   </div>
 </div>
 
@@ -200,33 +212,60 @@
         });
       });
 
-      var $filterBar = $('.blog-filter');
+      var $filterBar = $('#blog-filter-{{ section.id }}');
+
+      function paintActiveImportant($btn){
+        // Clear inlines on siblings
+        $btn.siblings('.filter-btn').each(function(){
+          this.style.removeProperty('background-color');
+          this.style.removeProperty('color');
+          this.style.removeProperty('border-color');
+        });
+
+        var root = document.getElementById('blog-filter-{{ section.id }}');
+        if (!root) return;
+        var cs = getComputedStyle(root);
+        var bg = cs.getPropertyValue('--filter-active-bg').trim() || '';
+        var fg = cs.getPropertyValue('--filter-active-fg').trim() || '';
+
+        // ARIA + class sync
+        $btn
+          .addClass('is-active')
+          .attr('aria-pressed','true')
+          .siblings('.filter-btn')
+          .removeClass('is-active')
+          .attr('aria-pressed','false');
+
+        // Inline-important paints (wins over any theme CSS)
+        if ($btn[0]){
+          $btn[0].style.setProperty('background-color', bg, 'important');
+          $btn[0].style.setProperty('color', fg, 'important');
+          $btn[0].style.setProperty('border-color', 'transparent', 'important');
+        }
+      }
 
       function activateFilter($btn){
         var filterValue = $btn.attr('data-filter') || '*';
         $grid.isotope({ filter: filterValue });
-        // visual state (desktop+mobile)
-        $btn
-          .addClass('is-active')
-          .attr('aria-pressed', 'true')
-          .siblings('.filter-btn')
-          .removeClass('is-active')
-          .attr('aria-pressed', 'false');
+        paintActiveImportant($btn);
       }
 
       if ($filterBar.length){
-        // mouse/touch click
+        // Mouse/touch
         $filterBar.on('click', 'button.filter-btn', function(e){
           e.preventDefault();
           activateFilter($(this));
         });
-        // keyboard support (Enter/Space)
+        // Keyboard support
         $filterBar.on('keydown', 'button.filter-btn', function(e){
           if (e.key === 'Enter' || e.key === ' '){
             e.preventDefault();
             activateFilter($(this));
           }
         });
+        // Paint initial
+        var $initial = $filterBar.find('button.filter-btn.is-active,[aria-pressed="true"]').first();
+        if ($initial.length) paintActiveImportant($initial);
       }
 
       var resizeTimer;
@@ -256,7 +295,7 @@
     box-sizing:border-box;
   }
 
-  /* Center the Isotope container within the section */
+  /* Center the whole Isotope container within the section */
   #shopify-section-{{section.id}}.blog-portfolio .isotope-grid{
     margin-left:auto; margin-right:auto;
   }
@@ -278,17 +317,12 @@
     transition: background-color .2s ease, color .2s ease, opacity .2s ease, border-color .2s ease;
   }
 
-  /* Make active look like hover (FILLED) on ALL viewports.
-     Extra specificity + !important to defeat theme desktop overrides. */
-  #shopify-section-{{section.id}} .blog-filter .filter-btn:hover,
+  /* Fallback/base active look (JS will enforce inline-important) */
   #shopify-section-{{section.id}} .blog-filter .filter-btn.is-active,
   #shopify-section-{{section.id}} .blog-filter .filter-btn[aria-pressed="true"]{
-    background-color: {{ section.settings.blog_button_bg_hover_color | default: section.settings.section_button_hover_bg_color }} !important;
-    color: {{ section.settings.blog_button_text_hover_color | default: section.settings.section_button_hover_text_color }} !important;
-    outline: none;
-    box-shadow: none;
-    border-color: transparent !important;
-    opacity: 1;
+    background-color: var(--filter-active-bg);
+    color: var(--filter-active-fg);
+    border-color: transparent;
   }
 
   /* Visible focus for keyboard users */
@@ -316,6 +350,8 @@
       width: calc(33.33% - {{ section.settings.gallery_spacing }}px);
     }
   }
+
+  /* ===== MOBILE CENTER ALIGN ===== */
   @media only screen and (max-width: 991px){
     #shopify-section-{{section.id}}.blog-portfolio .isotope-selector{
       width: 100% !important;
@@ -374,7 +410,7 @@
   #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item.overlay-style .dt-sc-blog-content a:not(dt-sc-btn){ color: {{section.settings.blog_link_color_overlay}}; }
   #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item.overlay-style .dt-sc-blog-content a:not(dt-sc-btn):hover{ color: {{section.settings.blog_link_hover_color_overlay}}; }
   #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item.overlay-style .dt-sc-blog-content .dt-sc-blog-description,
-  #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item.overlay-style .dt-sc-blog-content .dt-sc-blog-meta *:not/svg){ color: {{section.settings.blog_text_color_overlay}}; }
+  #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item.overlay-style .dt-sc-blog-content .dt-sc-blog-meta *:not(svg){ color: {{section.settings.blog_text_color_overlay}}; }
   #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item.overlay-style .dt-sc-blog-content .dt-sc-blog-meta p svg{ fill: {{section.settings.blog_icon_color_overlay}}; }
   #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item.overlay-style .dt-sc-blog-content a.dt-sc-btn{
     background-color: {{section.settings.blog_button_bg_color_overlay}}; color: {{section.settings.blog_button_text_color_overlay}};
