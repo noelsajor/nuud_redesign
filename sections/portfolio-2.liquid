@@ -72,33 +72,41 @@
         background-repeat: no-repeat;
         background-position: center center;
       {% endif %}
-      /* Put color last so it wins when no image is set */
       background-color: {{ section.settings.background_color | default: 'transparent' }};
     "
   >
-    <!-- Single source of layout width -->
     <div class="max-container">
-      <!-- Neutral inner wrapper: no max-width -->
       <div class="inner-container">
         <div class="row {{ section.settings.custom_class_name }}">
           {% render 'section-heading', class: section.id %}
 
           {%- comment -%}
-            Filter bar appears only if enabled and tags provided.
-            Example tags: "For him, For her, For couples, Auto-exploration"
+            Filter bar: “active” state is forced with high specificity so desktop styles can’t override it.
           {%- endcomment -%}
           {% assign filters_raw = section.settings.filter_tags | default: '' %}
           {% assign filters = filters_raw | split: ',' %}
           {% if section.settings.enable_filter and filters_raw != blank %}
             <div class="blog-filter" role="tablist" aria-label="Filter articles by tag">
-              <button class="filter-btn dt-sc-btn ctm-btn-padding is-active" data-filter="*">
+              <button
+                class="filter-btn dt-sc-btn ctm-btn-padding is-active"
+                data-filter="*"
+                aria-pressed="true"
+                type="button"
+              >
                 {{ section.settings.filter_all_label | default: 'All' }}
               </button>
               {% for raw in filters %}
                 {% assign lbl = raw | strip %}
                 {% if lbl != blank %}
                   {% assign h = lbl | handleize %}
-                  <button class="filter-btn dt-sc-btn ctm-btn-padding" data-filter=".tag-{{ h }}">{{ lbl }}</button>
+                  <button
+                    class="filter-btn dt-sc-btn ctm-btn-padding"
+                    data-filter=".tag-{{ h }}"
+                    aria-pressed="false"
+                    type="button"
+                  >
+                    {{ lbl }}
+                  </button>
                 {% endif %}
               {% endfor %}
             </div>
@@ -174,42 +182,60 @@
         </div>
       </div>
     </div>
-    <!-- /max-container -->
   </div>
 </div>
 
 <script type="text/javascript">
-  $(document).ready(function(){
-    var $grid = $('.isotope-grid');
+  (function($){
+    $(function(){
+      var $grid = $('.isotope-grid');
 
-    $grid.imagesLoaded(function(){
-      $grid.isotope({
-        itemSelector: '.isotope-selector',
-        percentPosition: true,
-        layoutMode: 'masonry',
-        fitWidth: true,
-        masonry: { gutter: {{ section.settings.gallery_spacing }} }
+      $grid.imagesLoaded(function(){
+        $grid.isotope({
+          itemSelector: '.isotope-selector',
+          percentPosition: true,
+          layoutMode: 'masonry',
+          fitWidth: true,
+          masonry: { gutter: {{ section.settings.gallery_spacing }} }
+        });
       });
-    });
 
-    // Handle filter clicks only if the bar exists
-    var $filterBar = $('.blog-filter');
-    if ($filterBar.length) {
-      $filterBar.on('click', 'button', function(e){
-        e.preventDefault();
-        var $btn = $(this);
-        var filterValue = $btn.attr('data-filter');
+      var $filterBar = $('.blog-filter');
+
+      function activateFilter($btn){
+        var filterValue = $btn.attr('data-filter') || '*';
         $grid.isotope({ filter: filterValue });
-        $btn.addClass('is-active').siblings().removeClass('is-active');
-      });
-    }
+        // visual state (desktop+mobile)
+        $btn
+          .addClass('is-active')
+          .attr('aria-pressed', 'true')
+          .siblings('.filter-btn')
+          .removeClass('is-active')
+          .attr('aria-pressed', 'false');
+      }
 
-    var resizeTimer;
-    $(window).on('resize orientationchange', function(){
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(function(){ $grid.isotope('layout'); }, 150);
+      if ($filterBar.length){
+        // mouse/touch click
+        $filterBar.on('click', 'button.filter-btn', function(e){
+          e.preventDefault();
+          activateFilter($(this));
+        });
+        // keyboard support (Enter/Space)
+        $filterBar.on('keydown', 'button.filter-btn', function(e){
+          if (e.key === 'Enter' || e.key === ' '){
+            e.preventDefault();
+            activateFilter($(this));
+          }
+        });
+      }
+
+      var resizeTimer;
+      $(window).on('resize orientationchange', function(){
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function(){ $grid.isotope('layout'); }, 150);
+      });
     });
-  });
+  })(jQuery);
 </script>
 
 <style>
@@ -230,16 +256,12 @@
     box-sizing:border-box;
   }
 
-  /* No font-family declarations – uses theme defaults */
-
-  /* Center the whole Isotope container within the section */
+  /* Center the Isotope container within the section */
   #shopify-section-{{section.id}}.blog-portfolio .isotope-grid{
     margin-left:auto; margin-right:auto;
   }
 
-  .dt-sc-main-heading {
-    font-weight: 600;
-  }
+  .dt-sc-main-heading { font-weight: 600; }
 
   /* ===== FILTER BAR ===== */
   #shopify-section-{{section.id}} .blog-filter{
@@ -253,17 +275,26 @@
   #shopify-section-{{section.id}} .blog-filter .filter-btn{
     line-height:1;
     cursor:pointer;
-    transition: background-color .2s ease, color .2s ease, opacity .2s ease;
+    transition: background-color .2s ease, color .2s ease, opacity .2s ease, border-color .2s ease;
   }
-  /* Active looks like hover (filled), remove outline */
+
+  /* Make active look like hover (FILLED) on ALL viewports.
+     Extra specificity + !important to defeat theme desktop overrides. */
   #shopify-section-{{section.id}} .blog-filter .filter-btn:hover,
-  #shopify-section-{{section.id}} .blog-filter .filter-btn.is-active{
-    background-color: {{ section.settings.blog_button_bg_hover_color | default: section.settings.section_button_hover_bg_color }};
-    color: {{ section.settings.blog_button_text_hover_color | default: section.settings.section_button_hover_text_color }};
+  #shopify-section-{{section.id}} .blog-filter .filter-btn.is-active,
+  #shopify-section-{{section.id}} .blog-filter .filter-btn[aria-pressed="true"]{
+    background-color: {{ section.settings.blog_button_bg_hover_color | default: section.settings.section_button_hover_bg_color }} !important;
+    color: {{ section.settings.blog_button_text_hover_color | default: section.settings.section_button_hover_text_color }} !important;
     outline: none;
     box-shadow: none;
-    border-color: transparent;
+    border-color: transparent !important;
     opacity: 1;
+  }
+
+  /* Visible focus for keyboard users */
+  #shopify-section-{{section.id}} .blog-filter .filter-btn:focus-visible{
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
   }
 
   /* Base card sizing for Isotope items (desktop) */
@@ -285,8 +316,6 @@
       width: calc(33.33% - {{ section.settings.gallery_spacing }}px);
     }
   }
-
-  /* ===== MOBILE CENTER ALIGN ===== */
   @media only screen and (max-width: 991px){
     #shopify-section-{{section.id}}.blog-portfolio .isotope-selector{
       width: 100% !important;
@@ -345,7 +374,7 @@
   #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item.overlay-style .dt-sc-blog-content a:not(dt-sc-btn){ color: {{section.settings.blog_link_color_overlay}}; }
   #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item.overlay-style .dt-sc-blog-content a:not(dt-sc-btn):hover{ color: {{section.settings.blog_link_hover_color_overlay}}; }
   #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item.overlay-style .dt-sc-blog-content .dt-sc-blog-description,
-  #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item.overlay-style .dt-sc-blog-content .dt-sc-blog-meta *:not(svg){ color: {{section.settings.blog_text_color_overlay}}; }
+  #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item.overlay-style .dt-sc-blog-content .dt-sc-blog-meta *:not/svg){ color: {{section.settings.blog_text_color_overlay}}; }
   #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item.overlay-style .dt-sc-blog-content .dt-sc-blog-meta p svg{ fill: {{section.settings.blog_icon_color_overlay}}; }
   #shopify-section-{{section.id}}.blog-portfolio .dt-sc-blog-section .dt-sc-blog-item.overlay-style .dt-sc-blog-content a.dt-sc-btn{
     background-color: {{section.settings.blog_button_bg_color_overlay}}; color: {{section.settings.blog_button_text_color_overlay}};
@@ -354,12 +383,9 @@
     background-color: {{section.settings.blog_button_bg_hover_color_overlay}}; color: {{section.settings.blog_button_hover_text_color_overlay }};
   }
 
-  #shopify-section-template--25476761125173__portfolio_2_JwTwMq .max-container {
-    padding: 32px 16px;
-  }
-  .dt-sc-main-heading {
-    text-align: center;
-  }
+  /* Optional demo padding tweak you had */
+  #shopify-section-template--25476761125173__portfolio_2_JwTwMq .max-container { padding: 32px 16px; }
+  .dt-sc-main-heading { text-align: center; }
 
   /* Section spacing */
   @media only screen and (min-width: 1200px){
