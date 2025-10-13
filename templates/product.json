@@ -463,7 +463,7 @@
             "icon": "shopify://shop_images/download_1.jpg",
             "author": "Eudin",
             "job": "Stamina Gummies For Men",
-            "star": "3"
+            "star": "5"
           }
         },
         "content_7wPJbN": {
@@ -492,9 +492,10 @@
           "type": "content",
           "settings": {
             "review_type": "photo",
-            "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
-            "author": "Author Name",
-            "job": "Author Designation",
+            "quote": "<p>After a long, stressful day, NUUD is a godsend. I know that these vapes are an aphrodisiac and are supposed to be used in bed but using them when I get home has been a game changer for my peace of mind. Plus the women love them too. My new Tinder pickup line has been “Want to try a sex vape?”.</p>",
+            "icon": "shopify://shop_images/testimonial-face-4.jpg",
+            "author": "Brian",
+            "job": "Vapordisiac",
             "star": "3",
             "photo": "shopify://shop_images/Rectangle_96_e03b2b75-8d2a-4e0d-994b-12bed3406c3f.png"
           }
