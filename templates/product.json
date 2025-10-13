@@ -73,7 +73,7 @@
         "product_tab1_heading": "Description",
         "product_tab2": true,
         "product_tab2_heading": "Shipping Information",
-        "page_content": "shipping-information",
+        "page_content": "data-sharing-opt-out",
         "product_tab3": false,
         "product_tab3_heading": "Reviews",
         "enable_enquiry": false,
