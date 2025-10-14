@@ -637,7 +637,7 @@
       "settings": {
         "mode": "recommendations",
         "collection": "for-both",
-        "fallback_collection": "all-products",
+        "fallback_collection": "",
         "products_limit": 4,
         "heading": "Recommended products",
         "heading_position": "text-center",
