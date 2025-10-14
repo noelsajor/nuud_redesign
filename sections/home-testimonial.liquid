@@ -625,28 +625,6 @@
     object-position: center;
   }
 }
-/* --- Mobile proportion fix: keep a consistent cover aspect ratio --- */
-@media (max-width: 767px) {
-  /* Choose the aspect ratio you want on phones (default 4:5). 
-     You can change 4 / 5 to 1 / 1, 3 / 4, 2 / 3, 16 / 9, etc. */
-  #shopify-section-{{ section.id }} .dt-sc-testimonial.image-only .dt-sc-testimonial-image {
-    position: relative;
-    aspect-ratio: 4 / 5;     /* <- tweak this if you prefer another proportion */
-    height: auto;            /* let aspect-ratio + width define height */
-    min-height: 0;           /* no extra floor; aspect-ratio controls the box */
-  }
-
-  #shopify-section-{{ section.id }} .dt-sc-testimonial.image-only .dt-sc-testimonial-image > a,
-  #shopify-section-{{ section.id }} .dt-sc-testimonial.image-only .dt-sc-testimonial-image img {
-    position: absolute;      /* back to cover fill */
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;       /* same cropped look as desktop */
-    object-position: center;
-  }
-}
 
 </style>
 
