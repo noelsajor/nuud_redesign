@@ -246,12 +246,13 @@
   .dt-sc-testimonial.image-only {
     height: auto;
     padding: 0;
-    /* make the whole card stretch so the image can cover it */
     display: block;
   }
 
-  .dt-sc-testimonial-image img {
-    border-radius: 32px !important; 
+  /* NEW: honor the adjustable border radius across all testimonial images */
+  #shopify-section-{{ section.id }} .dt-sc-testimonial .dt-sc-testimonial-image,
+  #shopify-section-{{ section.id }} .dt-sc-testimonial .dt-sc-testimonial-image img {
+    border-radius: {{ section.settings.border_radius }};
   }
 
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-heading .dt-sc-main-heading { color: var(--DTColor_Heading); color:{{ section.settings.section_heading_color }}; } 
@@ -369,8 +370,6 @@
       padding: 25px; 
       color: {{ settings.tertiary_color }};
       color: {{ section.settings.testimonial_content_color }};
-      
-
       border-radius: var(--DTRadius); border-radius: {{section.settings.boxed_border_radius }}px; 
         {% if section.settings.enable_box_shadow %} box-shadow: var(--DTboxShadow); {% endif %}
           }
@@ -394,16 +393,11 @@
   .dt-sc-testimonial-content-inner .dt-sc-testimonial-quote-content,
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section.quote_boxed .dt-sc-testimonial.style_2 .dt-sc-testimonial-content 
   .dt-sc-testimonial-content-inner .dt-sc-testimonial-quote {
-
-
     background: var(--DTTertiaryColor); 
       background: {{ section.settings.testimonial_background_color }}; 
-      
       color: var(--DTTertiaryColor); 
       color: {{ section.settings.testimonial_border_color }}; 
-      
       border: 1px solid currentcolor;
-
       padding: 25px; 
       border-radius: var(--DTRadius); border-radius: {{section.settings.boxed_border_radius }}px; 
         {% if section.settings.enable_box_shadow %} box-shadow: var(--DTboxShadow); {% endif %} 
@@ -459,7 +453,7 @@
     left: 0px; right: 0; margin: auto;
   }
 
-  /* FIX: removed stray brace in selector */
+  /* FIX: removed stray brace in selector & adjusted */
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2[class*="quote-icon-in-image"] .dt-sc-testimonial-content.text-center .dt-sc-testimonial-image:before {
     left: -40%; right: 0; margin: auto;
   }
@@ -552,36 +546,33 @@
     content: "\f005" "\f005" "\f005" "\f005" "\f123"; }
   
   @media (max-width: 1540px) {
-    
-  #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-image {
-    width: calc({{lap_leftColumn}}% - (calc({{section.settings.column_gap}}px)/2));
-  }
-  #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content { 
-    width: calc({{lap_rightColumn}}% - (calc({{section.settings.column_gap}}px)/2));
-  }
-  
+    #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-image {
+      width: calc({{lap_leftColumn}}% - (calc({{section.settings.column_gap}}px)/2));
+    }
+    #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content { 
+      width: calc({{lap_rightColumn}}% - (calc({{section.settings.column_gap}}px)/2));
+    }
   }
   
 
   @media (max-width: 576px) {
-
     #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial { display: grid; gap: {{section.settings.column_gap}}px; }
-
     #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-image,
     #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content { width: 100%; }
-
   }
 
-  /* --- Image-only cards: make image cover entire available space --- */
+  /* --- Image-only cards: mobile-safe cover layout --- */
   #shopify-section-{{ section.id }} .dt-sc-testimonial.image-only {
-    height: 100%;
+    height: auto;            /* FIX: was 100%, caused collapse on mobile */
+    overflow: hidden;        /* so border-radius clips absolute child */
   }
 
   #shopify-section-{{ section.id }} .dt-sc-testimonial.image-only .dt-sc-testimonial-image {
     position: relative;
     width: 100%;
     height: 100%;
-    min-height: 260px; /* fallback height so cover can engage even if parent has no explicit height */
+    min-height: 260px;       /* ensures visible height on mobile */
+    /* Or consider: aspect-ratio: 16/9; */
   }
 
   #shopify-section-{{ section.id }} .dt-sc-testimonial.image-only .dt-sc-testimonial-image > a,
