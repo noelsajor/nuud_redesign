@@ -663,8 +663,8 @@
       "settings": {
         "enable": true,
         "full": true,
-        "spacing_both_ends": false,
-        "padding": "100,40",
+        "spacing_both_ends": true,
+        "padding": "120,120",
         "margin": "0,0",
         "show_background_image": false,
         "background_style": "fixed",
