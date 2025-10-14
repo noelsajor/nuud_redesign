@@ -593,20 +593,20 @@
 
   }
 
-/* Make image-only cards fill and crop like a cover */
-#shopify-section-{{ section.id }} .dt-sc-testimonial.image-only .dt-sc-testimonial-image {
-  position: relative;
-  height: 100%;
-}
+  /* Make image-only cards fill and crop like a cover */
+  #shopify-section-{{ section.id }} .dt-sc-testimonial.image-only .dt-sc-testimonial-image {
+    position: relative;
+    height: 100%;
+  }
 
-#shopify-section-{{ section.id }} .dt-sc-testimonial.image-only .dt-sc-testimonial-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-  border-radius: {{ section.settings.boxed_border_radius }}px;
-}
+  #shopify-section-{{ section.id }} .dt-sc-testimonial.image-only .dt-sc-testimonial-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    border-radius: {{ section.settings.boxed_border_radius }}px;
+  }
 
 
 </style>
