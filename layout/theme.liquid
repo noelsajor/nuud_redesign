@@ -72,6 +72,7 @@
     {% section 'gdpr-cookies' %}  
     {% if settings.box_layout %} </div> {% endif %}  
 
+    {%- comment -%}
     <!-- Begin Recently Viewed Products -->
     {% if template contains 'product' %}
     {% if settings.enable_this %}
@@ -82,5 +83,7 @@
     {% endif %}
     {% endif %}
     <!-- End Recently Viewed Products -->
+    {%- endcomment -%}
+    
   </body>
 </html>
