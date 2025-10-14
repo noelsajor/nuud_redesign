@@ -12,16 +12,15 @@
 {%- assign column = 'three-column' -%}              
 {% endcase %} 
 
-{%- comment -%} FIX: correct case syntax for boxed styles {%- endcomment -%}
-{% case section.settings.boxed_styles %}
-  {% when 'overall_boxed' %}
-    {%- assign boxed_styles = 'overall_boxed' -%}
-  {% when 'content_boxed' %}
-    {%- assign boxed_styles = 'content_boxed' -%}
-  {% when 'quote_boxed' %}
-    {%- assign boxed_styles = 'quote_boxed' -%}
-  {% when 'default' %}
-    {%- assign boxed_styles = 'default' -%}
+{% case section.settings.boxed_styles == 'overall_boxed' %}
+{% when 'overall_boxed' %}
+{%- assign boxed_styles = 'overall_boxed' %}
+{% when 'content_boxed' %}
+{%- assign boxed_styles = 'content_boxed' %}
+{% when 'quote_boxed' %}
+{%- assign boxed_styles = 'quote_boxed' %}
+{% when 'default' %}
+{%- assign boxed_styles = 'default' %}
 {% endcase %} 
 
 {% if section.settings.enable_overlay %}
@@ -55,16 +54,13 @@
         {% render 'section-heading', class: section.id %} 
         {% if section.settings.enable_slider %}  <div class="dt-sc-swiper-slider swiper-container {% if section.settings.dots %} {{ section.settings.carousel_pagination_bottom_alignment }} {{ section.settings.carousel_pagination_alignment }} {% endif %} {% if section.settings.arrows %}  {{ section.settings.nav_arrow_position }} {{ section.settings.center_nav_arrow_alignment }} {% endif %}">{% endif %}
         {% if section.settings.enable_slider %}  <div id="swiper-{{section.id}}-slider">{% endif %}
-        <div class="dt-sc-testimonial-section {{ boxed_styles }} {% if section.settings.enable_slider %}swiper-wrapper{% endif %} {% unless section.settings.enable_slider %}dt-sc-column{% endunless %}{% unless section.settings.enable_slider %} {{column}}{% endunless %}">        
+        <div class="dt-sc-testimonial-section {{ section.settings.boxed_styles }} {% if section.settings.enable_slider %}swiper-wrapper{% endif %} {% unless section.settings.enable_slider %}dt-sc-column{% endunless %}{% unless section.settings.enable_slider %} {{column}}{% endunless %}">        
           {% for block in section.blocks %} 
             {% if block.type == 'image_only' %}
               {%- assign image_alt = block.settings.alt | default: section.settings.section_heading | escape -%}
               <div class="dt-sc-testimonial image-only {% if section.settings.enable_slider %}swiper-slide{% endif %} {{ section.settings.block_style }} {{ section.settings.vertical_position }}">
                 <div class="dt-sc-testimonial-image" style="width:100%;">
                   {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}">{%- endif -%}
-
-                  {%- comment -%} Guard: render IMG only if an image is selected {%- endcomment -%}
-                  {% if block.settings.image %}
                     <img
                       src="{{ block.settings.image | image_url: width: 2000 }}"
                       srcset="
@@ -79,13 +75,12 @@
                       width="{{ block.settings.image.width }}"
                       height="{{ block.settings.image.height }}"
                       alt="{{ image_alt }}"
-                      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;"
+                      style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;"
                     >
+
                     <noscript>
                       {{ block.settings.image | img_url: '1024x' | img_tag: image_alt, 'dt-sc-noscript-image' }}
                     </noscript>
-                  {% endif %}
-
                   {%- if block.settings.link != blank -%}</a>{%- endif -%}
                 </div>
               </div>
@@ -263,10 +258,7 @@
   </div>
 </div>
 
-{%- comment -%} FIX: close both opening IFs {%- endcomment -%}
-{% endif %} {# closes section.blocks.size > 0 #}
-{% endif %} {# closes section.settings.enable #}
-
+{% endif %}
 <style>
 
   .dt-sc-testimonial.image-only {
@@ -445,9 +437,9 @@
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.vertical-center { align-items: center; }
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.vertical-bottom { align-items: flex-end; }  
 
-  /* limit to non image-only so our cover styles below can win cleanly */
-  #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial:not(.image-only) .dt-sc-testimonial-image img { 
+  #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-image img { 
     width: 100%; border-radius: {{section.settings.border_radius}}; height: auto;
+/*     height: 100%; width: 100%; object-fit: cover; object-position: center; */
   }
 
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial cite { font-style: normal; display: flex; flex-wrap: wrap; align-items: center;  font-weight: bold; 
@@ -714,6 +706,7 @@
   .on('shopify:section:load', homeTestimonial)
   .on('shopify:section:unload', homeTestimonial)
 </script>
+{% endif %}
 
 {% schema %}
 {
