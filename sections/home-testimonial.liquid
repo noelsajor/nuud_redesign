@@ -615,6 +615,16 @@
     object-position: center;
     display: block;
   }
+{% if section.settings.hide_testimonial_images %}
+  /* Hide images on testimonial content cards (style_1/2/3), keep image_only slides intact */
+  #shopify-section-{{ section.id }} .dt-sc-testimonial:not(.image-only) .dt-sc-testimonial-image {
+    display: none !important;
+  }
+  /* Let the text column expand to full width when the image is hidden */
+  #shopify-section-{{ section.id }} .dt-sc-testimonial:not(.image-only) .dt-sc-testimonial-content {
+    width: 100% !important;
+  }
+{% endif %}
 
 
 </style>
