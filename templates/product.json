@@ -636,8 +636,8 @@
       "name": "Prod grid / Recos",
       "settings": {
         "mode": "recommendations",
-        "collection": "",
-        "fallback_collection": "",
+        "collection": "for-both",
+        "fallback_collection": "all-products",
         "products_limit": 4,
         "heading": "Recommended products",
         "heading_position": "text-center",
