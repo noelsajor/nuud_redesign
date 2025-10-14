@@ -91,12 +91,15 @@
 
             {% if section.settings.block_style  == 'style_1' %}   
               <div class="dt-sc-testimonial {% if section.settings.enable_slider %}swiper-slide{% endif %} {% if section.settings.reverse_column %}reverse{% endif %} {{section.settings.quote_style}} {{section.settings.block_style}} {{section.settings.vertical_position}}">
-                <div class="dt-sc-testimonial-image">                          
-                  <img class="lazyload"
-                    data-src="{{ block.settings.icon | img_url: '200x200' }}"                         
-                    data-aspectratio="{{ block.settings.icon.aspect_ratio }}"
-                    data-sizes="auto"            
-                    alt="{{ block.settings.title }}">            
+                <div class="dt-sc-testimonial-image">
+                  {% if block.settings.icon != blank %}
+                    <img
+                      src="{{ block.settings.icon | image_url: width: 200 }}"
+                      loading="lazy"
+                      width="{{ block.settings.icon.width }}"
+                      height="{{ block.settings.icon.height }}"
+                      alt="{{ block.settings.title | escape }}">
+                  {% endif %}
                   <noscript>
                     {{ block.settings.icon | img_url: '200x200', scale: 2 | img_tag: block.settings.icon.alt, 'dt-sc-noscript-image' }}
                   </noscript>
@@ -152,12 +155,15 @@
                     </div>
                     {% if block.settings.author != blank  or  block.settings.job != blank %}
                       <div class="dt-sc-author-info {{ section.settings.author_info_style }}">
-                        <div class="dt-sc-testimonial-image">                    
-                          <img class="lazyload"
-                            data-src="{{ block.settings.icon | img_url: '200x200' }}"                         
-                            data-aspectratio="{{ block.settings.icon.aspect_ratio }}"
-                            data-sizes="auto"            
-                            alt="{{ block.settings.title }}">            
+                        <div class="dt-sc-testimonial-image">
+                          {% if block.settings.icon != blank %}
+                            <img
+                              src="{{ block.settings.icon | image_url: width: 200 }}"
+                              loading="lazy"
+                              width="{{ block.settings.icon.width }}"
+                              height="{{ block.settings.icon.height }}"
+                              alt="{{ block.settings.title | escape }}">
+                          {% endif %}
                           <noscript>
                             {{ block.settings.icon | img_url: '200x200', scale: 2 | img_tag: block.settings.icon.alt, 'dt-sc-noscript-image' }}
                           </noscript>
@@ -171,12 +177,15 @@
 
             {% elsif section.settings.block_style  == 'style_3' %}
               <div class="dt-sc-testimonial {{section.settings.text_position}} {% if section.settings.enable_slider %}swiper-slide{% endif %} {% if section.settings.reverse_column %}reverse{% endif %} {{section.settings.quote_style}} {{section.settings.block_style}}">
-                <div class="dt-sc-testimonial-image">             
-                  <img class="lazyload"
-                   data-src="{{ block.settings.icon | img_url: '200x200' }}"                         
-                   data-aspectratio="{{ block.settings.icon.aspect_ratio }}"
-                   data-sizes="auto"            
-                   alt="{{ block.settings.title }}">            
+                <div class="dt-sc-testimonial-image">
+                  {% if block.settings.icon != blank %}
+                    <img
+                      src="{{ block.settings.icon | image_url: width: 200 }}"
+                      loading="lazy"
+                      width="{{ block.settings.icon.width }}"
+                      height="{{ block.settings.icon.height }}"
+                      alt="{{ block.settings.title | escape }}">
+                  {% endif %}
                   <noscript>
                     {{ block.settings.icon | img_url: '200x200', scale: 2 | img_tag: block.settings.icon.alt, 'dt-sc-noscript-image' }}
                   </noscript>
@@ -410,31 +419,6 @@
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.vertical-center { align-items: center; }
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.vertical-bottom { align-items: flex-end; }  
 
-  #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-image img { 
-    width: 100%; border-radius: {{section.settings.border_radius}}; height: auto;
-  }
-
-  #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial cite { font-style: normal; display: flex; flex-wrap: wrap; align-items: center;  font-weight: bold; 
-    margin-top: 20px; width: 100%; 
-  }
-  #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial cite span { font-style: normal; display: flex; flex-wrap: wrap; align-items: center; font-weight: normal; }
-  #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial cite span:before { display: block; content: "-"; position: relative; }
-
-  #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial cite span:before {
-    color: var(--DTPrimaryColor);
-      color: {{section.settings.testimonial_author_separator_color }};
-      }
-
-  #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-author-info:not(.style_2) cite span:before { margin: 0 5px; }
-
-
-  #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-image {
-    width: calc({{leftColumn}}% - (calc({{section.settings.column_gap}}px)/2));
-  }
-  #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content { 
-    width: calc({{rightColumn}}% - (calc({{section.settings.column_gap}}px)/2));
-  }
-  
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content p { margin-bottom: 0; }
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content.text-start cite { justify-content: flex-start; }
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content.text-center cite { justify-content: center; }
@@ -475,7 +459,8 @@
     left: 0px; right: 0; margin: auto;
   }
 
-  #shopify-section-{{section.id}}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2[class*="quote-icon-in-image"] .dt-sc-testimonial-content.text-center .dt-sc-testimonial-image:before {
+  /* FIX: removed stray brace in selector */
+  #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2[class*="quote-icon-in-image"] .dt-sc-testimonial-content.text-center .dt-sc-testimonial-image:before {
     left: -40%; right: 0; margin: auto;
   }
 
