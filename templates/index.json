@@ -696,7 +696,7 @@
         "heading_position": "text-start",
         "grid": "1",
         "block_style": "style_3",
-        "boxed_styles": "content_boxed",
+        "boxed_styles": "overall_boxed",
         "enable_box_shadow": false,
         "reverse_column": true,
         "text_position": "text-center",
