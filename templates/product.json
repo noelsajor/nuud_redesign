@@ -582,6 +582,7 @@
     },
     "spacer_wave_epNXGb": {
       "type": "spacer-wave",
+      "disabled": true,
       "name": "Wave Spacer (Animated)",
       "settings": {
         "use_gradient": false,
@@ -607,10 +608,12 @@
     },
     "product_recommendations_a8Q3bq": {
       "type": "product-recommendations",
+      "disabled": true,
       "name": "Product recommendations",
       "settings": {
         "mode": "recommendations",
         "collection": "for-both",
+        "fallback_collection": "",
         "products_limit": 4,
         "heading": "Recommended products",
         "heading_position": "text-center",
