@@ -67,6 +67,7 @@
         "show_checkout": true,
         "hide_addtocart": false,
         "show_wishlist": false,
+        "hide_grid_titles": true,
         "tab_position": "bottom",
         "tab_style": "toggle",
         "product_tab1": true,
