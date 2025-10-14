@@ -630,22 +630,6 @@
         "extra_space_height": 40,
         "z_index": 1
       }
-    },
-    "product_recommendations_CTHfDx": {
-      "type": "product-recommendations",
-      "name": "Prod grid / Recos",
-      "settings": {
-        "mode": "collection",
-        "collection": "",
-        "fallback_collection": "for-both",
-        "products_limit": 4,
-        "heading": "Recommended products",
-        "heading_position": "text-center",
-        "full": false,
-        "spacing_both_ends": false,
-        "padding": "0,0",
-        "margin": "0,0"
-      }
     }
   },
   "order": [
@@ -659,7 +643,6 @@
     "home_testimonial_LPfNKM",
     "spacer_wave_epNXGb",
     "faq_section_HdUrdH",
-    "spacer_wave_BqhNbL",
-    "product_recommendations_CTHfDx"
+    "spacer_wave_BqhNbL"
   ]
 }
