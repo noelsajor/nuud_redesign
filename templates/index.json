@@ -910,6 +910,33 @@
         "active_text_color": "#ffffff"
       }
     },
+    "176047088699b09df4": {
+      "type": "apps",
+      "blocks": {
+        "instafeed_app_block_kgQKG4": {
+          "type": "shopify://apps/instafeed/blocks/app-block/c447db20-095d-4a10-9725-b5977662c9d5",
+          "settings": {
+            "title": "",
+            "title_color": "",
+            "title_size_v2": 0,
+            "alignment": "center",
+            "instafeed_margin_top": 0,
+            "instafeed_margin_bottom": 0,
+            "instafeed_margin_sides": 0,
+            "show_instagram_link": false,
+            "link_alignment": "left",
+            "link_color": "#000000",
+            "background_color": "",
+            "feed_id": "",
+            "html_area": ""
+          }
+        }
+      },
+      "block_order": [
+        "instafeed_app_block_kgQKG4"
+      ],
+      "settings": {}
+    },
     "1757879707bba2c8c8": {
       "type": "_blocks",
       "name": "FAQs",
@@ -1046,33 +1073,6 @@
         "extra_space_height": 40,
         "z_index": 1
       }
-    },
-    "176047088699b09df4": {
-      "type": "apps",
-      "blocks": {
-        "instafeed_app_block_kgQKG4": {
-          "type": "shopify://apps/instafeed/blocks/app-block/c447db20-095d-4a10-9725-b5977662c9d5",
-          "settings": {
-            "title": "",
-            "title_color": "",
-            "title_size_v2": 0,
-            "alignment": "center",
-            "instafeed_margin_top": 0,
-            "instafeed_margin_bottom": 0,
-            "instafeed_margin_sides": 0,
-            "show_instagram_link": false,
-            "link_alignment": "left",
-            "link_color": "#000000",
-            "background_color": "",
-            "feed_id": "",
-            "html_area": ""
-          }
-        }
-      },
-      "block_order": [
-        "instafeed_app_block_kgQKG4"
-      ],
-      "settings": {}
     }
   },
   "order": [
@@ -1092,9 +1092,9 @@
     "spacer_wave_zA7HKx",
     "1654336925c509c587",
     "faq_section_8ifTKi",
+    "176047088699b09df4",
     "1757879707bba2c8c8",
     "portfolio_2_JwTwMq",
-    "176047088699b09df4",
     "home_newsletter_PPedY3",
     "spacer_wave_DjDLyz"
   ]
