@@ -606,6 +606,26 @@
   }
 {% endif %}
 
+/* --- Mobile fix: ensure image-only cards render images on small screens --- */
+@media (max-width: 767px) {
+  #shopify-section-{{ section.id }} .dt-sc-testimonial.image-only .dt-sc-testimonial-image {
+    position: relative;
+    min-height: auto;        /* don't rely on min-height for mobile */
+    height: auto;            /* let content define height */
+  }
+
+  #shopify-section-{{ section.id }} .dt-sc-testimonial.image-only .dt-sc-testimonial-image > a,
+  #shopify-section-{{ section.id }} .dt-sc-testimonial.image-only .dt-sc-testimonial-image img {
+    position: static;        /* remove absolute positioning on mobile */
+    inset: auto;
+    width: 100%;
+    height: auto;            /* natural aspect ratio so it always appears */
+    display: block;
+    object-fit: contain;     /* avoids crop while static; switch to 'cover' if you prefer */
+    object-position: center;
+  }
+}
+
 </style>
 
 <script type="text/javascript">  
