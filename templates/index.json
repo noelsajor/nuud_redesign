@@ -133,7 +133,7 @@
             "icon_image": "shopify://shop_images/free_shiping.svg",
             "icon_label": "Delivery truck icon representing free shipping",
             "icon_color": "#881d3e",
-            "feature_text": "FREE SHIPPING OVER $75",
+            "feature_text": "FREE SHIPPING OVER $25",
             "text_color": "#881d3e",
             "text_size": 18,
             "text_weight": "600",
