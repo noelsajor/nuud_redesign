@@ -605,22 +605,6 @@
         "active_text_color": "#ffffff"
       }
     },
-    "product_recommendations_a8Q3bq": {
-      "type": "product-recommendations",
-      "name": "Product recommendations",
-      "settings": {
-        "mode": "recommendations",
-        "collection": "all-products",
-        "fallback_collection": "for-both",
-        "products_limit": 4,
-        "heading": "Recommended products",
-        "heading_position": "text-center",
-        "full": false,
-        "spacing_both_ends": false,
-        "padding": "160,240",
-        "margin": "0,0"
-      }
-    },
     "spacer_wave_BqhNbL": {
       "type": "spacer-wave",
       "name": "Wave Spacer (Animated)",
@@ -658,7 +642,6 @@
     "home_testimonial_LPfNKM",
     "spacer_wave_epNXGb",
     "faq_section_HdUrdH",
-    "product_recommendations_a8Q3bq",
     "spacer_wave_BqhNbL"
   ]
 }
