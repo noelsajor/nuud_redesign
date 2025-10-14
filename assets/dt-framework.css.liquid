@@ -47,7 +47,24 @@ h4, .h4, h4 a { font-size: var(--DTFontSize_H4); }
 h5, .h5, h5 a { font-size: var(--DTFontSize_H5); }
 h6, .h6, h6 a { font-size: var(--DTFontSize_H6); }
 
-
+h1, h2, h3, h4, h5, h6 {color:var(--DTColor_Heading); letter-spacing: 2px; text-transform: none; line-height: var(--DT_Heading_Line_Height); margin-top: 30px; margin-bottom: 15px; font-family: var(--DTFontTypo_Heading); font-weight: var(--font-weight-header); }
+h1:empty, h2:empty, h3:empty, h4:empty, h5:empty, h6:empty, p:empty { display: none; }
+svg { width: 20px;  height: 20px; }
+button svg, .dt-sc-btn svg { height: var(--DTFontSizeBase); margin-right:5px; }
+button svg:only-child, .dt-sc-btn svg:only-child { margin: 0; }
+.orange_bg .dt-sc-heading:after, .orange_bg .dt-sc-heading.place_on_top:before{ filter: invert(100%);
+    -webkit-filter: invert(1);
+    -moz-filter: invert(100%);
+   -o-filter: invert(100%);
+   -ms-filter: invert(100%);
+    opacity:1;}
+p { margin-bottom: 15px; }
+p:only-of-type {  margin-bottom: 0; }
+blockquote { border-left: 2px solid currentColor;  margin: 1.5rem 0; padding: 0 0 0 1rem; font-style: italic; }
+blockquote>p { margin: 0 0 1rem; }
+blockquote>p:only-child, blockquote>p:last-of-type {  margin-bottom: 0; }
+a { background-color: transparent; text-decoration: none;  color: var(--DTLinkColor); }
+.text-start, .text-start > * { text-align: start; justify-content: flex-start; }
 .text-center, .text-center > * { text-align: center; justify-content: center; }
 .text-end, .text-end > * { text-align: end; justify-content: flex-end; }
 .text-center .dt-sc-list-inline { justify-content: center; }
@@ -1720,7 +1737,7 @@ form[class*="shopify-product"] .dT_VProdWishList a.add-wishlist:before { content
         form[class*="shopify-product"] > div.product_payments_btns button, 
         form[class*="shopify-product"] > div.product_payments_btns .product-form__item--submit button { width: calc(50% - 20px);}
         form[class*="shopify-product"] > div.product_payments_btns .dT_VProdWishList { margin-bottom: 25px; }
-        .dt-sc-swiper-slider.swiper-container.swiper-container [class*="swiper-container"]{padding:0;margin:0;}
+        .dt-sc-swiper-slider.swiper-container.swiper-container [class*="swiper-container"]{padding:0 24px;margin:0;}
         
         .user-account .grid__item > div.register-form .dt-sc-btn-group>*:last-child,
         .user-account .section-header .dt-sc-btn-group>*:last-child
