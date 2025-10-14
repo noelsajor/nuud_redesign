@@ -69,6 +69,10 @@
                         data-media-id="{{ media.id }}"
                         data-media-type="{{ media.media_type }}"
                         aria-label="Show media {{ forloop.index }}"
+                        {% if media.media_type == 'image' %}
+                          data-full="{{ media | image_url: width: 1600 }}"
+                          data-sizes="(min-width: 992px) 700px, 100vw"
+                        {% endif %}
                       >
                         {{ media | image_url: width: 240 | image_tag: loading: 'lazy', widths: '120,160,240', class: 'product-media__thumb-img' }}
                         {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
@@ -573,6 +577,16 @@
   @media (max-width: 767px){ #product-gallery .product-item-wrap{ min-height: 280px; } }
 
   @keyframes dt-swing { 0% { transform: translateY(15px); } 100% { transform: translateY(-15px); } }
+
+  /* --- Keep desktop stage from shrinking on swap --- */
+  #shopify-section-{{ section.id }} .desktop-stage { width: 100%; }
+  #shopify-section-{{ section.id }} .desktop-stage .product-media__img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    border-radius: 12px;
+  }
 </style>
 
 {%- comment -%} Mobile full-width container + Accordion line style (overrides) {%- endcomment -%}
@@ -795,22 +809,43 @@
 
     function swapDesktopTo(mediaId){
       if(!featured || !mediaId) return;
-      var btn = thumbsWrap ? thumbsWrap.querySelector('.product-media__thumb[data-media-id="'+mediaId+'"]') : null;
-      var imgSrc = btn ? (btn.querySelector("img").currentSrc || btn.querySelector("img").src) : null;
 
-      // Replace content by type (simplified to image for consistency)
-      if(imgSrc){
-        featured.innerHTML = "";
-        var big = new Image();
-        big.className = 'product-media__img';
-        big.decoding = 'async';
-        big.loading = 'eager';
-        big.sizes = '(min-width: 992px) 700px, 100vw';
-        big.src = imgSrc;
-        featured.appendChild(big);
-        featured.setAttribute('data-current-media-id', mediaId);
+      var btn = thumbsWrap ? thumbsWrap.querySelector('.product-media__thumb[data-media-id="'+mediaId+'"]') : null;
+      if(!btn) return;
+
+      var type = btn.getAttribute('data-media-type') || 'image';
+
+      // Clear current stage and set current media
+      featured.innerHTML = "";
+      featured.setAttribute('data-current-media-id', mediaId);
+
+      if(type === 'image'){
+        // Prefer high-res URL from data-full; fallback to the thumb image if needed
+        var full = btn.getAttribute('data-full');
+        var sizes = btn.getAttribute('data-sizes') || '(min-width: 992px) 700px, 100vw';
+        var thumbImg = btn.querySelector('img');
+
+        var img = new Image();
+        img.className = 'product-media__img';
+        img.decoding = 'async';
+        img.loading = 'eager';
+        img.sizes = sizes;
+        img.src = full || (thumbImg ? (thumbImg.currentSrc || thumbImg.src) : '');
+        featured.appendChild(img);
+      } else if (type === 'video' || type === 'external_video') {
+        // Minimal placeholder; real video is in mobile slides if needed
+        var badge = document.createElement('div');
+        badge.textContent = '▶';
+        badge.setAttribute('aria-hidden', 'true');
+        featured.appendChild(badge);
+      } else if (type === 'model') {
+        var badge3d = document.createElement('div');
+        badge3d.textContent = '3D';
+        badge3d.setAttribute('aria-hidden', 'true');
+        featured.appendChild(badge3d);
       }
 
+      // Update active state on thumbs
       if(thumbsWrap){
         qsa(thumbsWrap, '.product-media__thumb').forEach(function(t){
           var active = t.getAttribute('data-media-id') === mediaId;
