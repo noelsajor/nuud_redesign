@@ -38,6 +38,12 @@
   {% assign lazyScript = "lazyload" %}
 {% endif %}
 
+{%- comment -%} Determine card mode without boolean expressions inside assign/output {%- endcomment -%}
+{% assign force_image_only = false %}
+{% if section.settings.card_type == 'image_only' %}
+  {% assign force_image_only = true %}
+{% endif %}
+
 <div
   data-section-id="{{ section.id }}"
   data-section-type="inner-page-testimonials-section"
@@ -59,33 +65,42 @@
 
         <div class="dt-sc-testimonial-section {{ section.settings.boxed_styles }} {% if section.settings.enable_slider %}swiper-wrapper{% endif %} {% unless section.settings.enable_slider %}dt-sc-column{% endunless %}{% unless section.settings.enable_slider %} {{column}}{% endunless %}">        
           {% for block in section.blocks %} 
-            {% if block.type == 'image_only' %}
-              {%- assign image_alt = block.settings.alt | default: section.settings.section_heading | escape -%}
+
+            {% if force_image_only or block.type == 'image_only' %}
+              {%- comment -%}
+                Image-only card:
+                - If the block is "image_only", use block.settings.image.
+                - If it's a content block but section card_type = image_only, use the author image (icon) as the full image.
+              {%- endcomment -%}
+              {%- assign image_source = block.settings.image | default: block.settings.icon -%}
+              {%- assign image_alt = block.settings.alt | default: block.settings.title | default: section.settings.section_heading | escape -%}
+              {% if image_source != blank %}
               <div class="dt-sc-testimonial image-only {% if section.settings.enable_slider %}swiper-slide{% endif %} {{ section.settings.block_style }} {{ section.settings.vertical_position }}">
                 <div class="dt-sc-testimonial-image" style="width:100%;">
-                  {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}">{%- endif -%}
+                  {%- if block.settings.link != blank and block.type == 'image_only' -%}<a href="{{ block.settings.link }}">{%- endif -%}
                     <img
-                      src="{{ block.settings.image | image_url: width: 2000 }}"
+                      src="{{ image_source | image_url: width: 2000 }}"
                       srcset="
-                        {{ block.settings.image | image_url: width: 640 }} 640w,
-                        {{ block.settings.image | image_url: width: 960 }} 960w,
-                        {{ block.settings.image | image_url: width: 1280 }} 1280w,
-                        {{ block.settings.image | image_url: width: 1600 }} 1600w,
-                        {{ block.settings.image | image_url: width: 2000 }} 2000w
+                        {{ image_source | image_url: width: 640 }} 640w,
+                        {{ image_source | image_url: width: 960 }} 960w,
+                        {{ image_source | image_url: width: 1280 }} 1280w,
+                        {{ image_source | image_url: width: 1600 }} 1600w,
+                        {{ image_source | image_url: width: 2000 }} 2000w
                       "
                       sizes="(min-width: 1024px) 33vw, 100vw"
                       loading="lazy"
-                      width="{{ block.settings.image.width }}"
-                      height="{{ block.settings.image.height }}"
+                      width="{{ image_source.width }}"
+                      height="{{ image_source.height }}"
                       alt="{{ image_alt }}"
                       style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;"
                     >
                     <noscript>
-                      {{ block.settings.image | img_url: '1024x' | img_tag: image_alt, 'dt-sc-noscript-image' }}
+                      {{ image_source | img_url: '1024x' | img_tag: image_alt, 'dt-sc-noscript-image' }}
                     </noscript>
-                  {%- if block.settings.link != blank -%}</a>{%- endif -%}
+                  {%- if block.settings.link != blank and block.type == 'image_only' -%}</a>{%- endif -%}
                 </div>
               </div>
+              {% endif %}
               {% continue %}
             {% endif %}
 
@@ -233,17 +248,12 @@
 {% endif %}
 
 <style>
-
   .dt-sc-testimonial.image-only {
     height: auto;
     padding: 0;
-    /* make the whole card stretch so the image can cover it */
     display: block;
   }
-
-  .dt-sc-testimonial-image img {
-    border-radius: 0 !important; 
-  }
+  .dt-sc-testimonial-image img { border-radius: 0 !important; }
 
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-heading .dt-sc-main-heading { color: var(--DTColor_Heading); color:{{ section.settings.section_heading_color }}; } 
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-heading .dt-sc-sub-heading { color: var(--DTColor_Heading); color:{{ section.settings.section_sub_heading_color }}; } 
@@ -297,7 +307,6 @@
     gap: {{ section.settings.column_gap }}px; }
 
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial { display: flex; justify-content: space-between; }
-  
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial cite i { font-style: normal; }
 
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial cite { 
@@ -360,11 +369,9 @@
       padding: 25px; 
       color: {{ settings.tertiary_color }};
       color: {{ section.settings.testimonial_content_color }};
-      
-
       border-radius: var(--DTRadius); border-radius: {{section.settings.boxed_border_radius }}px; 
         {% if section.settings.enable_box_shadow %} box-shadow: var(--DTboxShadow); {% endif %}
-          }
+  }
 
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section.content_boxed .dt-sc-testimonial:not(.style_2) .dt-sc-testimonial-content 
   .dt-sc-testimonial-content-inner .dt-sc-testimonial-quote > p,
@@ -385,20 +392,15 @@
   .dt-sc-testimonial-content-inner .dt-sc-testimonial-quote-content,
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section.quote_boxed .dt-sc-testimonial.style_2 .dt-sc-testimonial-content 
   .dt-sc-testimonial-content-inner .dt-sc-testimonial-quote {
-
-
     background: var(--DTTertiaryColor); 
       background: {{ section.settings.testimonial_background_color }}; 
-      
       color: var(--DTTertiaryColor); 
       color: {{ section.settings.testimonial_border_color }}; 
-      
       border: 1px solid currentcolor;
-
       padding: 25px; 
       border-radius: var(--DTRadius); border-radius: {{section.settings.boxed_border_radius }}px; 
         {% if section.settings.enable_box_shadow %} box-shadow: var(--DTboxShadow); {% endif %} 
-          }
+  }
   
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section.content_boxed .dt-sc-testimonial.style_2 
   .dt-sc-testimonial-content .dt-sc-testimonial-content-inner .dt-sc-testimonial-quote-content .dt-sc-testimonial-quote > p, 
@@ -427,7 +429,6 @@
 
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-author-info:not(.style_2) cite span:before { margin: 0 5px; }
 
-
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-image {
     width: calc({{leftColumn}}% - (calc({{section.settings.column_gap}}px)/2));
   }
@@ -448,7 +449,6 @@
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content.text-end cite span:before { right: 0; left: auto; }
 
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-author-info.style_2 cite span { width: 100%; padding-top: 20px; position: relative; }
-
   #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-author-info.style_2 cite span:before { content: ""; display: block; position: absolute; width: 50px;
     height: 1px; top: 10px; left: 0; }
 
@@ -475,7 +475,8 @@
     left: 0px; right: 0; margin: auto;
   }
 
-  #shopify-section-{{section.id}}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2[class*="quote-icon-in-image"] .dt-sc-testimonial-content.text-center .dt-sc-testimonial-image:before {
+  /* fixed extra brace in selector here */
+  #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial.style_2[class*="quote-icon-in-image"] .dt-sc-testimonial-content.text-center .dt-sc-testimonial-image:before {
     left: -40%; right: 0; margin: auto;
   }
 
@@ -567,60 +568,31 @@
     content: "\f005" "\f005" "\f005" "\f005" "\f123"; }
   
   @media (max-width: 1540px) {
-    
-  #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-image {
-    width: calc({{lap_leftColumn}}% - (calc({{section.settings.column_gap}}px)/2));
-  }
-  #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content { 
-    width: calc({{lap_rightColumn}}% - (calc({{section.settings.column_gap}}px)/2));
+    #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-image { width: calc({{lap_leftColumn}}% - (calc({{section.settings.column_gap}}px)/2)); }
+    #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content { width: calc({{lap_rightColumn}}% - (calc({{section.settings.column_gap}}px)/2)); }
   }
   
-  }
-  
-
   @media (max-width: 576px) {
-
     #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial { display: grid; gap: {{section.settings.column_gap}}px; }
-
     #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-image,
     #shopify-section-{{section.id}}.inner-page-testimonial-block .dt-sc-testimonial-section .dt-sc-testimonial .dt-sc-testimonial-content { width: 100%; }
-
   }
 
-  /* --- Image-only cards: make image cover entire available space --- */
-  #shopify-section-{{ section.id }} .dt-sc-testimonial.image-only {
-    height: 100%;
-  }
-
+  /* --- Image-only cards: full-cover behavior --- */
+  #shopify-section-{{ section.id }} .dt-sc-testimonial.image-only { height: 100%; }
   #shopify-section-{{ section.id }} .dt-sc-testimonial.image-only .dt-sc-testimonial-image {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    min-height: 260px; /* fallback height so cover can engage even if parent has no explicit height */
+    position: relative; width: 100%; height: 100%; min-height: 260px;
   }
-
   #shopify-section-{{ section.id }} .dt-sc-testimonial.image-only .dt-sc-testimonial-image > a,
   #shopify-section-{{ section.id }} .dt-sc-testimonial.image-only .dt-sc-testimonial-image img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-    object-position: center;
+    position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: cover; object-position: center;
   }
 
 {% if section.settings.hide_testimonial_images %}
-  /* Hide images on testimonial content cards (style_1/2/3), keep image_only slides intact */
-  #shopify-section-{{ section.id }} .dt-sc-testimonial:not(.image-only) .dt-sc-testimonial-image {
-    display: none !important;
-  }
-  /* Let the text column expand to full width when the image is hidden */
-  #shopify-section-{{ section.id }} .dt-sc-testimonial:not(.image-only) .dt-sc-testimonial-content {
-    width: 100% !important;
-  }
+  /* Hide images on content cards (style_1/2/3); preserve image-only slides */
+  #shopify-section-{{ section.id }} .dt-sc-testimonial:not(.image-only) .dt-sc-testimonial-image { display: none !important; }
+  #shopify-section-{{ section.id }} .dt-sc-testimonial:not(.image-only) .dt-sc-testimonial-content { width: 100% !important; }
 {% endif %}
-
 </style>
 
 <script type="text/javascript">  
@@ -652,7 +624,6 @@
       }
     };
 
-    // Use grid rows when ItemsRow > 1 (modern Swiper)
     if (ItemsRow > 1) {
       config.grid = { rows: ItemsRow, fill: 'row' };
     }
@@ -660,13 +631,11 @@
     new Swiper('#swiper-' + id + '-slider', config);
   }
 
-  // Initial load
   $(document).ready(function(){
     var $scope = $('[data-section-type="inner-page-testimonials-section"]');
     if ($scope.length) homeTestimonial($scope);
   });
 
-  // Theme Editor events
   $(document).on('shopify:section:load', function(evt){
     var $scope = $(evt.target).find('[data-section-type="inner-page-testimonials-section"]');
     if ($scope.length) homeTestimonial($scope);
@@ -728,6 +697,19 @@
     },
 
     { "type": "header", "content": "Testimonial Settings" },
+
+    {
+      "type": "select",
+      "id": "card_type",
+      "label": "Card Type",
+      "default": "default",
+      "options": [
+        { "value": "default", "label": "Content card (Style 1/2/3)" },
+        { "value": "image_only", "label": "Full-image card" }
+      ],
+      "info": "Switch all blocks to full-image tiles. To mix types, leave this on 'Content card' and add 'Image Card (Image Only)' blocks."
+    },
+
     { "type": "checkbox", "id": "hide_testimonial_images", "label": "Hide images in testimonial cards", "default": false },
 
     {
