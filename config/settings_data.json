@@ -490,7 +490,7 @@
           "footer_link_hover_clr": "#fdf8e1",
           "footer__bottom_bg": "#881d3e",
           "footer_color": "#881d3e",
-          "show_copyright": true,
+          "show_copyright": false,
           "show_social": true,
           "social_placement": "with_address",
           "social_style": "inline",
