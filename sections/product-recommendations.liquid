@@ -5,26 +5,138 @@
 {% assign padding_top = padding[0] %}
 {% assign padding_bottom = padding[1] %} 
 
-<div class="{% render 'container-settings' %}" id="product-recs-host-{{ section.id }}">
+{%- assign mode = section.settings.mode | default: 'recommendations' -%}
+{%- assign prod_limit = section.settings.products_limit | default: 4 -%}
+{%- assign chosen_collection = section.settings.collection -%}
+
+<div class="{% render 'container-settings' %}" id="product-recs-host-{{ section.id }}" data-mode="{{ mode }}">
   {% if section.settings.heading != blank %}
     <h3 class="section-header__title {{ section.settings.heading_position }}">{{ section.settings.heading }}</h3>
   {% endif %}
 
   <div class="row">
-    <!-- Will be populated via fetch -->
     <div
       class="product-recommendations"
       id="product-recommendations-{{ section.id }}"
       data-product-id="{{ product.id }}"
       data-section-id="{{ section.id }}"
-      data-limit="4">
-      <!-- Optional: small skeleton -->
+      data-limit="{{ prod_limit | escape }}"
+    >
+      <!-- Skeleton (only visible until content is placed) -->
       <div class="recs-skeleton" aria-hidden="true" style="display:flex;gap:12px;">
-        <div style="height:180px;flex:1;background:#f3f3f3;border-radius:12px;"></div>
-        <div style="height:180px;flex:1;background:#f3f3f3;border-radius:12px;"></div>
-        <div style="height:180px;flex:1;background:#f3f3f3;border-radius:12px;"></div>
-        <div style="height:180px;flex:1;background:#f3f3f3;border-radius:12px;"></div>
+        {% for i in (1..4) %}
+          <div style="height:180px;flex:1;background:#f3f3f3;border-radius:12px;"></div>
+        {% endfor %}
       </div>
+
+      {% if mode == 'collection' %}
+        {% if chosen_collection != blank and chosen_collection.products_count > 0 %}
+          <div class="swiper-container dT_VProdRecommendations">
+            <ul class="swiper-wrapper">
+              {%- for product in chosen_collection.products limit: prod_limit -%}
+                {%- assign this_variant = product.selected_or_first_available_variant -%}
+                {%- assign on_sale = false -%}
+                {%- if this_variant.compare_at_price and this_variant.compare_at_price > this_variant.price -%}
+                  {%- assign on_sale = true -%}
+                {%- endif -%}
+                {%- assign sale_text = 'products.product.sale' | t -%}
+                {%- assign sold_out_text = 'products.product.sold_out' | t -%}
+
+                <li class="swiper-slide grid-item product-grid-item{% if on_sale %} on-sale{% endif %}{% if product.available == false %} sold-out{% endif %}" id="product-{{ product.id }}">
+                  <div class="products">
+                    <div class="product-container">
+                      {% render 'new-label', product: product %}
+                      {% if settings.enable_timer %}
+                        {% render 'deal-snippet', productID: product.id, product: product %}
+                      {% endif %}
+
+                      <a href="{{ product.url }}" class="grid-link product-group" aria-label="{{ product.title | escape }}">
+                        {% if on_sale and settings.collections_show_sale_circle %}
+                          <div class="featured-tag">
+                            <span class="badge badge--sale">
+                              <span class="gift-tag badge__text{% if sale_text.size > 7 %} badge__text--small{% endif %}">{{ sale_text }}</span>
+                            </span>
+                          </div>
+                        {% endif %}
+
+                        {% if settings.collections_show_sold_out_circle and product.available == false %}
+                          <span class="badge badge--sold-out">
+                            <span class="badge__text{% if sold_out_text.size > 9 %} badge__text--small{% endif %}">{{ sold_out_text }}</span>
+                          </span>
+                        {% endif %}
+
+                        <div class="image_group">
+                          <div class="ImageOverlayCa"></div>
+                          {% if settings.secondary_image_use and product.images.size > 1 %}
+                            <div class="reveal">
+                              <span class="product-additional">
+                                <img loading="lazy" src="{{ 'loading-large.gif' | asset_url }}" data-src="{{ product.featured_image | img_url: '600x' }}" class="featured-image teaser lazyload" alt="{{ product.featured_image.alt | default: product.title | escape }}">
+                              </span>
+                              <img loading="lazy" src="{{ 'loading-large.gif' | asset_url }}" data-src="{{ product.images.last | img_url: '600x' }}" class="hidden-feature_img teaser lazyload" alt="{{ product.images.last.alt | default: product.title | escape }}">
+                            </div>
+                          {% else %}
+                            <img loading="lazy" src="{{ 'loading-large.gif' | asset_url }}" data-src="{{ product.featured_image | img_url: '600x' }}" class="featured-image teaser lazyload" alt="{{ product.featured_image.alt | default: product.title | escape }}">
+                          {% endif %}
+                        </div>
+                      </a>
+
+                      <div class="product_right_tag{% if on_sale %} offer_exist{% endif %}">
+                        {% if on_sale %}{% render 'offer-price', product: product %}{% endif %}
+                      </div>
+
+                      <div class="ImageWrapper">
+                        <div class="product-button dt-sc_{{ settings.product_button_style }} {{ settings.icon_alignment }}">
+                          {% if settings.product_button_style == 'icon' and settings.enable_add_cart and product.available %}
+                            {% form 'product', product %}
+                              <input type="hidden" name="id" value="{{ this_variant.id }}">
+                              <button type="submit" class="dT_AddToCart btn" aria-label="{{ 'products.product.add_to_cart' | t }}"></button>
+                            {% endform %}
+                          {% endif %}
+
+                          {% if settings.enable_compare %}
+                            <div><dtx-compare><a href="javascript:void(0);" class="add-compare" data-product_handle="{{ product.handle }}" aria-label="Compare {{ product.title | escape }}"></a></dtx-compare></div>
+                          {% endif %}
+
+                          {% if settings.enable_wishlist %}
+                            {%- render 'button-wishlist', product: product -%}
+                          {% endif %}
+
+                          {% if settings.enable_quick_view %}
+                            <div><a class="product-thumb-full-quick-view popup-product quick-view-btn dt-sc-btn" href="{{ product.url }}" data-product-id="{{ product.id }}" data-slider-type="slider_gallery" data-effect="mfp-move-from-top" aria-label="Quick view {{ product.title | escape }}"></a></div>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="product-detail {{ settings.item_aignment }}">
+                      {% if settings.display_vendor %}<p class="product-vendor"><span>{{ product.vendor }}</span></p>{% endif %}
+                      <h3 class="grid-link__title"><a href="{{ product.url }}">{{ product.title }}<span class="choosen-swatch"></span></a></h3>
+
+                      {% if settings.product_button_style == 'icon' %}
+                        {% render 'variant-tag-color', product: product %}
+                      {% endif %}
+
+                      {% if settings.truncated_description %}
+                        <div class="product_desc grid_list">{{ product.description | strip_html | truncatewords: settings.excerpt_count }}</div>
+                      {% endif %}
+
+                      <div class="grid-link__meta">{% render 'product-price', product: product %}</div>
+
+                      {% if settings.product_review %}
+                        <span class="shopify-product-reviews-badge spr-badge" data-id="{{ product.id }}"></span>
+                      {% endif %}
+                    </div>
+                  </div>
+                </li>
+              {%- endfor -%}
+            </ul>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+          </div>
+        {% else %}
+          <p class="recs-empty">Select a collection with products to display.</p>
+        {% endif %}
+      {% endif %}
     </div>
   </div>
 </div>
@@ -54,6 +166,7 @@
 <script>
 (function(){
   var hostSel = '#product-recommendations-{{ section.id }}';
+  var mode = '{{ mode }}';
 
   function initSwiper(scope){
     if (typeof window.Swiper !== 'function') return;
@@ -82,6 +195,12 @@
   }
 
   function loadRecs(){
+    if (mode !== 'recommendations') {
+      var hostA = document.querySelector(hostSel);
+      if (hostA) initSwiper(hostA);
+      return;
+    }
+
     var host = document.querySelector(hostSel);
     if (!host) return;
 
@@ -105,7 +224,6 @@
         var tmp = document.createElement('div');
         tmp.innerHTML = html;
 
-        // Find the static marker rendered by this section template
         var inner = tmp.querySelector('#recs-inner');
         if (!inner || !inner.innerHTML.trim()) {
           host.innerHTML = '<p class="recs-empty">No recommendations available for this product.</p>';
@@ -120,142 +238,153 @@
       });
   }
 
-  // Theme editor: reload only when this section changes
   document.addEventListener('shopify:section:load', function(e){
     try {
       if (e && e.detail && e.detail.sectionId === '{{ section.id }}') loadRecs();
     } catch(_e){}
   });
 
-  // Initial load
   setTimeout(loadRecs, 150);
 })();
 </script>
 
-{%- comment -%}
-  The block below only renders when THIS section is requested through
-  /recommendations/products?... because only then `recommendations` is populated.
-  NOTE: Use a STATIC id (#recs-inner) so client JS can find it even if the server assigns a new section.id.
-{%- endcomment -%}
 <div id="recs-inner">
-{%- if recommendations and recommendations.performed and recommendations.products_count > 0 -%}
-  <div class="swiper-container dT_VProdRecommendations">
-    <ul class="swiper-wrapper">
-      {%- for product in recommendations.products -%}
-        {%- assign this_variant = product.selected_or_first_available_variant -%}
-        {%- assign on_sale = false -%}
-        {%- if this_variant.compare_at_price and this_variant.compare_at_price > this_variant.price -%}
-          {%- assign on_sale = true -%}
-        {%- endif -%}
-        {%- assign sale_text = 'products.product.sale' | t -%}
-        {%- assign sold_out_text = 'products.product.sold_out' | t -%}
+  {%- if mode == 'recommendations' and recommendations and recommendations.performed and recommendations.products_count > 0 -%}
+    <div class="swiper-container dT_VProdRecommendations">
+      <ul class="swiper-wrapper">
+        {%- for product in recommendations.products -%}
+          {%- assign this_variant = product.selected_or_first_available_variant -%}
+          {%- assign on_sale = false -%}
+          {%- if this_variant.compare_at_price and this_variant.compare_at_price > this_variant.price -%}
+            {%- assign on_sale = true -%}
+          {%- endif -%}
+          {%- assign sale_text = 'products.product.sale' | t -%}
+          {%- assign sold_out_text = 'products.product.sold_out' | t -%}
 
-        <li class="swiper-slide grid-item product-grid-item{% if on_sale %} on-sale{% endif %}{% if product.available == false %} sold-out{% endif %}" id="product-{{ product.id }}">
-          <div class="products">
-            <div class="product-container">
-              {% render 'new-label', product: product %}
-              {% if settings.enable_timer %}
-                {% render 'deal-snippet', productID: product.id, product: product %}
-              {% endif %}
-
-              <a href="{{ product.url }}" class="grid-link product-group" aria-label="{{ product.title | escape }}">
-                {% if on_sale and settings.collections_show_sale_circle %}
-                  <div class="featured-tag">
-                    <span class="badge badge--sale">
-                      <span class="gift-tag badge__text{% if sale_text.size > 7 %} badge__text--small{% endif %}">{{ sale_text }}</span>
-                    </span>
-                  </div>
+          <li class="swiper-slide grid-item product-grid-item{% if on_sale %} on-sale{% endif %}{% if product.available == false %} sold-out{% endif %}" id="product-{{ product.id }}">
+            <div class="products">
+              <div class="product-container">
+                {% render 'new-label', product: product %}
+                {% if settings.enable_timer %}
+                  {% render 'deal-snippet', productID: product.id, product: product %}
                 {% endif %}
 
-                {% if settings.collections_show_sold_out_circle and product.available == false %}
-                  <span class="badge badge--sold-out">
-                    <span class="badge__text{% if sold_out_text.size > 9 %} badge__text--small{% endif %}">{{ sold_out_text }}</span>
-                  </span>
-                {% endif %}
-
-                <div class="image_group">
-                  <div class="ImageOverlayCa"></div>
-                  {% if settings.secondary_image_use and product.images.size > 1 %}
-                    <div class="reveal">
-                      <span class="product-additional">
-                        <img loading="lazy" src="{{ 'loading-large.gif' | asset_url }}" data-src="{{ product.featured_image | img_url: '600x' }}" class="featured-image teaser lazyload" alt="{{ product.featured_image.alt | default: product.title | escape }}">
+                <a href="{{ product.url }}" class="grid-link product-group" aria-label="{{ product.title | escape }}">
+                  {% if on_sale and settings.collections_show_sale_circle %}
+                    <div class="featured-tag">
+                      <span class="badge badge--sale">
+                        <span class="gift-tag badge__text{% if sale_text.size > 7 %} badge__text--small{% endif %}">{{ sale_text }}</span>
                       </span>
-                      <img loading="lazy" src="{{ 'loading-large.gif' | asset_url }}" data-src="{{ product.images.last | img_url: '600x' }}" class="hidden-feature_img teaser lazyload" alt="{{ product.images.last.alt | default: product.title | escape }}">
                     </div>
-                  {% else %}
-                    <img loading="lazy" src="{{ 'loading-large.gif' | asset_url }}" data-src="{{ product.featured_image | img_url: '600x' }}" class="featured-image teaser lazyload" alt="{{ product.featured_image.alt | default: product.title | escape }}">
                   {% endif %}
-                </div>
-              </a>
 
-              <div class="product_right_tag{% if on_sale %} offer_exist{% endif %}">
-                {% if on_sale %}{% render 'offer-price', product: product %}{% endif %}
+                  {% if settings.collections_show_sold_out_circle and product.available == false %}
+                    <span class="badge badge--sold-out">
+                      <span class="badge__text{% if sold_out_text.size > 9 %} badge__text--small{% endif %}">{{ sold_out_text }}</span>
+                    </span>
+                  {% endif %}
+
+                  <div class="image_group">
+                    <div class="ImageOverlayCa"></div>
+                    {% if settings.secondary_image_use and product.images.size > 1 %}
+                      <div class="reveal">
+                        <span class="product-additional">
+                          <img loading="lazy" src="{{ 'loading-large.gif' | asset_url }}" data-src="{{ product.featured_image | img_url: '600x' }}" class="featured-image teaser lazyload" alt="{{ product.featured_image.alt | default: product.title | escape }}">
+                        </span>
+                        <img loading="lazy" src="{{ 'loading-large.gif' | asset_url }}" data-src="{{ product.images.last | img_url: '600x' }}" class="hidden-feature_img teaser lazyload" alt="{{ product.images.last.alt | default: product.title | escape }}">
+                      </div>
+                    {% else %}
+                      <img loading="lazy" src="{{ 'loading-large.gif' | asset_url }}" data-src="{{ product.featured_image | img_url: '600x' }}" class="featured-image teaser lazyload" alt="{{ product.featured_image.alt | default: product.title | escape }}">
+                    {% endif %}
+                  </div>
+                </a>
+
+                <div class="product_right_tag{% if on_sale %} offer_exist{% endif %}">
+                  {% if on_sale %}{% render 'offer-price', product: product %}{% endif %}
+                </div>
+
+                <div class="ImageWrapper">
+                  <div class="product-button dt-sc_{{ settings.product_button_style }} {{ settings.icon_alignment }}">
+                    {% if settings.product_button_style == 'icon' and settings.enable_add_cart and product.available %}
+                      {% form 'product', product %}
+                        <input type="hidden" name="id" value="{{ this_variant.id }}">
+                        <button type="submit" class="dT_AddToCart btn" aria-label="{{ 'products.product.add_to_cart' | t }}"></button>
+                      {% endform %}
+                    {% endif %}
+
+                    {% if settings.enable_compare %}
+                      <div><dtx-compare><a href="javascript:void(0);" class="add-compare" data-product_handle="{{ product.handle }}" aria-label="Compare {{ product.title | escape }}"></a></dtx-compare></div>
+                    {% endif %}
+
+                    {% if settings.enable_wishlist %}
+                      {%- render 'button-wishlist', product: product -%}
+                    {% endif %}
+
+                    {% if settings.enable_quick_view %}
+                      <div><a class="product-thumb-full-quick-view popup-product quick-view-btn dt-sc-btn" href="{{ product.url }}" data-product-id="{{ product.id }}" data-slider-type="slider_gallery" data-effect="mfp-move-from-top" aria-label="Quick view {{ product.title | escape }}"></a></div>
+                    {% endif %}
+                  </div>
+                </div>
               </div>
 
-              <div class="ImageWrapper">
-                <div class="product-button dt-sc_{{ settings.product_button_style }} {{ settings.icon_alignment }}">
-                  {% if settings.product_button_style == 'icon' and settings.enable_add_cart and product.available %}
-                    {% form 'product', product %}
-                      <input type="hidden" name="id" value="{{ this_variant.id }}">
-                      <button type="submit" class="dT_AddToCart btn" aria-label="{{ 'products.product.add_to_cart' | t }}"></button>
-                    {% endform %}
-                  {% endif %}
+              <div class="product-detail {{ settings.item_aignment }}">
+                {% if settings.display_vendor %}<p class="product-vendor"><span>{{ product.vendor }}</span></p>{% endif %}
+                <h3 class="grid-link__title"><a href="{{ product.url }}">{{ product.title }}<span class="choosen-swatch"></span></a></h3>
 
-                  {% if settings.enable_compare %}
-                    <div><dtx-compare><a href="javascript:void(0);" class="add-compare" data-product_handle="{{ product.handle }}" aria-label="Compare {{ product.title | escape }}"></a></dtx-compare></div>
-                  {% endif %}
+                {% if settings.product_button_style == 'icon' %}
+                  {% render 'variant-tag-color', product: product %}
+                {% endif %}
 
-                  {% if settings.enable_wishlist %}
-                    {%- render 'button-wishlist', product: product -%}
-                  {% endif %}
+                {% if settings.truncated_description %}
+                  <div class="product_desc grid_list">{{ product.description | strip_html | truncatewords: settings.excerpt_count }}</div>
+                {% endif %}
 
-                  {% if settings.enable_quick_view %}
-                    <div><a class="product-thumb-full-quick-view popup-product quick-view-btn dt-sc-btn" href="{{ product.url }}" data-product-id="{{ product.id }}" data-slider-type="slider_gallery" data-effect="mfp-move-from-top" aria-label="Quick view {{ product.title | escape }}"></a></div>
-                  {% endif %}
-                </div>
+                <div class="grid-link__meta">{% render 'product-price', product: product %}</div>
+
+                {% if settings.product_review %}
+                  <span class="shopify-product-reviews-badge spr-badge" data-id="{{ product.id }}"></span>
+                {% endif %}
               </div>
             </div>
-
-            <div class="product-detail {{ settings.item_aignment }}">
-              {% if settings.display_vendor %}<p class="product-vendor"><span>{{ product.vendor }}</span></p>{% endif %}
-              <h3 class="grid-link__title"><a href="{{ product.url }}">{{ product.title }}<span class="choosen-swatch"></span></a></h3>
-
-              {% if settings.product_button_style == 'icon' %}
-                {% render 'variant-tag-color', product: product %}
-              {% endif %}
-
-              {% if settings.truncated_description %}
-                <div class="product_desc grid_list">{{ product.description | strip_html | truncatewords: settings.excerpt_count }}</div>
-              {% endif %}
-
-              <div class="grid-link__meta">{% render 'product-price', product: product %}</div>
-
-              {% if settings.product_review %}
-                <span class="shopify-product-reviews-badge spr-badge" data-id="{{ product.id }}"></span>
-              {% endif %}
-            </div>
-          </div>
-        </li>
-      {%- endfor -%}
-    </ul>
-
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
-  </div>
-{%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+  {%- endif -%}
 </div>
 
 {% schema %}
 {
-  "name": "Product recommendations",
+  "name": "Prod grid / Recos",
   "tag": "section",
   "class": "section product-recommendations-section",
-  "templates": ["product"],
+  "templates": ["product", "index", "collection", "page"],
   "settings": [
-    { "type": "checkbox", "id": "full", "label": "Show Full width", "default": false },
-    { "type": "checkbox", "id": "spacing_both_ends", "label": "Enable Right & Left Spacing (Works only on Fullwidth)", "default": false },
-    { "type": "text", "id": "padding", "label": "Style value (Padding)", "default":"0,0", "info":"Top(px),Bottom(px)" },
-    { "type": "text", "id": "margin", "label": "Style value (Margin)", "default":"0,0", "info":"Top(px),Bottom(px)" },
+    { "type": "select",
+      "id": "mode",
+      "label": "Mode",
+      "default": "recommendations",
+      "options": [
+        { "value": "recommendations", "label": "Shopify recommendations (product pages)" },
+        { "value": "collection", "label": "Manual collection" }
+      ]
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection (used when Mode = Collection)"
+    },
+    {
+      "type": "range",
+      "id": "products_limit",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "label": "Products to show",
+      "default": 4
+    },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Recommended products" },
     {
       "type": "select",
@@ -267,9 +396,13 @@
         { "value": "text-start", "label": "Left" },
         { "value": "text-end", "label": "Right" }
       ]
-    }
+    },
+    { "type": "checkbox", "id": "full", "label": "Show Full width", "default": false },
+    { "type": "checkbox", "id": "spacing_both_ends", "label": "Enable Right & Left Spacing (Works only on Fullwidth)", "default": false },
+    { "type": "text", "id": "padding", "label": "Style value (Padding)", "default":"0,0", "info":"Top(px),Bottom(px)" },
+    { "type": "text", "id": "margin", "label": "Style value (Margin)", "default":"0,0", "info":"Top(px),Bottom(px)" }
   ],
-  "presets": [{ "name": "Product recommendations" }]
+  "presets": [{ "name": "Prod grid / Recos" }]
 }
 {% endschema %}
 
