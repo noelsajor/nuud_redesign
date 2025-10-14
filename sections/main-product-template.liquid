@@ -538,7 +538,7 @@
   #shopify-section-{{ section.id }} .media-slide{
     position: relative;
     scroll-snap-align: center;
-    aspect-ratio: 1 / 1; /* adjust if you prefer 4/5 or 3/4 */
+    aspect-ratio: 1 / 1;
     display: grid;
     place-items: center;
   }
@@ -690,6 +690,16 @@
   }
 
 </style>
+
+{%- comment -%} Toggle: Hide grid item titles when enabled in settings {%- endcomment -%}
+{% if section.settings.hide_grid_titles %}
+  <style>
+    #shopify-section-{{ section.id }} .grid-link__title { display: none !important; }
+    #shopify-section-{{ section.id }} .adv-product-list .grid-link__title,
+    #shopify-section-{{ section.id }} .sidebar .grid-link__title,
+    #shopify-section-{{ section.id }} .product-grid .grid-link__title { display: none !important; }
+  </style>
+{% endif %}
 
 
 
@@ -1022,6 +1032,9 @@
     { "type": "checkbox", "id": "show_checkout", "label": "Enable buynow", "default": true },
     { "type": "checkbox", "id": "hide_addtocart", "label": "Hide Add to cart", "default": false },
     { "type": "checkbox", "id": "show_wishlist", "label": "Enable Wishlist", "default": true },
+
+    { "type": "header", "content": "Display" },
+    { "type": "checkbox", "id": "hide_grid_titles", "label": "Hide grid item titles", "default": false },
 
     { "type": "header", "content": "Tab Section" },
     { "type": "radio", "id": "tab_position", "label": "Tab position", "options": [
