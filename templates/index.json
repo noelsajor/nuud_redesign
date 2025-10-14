@@ -838,7 +838,7 @@
         "navigation_dot_active_color": ""
       }
     },
-    "spacer_wave_zA7HKx": {
+    "spacer_wave_V8EaLQ": {
       "type": "spacer-wave",
       "name": "Wave Spacer (Animated)",
       "settings": {
@@ -910,6 +910,31 @@
         "active_text_color": "#ffffff"
       }
     },
+    "spacer_wave_zA7HKx": {
+      "type": "spacer-wave",
+      "name": "Wave Spacer (Animated)",
+      "settings": {
+        "use_gradient": false,
+        "background_color": "#ffd8d8",
+        "background_gradient": "linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 100%)",
+        "spacer_padding_top": 0,
+        "spacer_padding_bottom": 40,
+        "show_top_wave": true,
+        "show_bottom_wave": false,
+        "wave_color": "#ffd8d8",
+        "wave_overlap_top": 100,
+        "wave_overlap_bottom": 100,
+        "wave_shape": "medium",
+        "wave_frequency": 2,
+        "wave_amplitude": 25,
+        "animate_waves": true,
+        "wave_speed": 12,
+        "wave_bob": 0,
+        "extra_space": false,
+        "extra_space_height": 40,
+        "z_index": 1
+      }
+    },
     "176047088699b09df4": {
       "type": "apps",
       "blocks": {
@@ -936,6 +961,31 @@
         "instafeed_app_block_kgQKG4"
       ],
       "settings": {}
+    },
+    "spacer_wave_QwWz9m": {
+      "type": "spacer-wave",
+      "name": "Wave Spacer (Animated)",
+      "settings": {
+        "use_gradient": false,
+        "background_color": "#ffd8d8",
+        "background_gradient": "linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 100%)",
+        "spacer_padding_top": 0,
+        "spacer_padding_bottom": 40,
+        "show_top_wave": false,
+        "show_bottom_wave": true,
+        "wave_color": "#ffd8d8",
+        "wave_overlap_top": 100,
+        "wave_overlap_bottom": 100,
+        "wave_shape": "medium",
+        "wave_frequency": 2,
+        "wave_amplitude": 25,
+        "animate_waves": true,
+        "wave_speed": 12,
+        "wave_bob": 0,
+        "extra_space": false,
+        "extra_space_height": 40,
+        "z_index": 1
+      }
     },
     "1757879707bba2c8c8": {
       "type": "_blocks",
@@ -1090,9 +1140,11 @@
     "spacer_wave_AzjPHt",
     "1654336925c509c587",
     "home_testimonial_gBtfKW",
-    "spacer_wave_zA7HKx",
+    "spacer_wave_V8EaLQ",
     "faq_section_8ifTKi",
+    "spacer_wave_zA7HKx",
     "176047088699b09df4",
+    "spacer_wave_QwWz9m",
     "1757879707bba2c8c8",
     "portfolio_2_JwTwMq",
     "home_newsletter_PPedY3",
