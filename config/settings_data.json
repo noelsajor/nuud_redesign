@@ -360,7 +360,7 @@
           "social_icon_hover_bg": "rgba(0,0,0,0)",
           "show_account": false,
           "show_header_cart": true,
-          "show_header_wishlist": true,
+          "show_header_wishlist": false,
           "show_header_compare": false,
           "icon_color": "#ffffff",
           "icon_hover_color": "#881d3e",
