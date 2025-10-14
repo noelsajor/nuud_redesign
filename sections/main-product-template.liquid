@@ -680,209 +680,57 @@
 <!-- ========= GALLERY + DOTS + SUBTOTAL LOGIC (Editor-safe, section-scoped) ========= -->
 <script>
 (function(){
-  var SECTION_ID = "{{ section.id }}";
-  var MONEY_FORMAT = {{ shop.money_format | json }};
+  // ... keep the rest of your script as-is ...
 
-  function qs(root, sel){ return root.querySelector(sel); }
-  function qsa(root, sel){ return Array.prototype.slice.call(root.querySelectorAll(sel)); }
+  function swapDesktopTo(mediaId){
+    if(!featured || !mediaId) return;
+    var btn = thumbsWrap ? thumbsWrap.querySelector('.product-media__thumb[data-media-id="'+mediaId+'"]') : null;
+    if(!btn) return;
 
-  // Money formatting using Shopify helper when available
-  function formatMoney(cents){
-    if (window.Shopify && typeof Shopify.formatMoney === 'function') {
-      return Shopify.formatMoney(cents, MONEY_FORMAT);
-    }
-    var amount = (cents / 100).toFixed(2);
-    return '$' + amount;
-  }
+    var type = btn.getAttribute('data-media-type');
 
-  function initSection(sectionEl){
-    if(!sectionEl) return;
+    // IMAGES: use the large URL we embedded on the thumb button
+    if(type === 'image'){
+      var bigSrc   = btn.getAttribute('data-large');
+      var sizes    = btn.getAttribute('data-sizes') || '(min-width: 992px) 700px, 100vw';
+      var widths   = (btn.getAttribute('data-widths') || '700,900,1200,1600').split(',');
 
-    // Quantity + Subtotal
-    var qtyWrap = qs(sectionEl, "[data-qty]");
-    var qtyInput = qs(sectionEl, ".quantity-btn-number");
-    var subtotalEl = qs(sectionEl, "[data-subtotal]");
-    var priceSpan = qs(sectionEl, ".product-price-current .money");
+      featured.innerHTML = '';
+      var img = new Image();
+      img.className = 'product-media__img';
+      img.decoding = 'async';
+      img.loading  = 'eager';
+      img.sizes    = sizes;
 
-    function getPriceCents(){
-      if(!priceSpan) return 0;
-      var centsAttr = priceSpan.getAttribute("data-price-cents");
-      if(centsAttr) return parseInt(centsAttr, 10) || 0;
-      var numeric = (priceSpan.textContent || "").replace(/[^0-9.]/g, "");
-      return Math.round(parseFloat(numeric || "0") * 100);
-    }
-    function setSubtotal(){
-      if(!subtotalEl) return;
-      var qty = parseFloat(qtyInput && qtyInput.value ? qtyInput.value : "1") || 1;
-      var subtotalCents = Math.max(1, qty) * getPriceCents();
-      subtotalEl.textContent = formatMoney(subtotalCents);
-    }
-    if(qtyWrap && qtyInput){
-      qtyWrap.addEventListener("click", function(e){
-        var btn = e.target.closest("button[data-type]");
-        if(!btn) return;
-        var t = btn.getAttribute("data-type");
-        var v = parseInt(qtyInput.value || "1", 10) || 1;
-        if(t === "minus") v = Math.max(1, v - 1);
-        if(t === "plus") v = v + 1;
-        qtyInput.value = String(v);
-        setSubtotal();
-      });
-      qtyInput.addEventListener("input", setSubtotal);
-      setSubtotal();
+      // Build a lightweight srcset from the same base by trusting the bigSrc width param
+      // If your CDN supports it, you can also compute variants server-side; this is enough to fix the “small after click” bug.
+      img.src = bigSrc;
+      featured.appendChild(img);
+    } else if (type === 'video' || type === 'external_video') {
+      // Optional: if you want to support swapping videos via thumbs, render your video element here.
+      // For now we simply keep existing content or you can extend this branch.
+    } else if (type === 'model') {
+      // Optional: same note as above for 3D models.
     }
 
-    // ----- MOBILE/TABLET SCROLLER + DOTS -----
-    var scroller = qs(sectionEl, "#MediaScroller-" + SECTION_ID);
-    var dotsWrap = qs(sectionEl, "#MediaDots-" + SECTION_ID);
-    var slides = scroller ? qsa(scroller, ".media-slide") : [];
-
-    function setActiveDot(index){
-      if(!dotsWrap) return;
-      qsa(dotsWrap, ".media-dot").forEach(function(btn, i){
-        btn.setAttribute("aria-selected", i === index ? "true" : "false");
-        btn.tabIndex = i === index ? 0 : -1;
-      });
-    }
-
-    function scrollToIndex(i){
-      if(!scroller || !slides[i]) return;
-      slides[i].scrollIntoView({behavior: 'smooth', inline: 'center', block: 'nearest'});
-      setActiveDot(i);
-    }
-
-    function buildDots(){
-      if(!dotsWrap || !slides.length) return;
-      dotsWrap.innerHTML = "";
-      slides.forEach(function(slide, i){
-        var b = document.createElement("button");
-        b.className = "media-dot";
-        b.type = "button";
-        b.setAttribute("role", "tab");
-        b.setAttribute("aria-controls", "media-slide-" + SECTION_ID + "-" + i);
-        b.setAttribute("aria-selected", slide.classList.contains("is-initial") ? "true" : "false");
-        b.tabIndex = slide.classList.contains("is-initial") ? 0 : -1;
-        b.addEventListener("click", function(){ scrollToIndex(i); });
-        dotsWrap.appendChild(b);
-        slide.id = "media-slide-" + SECTION_ID + "-" + i;
-      });
-      // If no initial flagged, set first active
-      if(!dotsWrap.querySelector('[aria-selected="true"]')) setActiveDot(0);
-    }
-
-    function watchSlides(){
-      if(!scroller || !slides.length) return;
-      var io = new IntersectionObserver(function(entries){
-        // Find the most visible slide
-        var best = entries.slice().sort(function(a,b){ return b.intersectionRatio - a.intersectionRatio; })[0];
-        if(best && best.isIntersecting){
-          var idx = parseInt(best.target.getAttribute("data-index") || "0", 10);
-          setActiveDot(idx);
-        }
-      }, { root: scroller, threshold: [0.5, 0.75, 0.9] });
-      slides.forEach(function(slide){ io.observe(slide); });
-
-      // Keyboard support (left/right)
-      scroller.addEventListener("keydown", function(e){
-        if(e.key === "ArrowRight"){ e.preventDefault(); var a = qsa(dotsWrap, ".media-dot").findIndex(function(el){ return el.getAttribute("aria-selected")==="true"; }); scrollToIndex(Math.min(slides.length-1, (a<0?0:a+1))); }
-        if(e.key === "ArrowLeft"){ e.preventDefault(); var a2 = qsa(dotsWrap, ".media-dot").findIndex(function(el){ return el.getAttribute("aria-selected")==="true"; }); scrollToIndex(Math.max(0, (a2<0?0:a2-1))); }
-      }, {passive:false});
-    }
-
-    // ----- DESKTOP: THUMB → MAIN STAGE -----
-    var featured = qs(sectionEl, "#FeaturedMedia-" + SECTION_ID);
-    var thumbsWrap = qs(sectionEl, ".product-media__thumbs.desktop-thumbs");
-
-    function swapDesktopTo(mediaId){
-      if(!featured || !mediaId) return;
-      var btn = thumbsWrap ? thumbsWrap.querySelector('.product-media__thumb[data-media-id="'+mediaId+'"]') : null;
-      var imgSrc = btn ? (btn.querySelector("img").currentSrc || btn.querySelector("img").src) : null;
-
-      // Replace content by type (simplified to image for consistency)
-      if(imgSrc){
-        featured.innerHTML = "";
-        var big = new Image();
-        big.className = 'product-media__img';
-        big.decoding = 'async';
-        big.loading = 'eager';
-        big.sizes = '(min-width: 992px) 700px, 100vw';
-        big.src = imgSrc;
-        featured.appendChild(big);
-        featured.setAttribute('data-current-media-id', mediaId);
-      }
-
-      if(thumbsWrap){
-        qsa(thumbsWrap, '.product-media__thumb').forEach(function(t){
-          var active = t.getAttribute('data-media-id') === mediaId;
-          t.classList.toggle('is-active', active);
-          t.setAttribute('aria-current', active ? 'true' : 'false');
-        });
-      }
-    }
+    featured.setAttribute('data-current-media-id', mediaId);
 
     if(thumbsWrap){
-      thumbsWrap.addEventListener("click", function(e){
-        var btn = e.target.closest(".product-media__thumb");
-        if(!btn) return;
-        var id = btn.getAttribute("data-media-id");
-        swapDesktopTo(id);
-
-        // Also sync mobile scroller position so both views stay aligned
-        if(scroller){
-          var slide = scroller.querySelector('.media-slide[data-media-id="'+id+'"]');
-          if(slide){ slide.scrollIntoView({behavior:'smooth', inline:'center'}); }
-        }
+      Array.prototype.forEach.call(thumbsWrap.querySelectorAll('.product-media__thumb'), function(t){
+        var active = t.getAttribute('data-media-id') === mediaId;
+        t.classList.toggle('is-active', active);
+        t.setAttribute('aria-current', active ? 'true' : 'false');
       });
     }
-
-    // Variant change: sync media & price/subtotal
-    document.addEventListener('variant:change', function(e){
-      try {
-        var v = e.detail && e.detail.variant ? e.detail.variant : null;
-        var mediaId = v && v.featured_media ? String(v.featured_media.id) : null;
-
-        if(mediaId){
-          // Desktop
-          swapDesktopTo(mediaId);
-          // Mobile
-          if(scroller){
-            var slide = scroller.querySelector('.media-slide[data-media-id="'+mediaId+'"]');
-            if(slide){ slide.scrollIntoView({behavior:'smooth', inline:'center'}); }
-          }
-        }
-
-        if(priceSpan && v && typeof v.price === 'number'){
-          priceSpan.setAttribute('data-price-cents', v.price);
-          // Use Shopify helper to render currency if available
-          priceSpan.textContent = formatMoney(v.price);
-          setSubtotal();
-        }
-      } catch(err){}
-    });
-
-    // Build dots + observers after DOM ready
-    buildDots();
-    watchSlides();
   }
 
-  var sectionRoot = document.getElementById('shopify-section-{{ section.id }}') || document;
-  initSection(sectionRoot);
+  // keep the rest of your code (listeners, variant:change, etc.) the same,
+  // but make sure variant:change calls swapDesktopTo(mediaId) (it already does).
 
-  // Re-init inside Theme Editor
-  document.addEventListener('shopify:section:load', function(e){
-    if(e && e.detail && e.detail.sectionId === "{{ section.id }}"){
-      var el = document.getElementById('shopify-section-{{ section.id }}');
-      initSection(el);
-    }
-  });
-  document.addEventListener('shopify:section:select', function(e){
-    if(e && e.detail && e.detail.sectionId === "{{ section.id }}"){
-      var el = document.getElementById('shopify-section-{{ section.id }}');
-      initSection(el);
-    }
-  });
+  // ... keep the rest of your script as-is ...
 })();
 </script>
+
 
 {% schema %}
 {
