@@ -607,12 +607,11 @@
     },
     "product_recommendations_a8Q3bq": {
       "type": "product-recommendations",
-      "disabled": true,
       "name": "Product recommendations",
       "settings": {
         "mode": "recommendations",
-        "collection": "for-both",
-        "fallback_collection": "",
+        "collection": "all-products",
+        "fallback_collection": "for-both",
         "products_limit": 4,
         "heading": "Recommended products",
         "heading_position": "text-center",
