@@ -452,9 +452,13 @@ Compute RGBA for category card background (opacity controlled in settings)
       {% if section.settings.show_right_image %}"image"{% endif %}
       "categories";
     align-items: start;
-    justify-items: stretch;   /* full width */
-    gap: 20px;                /* tighter, mobile-friendly spacing */
+    justify-items: stretch;  
+    gap: 20px;               
   }
+
+  .ai-category-title-text-{{ uid }}{
+  color:#fff; text-align:center; font-family: 'Bricolage Grotesque'; font-size: 20px; font-weight:600;
+}
 
   /* Let the left column's children participate in the grid areas */
   .ai-split-section-left-{{ uid }}{
