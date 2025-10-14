@@ -62,11 +62,22 @@
                 <div class="dt-sc-testimonial-image" style="width:100%;">
                   {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}">{%- endif -%}
                     <img
-                      class="lazyload"
-                      data-src="{{ block.settings.image | img_url: 'master' }}"
-                      data-aspectratio="{{ block.settings.image.aspect_ratio }}"
-                      data-sizes="auto"
-                      alt="{{ image_alt }}">
+                      src="{{ block.settings.image | image_url: width: 2000 }}"
+                      srcset="
+                        {{ block.settings.image | image_url: width: 640 }} 640w,
+                        {{ block.settings.image | image_url: width: 960 }} 960w,
+                        {{ block.settings.image | image_url: width: 1280 }} 1280w,
+                        {{ block.settings.image | image_url: width: 1600 }} 1600w,
+                        {{ block.settings.image | image_url: width: 2000 }} 2000w
+                      "
+                      sizes="(min-width: 1024px) 33vw, 100vw"
+                      loading="lazy"
+                      width="{{ block.settings.image.width }}"
+                      height="{{ block.settings.image.height }}"
+                      alt="{{ image_alt }}"
+                      style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;"
+                    >
+
                     <noscript>
                       {{ block.settings.image | img_url: '1024x' | img_tag: image_alt, 'dt-sc-noscript-image' }}
                     </noscript>
