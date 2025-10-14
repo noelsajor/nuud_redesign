@@ -647,6 +647,7 @@
         "content_iVD6qQ",
         "content_gNMcYC"
       ],
+      "disabled": true,
       "custom_css": [
         ".overall_boxed {border: none;}"
       ],
@@ -772,7 +773,6 @@
         "image_only_XXxCxq",
         "content_ei8jHT"
       ],
-      "disabled": true,
       "settings": {
         "enable": true,
         "full": true,
