@@ -348,7 +348,7 @@
           "header_contact_hover": "#f3eeeb",
           "logo": "shopify://shop_images/Nuud_Pleasures_Logo_Vectorized_3.svg",
           "logo_max_width": 160,
-          "menu_align": "logo_center",
+          "menu_align": "logo_top_center",
           "mobile_screen_width": "575",
           "show_header_social": true,
           "search_type": "none",
