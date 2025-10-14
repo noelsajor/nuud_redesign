@@ -19,8 +19,8 @@
         "margin": "0,0",
         "show_blog_author": true,
         "show_blog_date": true,
-        "show_blog_tag": true,
-        "social_sharing_blog": true,
+        "show_blog_tag": false,
+        "social_sharing_blog": false,
         "blog_meta_color": "#343434",
         "blog_meta_icon_color": "#343434"
       }
