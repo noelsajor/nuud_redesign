@@ -56,10 +56,10 @@
         {% if section.settings.enable_slider %}  <div id="swiper-{{section.id}}-slider">{% endif %}
         <div class="dt-sc-testimonial-section {{ section.settings.boxed_styles }} {% if section.settings.enable_slider %}swiper-wrapper{% endif %} {% unless section.settings.enable_slider %}dt-sc-column{% endunless %}{% unless section.settings.enable_slider %} {{column}}{% endunless %}">        
           {% for block in section.blocks %} 
-            {% if block.type == 'image_only' %}
+          {% if block.type == 'image_only' %}
             {%- assign image_alt = block.settings.alt | default: section.settings.section_heading | escape -%}
-            <div class="dt-sc-testimonial {% if section.settings.enable_slider %}swiper-slide{% endif %} {{ section.settings.block_style }} {{ section.settings.vertical_position }}">
-              <div class="dt-sc-testimonial-image" style="width:100%;">
+            <div class="dt-sc-testimonial image-only {% if section.settings.enable_slider %}swiper-slide{% endif %} {{ section.settings.block_style }} {{ section.settings.vertical_position }}">
+              <div class="dt-sc-testimonial-image" style="width:100%; aspect-ratio: 16/9;">
                 {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}">{%- endif -%}
                   <img
                     class="lazyload"
@@ -72,10 +72,6 @@
                   </noscript>
                 {%- if block.settings.link != blank -%}</a>{%- endif -%}
               </div>
-              {%- comment -%}
-                We intentionally omit testimonial content/rating/author;
-                structure & classes stay consistent so slider/grid/boxing work the same.
-              {%- endcomment -%}
             </div>
             {% continue %}
           {% endif %}
