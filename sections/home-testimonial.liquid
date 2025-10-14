@@ -55,7 +55,30 @@
         {% if section.settings.enable_slider %}  <div class="dt-sc-swiper-slider swiper-container {% if section.settings.dots %} {{ section.settings.carousel_pagination_bottom_alignment }} {{ section.settings.carousel_pagination_alignment }} {% endif %} {% if section.settings.arrows %}  {{ section.settings.nav_arrow_position }} {{ section.settings.center_nav_arrow_alignment }} {% endif %}">{% endif %}
         {% if section.settings.enable_slider %}  <div id="swiper-{{section.id}}-slider">{% endif %}
         <div class="dt-sc-testimonial-section {{ section.settings.boxed_styles }} {% if section.settings.enable_slider %}swiper-wrapper{% endif %} {% unless section.settings.enable_slider %}dt-sc-column{% endunless %}{% unless section.settings.enable_slider %} {{column}}{% endunless %}">        
-          {% for block in section.blocks %}       
+          {% for block in section.blocks %} 
+            {% if block.type == 'image_only' %}
+            {%- assign image_alt = block.settings.alt | default: section.settings.section_heading | escape -%}
+            <div class="dt-sc-testimonial {% if section.settings.enable_slider %}swiper-slide{% endif %} {{ section.settings.block_style }} {{ section.settings.vertical_position }}">
+              <div class="dt-sc-testimonial-image" style="width:100%;">
+                {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}">{%- endif -%}
+                  <img
+                    class="lazyload"
+                    data-src="{{ block.settings.image | img_url: 'master' }}"
+                    data-aspectratio="{{ block.settings.image.aspect_ratio }}"
+                    data-sizes="auto"
+                    alt="{{ image_alt }}">
+                  <noscript>
+                    {{ block.settings.image | img_url: '1024x' | img_tag: image_alt, 'dt-sc-noscript-image' }}
+                  </noscript>
+                {%- if block.settings.link != blank -%}</a>{%- endif -%}
+              </div>
+              {%- comment -%}
+                We intentionally omit testimonial content/rating/author;
+                structure & classes stay consistent so slider/grid/boxing work the same.
+              {%- endcomment -%}
+            </div>
+            {% continue %}
+          {% endif %}
           {% if section.settings.block_style  == 'style_1' %}   
           <div class="dt-sc-testimonial {% if section.settings.enable_slider %}swiper-slide{% endif %} {% if section.settings.reverse_column %}reverse{% endif %} {{section.settings.quote_style}} {{section.settings.block_style}} {{section.settings.vertical_position}}">
             <div class="dt-sc-testimonial-image">                          
@@ -1219,89 +1242,53 @@
 "label": "Navigation Dot Active Color"
 }
 ],
+
+
 "blocks": [
-{
-"type": "content",
-"name": "Content",        
-"settings": [
-{
-"type": "richtext",
-"id": "quote",
-"label": "Text",
-"info": "Best results if text does not exceed 400 characters",
-"default": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type.</p>"
-},
-{
-"type": "image_picker",
-"id": "icon",
-"label": "Author Image"          
-},
-{
-"type": "text",
-"id": "author",
-"label": "Author",
-"default": "Author Name"
-},
-{
-"type": "text",
-"id": "job",
-"label": "Designation",
-"default": "Author Designation"
-},
-{
-"type": "select",
-"id": "star",
-"label": "rating",
-"default": "3",
-"options": [
-{
-"value": "0",
-"label": "0"
-},
-{
-"value": "0.5",
-"label": "0.5"
-},
-{
-"value": "1",
-"label": "1"
-},
-{
-"value": "1.5",
-"label": "1.5"
-},
-{
-"value": "2",
-"label": "2"
-},
-{
-"value": "2.5",
-"label": "2.5"
-},
-{
-"value": "3",
-"label": "3"
-},
-{
-"value": "3.5",
-"label": "3.5"
-},
-{
-"value": "4",
-"label": "4"
-},
-{
-"value": "4.5",
-"label": "4.5"
-},
-{
-"value": "5",
-"label": "5"
-}
-]
-}
-]
-}
+  {
+    "type": "image_only",
+    "name": "Image Card (Image Only)",
+    "settings": [
+      { "type": "image_picker", "id": "image", "label": "Image" },
+      { "type": "text", "id": "alt", "label": "Alt text (optional)" },
+      { "type": "url", "id": "link", "label": "Optional link" }
+    ]
+  },
+  {
+    "type": "content",
+    "name": "Content",
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "quote",
+        "label": "Text",
+        "info": "Best results if text does not exceed 400 characters",
+        "default": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type.</p>"
+      },
+      { "type": "image_picker", "id": "icon", "label": "Author Image" },
+      { "type": "text", "id": "author", "label": "Author", "default": "Author Name" },
+      { "type": "text", "id": "job", "label": "Designation", "default": "Author Designation" },
+      {
+        "type": "select",
+        "id": "star",
+        "label": "rating",
+        "default": "3",
+        "options": [
+          { "value": "0", "label": "0" },
+          { "value": "0.5", "label": "0.5" },
+          { "value": "1", "label": "1" },
+          { "value": "1.5", "label": "1.5" },
+          { "value": "2", "label": "2" },
+          { "value": "2.5", "label": "2.5" },
+          { "value": "3", "label": "3" },
+          { "value": "3.5", "label": "3.5" },
+          { "value": "4", "label": "4" },
+          { "value": "4.5", "label": "4.5" },
+          { "value": "5", "label": "5" }
+        ]
+      }
+    ]
+  }
 ]
 }
 {% endschema %}
