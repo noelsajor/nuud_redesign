@@ -458,7 +458,6 @@
         "content_cykCyq": {
           "type": "content",
           "settings": {
-            "review_type": "full",
             "quote": "<p>I am a little bit ashamed to admit that I used to finish way way too quick and it always left both of us... frustrated. After trying the stamina gummies, I had control and was able to go long. Really, I could actually enjoy the moment instead of worrying about it ending too soon!! I was very skeptical at first but this is really a game changer. </p>",
             "icon": "shopify://shop_images/download_1.jpg",
             "author": "Eudin",
@@ -469,18 +468,16 @@
         "content_7wPJbN": {
           "type": "content",
           "settings": {
-            "review_type": "photo",
             "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
+            "icon": "shopify://shop_images/images_2.jpg",
             "author": "Author Name",
             "job": "Author Designation",
-            "star": "3",
-            "photo": "shopify://shop_images/Rectangle_97.png"
+            "star": "3"
           }
         },
         "content_CHjq6e": {
           "type": "content",
           "settings": {
-            "review_type": "full",
             "quote": "<p>I honestly didn’t think this would work for me. For years I could never finish, no matter what I tried. I am not the person to leave reviews but this vitality gummies earned it in full. I was able to finally have an orgasm... for the very first time. I can’t even explain how emotional that was for me. You got a customer for life.</p>",
             "icon": "shopify://shop_images/images_2.jpg",
             "author": "Gabriele",
@@ -491,24 +488,20 @@
         "content_geJp9L": {
           "type": "content",
           "settings": {
-            "review_type": "photo",
             "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
             "author": "Author Name",
             "job": "Author Designation",
-            "star": "3",
-            "photo": "shopify://shop_images/Rectangle_97.png"
+            "star": "3"
           }
         },
         "content_mH3FzN": {
           "type": "content",
           "settings": {
-            "review_type": "full",
             "quote": "<p>After a long, stressful day, NUUD is a godsend. I know that these vapes are an aphrodisiac and are supposed to be used in bed but using them when I get home has been a game changer for my peace of mind. Plus the women love them too. My new Tinder pickup line has been “Want to try a sex vape?”.</p>",
             "icon": "shopify://shop_images/testimonial-face-4.jpg",
             "author": "Brian",
             "job": "Vapordisiac",
-            "star": "3",
-            "photo": "shopify://shop_images/Rectangle_96_e03b2b75-8d2a-4e0d-994b-12bed3406c3f.png"
+            "star": "3"
           }
         }
       },
@@ -521,18 +514,16 @@
       ],
       "name": "Testimonial",
       "settings": {
+        "enable": true,
         "full": true,
         "spacing_both_ends": false,
-        "padding": "100,100",
+        "padding": "120,120",
         "margin": "0,0",
-        "image_2": "shopify://shop_images/SpicyLove.png",
         "show_background_image": false,
         "background_style": "fixed",
-        "background_size": "auto",
         "enable_overlay": true,
         "background_color": "#ffd8d8",
         "overlay_transparency": "1",
-        "mask_image_color": "",
         "section_heading": "The people who love us",
         "section_sub_heading": "",
         "section_description": "",
@@ -546,9 +537,10 @@
         "section_button_hover_bg_color": "",
         "section_button_hover_text_color": "",
         "heading_position": "text-center",
+        "hide_testimonial_images": true,
         "grid": "1",
         "block_style": "style_3",
-        "boxed_styles": "overall_boxed",
+        "boxed_styles": "content_boxed",
         "enable_box_shadow": false,
         "reverse_column": true,
         "text_position": "text-center",
@@ -560,7 +552,6 @@
         "content_width": "30/70",
         "lap_content_width": "20/80",
         "vertical_position": "vertical-center",
-        "card_aspect_ratio": "1/1",
         "testimonial_border_color": "",
         "testimonial_background_color": "#ffffff",
         "testimonial_content_color": "#881d3e",
@@ -572,10 +563,6 @@
         "enable_slider": true,
         "enable_auto_height": true,
         "items_per_view": 3,
-        "items_laptop_view": 3,
-        "items_tablet_view": 2,
-        "items_mobile_view": 1,
-        "enable_center_mode": true,
         "slider_autoplay": 3,
         "dots": false,
         "carousel_pagination_alignment": "center_pagination",
@@ -588,8 +575,7 @@
         "navigation_button_hover_color": "",
         "navigation_button_hover_icon_color": "",
         "navigation_dot_color": "",
-        "navigation_dot_active_color": "",
-        "custom_class_name": ""
+        "navigation_dot_active_color": ""
       }
     },
     "spacer_wave_epNXGb": {
