@@ -604,6 +604,14 @@
             "star": "5"
           }
         },
+        "image_only_BeLFN9": {
+          "type": "image_only",
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_96.png",
+            "alt": "",
+            "link": ""
+          }
+        },
         "content_BkkKNX": {
           "type": "content",
           "settings": {
@@ -612,6 +620,14 @@
             "author": "Gabrielle",
             "job": "Vitality Gummies for Women",
             "star": "5"
+          }
+        },
+        "image_only_XXxCxq": {
+          "type": "image_only",
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_97.png",
+            "alt": "",
+            "link": ""
           }
         },
         "content_ei8jHT": {
@@ -623,45 +639,14 @@
             "job": "Vapordisiac",
             "star": "5"
           }
-        },
-        "content_AcjGBC": {
-          "type": "content",
-          "settings": {
-            "quote": "<p>I honestly didn’t think this would work for me. For years I could never finish, no matter what I tried. I am not the person to leave reviews but this vitality gummies earned it in full. I was able to finally have an orgasm... for the very first time. I can’t even explain how emotional that was for me. You got a customer for life.</p>",
-            "icon": "shopify://shop_images/images_2.jpg",
-            "author": "Gabrielle",
-            "job": "Vitality Gummies for Women",
-            "star": "5"
-          }
-        },
-        "content_hyYyHN": {
-          "type": "content",
-          "settings": {
-            "quote": "<p>After a long, stressful day, NUUD is a godsend. I know that these vapes are an aphrodisiac and are supposed to be used in bed but using them when I get home has been a game changer for my peace of mind. Plus the women love them too. My new Tinder pickup line has been “Want to try a sex vape?”.</p>",
-            "icon": "shopify://shop_images/testimonial-face-4.jpg",
-            "author": "Brian",
-            "job": "Vapordisiac",
-            "star": "5"
-          }
-        },
-        "content_JbzDrp": {
-          "type": "content",
-          "settings": {
-            "quote": "<p>I am a little bit ashamed to admit that I used to finish way way too quick and it always left both of us... frustrated. After trying the stamina gummies, I had control and was able to go long. Really, I could actually enjoy the moment instead of worrying about it ending too soon!! I was very skeptical at first but this is really a game changer. </p>",
-            "icon": "shopify://shop_images/download_1.jpg",
-            "author": "Eudin",
-            "job": "Stamina Gummies for Men",
-            "star": "5"
-          }
         }
       },
       "block_order": [
         "content_wMqbMc",
+        "image_only_BeLFN9",
         "content_BkkKNX",
-        "content_ei8jHT",
-        "content_AcjGBC",
-        "content_hyYyHN",
-        "content_JbzDrp"
+        "image_only_XXxCxq",
+        "content_ei8jHT"
       ],
       "settings": {
         "enable": true,
