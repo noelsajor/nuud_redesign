@@ -79,8 +79,8 @@
         "enable_enquiry": false,
         "enable_sticky_cart": false,
         "show_adv_product": true,
-        "choose_label": "Choose mood",
-        "collection": "for-both"
+        "choose_label": "Bundle This",
+        "collection": "all-products"
       }
     },
     "home_specification_block_zQq98J": {
