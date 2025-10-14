@@ -609,12 +609,15 @@
       "type": "product-recommendations",
       "name": "Product recommendations",
       "settings": {
+        "mode": "recommendations",
+        "collection": "for-both",
+        "products_limit": 4,
+        "heading": "Recommended products",
+        "heading_position": "text-center",
         "full": false,
         "spacing_both_ends": false,
         "padding": "160,240",
-        "margin": "0,0",
-        "heading": "Recommended products",
-        "heading_position": "text-center"
+        "margin": "0,0"
       }
     },
     "spacer_wave_BqhNbL": {
