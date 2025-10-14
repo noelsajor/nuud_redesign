@@ -467,6 +467,7 @@
         },
         "content_7wPJbN": {
           "type": "content",
+          "disabled": true,
           "settings": {
             "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
             "icon": "shopify://shop_images/images_2.jpg",
@@ -487,6 +488,7 @@
         },
         "content_geJp9L": {
           "type": "content",
+          "disabled": true,
           "settings": {
             "quote": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>",
             "author": "Author Name",
