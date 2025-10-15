@@ -98,13 +98,13 @@
           "type": "feature",
           "settings": {
             "icon_svg": "",
-            "icon_image": "shopify://shop_images/free_returns.svg",
+            "icon_image": "shopify://shop_images/FreeReturns.svg",
             "icon_label": "Package icon representing free returns",
             "icon_color": "#881d3e",
             "feature_text": "FREE RETURNS",
-            "text_color": "#881d3e",
-            "text_size": 18,
-            "text_weight": "600",
+            "text_color": "#2d0288",
+            "text_size": 24,
+            "text_weight": "700",
             "feature_subtext": "",
             "subtext_color": "#666666",
             "subtext_size": 14
