@@ -128,7 +128,7 @@
         "blog_show_button": true,
         "blog_show_description": true,
         "block_banner_style": "grid-style",
-        "post_limit": 6,
+        "post_limit": 50,
         "grid": "3",
         "gallery_spacing": 80,
         "text_position": "text-center",
@@ -154,6 +154,10 @@
         "enable_filter": true,
         "filter_all_label": "All",
         "filter_tags": "For him, For her, For couples, Auto-exploration",
+        "enable_pagination": true,
+        "pagination_step": 4,
+        "pagination_more_label": "Show more",
+        "pagination_reset_label": "Show less",
         "custom_class_name": ""
       }
     },
