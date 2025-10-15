@@ -124,10 +124,12 @@
           {% endif %}
 
           {% unless blog.articles_count == 0 %}
-            <div class="dt-sc-blog-section isotope-grid">
+            <div class="dt-sc-blog-section isotope-grid" id="blog-grid-{{ section.id }}">
               {% for article in blogs[section.settings.blog].articles limit: section.settings.post_limit %}
                 <div class="isotope-selector dt-sc-blog-item {{ section.settings.text_position }} {{ item_style }} {{ section.settings.vertical_position }}{% for t in article.tags %} tag-{{ t | handle }}{% endfor %}"
-                     {% if section.settings.block_banner_style == 'overlay-style' %}style="min-height:{{ section.settings.overlay_style_height }}px"{% endif %}>
+                     {% if section.settings.block_banner_style == 'overlay-style' %}style="min-height:{{ section.settings.overlay_style_height }}px"{% endif %}
+                     data-item-index="{{ forloop.index }}"
+                >
                   <div class="dt-sc-blog-image {{ overlay_class }}">
                     {% if article.image %}
                       <div class="article__grid-image-wrapper wow animated fadeInDown">
@@ -189,6 +191,18 @@
                 </div>
               {% endfor %}
             </div>
+
+            {%- comment -%} Pagination controls (optional) {%- endcomment -%}
+            {% if section.settings.enable_pagination and section.settings.post_limit > section.settings.pagination_step %}
+              <div class="blog-pagination-controls" id="blog-pagination-{{ section.id }}">
+                <button type="button" class="dt-sc-btn ctm-btn-padding" id="blog-load-more-{{ section.id }}">
+                  {{ section.settings.pagination_more_label | default: 'Show more' }}
+                </button>
+                <button type="button" class="dt-sc-btn ctm-btn-padding" id="blog-load-reset-{{ section.id }}" style="display:none">
+                  {{ section.settings.pagination_reset_label | default: 'Show less' }}
+                </button>
+              </div>
+            {% endif %}
           {% endunless %}
         </div>
       </div>
@@ -200,7 +214,7 @@
 <script type="text/javascript">
   (function($){
     $(function(){
-      var $grid = $('.isotope-grid');
+      var $grid = $('#blog-grid-{{ section.id }}');
 
       $grid.imagesLoaded(function(){
         $grid.isotope({
@@ -215,7 +229,6 @@
       var $filterBar = $('#blog-filter-{{ section.id }}');
 
       function paintActiveImportant($btn){
-        // Clear inlines on siblings
         $btn.siblings('.filter-btn').each(function(){
           this.style.removeProperty('background-color');
           this.style.removeProperty('color');
@@ -228,7 +241,6 @@
         var bg = cs.getPropertyValue('--filter-active-bg').trim() || '';
         var fg = cs.getPropertyValue('--filter-active-fg').trim() || '';
 
-        // ARIA + class sync
         $btn
           .addClass('is-active')
           .attr('aria-pressed','true')
@@ -236,7 +248,6 @@
           .removeClass('is-active')
           .attr('aria-pressed','false');
 
-        // Inline-important paints (wins over any theme CSS)
         if ($btn[0]){
           $btn[0].style.setProperty('background-color', bg, 'important');
           $btn[0].style.setProperty('color', fg, 'important');
@@ -246,38 +257,88 @@
 
       function activateFilter($btn){
         var filterValue = $btn.attr('data-filter') || '*';
-        $grid.isotope({ filter: filterValue });
+        $grid.isotope({ filter: filterValue }).isotope('layout');
         paintActiveImportant($btn);
       }
 
       if ($filterBar.length){
-        // Mouse/touch
         $filterBar.on('click', 'button.filter-btn', function(e){
           e.preventDefault();
           activateFilter($(this));
         });
-        // Keyboard support
         $filterBar.on('keydown', 'button.filter-btn', function(e){
           if (e.key === 'Enter' || e.key === ' '){
             e.preventDefault();
             activateFilter($(this));
           }
         });
-        // Paint initial
         var $initial = $filterBar.find('button.filter-btn.is-active,[aria-pressed="true"]').first();
         if ($initial.length) paintActiveImportant($initial);
       }
 
+      // ===== Pagination (show more) =====
+      {% if section.settings.enable_pagination and section.settings.post_limit > section.settings.pagination_step %}
+      var step = {{ section.settings.pagination_step | default: 4 | plus: 0 }};
+      var $items = $grid.find('.isotope-selector');
+      var $moreBtn = $('#blog-load-more-{{ section.id }}');
+      var $resetBtn = $('#blog-load-reset-{{ section.id }}');
+
+      function applyVisibility(visibleCount){
+        $items.each(function(i, el){
+          var shouldShow = (i < visibleCount);
+          el.classList.toggle('is-hidden', !shouldShow);
+        });
+        $grid.isotope('layout');
+      }
+
+      // Initial state
+      var visible = Math.min(step, $items.length);
+      applyVisibility(visible);
+
+      if (visible >= $items.length){
+        $moreBtn.hide();
+      }
+
+      $moreBtn.on('click', function(e){
+        e.preventDefault();
+        visible = Math.min(visible + step, $items.length);
+        applyVisibility(visible);
+        if (visible >= $items.length){
+          $moreBtn.hide();
+        }
+        $resetBtn.show();
+      });
+
+      $resetBtn.on('click', function(e){
+        e.preventDefault();
+        visible = Math.min(step, $items.length);
+        applyVisibility(visible);
+        $resetBtn.hide();
+        if ($items.length > step){ $moreBtn.show(); }
+      });
+
+      // Re-layout on window changes
       var resizeTimer;
       $(window).on('resize orientationchange', function(){
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function(){ $grid.isotope('layout'); }, 150);
       });
+      {% else %}
+      // Re-layout on window changes (no pagination path)
+      var resizeTimer;
+      $(window).on('resize orientationchange', function(){
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function(){ $grid.isotope('layout'); }, 150);
+      });
+      {% endif %}
     });
   })(jQuery);
 </script>
 
 <style>
+  /* Hide class for pagination */
+  #shopify-section-{{section.id}} .is-hidden{ display:none !important; }
+
   /* Single container that controls width + padding */
   #shopify-section-{{section.id}} .max-container{
     max-width:1280px;
@@ -317,7 +378,7 @@
     transition: background-color .2s ease, color .2s ease, opacity .2s ease, border-color .2s ease;
   }
 
-  /* Fallback/base active look (JS will enforce inline-important) */
+  /* Fallback/base active look (JS enforces inline-important) */
   #shopify-section-{{section.id}} .blog-filter .filter-btn.is-active,
   #shopify-section-{{section.id}} .blog-filter .filter-btn[aria-pressed="true"]{
     background-color: var(--filter-active-bg);
@@ -325,7 +386,6 @@
     border-color: transparent;
   }
 
-  /* Visible focus for keyboard users */
   #shopify-section-{{section.id}} .blog-filter .filter-btn:focus-visible{
     outline: 2px solid currentColor;
     outline-offset: 2px;
@@ -419,7 +479,12 @@
     background-color: {{section.settings.blog_button_bg_hover_color_overlay}}; color: {{section.settings.blog_button_hover_text_color_overlay }};
   }
 
-  /* Optional demo padding tweak you had */
+  /* Pagination controls */
+  #shopify-section-{{section.id}} .blog-pagination-controls{
+    display:flex; gap:12px; justify-content:center; margin-top:16px;
+  }
+
+  /* Demo padding tweak preserved */
   #shopify-section-template--25476761125173__portfolio_2_JwTwMq .max-container { padding: 32px 16px; }
   .dt-sc-main-heading { text-align: center; }
 
@@ -508,7 +573,7 @@
       ]
     },
 
-    { "type": "range", "id": "post_limit", "label": "Total Number of Posts", "min": 1, "max": 6, "step": 1, "default": 2 },
+    { "type": "range", "id": "post_limit", "label": "Total Number of Posts", "min": 1, "max": 50, "step": 1, "default": 8 },
 
     { "type": "select", "id": "grid", "label": "Item per row", "info": "Select '1' for List Style", "default": "2",
       "options": [
@@ -575,6 +640,12 @@
     { "type": "checkbox", "id": "enable_filter", "label": "Enable filter bar", "default": true },
     { "type": "text", "id": "filter_all_label", "label": "All filter label", "default": "All" },
     { "type": "text", "id": "filter_tags", "label": "Filter tags (comma-separated)", "default": "For him, For her, For couples, Auto-exploration", "info": "Matches article tags (case-insensitive). Example: For him, For her" },
+
+    { "type": "header", "content": "Pagination" },
+    { "type": "checkbox", "id": "enable_pagination", "label": "Enable pagination (Show more)", "default": true },
+    { "type": "range", "id": "pagination_step", "label": "Items per click", "min": 1, "max": 12, "step": 1, "default": 4 },
+    { "type": "text", "id": "pagination_more_label", "label": "'Show more' label", "default": "Show more" },
+    { "type": "text", "id": "pagination_reset_label", "label": "'Show less' label", "default": "Show less" },
 
     { "type": "header", "content": "Custom class" },
     { "type": "text", "id": "custom_class_name", "label": "Add your custom class name here" }
