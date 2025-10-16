@@ -723,7 +723,7 @@
 
 </style>
 
-<!-- ========= GALLERY + DOTS + SUBTOTAL LOGIC + FAQ OPEN/CLOSE ALL + CLOSABLE PANELS ========= -->
+<!-- ========= GALLERY + DOTS + SUBTOTAL LOGIC + FAQ OPEN/CLOSE ALL + INDEPENDENT PANELS ========= -->
 <script>
 (function(){
   var SECTION_ID = "{{ section.id }}";
@@ -750,7 +750,7 @@
 
       constructor(){
         super();
-        this._shadow = this.attachShadow({ mode: 'closed' }); // isolate from apps
+        this._shadow = this.attachShadow({ mode: 'closed' });
       }
 
       connectedCallback(){ this.render(); }
@@ -883,7 +883,45 @@
     });
   }
 
-  /* ====== NEW: Allow closing the same <details> by clicking its <summary> ====== */
+  /* ====== NEW: Make each accordion item toggle independently ====== */
+  function makeAccordionsIndependent(sectionEl){
+    if(!sectionEl) return;
+    var tabs = sectionEl.querySelectorAll('.product-tab');
+
+    tabs.forEach(function(tab){
+      if(tab.__indepBound) return;
+      tab.__indepBound = true;
+
+      function toggleOnlyThis(targetEvent){
+        var sum = targetEvent.target && targetEvent.target.closest && targetEvent.target.closest('summary');
+        if(!sum || !tab.contains(sum)) return false;
+        var details = sum.closest('details');
+        if(!details) return false;
+
+        // Prevent any "single-open" logic from other scripts
+        targetEvent.preventDefault();
+        if (typeof targetEvent.stopImmediatePropagation === 'function') targetEvent.stopImmediatePropagation();
+        targetEvent.stopPropagation();
+
+        details.open = !details.open; // toggle only this one
+        return true;
+      }
+
+      // Run in capture to beat other handlers that might close siblings
+      tab.addEventListener('click', function(e){
+        toggleOnlyThis(e);
+      }, true);
+
+      // Keyboard accessibility (Enter/Space)
+      tab.addEventListener('keydown', function(e){
+        var isToggleKey = (e.key === 'Enter') || (e.key === ' ') || (e.code === 'Space');
+        if(!isToggleKey) return;
+        toggleOnlyThis(e);
+      }, true);
+    });
+  }
+
+  /* (Optional from earlier) Allow closing an already-open item by clicking it */
   function enableClosableAccordions(sectionEl){
     if(!sectionEl) return;
     var tabs = sectionEl.querySelectorAll('.product-tab');
@@ -907,13 +945,11 @@
         return false;
       }
 
-      // Capture phase to beat any other handlers that might re-open
       tab.addEventListener('click', function(e){}, true);
       tab.addEventListener('click', function(e){
         closeIfAlreadyOpen(e);
       });
 
-      // Keyboard support (Enter/Space)
       tab.addEventListener('keydown', function(e){
         var isToggleKey = (e.key === 'Enter') || (e.key === ' ') || (e.code === 'Space');
         if(!isToggleKey) return;
@@ -943,7 +979,7 @@
       if(!subtotalEl) return;
       var qty = parseFloat(qtyInput && qtyInput.value ? qtyInput.value : "1") || 1;
       var subtotalCents = Math.max(1, qty) * getPriceCents();
-      subtotalEl.setAttribute('data-cents', String(subtotalCents)); // triggers re-render
+      subtotalEl.setAttribute('data-cents', String(subtotalCents));
     }
 
     if(qtyWrap && qtyInput){
@@ -1119,7 +1155,7 @@
           priceSpan.setAttribute('data-price-cents', v.price);
           priceSpan.textContent = formatMoney(v.price);
           if (subtotalEl){
-            subtotalEl.setAttribute('data-cents', v.price); // base 1× qty
+            subtotalEl.setAttribute('data-cents', v.price);
             setSubtotal();
           }
         }
@@ -1153,8 +1189,13 @@
     // >>> Connect swatch-group clicks to quantity/subtotal
     wireQuantitySwatches(sectionEl, setSubtotal);
 
-    // >>> Bind FAQ toggles + enable closing same panel
+    // >>> FAQ Open/Close all (if you added the button)
     bindFaqToggles(sectionEl);
+
+    // >>> Make each accordion independent (key line for your request)
+    makeAccordionsIndependent(sectionEl);
+
+    // (Optional) still allow clicking an open item to close itself (harmless alongside independence)
     enableClosableAccordions(sectionEl);
   }
 
