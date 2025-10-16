@@ -296,10 +296,10 @@
                       {% endcase %}
                     {% endfor %}
 
-                    <!-- ====== Quantity + Total INLINE ROW (live subtotal) ====== -->
-                    {% if section.settings.show_quantity_selector %}
-                      <div class="product-attributes dt-sc-qty dt-inline-row" data-qty>
-                        <div class="qty-controls">
+                    <!-- ====== Quantity + Total in SAME WRAPPER (keeps original classes) ====== -->
+                    <div class="qty-total-row dt-inline-row" data-qty>
+                      {% if section.settings.show_quantity_selector %}
+                        <div class="product-attributes dt-sc-qty">
                           <p class="product-label">{{ 'products.product.quantity' | t }}</p>
                           <div class="quantity product-form__item product-form__item--quantity product-item-caption-qty">
                             <button class="quantity-btn quantity-btn-minus btn-number btn-number-{{ section.id }}" type="button" data-type="minus" aria-label="Decrease quantity">&#45;</button>
@@ -307,22 +307,9 @@
                             <button class="quantity-btn quantity-btn-plus btn-number btn-number-{{ section.id }}" type="button" data-type="plus" aria-label="Increase quantity">&#43;</button>
                           </div>
                         </div>
+                      {% endif %}
 
-                        <div class="sub-total-inline">
-                          <p class="product-label">{{ 'products.product.total' | t }}</p>
-                          <strong
-                            data-subtotal
-                            data-cents="{{ current_variant.price }}"
-                            data-currency="ignore"
-                            data-glc="ignore"
-                            class="no-glc"
-                          >
-                            {{ current_variant.price | money }}
-                          </strong>
-                        </div>
-                      </div>
-                    {% else %}
-                      <div class="product-attributes sub-total-inline-alone">
+                      <div class="sub-total">
                         <p class="product-label">{{ 'products.product.total' | t }}</p>
                         <strong
                           data-subtotal
@@ -334,8 +321,8 @@
                           {{ current_variant.price | money }}
                         </strong>
                       </div>
-                    {% endif %}
-                    <!-- ========================================================= -->
+                    </div>
+                    <!-- ================================================================ -->
 
                     {% if section.settings.show_product_quantity %}
                       <div id="inventory-product" class="product-attributes inventory-product-{{section.id }} attributes-hidden">
@@ -627,37 +614,32 @@
     opacity: 1;
   }
 
-  /* ====== NEW: Horizontal layout for Quantity + Total ====== */
-  .dt-inline-row{
+  /* ====== Horizontal layout for Quantity + Total (shared wrapper) ====== */
+  .qty-total-row.dt-inline-row{
     display: flex;
     align-items: center;
     gap: 16px;
     justify-content: space-between;
     flex-wrap: wrap;
   }
-  .dt-inline-row .qty-controls{
+  .qty-total-row .product-attributes.dt-sc-qty{
     display: flex;
     align-items: center;
     gap: 12px;
+    margin: 0;
   }
-  .dt-inline-row .quantity{
+  .qty-total-row .product-attributes.dt-sc-qty .quantity{
     display: inline-flex;
     align-items: center;
     gap: 8px;
   }
-  .sub-total-inline{
+  .qty-total-row .sub-total{
     margin-left: auto;
     display: inline-flex;
     align-items: center;
     gap: 8px;
   }
-  .sub-total-inline .product-label,
-  .dt-inline-row .product-label{ margin: 0; }
-  .sub-total-inline-alone{
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
+  .qty-total-row .product-label{ margin: 0; }
   /* ====== END new styles ====== */
 </style>
 
@@ -695,7 +677,6 @@
 
   /* --- Desktop-only overrides (≥992px) --- */
   @media (min-width: 992px){
-    /* 1) Hide the mobile/tablet scroller + dots on desktop */
     #shopify-section-{{ section.id }} .media-scroller,
     #shopify-section-{{ section.id }} .media-dots{
       display: none !important;
@@ -737,11 +718,11 @@
     #shopify-section-{{ section.id }} .media-scroller{
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;           /* Firefox */
-      -ms-overflow-style: none;        /* IE/Edge legacy */
+      scrollbar-width: none;
+      -ms-overflow-style: none;
     }
     #shopify-section-{{ section.id }} .media-scroller::-webkit-scrollbar{
-      display: none;                   /* Chrome/Safari/Opera */
+      display: none;
       height: 0;
       background: transparent;
     }
@@ -770,10 +751,10 @@
   function initSection(sectionEl){
     if(!sectionEl) return;
 
-    // Quantity + Subtotal (scoped to the combined row first, else fallback)
-    var qtyWrap    = qs(sectionEl, "[data-qty]");
-    var qtyInput   = qtyWrap ? qs(qtyWrap, ".quantity-btn-number") : null;
-    var subtotalEl = qtyWrap ? qs(qtyWrap, "[data-subtotal]") : qs(sectionEl, "[data-subtotal]");
+    // Scope to the shared wrapper that contains BOTH quantity and subtotal
+    var qtyWrap    = qs(sectionEl, ".qty-total-row[data-qty]");
+    var qtyInput   = qtyWrap ? qs(qtyWrap, ".product-attributes.dt-sc-qty .quantity-btn-number") : null;
+    var subtotalEl = qtyWrap ? qs(qtyWrap, ".sub-total [data-subtotal]") : qs(sectionEl, "[data-subtotal]");
     var priceSpan  = qs(sectionEl, ".product-price-current .money");
 
     function getPriceCents(){
@@ -790,8 +771,8 @@
       var qty = parseFloat(qtyInput && qtyInput.value ? qtyInput.value : "1") || 1;
       qty = Math.max(1, qty);
       var subtotalCents = qty * getPriceCents();
-      subtotalEl.setAttribute('data-cents', String(subtotalCents));   // keep raw value here
-      subtotalEl.textContent = formatMoney(subtotalCents);            // textContent avoids injected spans
+      subtotalEl.setAttribute('data-cents', String(subtotalCents));
+      subtotalEl.textContent = formatMoney(subtotalCents);
     }
 
     if(qtyWrap && qtyInput){
@@ -890,14 +871,12 @@
         var sizes  = btn.getAttribute('data-sizes') || '(min-width: 992px) 700px, 100vw';
         var ar     = parseFloat(btn.getAttribute('data-ar') || '1');
 
-        // Reserve aspect ratio to prevent collapse/reflow
         if (ar && isFinite(ar) && ar > 0) {
           var ratioText = '1 / ' + (1/ar).toFixed(6);
           featured.style.setProperty('--stage-ar', ratioText);
           featured.style.aspectRatio = ratioText;
         }
 
-        // Create next image off-DOM
         var nextImg = new Image();
         nextImg.className = 'product-media__img is-entering';
         nextImg.decoding = 'async';
@@ -923,7 +902,6 @@
         return;
       }
 
-      // Non-image types: minimal placeholder behavior
       featured.innerHTML = '';
       if (type === 'video' || type === 'external_video') {
         var badge = document.createElement('div');
@@ -946,7 +924,6 @@
         var id = btn.getAttribute("data-media-id");
         swapDesktopTo(id);
 
-        // Also sync mobile scroller position so both views stay aligned
         if(scroller){
           var slide = scroller.querySelector('.media-slide[data-media-id="'+id+'"]');
           if(slide){ slide.scrollIntoView({behavior:'smooth', inline:'center'}); }
@@ -972,14 +949,13 @@
           priceSpan.setAttribute('data-price-cents', v.price);
           priceSpan.textContent = formatMoney(v.price);
           if (subtotalEl){
-            subtotalEl.setAttribute('data-cents', v.price); // keep raw cents in subtotal element
-            setSubtotal();                                  // recompute with current qty
+            subtotalEl.setAttribute('data-cents', v.price);
+            setSubtotal();
           }
         }
       } catch(err){}
     });
 
-    // Build dots + observers after DOM ready
     buildDots();
     watchSlides();
   }
@@ -987,7 +963,6 @@
   var sectionRoot = document.getElementById('shopify-section-{{ section.id }}') || document;
   initSection(sectionRoot);
 
-  // Re-init inside Theme Editor
   document.addEventListener('shopify:section:load', function(e){
     if(e && e.detail && e.detail.sectionId === "{{ section.id }}"){
       var el = document.getElementById('shopify-section-{{ section.id }}');
@@ -1001,7 +976,6 @@
     }
   });
 
-  // Set initial aspect ratio from the initial active thumb (once)
   (function initStageAR(){
     try{
       var active = document.querySelector('#shopify-section-{{ section.id }} .product-media__thumb.is-active');
