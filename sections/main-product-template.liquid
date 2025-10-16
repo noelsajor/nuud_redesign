@@ -252,37 +252,39 @@
                       {% endunless %}
                     {% endif %}
 
-                    <!-- ================= SUBTOTAL (Shadow-DOM isolated) ================= -->
-                    <div class="sub-total">
-                      <p class="product-label">{{ 'products.product.total' | t }}</p>
-                      <subtotal-display
-                        id="Subtotal-{{ section.id }}"
-                        data-subtotal
-                        data-cents="{{ current_variant.price }}"
-                        class="no-glc"
-                        data-glc="ignore"
-                        data-currency="ignore"
-                        style="display:inline-block"
-                        aria-live="polite"
-                      ></subtotal-display>
+                    <!-- ====== Quantity + Total in the same row ====== -->
+                    <div class="qty-total-row">
+                      {% if section.settings.show_quantity_selector %}
+                        <div class="product-attributes dt-sc-qty">
+                          <p class="product-label">{{ 'products.product.quantity' | t }}</p>
+                          <div class="quantity product-form__item product-form__item--quantity product-item-caption-qty" data-qty>
+                            <button class="quantity-btn quantity-btn-minus btn-number btn-number-{{ section.id }}" type="button" data-type="minus" aria-label="Decrease quantity">&#45;</button>
+                            <input type="text" id="Quantity-{{ section.id }}" name="quantity" value="1" class="quantity-btn-number form-control input-number input-number-{{ section.id }} product-form__input" inputmode="numeric" pattern="[0-9]*" aria-label="Quantity">
+                            <button class="quantity-btn quantity-btn-plus btn-number btn-number-{{ section.id }}" type="button" data-type="plus" aria-label="Increase quantity">&#43;</button>
+                          </div>
+                        </div>
+                      {% endif %}
+
+                      <div class="sub-total">
+                        <p class="product-label">{{ 'products.product.total' | t }}</p>
+                        <subtotal-display
+                          id="Subtotal-{{ section.id }}"
+                          data-subtotal
+                          data-cents="{{ current_variant.price }}"
+                          class="no-glc"
+                          data-glc="ignore"
+                          data-currency="ignore"
+                          style="display:inline-block"
+                          aria-live="polite"
+                        ></subtotal-display>
+                      </div>
                     </div>
-                    <!-- ================================================================ -->
+                    <!-- ============================================== -->
 
                     {% if section.settings.show_product_quantity %}
                       <div id="inventory-product" class="product-attributes inventory-product-{{section.id }} attributes-hidden">
                         <p class="product-label">{{ 'products.product.availability' | t }}</p>
                         <span id="variant-inventory" class="variant-inventory-{{section.id }}"></span>
-                      </div>
-                    {% endif %}
-
-                    {% if section.settings.show_quantity_selector %}
-                      <div class="product-attributes dt-sc-qty">
-                        <p class="product-label">{{ 'products.product.quantity' | t }}</p>
-                        <div class="quantity product-form__item product-form__item--quantity product-item-caption-qty" data-qty>
-                          <button class="quantity-btn quantity-btn-minus btn-number btn-number-{{ section.id }}" type="button" data-type="minus" aria-label="Decrease quantity">&#45;</button>
-                          <input type="text" id="Quantity-{{ section.id }}" name="quantity" value="1" class="quantity-btn-number form-control input-number input-number-{{ section.id }} product-form__input" inputmode="numeric" pattern="[0-9]*" aria-label="Quantity">
-                          <button class="quantity-btn quantity-btn-plus btn-number btn-number-{{ section.id }}" type="button" data-type="plus" aria-label="Increase quantity">&#43;</button>
-                        </div>
                       </div>
                     {% endif %}
 
@@ -572,6 +574,29 @@
   /* === Kill switch ONLY inside subtotal (do not affect other prices) === */
   .sub-total .glc-money,
   .sub-total [class*="money"] { all: unset; display: contents; }
+
+  /* ===== Quantity + Total row ===== */
+  .qty-total-row{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    flex-wrap:wrap;     /* wrap gracefully on narrow screens */
+    margin-top:8px;
+  }
+  .qty-total-row .sub-total{
+    margin-left:auto;   /* pushes Total to the right on wide screens */
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+  }
+  .qty-total-row .product-label{
+    margin:0 8px 0 0;
+    line-height:1.2;
+  }
+  @media (max-width: 480px){
+    .qty-total-row{ gap:12px; }
+    .qty-total-row .sub-total{ margin-left:0; } /* allow wrap */
+  }
 </style>
 
 {%- comment -%} Mobile full-width container + Accordion line style (overrides) {%- endcomment -%}
@@ -692,10 +717,7 @@
         this._shadow = this.attachShadow({ mode: 'closed' }); // isolate from apps
       }
 
-      connectedCallback(){
-        this.render();
-      }
-
+      connectedCallback(){ this.render(); }
       attributeChangedCallback(){ this.render(); }
 
       render(){
@@ -1016,7 +1038,7 @@
       ensureSubtotal.observe(subWrap, { childList:true, subtree:false });
     }
 
-    // >>> NEW: connect swatch-group clicks to quantity/subtotal
+    // >>> Connect swatch-group clicks to quantity/subtotal
     wireQuantitySwatches(sectionEl, setSubtotal);
   }
 
