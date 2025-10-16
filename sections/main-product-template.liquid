@@ -258,37 +258,89 @@
                       {% endunless %}
                     {% endif %}
 
-                    <!-- ================= SUBTOTAL (now with ID + ignore hooks) ================= -->
-                    <div class="sub-total">
-                      <p class="product-label">{{ 'products.product.total' | t }}</p>
-                      <strong
-                        id="Subtotal-{{ section.id }}"
-                        data-subtotal
-                        data-cents="{{ current_variant.price }}"
-                        data-currency="ignore"
-                        data-glc="ignore"
-                        class="no-glc"
-                      >
-                        {{ current_variant.price | money }}
-                      </strong>
-                    </div>
-                    <!-- ===================================================================== -->
+                    {%- for block in section.blocks -%}
+                      {%- case block.type -%}
+                        {%- when 'size_chart' -%}
+                          {% if product.options contains 'Size' %}
+                            <div class="product-attributes">
+                              <a class="trigger-pop-up">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                                  <path d="M95.3,26.3L73.7,4.7c-1.2-1.2-3.1-1.2-4.3,0l-8.6,8.6l15.1,15.1l-4.3,4.3L56.5,17.7L50,24.1l10.8,10.8l-4.3,4.3L45.7,28.4
+                                           l-6.5,6.5L54.3,50L50,54.3L34.9,39.2l-6.5,6.5l10.8,10.8l-4.3,4.3L24.1,50l-6.5,6.5l15.1,15.1l-4.3,4.3L13.3,60.8l-8.6,8.6
+                                           c-1.2,1.2-1.2,3.1,0,4.3l21.6,21.6c1.2,1.2,3.1,1.2,4.3,0l64.7-64.7C96.5,29.4,96.5,27.5,95.3,26.3z"/>
+                                </svg>
+                                {{ 'products.product.size_chart' | t }}
+                              </a>
+                            </div>
+                          {% endif %}
+
+                        {%- when 'vendor' -%}
+                          <div class="product-attributes">
+                            <p class="product-label">{{ 'products.product.vendor' | t }}</p>
+                            {{ product.vendor | link_to_vendor }}
+                          </div>
+
+                        {%- when 'sku' -%}
+                          <div id="sku-table" class="product-attributes sku-table-{{section.id }} attributes-hidden">
+                            <p class="product-label">{{ 'products.product.sku' | t }}</p>
+                            <span id="variant-sku" class="variant-sku-{{section.id }}"></span>
+                          </div>
+
+                        {%- when 'type' -%}
+                          <div class="product-attributes">
+                            <p class="product-label">{{ 'products.product.type' | t }}</p> {{ product.type }}
+                          </div>
+
+                        {%- when 'fbt' -%}
+                          {% render 'frequently-bought-together' %}
+                      {% endcase %}
+                    {% endfor %}
+
+                    <!-- ====== Quantity + Total INLINE ROW (live subtotal) ====== -->
+                    {% if section.settings.show_quantity_selector %}
+                      <div class="product-attributes dt-sc-qty dt-inline-row" data-qty>
+                        <div class="qty-controls">
+                          <p class="product-label">{{ 'products.product.quantity' | t }}</p>
+                          <div class="quantity product-form__item product-form__item--quantity product-item-caption-qty">
+                            <button class="quantity-btn quantity-btn-minus btn-number btn-number-{{ section.id }}" type="button" data-type="minus" aria-label="Decrease quantity">&#45;</button>
+                            <input type="text" id="Quantity-{{ section.id }}" name="quantity" value="1" class="quantity-btn-number form-control input-number input-number-{{ section.id }} product-form__input" inputmode="numeric" pattern="[0-9]*" aria-label="Quantity">
+                            <button class="quantity-btn quantity-btn-plus btn-number btn-number-{{ section.id }}" type="button" data-type="plus" aria-label="Increase quantity">&#43;</button>
+                          </div>
+                        </div>
+
+                        <div class="sub-total-inline">
+                          <p class="product-label">{{ 'products.product.total' | t }}</p>
+                          <strong
+                            data-subtotal
+                            data-cents="{{ current_variant.price }}"
+                            data-currency="ignore"
+                            data-glc="ignore"
+                            class="no-glc"
+                          >
+                            {{ current_variant.price | money }}
+                          </strong>
+                        </div>
+                      </div>
+                    {% else %}
+                      <div class="product-attributes sub-total-inline-alone">
+                        <p class="product-label">{{ 'products.product.total' | t }}</p>
+                        <strong
+                          data-subtotal
+                          data-cents="{{ current_variant.price }}"
+                          data-currency="ignore"
+                          data-glc="ignore"
+                          class="no-glc"
+                        >
+                          {{ current_variant.price | money }}
+                        </strong>
+                      </div>
+                    {% endif %}
+                    <!-- ========================================================= -->
 
                     {% if section.settings.show_product_quantity %}
                       <div id="inventory-product" class="product-attributes inventory-product-{{section.id }} attributes-hidden">
                         <p class="product-label">{{ 'products.product.availability' | t }}</p>
                         <span id="variant-inventory" class="variant-inventory-{{section.id }}"></span>
-                      </div>
-                    {% endif %}
-
-                    {% if section.settings.show_quantity_selector %}
-                      <div class="product-attributes dt-sc-qty">
-                        <p class="product-label">{{ 'products.product.quantity' | t }}</p>
-                        <div class="quantity product-form__item product-form__item--quantity product-item-caption-qty" data-qty>
-                          <button class="quantity-btn quantity-btn-minus btn-number btn-number-{{ section.id }}" type="button" data-type="minus" aria-label="Decrease quantity">&#45;</button>
-                          <input type="text" id="Quantity-{{ section.id }}" name="quantity" value="1" class="quantity-btn-number form-control input-number input-number-{{ section.id }} product-form__input" inputmode="numeric" pattern="[0-9]*" aria-label="Quantity">
-                          <button class="quantity-btn quantity-btn-plus btn-number btn-number-{{ section.id }}" type="button" data-type="plus" aria-label="Increase quantity">&#43;</button>
-                        </div>
                       </div>
                     {% endif %}
 
@@ -574,6 +626,39 @@
   #shopify-section-{{ section.id }} .desktop-stage .product-media__img.is-entering.is-ready {
     opacity: 1;
   }
+
+  /* ====== NEW: Horizontal layout for Quantity + Total ====== */
+  .dt-inline-row{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .dt-inline-row .qty-controls{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .dt-inline-row .quantity{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sub-total-inline{
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sub-total-inline .product-label,
+  .dt-inline-row .product-label{ margin: 0; }
+  .sub-total-inline-alone{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  /* ====== END new styles ====== */
 </style>
 
 {%- comment -%} Mobile full-width container + Accordion line style (overrides) {%- endcomment -%}
@@ -631,7 +716,7 @@
     #shopify-section-{{ section.id }} .desktop-stage{
       display: block !important;
       grid-area: stage;
-      order: 1; /* safety if order is used elsewhere */
+      order: 1;
     }
     #shopify-section-{{ section.id }} .desktop-thumbs{
       display: grid !important;
@@ -685,11 +770,11 @@
   function initSection(sectionEl){
     if(!sectionEl) return;
 
-    // Quantity + Subtotal
-    var qtyWrap = qs(sectionEl, "[data-qty]");
-    var qtyInput = qs(sectionEl, ".quantity-btn-number");
-    var subtotalEl = qs(sectionEl, "[data-subtotal]");
-    var priceSpan = qs(sectionEl, ".product-price-current .money");
+    // Quantity + Subtotal (scoped to the combined row first, else fallback)
+    var qtyWrap    = qs(sectionEl, "[data-qty]");
+    var qtyInput   = qtyWrap ? qs(qtyWrap, ".quantity-btn-number") : null;
+    var subtotalEl = qtyWrap ? qs(qtyWrap, "[data-subtotal]") : qs(sectionEl, "[data-subtotal]");
+    var priceSpan  = qs(sectionEl, ".product-price-current .money");
 
     function getPriceCents(){
       if(!priceSpan) return 0;
@@ -699,45 +784,14 @@
       return Math.round(parseFloat(numeric || "0") * 100);
     }
 
-    // --- Subtotal sanitizer: remove any injected HTML wrappers (e.g., <span class="glc-money">)
-    function sanitizeSubtotal(forceValueCents){
-      if(!subtotalEl) return;
-      var centsAttr = typeof forceValueCents === 'number'
-        ? forceValueCents
-        : parseInt(subtotalEl.getAttribute('data-cents') || '0', 10);
-
-      // Always end with plain text — no inner HTML
-      subtotalEl.innerHTML = '';
-      subtotalEl.appendChild(document.createTextNode(formatMoney(isNaN(centsAttr) ? 0 : centsAttr)));
-    }
-
-    // Watch subtotal for any third-party DOM injections and revert instantly
-    (function watchSubtotal(){
-      if(!subtotalEl || !window.MutationObserver) return;
-      try{
-        var suspicious = function(){
-          if (
-            subtotalEl.children.length > 0 ||
-            subtotalEl.querySelector('.glc-money, [data-glc], [data-currency], [class*="money"]')
-          ){
-            var cents = parseInt(subtotalEl.getAttribute('data-cents') || '0', 10) || 0;
-            sanitizeSubtotal(cents);
-          }
-        };
-        var mo = new MutationObserver(function(){ suspicious(); });
-        mo.observe(subtotalEl, { childList: true, subtree: true, attributes: true, characterData: false });
-        // Clean immediately in case the wrapper is already present
-        suspicious();
-      }catch(e){}
-    })();
-
     // --- SUBTOTAL: always write plain text, store raw cents on the element
     function setSubtotal(){
       if(!subtotalEl) return;
       var qty = parseFloat(qtyInput && qtyInput.value ? qtyInput.value : "1") || 1;
-      var subtotalCents = Math.max(1, qty) * getPriceCents();
-      subtotalEl.setAttribute('data-cents', String(subtotalCents)); // keep raw value
-      sanitizeSubtotal(subtotalCents);                              // render sanitized text
+      qty = Math.max(1, qty);
+      var subtotalCents = qty * getPriceCents();
+      subtotalEl.setAttribute('data-cents', String(subtotalCents));   // keep raw value here
+      subtotalEl.textContent = formatMoney(subtotalCents);            // textContent avoids injected spans
     }
 
     if(qtyWrap && qtyInput){
