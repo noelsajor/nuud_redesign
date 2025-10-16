@@ -608,11 +608,11 @@
     display:flex;
     align-items:center;
     gap:16px;
-    flex-wrap:wrap;     /* wrap gracefully on narrow screens */
+    flex-wrap:wrap;
     margin-top:8px;
   }
   .qty-total-row .sub-total{
-    margin-left:auto;   /* pushes Total to the right on wide screens */
+    margin-left:auto;
     display:inline-flex;
     align-items:center;
     gap:8px;
@@ -624,7 +624,7 @@
   }
   @media (max-width: 480px){
     .qty-total-row{ gap:12px; }
-    .qty-total-row .sub-total{ margin-left:0; } /* allow wrap */
+    .qty-total-row .sub-total{ margin-left:0; }
   }
 
   /* --- FAQ controls (Open/Close all) --- */
@@ -669,7 +669,6 @@
 
   /* --- Desktop-only overrides (≥992px) --- */
   @media (min-width: 992px){
-    /* 1) Hide the mobile/tablet scroller + dots on desktop */
     #shopify-section-{{ section.id }} .media-scroller,
     #shopify-section-{{ section.id }} .media-dots{
       display: none !important;
@@ -678,7 +677,6 @@
       overflow: hidden !important;
     }
 
-    /* 2) Place DESKTOP MAIN STAGE first, then DESKTOP THUMBNAILS (vertical stacking) */
     #shopify-section-{{ section.id }} .product-media{
       display: grid;
       grid-template-areas:
@@ -690,7 +688,7 @@
     #shopify-section-{{ section.id }} .desktop-stage{
       display: block !important;
       grid-area: stage;
-      order: 1; /* safety if order is used elsewhere */
+      order: 1;
     }
     #shopify-section-{{ section.id }} .desktop-thumbs{
       display: grid !important;
@@ -711,11 +709,11 @@
     #shopify-section-{{ section.id }} .media-scroller{
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;           /* Firefox */
-      -ms-overflow-style: none;        /* IE/Edge legacy */
+      scrollbar-width: none;
+      -ms-overflow-style: none;
     }
     #shopify-section-{{ section.id }} .media-scroller::-webkit-scrollbar{
-      display: none;                   /* Chrome/Safari/Opera */
+      display: none;
       height: 0;
       background: transparent;
     }
@@ -883,7 +881,7 @@
     });
   }
 
-  /* ====== NEW: Make each accordion item toggle independently ====== */
+  /* ====== Independent accordion behavior (defensive, but may be overridden by theme) ====== */
   function makeAccordionsIndependent(sectionEl){
     if(!sectionEl) return;
     var tabs = sectionEl.querySelectorAll('.product-tab');
@@ -921,7 +919,7 @@
     });
   }
 
-  /* (Optional from earlier) Allow closing an already-open item by clicking it */
+  /* (Optional) still allow clicking an open item to close itself */
   function enableClosableAccordions(sectionEl){
     if(!sectionEl) return;
     var tabs = sectionEl.querySelectorAll('.product-tab');
@@ -1192,10 +1190,10 @@
     // >>> FAQ Open/Close all (if you added the button)
     bindFaqToggles(sectionEl);
 
-    // >>> Make each accordion independent (key line for your request)
+    // >>> Make each accordion independent
     makeAccordionsIndependent(sectionEl);
 
-    // (Optional) still allow clicking an open item to close itself (harmless alongside independence)
+    // (Optional) allow clicking an open item to close itself
     enableClosableAccordions(sectionEl);
   }
 
@@ -1233,6 +1231,94 @@
     } catch(e){}
   })();
 
+})();
+</script>
+
+<!-- ===== ABSOLUTE OVERRIDE: Force independent toggling for both <details> and button-based accordions ===== -->
+<script>
+(function () {
+  function makeAccordionsIndependent(root) {
+    var scope = root || document;
+    var tabs = scope.querySelectorAll('.product-tab');
+    if (!tabs.length) return;
+
+    tabs.forEach(function (tab) {
+      if (tab.__hardIndepBound) return;
+      tab.__hardIndepBound = true;
+
+      // <details>/<summary>
+      tab.addEventListener('click', function (e) {
+        var sum = e.target && e.target.closest && e.target.closest('summary');
+        if (!sum || !tab.contains(sum)) return;
+        var details = sum.closest('details');
+        if (!details) return;
+
+        e.preventDefault();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+        e.stopPropagation();
+
+        details.open = !details.open;
+      }, true);
+
+      tab.addEventListener('keydown', function (e) {
+        var isToggleKey = (e.key === 'Enter') || (e.key === ' ') || (e.code === 'Space');
+        if (!isToggleKey) return;
+        var sum = e.target && e.target.closest && e.target.closest('summary');
+        if (!sum || !tab.contains(sum)) return;
+        var details = sum.closest('details');
+        if (!details) return;
+
+        e.preventDefault();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+        e.stopPropagation();
+
+        details.open = !details.open;
+      }, true);
+
+      // Button-based accordions (.dt-sc-accordion-btn or [data-accordion-trigger])
+      tab.addEventListener('click', function (e) {
+        var btn = e.target && e.target.closest && e.target.closest('.dt-sc-accordion-btn, [data-accordion-trigger]');
+        if (!btn || !tab.contains(btn)) return;
+
+        var panelId = btn.getAttribute('aria-controls');
+        var panel = (panelId && document.getElementById(panelId)) || btn.nextElementSibling;
+        if (!panel) return;
+
+        e.preventDefault();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+        e.stopPropagation();
+
+        var isOpen =
+          btn.getAttribute('aria-expanded') === 'true' ||
+          panel.hidden === false ||
+          panel.style.display === 'block' ||
+          panel.classList.contains('is-open');
+
+        var nextState = !isOpen;
+
+        btn.setAttribute('aria-expanded', String(nextState));
+        try { panel.hidden = !nextState; } catch (err) {}
+        if (panel.style) panel.style.display = nextState ? '' : 'none';
+        panel.classList.toggle('is-open', nextState);
+        btn.classList.toggle('is-active', nextState);
+      }, true);
+    });
+  }
+
+  function init() {
+    var section = document.getElementById('shopify-section-{{ section.id }}') || document;
+    // Run after other scripts so we can override them deterministically
+    setTimeout(function(){ makeAccordionsIndependent(section); }, 0);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  document.addEventListener('shopify:section:load', init);
+  document.addEventListener('shopify:section:select', init);
 })();
 </script>
 
