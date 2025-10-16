@@ -112,10 +112,8 @@
                       {%- case block.type -%}
                         {%- when '@app' -%}
                           {% render block %}
-
                         {%- when 'title' -%}
                           <h3 class="product-title">{{ product.title | escape }}</h3>
-
                         {%- when 'price' -%}
                           <div class="product-price">
                             <p class="product-price-label product-label">{{ "products.product.price" | t }}</p>
@@ -144,25 +142,21 @@
                                   {%- endif -%}
                                 </span>
                               {%- endcapture -%}
-
                               {%- if current_variant.unit_price_measurement -%}
                                 {{ current_variant.unit_price | money }}{{- unit_price_separator -}}{{- unit_price_base_unit -}}
                               {%- endif -%}
                             </div>
                           </div>
-
                         {%- when 'short_text' -%}
                           {%- if product.metafields.my_fields.short_description != blank -%}
                             <div class="product-attributes">
                               {{ product.metafields.my_fields.short_description }}
                             </div>
                           {%- endif -%}
-
                         {%- when 'text' -%}
                           <div class="product-item-caption-desc product-rte-description">
                             <p>{{- block.settings.text -}}</p>
                           </div>
-
                         {%- when 'deal' -%}
                           {% render 'deal-snippet', productID: product.id %}
                       {% endcase %}
@@ -258,69 +252,19 @@
                       {% endunless %}
                     {% endif %}
 
-                    {%- for block in section.blocks -%}
-                      {%- case block.type -%}
-                        {%- when 'size_chart' -%}
-                          {% if product.options contains 'Size' %}
-                            <div class="product-attributes">
-                              <a class="trigger-pop-up">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
-                                  <path d="M95.3,26.3L73.7,4.7c-1.2-1.2-3.1-1.2-4.3,0l-8.6,8.6l15.1,15.1l-4.3,4.3L56.5,17.7L50,24.1l10.8,10.8l-4.3,4.3L45.7,28.4
-                                           l-6.5,6.5L54.3,50L50,54.3L34.9,39.2l-6.5,6.5l10.8,10.8l-4.3,4.3L24.1,50l-6.5,6.5l15.1,15.1l-4.3,4.3L13.3,60.8l-8.6,8.6
-                                           c-1.2,1.2-1.2,3.1,0,4.3l21.6,21.6c1.2,1.2,3.1,1.2,4.3,0l64.7-64.7C96.5,29.4,96.5,27.5,95.3,26.3z"/>
-                                </svg>
-                                {{ 'products.product.size_chart' | t }}
-                              </a>
-                            </div>
-                          {% endif %}
-
-                        {%- when 'vendor' -%}
-                          <div class="product-attributes">
-                            <p class="product-label">{{ 'products.product.vendor' | t }}</p>
-                            {{ product.vendor | link_to_vendor }}
-                          </div>
-
-                        {%- when 'sku' -%}
-                          <div id="sku-table" class="product-attributes sku-table-{{section.id }} attributes-hidden">
-                            <p class="product-label">{{ 'products.product.sku' | t }}</p>
-                            <span id="variant-sku" class="variant-sku-{{section.id }}"></span>
-                          </div>
-
-                        {%- when 'type' -%}
-                          <div class="product-attributes">
-                            <p class="product-label">{{ 'products.product.type' | t }}</p> {{ product.type }}
-                          </div>
-
-                        {%- when 'fbt' -%}
-                          {% render 'frequently-bought-together' %}
-                      {% endcase %}
-                    {% endfor %}
-
-                    <!-- ====== Quantity + Total in SAME WRAPPER (keeps original classes) ====== -->
-                    <div class="qty-total-row dt-inline-row" data-qty>
-                      {% if section.settings.show_quantity_selector %}
-                        <div class="product-attributes dt-sc-qty">
-                          <p class="product-label">{{ 'products.product.quantity' | t }}</p>
-                          <div class="quantity product-form__item product-form__item--quantity product-item-caption-qty">
-                            <button class="quantity-btn quantity-btn-minus btn-number btn-number-{{ section.id }}" type="button" data-type="minus" aria-label="Decrease quantity">&#45;</button>
-                            <input type="text" id="Quantity-{{ section.id }}" name="quantity" value="1" class="quantity-btn-number form-control input-number input-number-{{ section.id }} product-form__input" inputmode="numeric" pattern="[0-9]*" aria-label="Quantity">
-                            <button class="quantity-btn quantity-btn-plus btn-number btn-number-{{ section.id }}" type="button" data-type="plus" aria-label="Increase quantity">&#43;</button>
-                          </div>
-                        </div>
-                      {% endif %}
-
-                      <div class="sub-total">
-                        <p class="product-label">{{ 'products.product.total' | t }}</p>
-                        <strong
-                          data-subtotal
-                          data-cents="{{ current_variant.price }}"
-                          data-currency="ignore"
-                          data-glc="ignore"
-                          class="no-glc"
-                        >
-                          {{ current_variant.price | money }}
-                        </strong>
-                      </div>
+                    <!-- ================= SUBTOTAL (Shadow-DOM isolated) ================= -->
+                    <div class="sub-total">
+                      <p class="product-label">{{ 'products.product.total' | t }}</p>
+                      <subtotal-display
+                        id="Subtotal-{{ section.id }}"
+                        data-subtotal
+                        data-cents="{{ current_variant.price }}"
+                        class="no-glc"
+                        data-glc="ignore"
+                        data-currency="ignore"
+                        style="display:inline-block"
+                        aria-live="polite"
+                      ></subtotal-display>
                     </div>
                     <!-- ================================================================ -->
 
@@ -328,6 +272,17 @@
                       <div id="inventory-product" class="product-attributes inventory-product-{{section.id }} attributes-hidden">
                         <p class="product-label">{{ 'products.product.availability' | t }}</p>
                         <span id="variant-inventory" class="variant-inventory-{{section.id }}"></span>
+                      </div>
+                    {% endif %}
+
+                    {% if section.settings.show_quantity_selector %}
+                      <div class="product-attributes dt-sc-qty">
+                        <p class="product-label">{{ 'products.product.quantity' | t }}</p>
+                        <div class="quantity product-form__item product-form__item--quantity product-item-caption-qty" data-qty>
+                          <button class="quantity-btn quantity-btn-minus btn-number btn-number-{{ section.id }}" type="button" data-type="minus" aria-label="Decrease quantity">&#45;</button>
+                          <input type="text" id="Quantity-{{ section.id }}" name="quantity" value="1" class="quantity-btn-number form-control input-number input-number-{{ section.id }} product-form__input" inputmode="numeric" pattern="[0-9]*" aria-label="Quantity">
+                          <button class="quantity-btn quantity-btn-plus btn-number btn-number-{{ section.id }}" type="button" data-type="plus" aria-label="Increase quantity">&#43;</button>
+                        </div>
                       </div>
                     {% endif %}
 
@@ -614,33 +569,9 @@
     opacity: 1;
   }
 
-  /* ====== Horizontal layout for Quantity + Total (shared wrapper) ====== */
-  .qty-total-row.dt-inline-row{
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    justify-content: space-between;
-    flex-wrap: wrap;
-  }
-  .qty-total-row .product-attributes.dt-sc-qty{
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 0;
-  }
-  .qty-total-row .product-attributes.dt-sc-qty .quantity{
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .qty-total-row .sub-total{
-    margin-left: auto;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .qty-total-row .product-label{ margin: 0; }
-  /* ====== END new styles ====== */
+  /* === Kill switch ONLY inside subtotal (do not affect other prices) === */
+  .sub-total .glc-money,
+  .sub-total [class*="money"] { all: unset; display: contents; }
 </style>
 
 {%- comment -%} Mobile full-width container + Accordion line style (overrides) {%- endcomment -%}
@@ -677,6 +608,7 @@
 
   /* --- Desktop-only overrides (≥992px) --- */
   @media (min-width: 992px){
+    /* 1) Hide the mobile/tablet scroller + dots on desktop */
     #shopify-section-{{ section.id }} .media-scroller,
     #shopify-section-{{ section.id }} .media-dots{
       display: none !important;
@@ -697,7 +629,7 @@
     #shopify-section-{{ section.id }} .desktop-stage{
       display: block !important;
       grid-area: stage;
-      order: 1;
+      order: 1; /* safety if order is used elsewhere */
     }
     #shopify-section-{{ section.id }} .desktop-thumbs{
       display: grid !important;
@@ -718,11 +650,11 @@
     #shopify-section-{{ section.id }} .media-scroller{
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
+      scrollbar-width: none;           /* Firefox */
+      -ms-overflow-style: none;        /* IE/Edge legacy */
     }
     #shopify-section-{{ section.id }} .media-scroller::-webkit-scrollbar{
-      display: none;
+      display: none;                   /* Chrome/Safari/Opera */
       height: 0;
       background: transparent;
     }
@@ -748,14 +680,41 @@
     return '$' + amount;
   }
 
+  // === Subtotal Web Component (Shadow DOM)
+  (function defineSubtotal(){
+    if (customElements.get('subtotal-display')) return;
+
+    class SubtotalDisplay extends HTMLElement {
+      static get observedAttributes(){ return ['data-cents']; }
+
+      constructor(){
+        super();
+        this._shadow = this.attachShadow({ mode: 'closed' }); // isolate from apps
+      }
+
+      connectedCallback(){
+        this.render();
+      }
+
+      attributeChangedCallback(){ this.render(); }
+
+      render(){
+        var cents = parseInt(this.getAttribute('data-cents') || '0', 10) || 0;
+        this._shadow.textContent = formatMoney(cents);
+      }
+    }
+
+    customElements.define('subtotal-display', SubtotalDisplay);
+  })();
+
   function initSection(sectionEl){
     if(!sectionEl) return;
 
-    // Scope to the shared wrapper that contains BOTH quantity and subtotal
-    var qtyWrap    = qs(sectionEl, ".qty-total-row[data-qty]");
-    var qtyInput   = qtyWrap ? qs(qtyWrap, ".product-attributes.dt-sc-qty .quantity-btn-number") : null;
-    var subtotalEl = qtyWrap ? qs(qtyWrap, ".sub-total [data-subtotal]") : qs(sectionEl, "[data-subtotal]");
-    var priceSpan  = qs(sectionEl, ".product-price-current .money");
+    // Quantity + Subtotal
+    var qtyWrap = qs(sectionEl, "[data-qty]");
+    var qtyInput = qs(sectionEl, ".quantity-btn-number");
+    var subtotalEl = qs(sectionEl, "subtotal-display[data-subtotal]");
+    var priceSpan = qs(sectionEl, ".product-price-current .money");
 
     function getPriceCents(){
       if(!priceSpan) return 0;
@@ -765,14 +724,11 @@
       return Math.round(parseFloat(numeric || "0") * 100);
     }
 
-    // --- SUBTOTAL: always write plain text, store raw cents on the element
     function setSubtotal(){
       if(!subtotalEl) return;
       var qty = parseFloat(qtyInput && qtyInput.value ? qtyInput.value : "1") || 1;
-      qty = Math.max(1, qty);
-      var subtotalCents = qty * getPriceCents();
-      subtotalEl.setAttribute('data-cents', String(subtotalCents));
-      subtotalEl.textContent = formatMoney(subtotalCents);
+      var subtotalCents = Math.max(1, qty) * getPriceCents();
+      subtotalEl.setAttribute('data-cents', String(subtotalCents)); // triggers re-render
     }
 
     if(qtyWrap && qtyInput){
@@ -871,12 +827,14 @@
         var sizes  = btn.getAttribute('data-sizes') || '(min-width: 992px) 700px, 100vw';
         var ar     = parseFloat(btn.getAttribute('data-ar') || '1');
 
+        // Reserve aspect ratio to prevent collapse/reflow
         if (ar && isFinite(ar) && ar > 0) {
           var ratioText = '1 / ' + (1/ar).toFixed(6);
           featured.style.setProperty('--stage-ar', ratioText);
           featured.style.aspectRatio = ratioText;
         }
 
+        // Create next image off-DOM
         var nextImg = new Image();
         nextImg.className = 'product-media__img is-entering';
         nextImg.decoding = 'async';
@@ -902,6 +860,7 @@
         return;
       }
 
+      // Non-image types: minimal placeholder behavior
       featured.innerHTML = '';
       if (type === 'video' || type === 'external_video') {
         var badge = document.createElement('div');
@@ -924,6 +883,7 @@
         var id = btn.getAttribute("data-media-id");
         swapDesktopTo(id);
 
+        // Also sync mobile scroller position so both views stay aligned
         if(scroller){
           var slide = scroller.querySelector('.media-slide[data-media-id="'+id+'"]');
           if(slide){ slide.scrollIntoView({behavior:'smooth', inline:'center'}); }
@@ -949,20 +909,42 @@
           priceSpan.setAttribute('data-price-cents', v.price);
           priceSpan.textContent = formatMoney(v.price);
           if (subtotalEl){
-            subtotalEl.setAttribute('data-cents', v.price);
+            subtotalEl.setAttribute('data-cents', v.price); // base 1× qty
             setSubtotal();
           }
         }
       } catch(err){}
     });
 
+    // Build dots + observers after DOM ready
     buildDots();
     watchSlides();
+
+    // Ensure subtotal element exists even if a script removes it
+    var subWrap = qs(sectionEl, '.sub-total');
+    if(subWrap && window.MutationObserver){
+      var ensureSubtotal = new MutationObserver(function(){
+        if(!qs(sectionEl, 'subtotal-display[data-subtotal]')){
+          var restored = document.createElement('subtotal-display');
+          restored.setAttribute('data-subtotal','');
+          restored.id = "Subtotal-{{ section.id }}";
+          restored.setAttribute('data-cents', String(getPriceCents()));
+          restored.setAttribute('data-glc','ignore');
+          restored.setAttribute('data-currency','ignore');
+          restored.className = 'no-glc';
+          subWrap.appendChild(restored);
+          subtotalEl = restored;
+          setSubtotal();
+        }
+      });
+      ensureSubtotal.observe(subWrap, { childList:true, subtree:false });
+    }
   }
 
   var sectionRoot = document.getElementById('shopify-section-{{ section.id }}') || document;
   initSection(sectionRoot);
 
+  // Re-init inside Theme Editor
   document.addEventListener('shopify:section:load', function(e){
     if(e && e.detail && e.detail.sectionId === "{{ section.id }}"){
       var el = document.getElementById('shopify-section-{{ section.id }}');
@@ -976,6 +958,7 @@
     }
   });
 
+  // Set initial aspect ratio from the initial active thumb (once)
   (function initStageAR(){
     try{
       var active = document.querySelector('#shopify-section-{{ section.id }} .product-media__thumb.is-active');
