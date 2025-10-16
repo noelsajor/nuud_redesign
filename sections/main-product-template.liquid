@@ -258,48 +258,11 @@
                       {% endunless %}
                     {% endif %}
 
-                    {%- for block in section.blocks -%}
-                      {%- case block.type -%}
-                        {%- when 'size_chart' -%}
-                          {% if product.options contains 'Size' %}
-                            <div class="product-attributes">
-                              <a class="trigger-pop-up">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
-                                  <path d="M95.3,26.3L73.7,4.7c-1.2-1.2-3.1-1.2-4.3,0l-8.6,8.6l15.1,15.1l-4.3,4.3L56.5,17.7L50,24.1l10.8,10.8l-4.3,4.3L45.7,28.4
-                                           l-6.5,6.5L54.3,50L50,54.3L34.9,39.2l-6.5,6.5l10.8,10.8l-4.3,4.3L24.1,50l-6.5,6.5l15.1,15.1l-4.3,4.3L13.3,60.8l-8.6,8.6
-                                           c-1.2,1.2-1.2,3.1,0,4.3l21.6,21.6c1.2,1.2,3.1,1.2,4.3,0l64.7-64.7C96.5,29.4,96.5,27.5,95.3,26.3z"/>
-                                </svg>
-                                {{ 'products.product.size_chart' | t }}
-                              </a>
-                            </div>
-                          {% endif %}
-
-                        {%- when 'vendor' -%}
-                          <div class="product-attributes">
-                            <p class="product-label">{{ 'products.product.vendor' | t }}</p>
-                            {{ product.vendor | link_to_vendor }}
-                          </div>
-
-                        {%- when 'sku' -%}
-                          <div id="sku-table" class="product-attributes sku-table-{{section.id }} attributes-hidden">
-                            <p class="product-label">{{ 'products.product.sku' | t }}</p>
-                            <span id="variant-sku" class="variant-sku-{{section.id }}"></span>
-                          </div>
-
-                        {%- when 'type' -%}
-                          <div class="product-attributes">
-                            <p class="product-label">{{ 'products.product.type' | t }}</p> {{ product.type }}
-                          </div>
-
-                        {%- when 'fbt' -%}
-                          {% render 'frequently-bought-together' %}
-                      {% endcase %}
-                    {% endfor %}
-
-                    <!-- ================= SUBTOTAL PROTECTION (ignore by converters) ================= -->
+                    <!-- ================= SUBTOTAL (now with ID + ignore hooks) ================= -->
                     <div class="sub-total">
                       <p class="product-label">{{ 'products.product.total' | t }}</p>
                       <strong
+                        id="Subtotal-{{ section.id }}"
                         data-subtotal
                         data-cents="{{ current_variant.price }}"
                         data-currency="ignore"
@@ -309,7 +272,7 @@
                         {{ current_variant.price | money }}
                       </strong>
                     </div>
-                    <!-- ============================================================================ -->
+                    <!-- ===================================================================== -->
 
                     {% if section.settings.show_product_quantity %}
                       <div id="inventory-product" class="product-attributes inventory-product-{{section.id }} attributes-hidden">
@@ -736,13 +699,45 @@
       return Math.round(parseFloat(numeric || "0") * 100);
     }
 
+    // --- Subtotal sanitizer: remove any injected HTML wrappers (e.g., <span class="glc-money">)
+    function sanitizeSubtotal(forceValueCents){
+      if(!subtotalEl) return;
+      var centsAttr = typeof forceValueCents === 'number'
+        ? forceValueCents
+        : parseInt(subtotalEl.getAttribute('data-cents') || '0', 10);
+
+      // Always end with plain text — no inner HTML
+      subtotalEl.innerHTML = '';
+      subtotalEl.appendChild(document.createTextNode(formatMoney(isNaN(centsAttr) ? 0 : centsAttr)));
+    }
+
+    // Watch subtotal for any third-party DOM injections and revert instantly
+    (function watchSubtotal(){
+      if(!subtotalEl || !window.MutationObserver) return;
+      try{
+        var suspicious = function(){
+          if (
+            subtotalEl.children.length > 0 ||
+            subtotalEl.querySelector('.glc-money, [data-glc], [data-currency], [class*="money"]')
+          ){
+            var cents = parseInt(subtotalEl.getAttribute('data-cents') || '0', 10) || 0;
+            sanitizeSubtotal(cents);
+          }
+        };
+        var mo = new MutationObserver(function(){ suspicious(); });
+        mo.observe(subtotalEl, { childList: true, subtree: true, attributes: true, characterData: false });
+        // Clean immediately in case the wrapper is already present
+        suspicious();
+      }catch(e){}
+    })();
+
     // --- SUBTOTAL: always write plain text, store raw cents on the element
     function setSubtotal(){
       if(!subtotalEl) return;
       var qty = parseFloat(qtyInput && qtyInput.value ? qtyInput.value : "1") || 1;
       var subtotalCents = Math.max(1, qty) * getPriceCents();
-      subtotalEl.setAttribute('data-cents', String(subtotalCents));   // keep raw value here
-      subtotalEl.textContent = formatMoney(subtotalCents);            // textContent avoids injected spans
+      subtotalEl.setAttribute('data-cents', String(subtotalCents)); // keep raw value
+      sanitizeSubtotal(subtotalCents);                              // render sanitized text
     }
 
     if(qtyWrap && qtyInput){
