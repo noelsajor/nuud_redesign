@@ -81,7 +81,7 @@
                           <span class="product-media__thumb-badge" aria-hidden="true">▶</span>
                         {%- elsif media.media_type == 'model' -%}
                           <span class="product-media__thumb-badge" aria-hidden="true">3D</span>
-                        {%- endif -%}
+                        {%- endif %}
                       </button>
                     {%- endfor -%}
                   </div>
@@ -116,7 +116,7 @@
                           <h3 class="product-title">{{ product.title | escape }}</h3>
                         {%- when 'price' -%}
                           <div class="product-price">
-                            <p class="product-price-label product-label">{{ "products.product.price" | t }}</p>
+                            <p class="product-label product-label--price product-label">{{ "products.product.price" | t }}</p>
                             <ul class="price-list">
                               <li id="ProductPrice-{{ section.id }}" class="product-price-current">
                                 <span class="money" data-price-cents="{{ current_variant.price }}">{{ current_variant.price | money }}</span>
@@ -707,6 +707,87 @@
     customElements.define('subtotal-display', SubtotalDisplay);
   })();
 
+  // --- Hook quantity swatches (.swatch-group) to quantity input + subtotal ---
+  function wireQuantitySwatches(sectionEl, setSubtotal){
+    var groupSelector = '.swatch-group';
+    var qtyInput = sectionEl.querySelector('.quantity-btn-number');
+
+    if (!sectionEl || !qtyInput) return;
+
+    function onClick(e){
+      var target = e.target;
+      if (!target) return;
+
+      var item = target.closest('[data-qty],[data-quantity],[data-quantity-multiplier], .swatch-element, button, label, li, a, .chip, .badge');
+      if (!item || !item.closest(groupSelector)) return;
+
+      var qty =
+        parseInt(item.getAttribute('data-qty'), 10) ||
+        parseInt(item.getAttribute('data-quantity'), 10) ||
+        parseInt(item.getAttribute('data-quantity-multiplier'), 10);
+
+      if (!qty || !isFinite(qty)) {
+        var radio = item.querySelector('input[type="radio"],input[type="button"]');
+        if (radio && radio.value) {
+          var fromValue = parseInt(String(radio.value).match(/\d+/)?.[0], 10);
+          if (fromValue) qty = fromValue;
+        }
+      }
+      if (!qty || !isFinite(qty)) {
+        var txt = (item.textContent || '').trim();
+        var fromText = parseInt(txt.match(/\d+/)?.[0], 10);
+        if (fromText) qty = fromText;
+      }
+
+      if (!qty || !isFinite(qty)) return;
+
+      qty = Math.max(1, qty);
+
+      qtyInput.value = String(qty);
+
+      var group = item.closest(groupSelector);
+      if (group) {
+        group.querySelectorAll('.is-active,[aria-pressed="true"],[aria-selected="true"]').forEach(function(el){
+          el.classList.remove('is-active');
+          el.setAttribute('aria-pressed','false');
+          el.setAttribute('aria-selected','false');
+        });
+        item.classList.add('is-active');
+        item.setAttribute('aria-pressed','true');
+        item.setAttribute('aria-selected','true');
+
+        var groupRadio = item.querySelector('input[type="radio"]');
+        if (groupRadio) {
+          groupRadio.checked = true;
+          groupRadio.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
+
+      setSubtotal && setSubtotal();
+    }
+
+    var groups = sectionEl.querySelectorAll(groupSelector);
+    groups.forEach(function(gr){
+      if (!gr.__qtySwatchBound) {
+        gr.addEventListener('click', onClick);
+        gr.__qtySwatchBound = true;
+      }
+    });
+
+    if (window.MutationObserver && !sectionEl.__qtySwatchObserver) {
+      var obs = new MutationObserver(function(){
+        sectionEl.querySelectorAll(groupSelector).forEach(function(gr){
+          if (!gr.__qtySwatchBound) {
+            gr.addEventListener('click', onClick);
+            gr.__qtySwatchBound = true;
+          }
+        });
+      });
+      obs.observe(sectionEl, { childList: true, subtree: true });
+      sectionEl.__qtySwatchObserver = obs;
+    }
+  }
+
   function initSection(sectionEl){
     if(!sectionEl) return;
 
@@ -812,7 +893,6 @@
 
       var type = btn.getAttribute('data-media-type') || 'image';
 
-      // Update active state on thumbs ASAP
       if(thumbsWrap){
         qsa(thumbsWrap, '.product-media__thumb').forEach(function(t){
           var active = t.getAttribute('data-media-id') === mediaId;
@@ -827,14 +907,12 @@
         var sizes  = btn.getAttribute('data-sizes') || '(min-width: 992px) 700px, 100vw';
         var ar     = parseFloat(btn.getAttribute('data-ar') || '1');
 
-        // Reserve aspect ratio to prevent collapse/reflow
         if (ar && isFinite(ar) && ar > 0) {
           var ratioText = '1 / ' + (1/ar).toFixed(6);
           featured.style.setProperty('--stage-ar', ratioText);
           featured.style.aspectRatio = ratioText;
         }
 
-        // Create next image off-DOM
         var nextImg = new Image();
         nextImg.className = 'product-media__img is-entering';
         nextImg.decoding = 'async';
@@ -860,7 +938,6 @@
         return;
       }
 
-      // Non-image types: minimal placeholder behavior
       featured.innerHTML = '';
       if (type === 'video' || type === 'external_video') {
         var badge = document.createElement('div');
@@ -883,7 +960,6 @@
         var id = btn.getAttribute("data-media-id");
         swapDesktopTo(id);
 
-        // Also sync mobile scroller position so both views stay aligned
         if(scroller){
           var slide = scroller.querySelector('.media-slide[data-media-id="'+id+'"]');
           if(slide){ slide.scrollIntoView({behavior:'smooth', inline:'center'}); }
@@ -939,6 +1015,9 @@
       });
       ensureSubtotal.observe(subWrap, { childList:true, subtree:false });
     }
+
+    // >>> NEW: connect swatch-group clicks to quantity/subtotal
+    wireQuantitySwatches(sectionEl, setSubtotal);
   }
 
   var sectionRoot = document.getElementById('shopify-section-{{ section.id }}') || document;
