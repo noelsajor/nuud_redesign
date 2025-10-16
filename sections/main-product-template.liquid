@@ -296,10 +296,20 @@
                       {% endcase %}
                     {% endfor %}
 
+                    <!-- ================= SUBTOTAL PROTECTION (ignore by converters) ================= -->
                     <div class="sub-total">
                       <p class="product-label">{{ 'products.product.total' | t }}</p>
-                      <strong data-subtotal>{{ current_variant.price | money }}</strong>
+                      <strong
+                        data-subtotal
+                        data-cents="{{ current_variant.price }}"
+                        data-currency="ignore"
+                        data-glc="ignore"
+                        class="no-glc"
+                      >
+                        {{ current_variant.price | money }}
+                      </strong>
                     </div>
+                    <!-- ============================================================================ -->
 
                     {% if section.settings.show_product_quantity %}
                       <div id="inventory-product" class="product-attributes inventory-product-{{section.id }} attributes-hidden">
@@ -691,18 +701,6 @@
 
 </style>
 
-{%- comment -%} Toggle: Hide grid item titles when enabled in settings {%- endcomment -%}
-{% if section.settings.hide_grid_titles %}
-  <style>
-    #shopify-section-{{ section.id }} .grid-link__title { display: none !important; }
-    #shopify-section-{{ section.id }} .adv-product-list .grid-link__title,
-    #shopify-section-{{ section.id }} .sidebar .grid-link__title,
-    #shopify-section-{{ section.id }} .product-grid .grid-link__title { display: none !important; }
-  </style>
-{% endif %}
-
-
-
 <!-- ========= GALLERY + DOTS + SUBTOTAL LOGIC (Editor-safe, section-scoped) ========= -->
 <script>
 (function(){
@@ -737,12 +735,16 @@
       var numeric = (priceSpan.textContent || "").replace(/[^0-9.]/g, "");
       return Math.round(parseFloat(numeric || "0") * 100);
     }
+
+    // --- SUBTOTAL: always write plain text, store raw cents on the element
     function setSubtotal(){
       if(!subtotalEl) return;
       var qty = parseFloat(qtyInput && qtyInput.value ? qtyInput.value : "1") || 1;
       var subtotalCents = Math.max(1, qty) * getPriceCents();
-      subtotalEl.textContent = formatMoney(subtotalCents);
+      subtotalEl.setAttribute('data-cents', String(subtotalCents));   // keep raw value here
+      subtotalEl.textContent = formatMoney(subtotalCents);            // textContent avoids injected spans
     }
+
     if(qtyWrap && qtyInput){
       qtyWrap.addEventListener("click", function(e){
         var btn = e.target.closest("button[data-type]");
@@ -920,7 +922,10 @@
         if(priceSpan && v && typeof v.price === 'number'){
           priceSpan.setAttribute('data-price-cents', v.price);
           priceSpan.textContent = formatMoney(v.price);
-          setSubtotal();
+          if (subtotalEl){
+            subtotalEl.setAttribute('data-cents', v.price); // keep raw cents in subtotal element
+            setSubtotal();                                  // recompute with current qty
+          }
         }
       } catch(err){}
     });
