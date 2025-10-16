@@ -723,7 +723,7 @@
 
 </style>
 
-<!-- ========= GALLERY + DOTS + SUBTOTAL LOGIC + FAQ OPEN/CLOSE ALL ========= -->
+<!-- ========= GALLERY + DOTS + SUBTOTAL LOGIC + FAQ OPEN/CLOSE ALL + CLOSABLE PANELS ========= -->
 <script>
 (function(){
   var SECTION_ID = "{{ section.id }}";
@@ -846,7 +846,7 @@
     }
   }
 
-  /* ====== NEW: Bind "Open/Close all FAQs" toggles ====== */
+  /* ====== Bind "Open/Close all FAQs" toggles ====== */
   function bindFaqToggles(sectionEl){
     if(!sectionEl) return;
     var wrappers = sectionEl.querySelectorAll('.product-tab');
@@ -869,7 +869,6 @@
         setState(nextOpen);
       });
 
-      // Keep button label in sync if all details are toggled manually
       if ('MutationObserver' in window){
         var mo = new MutationObserver(function(){
           var detailsEls = tabWrap.querySelectorAll('details');
@@ -881,6 +880,45 @@
         });
         mo.observe(tabWrap, { attributes:true, subtree:true, attributeFilter:['open'] });
       }
+    });
+  }
+
+  /* ====== NEW: Allow closing the same <details> by clicking its <summary> ====== */
+  function enableClosableAccordions(sectionEl){
+    if(!sectionEl) return;
+    var tabs = sectionEl.querySelectorAll('.product-tab');
+    tabs.forEach(function(tab){
+      if(tab.__closableBound) return;
+      tab.__closableBound = true;
+
+      function closeIfAlreadyOpen(targetEvent){
+        var sum = targetEvent.target && targetEvent.target.closest && targetEvent.target.closest('summary');
+        if(!sum || !tab.contains(sum)) return false;
+        var details = sum.closest('details');
+        if(!details) return false;
+
+        if(details.hasAttribute('open')){
+          targetEvent.preventDefault();
+          if (typeof targetEvent.stopImmediatePropagation === 'function') targetEvent.stopImmediatePropagation();
+          targetEvent.stopPropagation();
+          details.open = false;
+          return true;
+        }
+        return false;
+      }
+
+      // Capture phase to beat any other handlers that might re-open
+      tab.addEventListener('click', function(e){}, true);
+      tab.addEventListener('click', function(e){
+        closeIfAlreadyOpen(e);
+      });
+
+      // Keyboard support (Enter/Space)
+      tab.addEventListener('keydown', function(e){
+        var isToggleKey = (e.key === 'Enter') || (e.key === ' ') || (e.code === 'Space');
+        if(!isToggleKey) return;
+        if (closeIfAlreadyOpen(e)) return;
+      }, true);
     });
   }
 
@@ -1115,8 +1153,9 @@
     // >>> Connect swatch-group clicks to quantity/subtotal
     wireQuantitySwatches(sectionEl, setSubtotal);
 
-    // >>> NEW: Bind FAQ toggles inside this section scope
+    // >>> Bind FAQ toggles + enable closing same panel
     bindFaqToggles(sectionEl);
+    enableClosableAccordions(sectionEl);
   }
 
   var sectionRoot = document.getElementById('shopify-section-{{ section.id }}') || document;
