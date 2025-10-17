@@ -721,7 +721,7 @@
 
 </style>
 
-<!-- ========= GALLERY + DOTS + SUBTOTAL LOGIC (unchanged) ========= -->
+<!-- ========= GALLERY + DOTS + SUBTOTAL LOGIC + FAQ OPEN/CLOSE ALL + INDEPENDENT PANELS ========= -->
 <script>
 (function(){
   var SECTION_ID = "{{ section.id }}";
@@ -730,6 +730,7 @@
   function qs(root, sel){ return root.querySelector(sel); }
   function qsa(root, sel){ return Array.prototype.slice.call(root.querySelectorAll(sel)); }
 
+  // Money formatting using Shopify helper when available
   function formatMoney(cents){
     if (window.Shopify && typeof Shopify.formatMoney === 'function') {
       return Shopify.formatMoney(cents, MONEY_FORMAT);
@@ -738,24 +739,227 @@
     return '$' + amount;
   }
 
+  // === Subtotal Web Component (Shadow DOM)
   (function defineSubtotal(){
     if (customElements.get('subtotal-display')) return;
+
     class SubtotalDisplay extends HTMLElement {
       static get observedAttributes(){ return ['data-cents']; }
-      constructor(){ super(); this._shadow = this.attachShadow({ mode: 'closed' }); }
+
+      constructor(){
+        super();
+        this._shadow = this.attachShadow({ mode: 'closed' });
+      }
+
       connectedCallback(){ this.render(); }
       attributeChangedCallback(){ this.render(); }
+
       render(){
         var cents = parseInt(this.getAttribute('data-cents') || '0', 10) || 0;
         this._shadow.textContent = formatMoney(cents);
       }
     }
+
     customElements.define('subtotal-display', SubtotalDisplay);
   })();
+
+  // --- Hook quantity swatches (.swatch-group) to quantity input + subtotal ---
+  function wireQuantitySwatches(sectionEl, setSubtotal){
+    var groupSelector = '.swatch-group';
+    var qtyInput = sectionEl.querySelector('.quantity-btn-number');
+
+    if (!sectionEl || !qtyInput) return;
+
+    function onClick(e){
+      var target = e.target;
+      if (!target) return;
+
+      var item = target.closest('[data-qty],[data-quantity],[data-quantity-multiplier], .swatch-element, button, label, li, a, .chip, .badge');
+      if (!item || !item.closest(groupSelector)) return;
+
+      var qty =
+        parseInt(item.getAttribute('data-qty'), 10) ||
+        parseInt(item.getAttribute('data-quantity'), 10) ||
+        parseInt(item.getAttribute('data-quantity-multiplier'), 10);
+
+      if (!qty || !isFinite(qty)) {
+        var radio = item.querySelector('input[type="radio"],input[type="button"]');
+        if (radio && radio.value) {
+          var fromValue = parseInt(String(radio.value).match(/\d+/)?.[0], 10);
+          if (fromValue) qty = fromValue;
+        }
+      }
+      if (!qty || !isFinite(qty)) {
+        var txt = (item.textContent || '').trim();
+        var fromText = parseInt(txt.match(/\d+/)?.[0], 10);
+        if (fromText) qty = fromText;
+      }
+
+      if (!qty || !isFinite(qty)) return;
+
+      qty = Math.max(1, qty);
+
+      qtyInput.value = String(qty);
+
+      var group = item.closest(groupSelector);
+      if (group) {
+        group.querySelectorAll('.is-active,[aria-pressed="true"],[aria-selected="true"]').forEach(function(el){
+          el.classList.remove('is-active');
+          el.setAttribute('aria-pressed','false');
+          el.setAttribute('aria-selected','false');
+        });
+        item.classList.add('is-active');
+        item.setAttribute('aria-pressed','true');
+        item.setAttribute('aria-selected','true');
+
+        var groupRadio = item.querySelector('input[type="radio"]');
+        if (groupRadio) {
+          groupRadio.checked = true;
+          groupRadio.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
+
+      setSubtotal && setSubtotal();
+    }
+
+    var groups = sectionEl.querySelectorAll(groupSelector);
+    groups.forEach(function(gr){
+      if (!gr.__qtySwatchBound) {
+        gr.addEventListener('click', onClick);
+        gr.__qtySwatchBound = true;
+      }
+    });
+
+    if (window.MutationObserver && !sectionEl.__qtySwatchObserver) {
+      var obs = new MutationObserver(function(){
+        sectionEl.querySelectorAll(groupSelector).forEach(function(gr){
+          if (!gr.__qtySwatchBound) {
+            gr.addEventListener('click', onClick);
+            gr.__qtySwatchBound = true;
+          }
+        });
+      });
+      obs.observe(sectionEl, { childList: true, subtree: true });
+      sectionEl.__qtySwatchObserver = obs;
+    }
+  }
+
+  /* ====== Bind "Open/Close all FAQs" toggles ====== */
+  function bindFaqToggles(sectionEl){
+    if(!sectionEl) return;
+    var wrappers = sectionEl.querySelectorAll('.product-tab');
+    wrappers.forEach(function(tabWrap){
+      var btn = tabWrap.querySelector('.faq-toggle-all');
+      if(!btn || btn.__bound) return;
+      btn.__bound = true;
+
+      function setState(openAll){
+        var detailsEls = tabWrap.querySelectorAll('details');
+        detailsEls.forEach(function(d){ d.open = !!openAll; });
+        btn.setAttribute('data-state', openAll ? 'open' : 'closed');
+        btn.setAttribute('aria-expanded', openAll ? 'true' : 'false');
+        var label = btn.querySelector('.label');
+        if(label){ label.textContent = openAll ? 'Close all FAQs' : 'Open all FAQs'; }
+      }
+
+      btn.addEventListener('click', function(){
+        var nextOpen = btn.getAttribute('data-state') !== 'open';
+        setState(nextOpen);
+      });
+
+      if ('MutationObserver' in window){
+        var mo = new MutationObserver(function(){
+          var detailsEls = tabWrap.querySelectorAll('details');
+          if(!detailsEls.length) return;
+          var allOpen = Array.prototype.every.call(detailsEls, function(d){ return d.open; });
+          var noneOpen = Array.prototype.every.call(detailsEls, function(d){ return !d.open; });
+          if(allOpen && btn.getAttribute('data-state') !== 'open') setState(true);
+          if(noneOpen && btn.getAttribute('data-state') !== 'closed') setState(false);
+        });
+        mo.observe(tabWrap, { attributes:true, subtree:true, attributeFilter:['open'] });
+      }
+    });
+  }
+
+  /* ====== Independent accordion behavior (defensive, but may be overridden by theme) ====== */
+  function makeAccordionsIndependent(sectionEl){
+    if(!sectionEl) return;
+    var tabs = sectionEl.querySelectorAll('.product-tab');
+
+    tabs.forEach(function(tab){
+      if(tab.__indepBound) return;
+      tab.__indepBound = true;
+
+      function toggleOnlyThis(targetEvent){
+        var sum = targetEvent.target && targetEvent.target.closest && targetEvent.target.closest('summary');
+        if(!sum || !tab.contains(sum)) return false;
+        var details = sum.closest('details');
+        if(!details) return false;
+
+        // Prevent any "single-open" logic from other scripts
+        targetEvent.preventDefault();
+        if (typeof targetEvent.stopImmediatePropagation === 'function') targetEvent.stopImmediatePropagation();
+        targetEvent.stopPropagation();
+
+        details.open = !details.open; // toggle only this one
+        return true;
+      }
+
+      // Run in capture to beat other handlers that might close siblings
+      tab.addEventListener('click', function(e){
+        toggleOnlyThis(e);
+      }, true);
+
+      // Keyboard accessibility (Enter/Space)
+      tab.addEventListener('keydown', function(e){
+        var isToggleKey = (e.key === 'Enter') || (e.key === ' ') || (e.code === 'Space');
+        if(!isToggleKey) return;
+        toggleOnlyThis(e);
+      }, true);
+    });
+  }
+
+  /* (Optional) still allow clicking an open item to close itself */
+  function enableClosableAccordions(sectionEl){
+    if(!sectionEl) return;
+    var tabs = sectionEl.querySelectorAll('.product-tab');
+    tabs.forEach(function(tab){
+      if(tab.__closableBound) return;
+      tab.__closableBound = true;
+
+      function closeIfAlreadyOpen(targetEvent){
+        var sum = targetEvent.target && targetEvent.target.closest && targetEvent.target.closest('summary');
+        if(!sum || !tab.contains(sum)) return false;
+        var details = sum.closest('details');
+        if(!details) return false;
+
+        if(details.hasAttribute('open')){
+          targetEvent.preventDefault();
+          if (typeof targetEvent.stopImmediatePropagation === 'function') targetEvent.stopImmediatePropagation();
+          targetEvent.stopPropagation();
+          details.open = false;
+          return true;
+        }
+        return false;
+      }
+
+      tab.addEventListener('click', function(e){}, true);
+      tab.addEventListener('click', function(e){
+        closeIfAlreadyOpen(e);
+      });
+
+      tab.addEventListener('keydown', function(e){
+        var isToggleKey = (e.key === 'Enter') || (e.key === ' ') || (e.code === 'Space');
+        if(!isToggleKey) return;
+        if (closeIfAlreadyOpen(e)) return;
+      }, true);
+    });
+  }
 
   function initSection(sectionEl){
     if(!sectionEl) return;
 
+    // Quantity + Subtotal
     var qtyWrap = qs(sectionEl, "[data-qty]");
     var qtyInput = qs(sectionEl, ".quantity-btn-number");
     var subtotalEl = qs(sectionEl, "subtotal-display[data-subtotal]");
@@ -768,6 +972,7 @@
       var numeric = (priceSpan.textContent || "").replace(/[^0-9.]/g, "");
       return Math.round(parseFloat(numeric || "0") * 100);
     }
+
     function setSubtotal(){
       if(!subtotalEl) return;
       var qty = parseFloat(qtyInput && qtyInput.value ? qtyInput.value : "1") || 1;
@@ -790,6 +995,7 @@
       setSubtotal();
     }
 
+    // ----- MOBILE/TABLET SCROLLER + DOTS -----
     var scroller = qs(sectionEl, "#MediaScroller-" + SECTION_ID);
     var dotsWrap = qs(sectionEl, "#MediaDots-" + SECTION_ID);
     var slides = scroller ? qsa(scroller, ".media-slide") : [];
@@ -801,11 +1007,13 @@
         btn.tabIndex = i === index ? 0 : -1;
       });
     }
+
     function scrollToIndex(i){
       if(!scroller || !slides[i]) return;
       slides[i].scrollIntoView({behavior: 'smooth', inline: 'center', block: 'nearest'});
       setActiveDot(i);
     }
+
     function buildDots(){
       if(!dotsWrap || !slides.length) return;
       dotsWrap.innerHTML = "";
@@ -823,6 +1031,7 @@
       });
       if(!dotsWrap.querySelector('[aria-selected="true"]')) setActiveDot(0);
     }
+
     function watchSlides(){
       if(!scroller || !slides.length) return;
       var io = new IntersectionObserver(function(entries){
@@ -835,19 +1044,12 @@
       slides.forEach(function(slide){ io.observe(slide); });
 
       scroller.addEventListener("keydown", function(e){
-        if(e.key === "ArrowRight"){
-          e.preventDefault();
-          var a = qsa(dotsWrap, ".media-dot").findIndex(function(el){ return el.getAttribute("aria-selected")==="true"; });
-          scrollToIndex(Math.min(slides.length-1, (a<0?0:a+1)));
-        }
-        if(e.key === "ArrowLeft"){
-          e.preventDefault();
-          var a2 = qsa(dotsWrap, ".media-dot").findIndex(function(el){ return el.getAttribute("aria-selected")==="true"; });
-          scrollToIndex(Math.max(0, (a2<0?0:a2-1)));
-        }
+        if(e.key === "ArrowRight"){ e.preventDefault(); var a = qsa(dotsWrap, ".media-dot").findIndex(function(el){ return el.getAttribute("aria-selected")==="true"; }); scrollToIndex(Math.min(slides.length-1, (a<0?0:a+1))); }
+        if(e.key === "ArrowLeft"){ e.preventDefault(); var a2 = qsa(dotsWrap, ".media-dot").findIndex(function(el){ return el.getAttribute("aria-selected")==="true"; }); scrollToIndex(Math.max(0, (a2<0?0:a2-1))); }
       }, {passive:false});
     }
 
+    // ----- DESKTOP: THUMB → MAIN STAGE -----
     var featured = qs(sectionEl, "#FeaturedMedia-" + SECTION_ID);
     var thumbsWrap = qs(sectionEl, ".product-media__thumbs.desktop-thumbs");
 
@@ -933,6 +1135,7 @@
       });
     }
 
+    // Variant change: sync media & price/subtotal
     document.addEventListener('variant:change', function(e){
       try {
         var v = e.detail && e.detail.variant ? e.detail.variant : null;
@@ -957,29 +1160,47 @@
       } catch(err){}
     });
 
+    // Build dots + observers after DOM ready
     buildDots();
     watchSlides();
 
-    // Stage AR once
-    try{
-      var active = sectionEl.querySelector('.product-media__thumb.is-active');
-      if(active){
-        var ar = parseFloat(active.getAttribute('data-ar') || '1');
-        if (ar && isFinite(ar) && ar > 0) {
-          var ratioText = '1 / ' + (1/ar).toFixed(6);
-          var featured = document.getElementById('FeaturedMedia-{{ section.id }}');
-          if (featured) {
-            featured.style.setProperty('--stage-ar', ratioText);
-            featured.style.aspectRatio = ratioText;
-          }
+    // Ensure subtotal element exists even if a script removes it
+    var subWrap = qs(sectionEl, '.sub-total');
+    if(subWrap && window.MutationObserver){
+      var ensureSubtotal = new MutationObserver(function(){
+        if(!qs(sectionEl, 'subtotal-display[data-subtotal]')){
+          var restored = document.createElement('subtotal-display');
+          restored.setAttribute('data-subtotal','');
+          restored.id = "Subtotal-{{ section.id }}";
+          restored.setAttribute('data-cents', String(getPriceCents()));
+          restored.setAttribute('data-glc','ignore');
+          restored.setAttribute('data-currency','ignore');
+          restored.className = 'no-glc';
+          subWrap.appendChild(restored);
+          subtotalEl = restored;
+          setSubtotal();
         }
-      }
-    } catch(e){}
+      });
+      ensureSubtotal.observe(subWrap, { childList:true, subtree:false });
+    }
+
+    // >>> Connect swatch-group clicks to quantity/subtotal
+    wireQuantitySwatches(sectionEl, setSubtotal);
+
+    // >>> FAQ Open/Close all (if you added the button)
+    bindFaqToggles(sectionEl);
+
+    // >>> Make each accordion independent
+    makeAccordionsIndependent(sectionEl);
+
+    // (Optional) allow clicking an open item to close itself
+    enableClosableAccordions(sectionEl);
   }
 
   var sectionRoot = document.getElementById('shopify-section-{{ section.id }}') || document;
   initSection(sectionRoot);
 
+  // Re-init inside Theme Editor
   document.addEventListener('shopify:section:load', function(e){
     if(e && e.detail && e.detail.sectionId === "{{ section.id }}"){
       var el = document.getElementById('shopify-section-{{ section.id }}');
@@ -992,167 +1213,171 @@
       initSection(el);
     }
   });
+
+  // Set initial aspect ratio from the initial active thumb (once)
+  (function initStageAR(){
+    try{
+      var active = document.querySelector('#shopify-section-{{ section.id }} .product-media__thumb.is-active');
+      if(!active) return;
+      var ar = parseFloat(active.getAttribute('data-ar') || '1');
+      if (ar && isFinite(ar) && ar > 0) {
+        var ratioText = '1 / ' + (1/ar).toFixed(6);
+        var featured = document.getElementById('FeaturedMedia-{{ section.id }}');
+        if (featured) {
+          featured.style.setProperty('--stage-ar', ratioText);
+          featured.style.aspectRatio = ratioText;
+        }
+      }
+    } catch(e){}
+  })();
 
 })();
 </script>
 
-<!-- ===== ACCORDION ENFORCER (single-open) ===== -->
+<!-- ===== ABSOLUTE OVERRIDE: Force independent toggling for both <details> and button-based accordions ===== -->
 <script>
-/**
- * Enforce true ACCORDION behavior (single panel open at a time)
- * for both <details><summary> and .dt-sc-accordion-btn triggers
- * inside this section only.
- *
- * Add data-allow-collapse="true" on the wrapper if you want to allow
- * the currently-open item to collapse to "none open".
- */
+(function () {
+  function makeAccordionsIndependent(root) {
+    var scope = root || document;
+    var tabs = scope.querySelectorAll('.product-tab');
+    if (!tabs.length) return;
+
+    tabs.forEach(function (tab) {
+      if (tab.__hardIndepBound) return;
+      tab.__hardIndepBound = true;
+
+      // <details>/<summary>
+      tab.addEventListener('click', function (e) {
+        var sum = e.target && e.target.closest && e.target.closest('summary');
+        if (!sum || !tab.contains(sum)) return;
+        var details = sum.closest('details');
+        if (!details) return;
+
+        e.preventDefault();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+        e.stopPropagation();
+
+        details.open = !details.open;
+      }, true);
+
+      tab.addEventListener('keydown', function (e) {
+        var isToggleKey = (e.key === 'Enter') || (e.key === ' ') || (e.code === 'Space');
+        if (!isToggleKey) return;
+        var sum = e.target && e.target.closest && e.target.closest('summary');
+        if (!sum || !tab.contains(sum)) return;
+        var details = sum.closest('details');
+        if (!details) return;
+
+        e.preventDefault();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+        e.stopPropagation();
+
+        details.open = !details.open;
+      }, true);
+
+      // Button-based accordions (.dt-sc-accordion-btn or [data-accordion-trigger])
+      tab.addEventListener('click', function (e) {
+        var btn = e.target && e.target.closest && e.target.closest('.dt-sc-accordion-btn, [data-accordion-trigger]');
+        if (!btn || !tab.contains(btn)) return;
+
+        var panelId = btn.getAttribute('aria-controls');
+        var panel = (panelId && document.getElementById(panelId)) || btn.nextElementSibling;
+        if (!panel) return;
+
+        e.preventDefault();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+        e.stopPropagation();
+
+        var isOpen =
+          btn.getAttribute('aria-expanded') === 'true' ||
+          panel.hidden === false ||
+          panel.style.display === 'block' ||
+          panel.classList.contains('is-open');
+
+        var nextState = !isOpen;
+
+        btn.setAttribute('aria-expanded', String(nextState));
+        try { panel.hidden = !nextState; } catch (err) {}
+        if (panel.style) panel.style.display = nextState ? '' : 'none';
+        panel.classList.toggle('is-open', nextState);
+        btn.classList.toggle('is-active', nextState);
+      }, true);
+    });
+  }
+
+  function init() {
+    var section = document.getElementById('shopify-section-{{ section.id }}') || document;
+    // Run after other scripts so we can override them deterministically
+    setTimeout(function(){ makeAccordionsIndependent(section); }, 0);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  document.addEventListener('shopify:section:load', init);
+  document.addEventListener('shopify:section:select', init);
+})();
+</script>
+
+<!-- FINAL: hard bind for .dt-sc-accordion-btn anywhere in the section (independent toggle on every click) -->
+<script>
 (function(){
-  var root = document.getElementById('shopify-section-{{ section.id }}') || document;
+  function bindAccordionButtons(scope){
+    scope.querySelectorAll('.dt-sc-accordion-btn').forEach(function(btn){
+      if (btn.__dtAccordionBound) return;
+      btn.__dtAccordionBound = true;
 
-  var WRAPPER_SELECTORS = [
-    '.product-tab',
-    '.dt-sc-accordion-container',
-    '.dt-sc-accordion',
-    '.accordion'
-  ].join(',');
+      btn.addEventListener('click', function(e){
+        // Find the associated panel:
+        var id = btn.getAttribute('aria-controls');
+        var panel = id ? document.getElementById(id) : null;
+        if (!panel) {
+          // fallback: next sibling or common class names
+          panel = btn.nextElementSibling && (btn.nextElementSibling.matches('[id], .dt-sc-accordion-content, [role="region"], [data-accordion-panel]') ? btn.nextElementSibling : null);
+          if (!panel) {
+            var wrap = btn.closest('.dt-sc-accordion, .dt-sc-accordion-container, li, .accordion-item');
+            if (wrap) panel = wrap.querySelector('.dt-sc-accordion-content, [role="region"], [data-accordion-panel], details > div, .accordion-content');
+          }
+        }
+        if (!panel) return;
 
-  function getPanelForButton(btn){
-    var id = btn.getAttribute('aria-controls');
-    var panel = id ? document.getElementById(id) : null;
-    if (!panel) {
-      var next = btn.nextElementSibling;
-      if (next && (next.matches('[id], .dt-sc-accordion-content, [role="region"], [data-accordion-panel], details > div, .accordion-content'))) {
-        panel = next;
-      }
-    }
-    return panel;
-  }
-  function setBtnPanelState(btn, panel, open){
-    btn.setAttribute('aria-expanded', String(open));
-    btn.classList.toggle('is-active', open);
-    if ('hidden' in panel) { panel.hidden = !open; }
-    if (panel.style) panel.style.display = open ? '' : 'none';
-    panel.classList.toggle('is-open', open);
-  }
-  function closeOtherButtons(currentBtn, container){
-    container.querySelectorAll('.dt-sc-accordion-btn, [data-accordion-trigger]').forEach(function(b){
-      if (b === currentBtn) return;
-      var p = getPanelForButton(b);
-      if (p) setBtnPanelState(b, p, false);
-    });
-  }
-  function openButtonPanel(btn, allowCollapse, container){
-    var panel = getPanelForButton(btn);
-    if (!panel) return;
+        e.preventDefault();
+        e.stopPropagation();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
 
-    var isOpen =
-      btn.getAttribute('aria-expanded') === 'true' ||
-      panel.hidden === false ||
-      panel.classList.contains('is-open') ||
-      panel.style.display === 'block';
+        var isOpen =
+          btn.getAttribute('aria-expanded') === 'true' ||
+          panel.hidden === false ||
+          panel.classList.contains('is-open') ||
+          panel.style.display === 'block';
 
-    if (isOpen) {
-      if (allowCollapse) {
-        setBtnPanelState(btn, panel, false);
-      } else {
-        closeOtherButtons(btn, container);
-        setBtnPanelState(btn, panel, true);
-      }
-      return;
-    }
-    // open this, close others
-    closeOtherButtons(btn, container);
-    setBtnPanelState(btn, panel, true);
-  }
+        var next = !isOpen;
 
-  function closeOtherDetails(current, container){
-    container.querySelectorAll('details').forEach(function(d){
-      if (d !== current) d.open = false;
-    });
-  }
-  function openDetails(detailsEl, allowCollapse, container){
-    var isOpen = detailsEl.hasAttribute('open');
-    if (isOpen) {
-      if (allowCollapse) { detailsEl.open = false; }
-      else {
-        closeOtherDetails(detailsEl, container);
-        detailsEl.open = true;
-      }
-      return;
-    }
-    closeOtherDetails(detailsEl, container);
-    detailsEl.open = true;
-  }
-
-  function initContainer(container){
-    if (container.__accordionBound) return;
-    container.__accordionBound = true;
-
-    var allowCollapse = container.getAttribute('data-allow-collapse') === 'true';
-
-    // <details><summary>
-    container.addEventListener('click', function(e){
-      var sum = e.target && e.target.closest && e.target.closest('summary');
-      if (!sum || !container.contains(sum)) return;
-      e.preventDefault();
-      e.stopPropagation();
-      if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
-      var details = sum.closest('details');
-      if (!details) return;
-      openDetails(details, allowCollapse, container);
-    }, true);
-
-    container.addEventListener('keydown', function(e){
-      var isToggleKey = (e.key === 'Enter') || (e.key === ' ') || (e.code === 'Space');
-      if (!isToggleKey) return;
-      var sum = e.target && e.target.closest && e.target.closest('summary');
-      if (!sum || !container.contains(sum)) return;
-      e.preventDefault();
-      e.stopPropagation();
-      if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
-      var details = sum.closest('details');
-      if (!details) return;
-      openDetails(details, allowCollapse, container);
-    }, true);
-
-    // Button-based accordions
-    container.addEventListener('click', function(e){
-      var btn = e.target && e.target.closest && e.target.closest('.dt-sc-accordion-btn, [data-accordion-trigger]');
-      if (!btn || !container.contains(btn)) return;
-      e.preventDefault();
-      e.stopPropagation();
-      if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
-      if (!btn.hasAttribute('aria-expanded')) btn.setAttribute('aria-expanded', 'false');
-      openButtonPanel(btn, allowCollapse, container);
-    }, true);
-
-    // On load, normalize to single-open if multiple are pre-opened
-    requestAnimationFrame(function(){
-      var firstOpen = container.querySelector('details[open]');
-      if (firstOpen){
-        closeOtherDetails(firstOpen, container);
-      }
-      var firstOpenBtn = container.querySelector('.dt-sc-accordion-btn[aria-expanded="true"], [data-accordion-trigger][aria-expanded="true"]');
-      if (firstOpenBtn){
-        closeOtherButtons(firstOpenBtn, container);
-      }
+        btn.setAttribute('aria-expanded', String(next));
+        try { panel.hidden = !next; } catch(_) {}
+        if (panel.style) panel.style.display = next ? '' : 'none';
+        panel.classList.toggle('is-open', next);
+        btn.classList.toggle('is-active', next);
+      }, true);
     });
   }
 
-  // Bind wrappers in this section
-  root.querySelectorAll(WRAPPER_SELECTORS).forEach(initContainer);
+  function init(){
+    var root = document.getElementById('shopify-section-{{ section.id }}') || document;
+    bindAccordionButtons(root);
+  }
 
-  // Theme editor rebind
-  document.addEventListener('shopify:section:load', function(e){
-    var el = e && e.detail ? document.getElementById('shopify-section-' + e.detail.sectionId) : null;
-    if (!el) return;
-    el.querySelectorAll(WRAPPER_SELECTORS).forEach(initContainer);
-  });
-  document.addEventListener('shopify:section:select', function(e){
-    var el = e && e.detail ? document.getElementById('shopify-section-' + e.detail.sectionId) : null;
-    if (!el) return;
-    el.querySelectorAll(WRAPPER_SELECTORS).forEach(initContainer);
-  });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  document.addEventListener('shopify:section:load', init);
+  document.addEventListener('shopify:section:select', init);
 })();
 </script>
 
