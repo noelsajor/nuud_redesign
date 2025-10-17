@@ -1080,6 +1080,211 @@
 })();
 </script>
 
+{%- comment -%}
+▼▼▼ DROP-IN: Replace accordion/toggles with a dropdown (scoped to this section) ▼▼▼
+{%- endcomment -%}
+<style>
+  /* Scoped to this section only */
+  #shopify-section-{{ section.id }} .product-tab .tab-dropdown-wrap {
+    display: grid;
+    gap: 10px;
+    margin: 16px 0;
+  }
+  #shopify-section-{{ section.id }} .product-tab .tab-dropdown-label {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  #shopify-section-{{ section.id }} .product-tab .tab-dropdown {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid var(--DTColor_Border, #e5e5e5);
+    border-radius: 10px;
+    background: #fff;
+  }
+
+  /* Hide original tab/accordion headers, keep content panes visible */
+  /* Case A: <details> accordions */
+  #shopify-section-{{ section.id }} .product-tab details > summary {
+    display: none !important;
+  }
+  /* Case B: dt-sc tabs header buttons/links */
+  #shopify-section-{{ section.id }} .product-tab .dt-sc-tabs .tablinks,
+  #shopify-section-{{ section.id }} .product-tab .dt-sc-tabs .dt-sc-tabs-nav {
+    display: none !important;
+  }
+</style>
+
+<script>
+(function(){
+  var SECTION_ID = "{{ section.id }}";
+
+  function initDropdown(container){
+    if (!container || container.__dropdownBound) return;
+
+    // 1) Collect panes for both possible structures
+    var detailsPanes = Array.prototype.slice.call(container.querySelectorAll('details'));
+    var dtTabsRoot   = container.querySelector('.dt-sc-tabs');
+    var dtTabButtons = dtTabsRoot ? Array.prototype.slice.call(dtTabsRoot.querySelectorAll('.tablinks')) : [];
+    var dtTabPanes   = dtTabsRoot ? Array.prototype.slice.call(dtTabsRoot.querySelectorAll('.tabcontent')) : [];
+
+    var items = []; // {id,title,activate}
+
+    if (detailsPanes.length){
+      detailsPanes.forEach(function(d, i){
+        var title = (d.querySelector('summary') && d.querySelector('summary').textContent.trim()) || ('Section ' + (i+1));
+        var paneId = d.id || ('dt-acc-' + SECTION_ID + '-' + i);
+        if (!d.id) d.id = paneId;
+
+        items.push({
+          id: paneId,
+          title: title,
+          activate: function(){
+            detailsPanes.forEach(function(x){ x.open = false; });
+            d.open = true;
+            // Ensure visibility for browsers that rely on open attribute
+            d.style.display = '';
+          }
+        });
+      });
+    } else if (dtTabButtons.length && dtTabPanes.length){
+      // Build map from button -> pane via href/data-target/aria-controls fallbacks
+      dtTabButtons.forEach(function(btn, i){
+        var label = (btn.textContent || '').trim() || ('Tab ' + (i+1));
+        var pane = null;
+
+        var targetId =
+          btn.getAttribute('data-target') ||
+          btn.getAttribute('aria-controls') ||
+          (btn.getAttribute('href') && btn.getAttribute('href').replace('#','')) || '';
+
+        if (targetId){
+          pane = container.querySelector('#' + CSS.escape(targetId));
+        }
+        if (!pane){ pane = dtTabPanes[i] || null; }
+
+        // Ensure pane has an id
+        var paneId = pane && pane.id ? pane.id : ('dt-tab-' + SECTION_ID + '-' + i);
+        if (pane && !pane.id) pane.id = paneId;
+
+        if (pane){
+          items.push({
+            id: paneId,
+            title: label,
+            activate: function(){
+              // Deactivate all
+              dtTabButtons.forEach(function(b){
+                b.classList.remove('active','is-active');
+                b.setAttribute('aria-selected','false');
+              });
+              dtTabPanes.forEach(function(p){
+                p.classList.remove('active','is-active','current');
+                p.hidden = true;
+                p.style.display = 'none';
+              });
+              // Activate selected
+              btn.classList.add('active','is-active');
+              btn.setAttribute('aria-selected','true');
+              pane.classList.add('active','is-active','current');
+              pane.hidden = false;
+              pane.style.display = '';
+            }
+          });
+        }
+      });
+
+      // Make sure all panes are hidden initially; dropdown will show one.
+      dtTabPanes.forEach(function(p){ p.hidden = true; p.style.display = 'none'; });
+    }
+
+    if (!items.length) return;
+
+    // 2) Build dropdown UI
+    var wrap = document.createElement('div');
+    wrap.className = 'tab-dropdown-wrap';
+
+    var label = document.createElement('label');
+    label.className = 'tab-dropdown-label';
+    var labelId = 'tab-dropdown-label-' + SECTION_ID;
+    label.id = labelId;
+    label.textContent = 'Section';
+
+    var select = document.createElement('select');
+    select.className = 'tab-dropdown';
+    select.setAttribute('aria-labelledby', labelId);
+
+    items.forEach(function(it, idx){
+      var opt = document.createElement('option');
+      opt.value = it.id;
+      opt.textContent = it.title;
+      select.appendChild(opt);
+    });
+
+    wrap.appendChild(label);
+    wrap.appendChild(select);
+
+    // Place the dropdown at the top of .product-tab
+    container.insertBefore(wrap, container.firstChild);
+
+    // 3) Initial selection: pick the first "open"/"active" pane if any
+    var initialIndex = 0;
+
+    // details: find first open
+    var openIndex = detailsPanes.findIndex(function(d){ return d.open; });
+    if (openIndex >= 0) initialIndex = openIndex;
+
+    // dt-tabs: find active pane
+    var activePaneIndex = dtTabPanes.findIndex(function(p){ return p.classList.contains('active') || p.classList.contains('is-active') || p.classList.contains('current'); });
+    if (activePaneIndex >= 0) initialIndex = activePaneIndex;
+
+    // Fallback to 0
+    select.selectedIndex = Math.max(0, initialIndex);
+
+    // Activate initial
+    var initialItem = items[select.selectedIndex];
+    if (initialItem && typeof initialItem.activate === 'function') initialItem.activate();
+
+    // 4) Change handler
+    select.addEventListener('change', function(){
+      var idx = select.selectedIndex;
+      var item = items[idx];
+      if (item && typeof item.activate === 'function') item.activate();
+
+      // Smooth scroll into view on mobile (optional, non-blocking)
+      try {
+        var paneEl = container.querySelector('#' + CSS.escape(item.id));
+        if (paneEl && window.matchMedia('(max-width: 991px)').matches){
+          paneEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } catch(e){}
+    });
+
+    container.__dropdownBound = true;
+  }
+
+  function boot(){
+    var sectionRoot = document.getElementById('shopify-section-{{ section.id }}');
+    if (!sectionRoot) return;
+    // This section may render 1 or 2 .product-tab blocks (right or bottom)
+    var tabsAreas = sectionRoot.querySelectorAll('.product-tab');
+    tabsAreas.forEach(initDropdown);
+  }
+
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', boot, { once: true });
+  } else {
+    boot();
+  }
+
+  // Re-init inside Theme Editor
+  document.addEventListener('shopify:section:load', function(e){
+    if(e && e.detail && e.detail.sectionId === "{{ section.id }}"){ boot(); }
+  });
+  document.addEventListener('shopify:section:select', function(e){
+    if(e && e.detail && e.detail.sectionId === "{{ section.id }}"){ boot(); }
+  });
+})();
+</script>
+
 {% schema %}
 {
   "name": "Product pages",
