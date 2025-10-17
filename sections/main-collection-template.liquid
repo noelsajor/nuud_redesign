@@ -271,9 +271,6 @@
                           id="Subtotal-{{ section.id }}"
                           data-subtotal
                           data-cents="{{ current_variant.price }}"
-                          class="no-glc"
-                          data-glc="ignore"
-                          data-currency="ignore"
                           style="display:inline-block"
                           aria-live="polite"
                         ></subtotal-display>
@@ -351,21 +348,7 @@
                   {%- endif -%}
 
                   {%- if section.settings.tab_position == "right" -%}
-                    <div class="product-tab" id="faq-{{ section.id }}-right">
-                      <div class="faq-controls">
-                        <button
-                          type="button"
-                          class="dt-sc-btn ctm-btn-padding faq-toggle-all"
-                          data-state="closed"
-                          aria-expanded="false"
-                          aria-controls="faq-{{ section.id }}-right"
-                        >
-                          <span class="label">Open all FAQs</span>
-                          <svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true" focusable="false" style="margin-left:8px;">
-                            <path fill="currentColor" d="M18 6a1.5 1.5 0 0 1 1.06.44l9 9a1.5 1.5 0 1 1-2.12 2.12L18 10.62l-7.94 6.94a1.5 1.5 0 1 1-2.12-2.12l9-9A1.5 1.5 0 0 1 18 6zm0 24a1.5 1.5 0 0 1-1.06-.44l-9-9a1.5 1.5 0 1 1 2.12-2.12L18 25.38l7.94-6.94a1.5 1.5 0 1 1 2.12 2.12l-9 9A1.5 1.5 0 0 1 18 30z"/>
-                          </svg>
-                        </button>
-                      </div>
+                    <div class="product-tab">
                       {% render 'product-tab' %}
                     </div>
                   {%- endif -%}
@@ -374,21 +357,7 @@
             </div> <!-- /product-page-row -->
 
             {%- if section.settings.tab_position == "bottom" -%}
-              <div class="product-tab" id="faq-{{ section.id }}-bottom">
-                <div class="faq-controls">
-                  <button
-                    type="button"
-                    class="dt-sc-btn ctm-btn-padding faq-toggle-all"
-                    data-state="closed"
-                    aria-expanded="false"
-                    aria-controls="faq-{{ section.id }}-bottom"
-                  >
-                    <span class="label">Open all FAQs</span>
-                    <svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true" focusable="false" style="margin-left:8px;">
-                      <path fill="currentColor" d="M18 6a1.5 1.5 0 0 1 1.06.44l9 9a1.5 1.5 0 1 1-2.12 2.12L18 10.62l-7.94 6.94a1.5 1.5 0 1 1-2.12-2.12l-9 9A1.5 1.5 0 0 1 18 30z"/>
-                    </svg>
-                  </button>
-                </div>
+              <div class="product-tab">
                 {% render 'product-tab' %}
               </div>
             {%- endif -%}
@@ -599,20 +568,16 @@
     opacity: 1;
   }
 
-  /* === Kill switch ONLY inside subtotal (do not affect other prices) === */
-  .sub-total .glc-money,
-  .sub-total [class*="money"] { all: unset; display: contents; }
-
   /* ===== Quantity + Total row ===== */
   .qty-total-row{
     display:flex;
     align-items:center;
     gap:16px;
-    flex-wrap:wrap;
+    flex-wrap:wrap;     /* wrap gracefully on narrow screens */
     margin-top:8px;
   }
   .qty-total-row .sub-total{
-    margin-left:auto;
+    margin-left:auto;   /* pushes Total to the right on wide screens */
     display:inline-flex;
     align-items:center;
     gap:8px;
@@ -624,14 +589,7 @@
   }
   @media (max-width: 480px){
     .qty-total-row{ gap:12px; }
-    .qty-total-row .sub-total{ margin-left:0; }
-  }
-
-  /* --- FAQ controls (Open/Close all) --- */
-  #shopify-section-{{ section.id }} .faq-controls{
-    display:flex;
-    justify-content:flex-end;
-    margin: 0 0 8px;
+    .qty-total-row .sub-total{ margin-left:0; } /* allow wrap */
   }
 </style>
 
@@ -667,61 +625,68 @@
   background: transparent !important; border: 0 !important; box-shadow: none !important;
 }
 
-  /* --- Desktop-only overrides (≥992px) --- */
-  @media (min-width: 992px){
-    #shopify-section-{{ section.id }} .media-scroller,
-    #shopify-section-{{ section.id }} .media-dots{
-      display: none !important;
-      visibility: hidden !important;
-      height: 0 !important;
-      overflow: hidden !important;
-    }
+/* === (Optional) Icon swap rules for + / − inside each summary === */
+#shopify-section-{{ section.id }} details summary .icon-plus { display: inline-block; }
+#shopify-section-{{ section.id }} details summary .icon-minus { display: none; }
+#shopify-section-{{ section.id }} details[open] summary .icon-plus { display: none; }
+#shopify-section-{{ section.id }} details[open] summary .icon-minus { display: inline-block; }
 
-    #shopify-section-{{ section.id }} .product-media{
-      display: grid;
-      grid-template-areas:
-        "stage"
-        "thumbs";
-      gap: 12px;
-      align-items: start;
-    }
-    #shopify-section-{{ section.id }} .desktop-stage{
-      display: block !important;
-      grid-area: stage;
-      order: 1;
-    }
-    #shopify-section-{{ section.id }} .desktop-thumbs{
-      display: grid !important;
-      grid-area: thumbs;
-      order: 2;
-      grid-auto-flow: column;
-      grid-auto-columns: minmax(64px, 96px);
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 2px;
-    }
-
-    #shopify-section-template--25476761977141__main .desktop-stage img { border-radius: 12px; }
+/* --- Desktop-only overrides (≥992px) --- */
+@media (min-width: 992px){
+  /* 1) Hide the mobile/tablet scroller + dots on desktop */
+  #shopify-section-{{ section.id }} .media-scroller,
+  #shopify-section-{{ section.id }} .media-dots{
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
   }
 
-  /* Mobile-only: hide horizontal scrollbar in the swipe gallery */
-  @media (max-width: 991.98px){
-    #shopify-section-{{ section.id }} .media-scroller{
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-    #shopify-section-{{ section.id }} .media-scroller::-webkit-scrollbar{
-      display: none;
-      height: 0;
-      background: transparent;
-    }
+  /* 2) Place DESKTOP MAIN STAGE first, then DESKTOP THUMBNAILS (vertical stacking) */
+  #shopify-section-{{ section.id }} .product-media{
+    display: grid;
+    grid-template-areas:
+      "stage"
+      "thumbs";
+    gap: 12px;
+    align-items: start;
+  }
+  #shopify-section-{{ section.id }} .desktop-stage{
+    display: block !important;
+    grid-area: stage;
+    order: 1; /* safety if order is used elsewhere */
+  }
+  #shopify-section-{{ section.id }} .desktop-thumbs{
+    display: grid !important;
+    grid-area: thumbs;
+    order: 2;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(64px, 96px);
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 2px;
   }
 
+  #shopify-section-template--25476761977141__main .desktop-stage img { border-radius: 12px; }
+}
+
+/* Mobile-only: hide horizontal scrollbar in the swipe gallery */
+@media (max-width: 991.98px){
+  #shopify-section-{{ section.id }} .media-scroller{
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;           /* Firefox */
+    -ms-overflow-style: none;        /* IE/Edge legacy */
+  }
+  #shopify-section-{{ section.id }} .media-scroller::-webkit-scrollbar{
+    display: none;                   /* Chrome/Safari/Opera */
+    height: 0;
+    background: transparent;
+  }
+}
 </style>
 
-<!-- ========= GALLERY + DOTS + SUBTOTAL LOGIC + FAQ OPEN/CLOSE ALL + INDEPENDENT PANELS ========= -->
+<!-- ========= GALLERY + DOTS + SUBTOTAL LOGIC (Editor-safe, section-scoped) ========= -->
 <script>
 (function(){
   var SECTION_ID = "{{ section.id }}";
@@ -739,24 +704,20 @@
     return '$' + amount;
   }
 
-  // === Subtotal Web Component (Shadow DOM)
+  // === Subtotal Web Component (Light DOM so apps can see it)
   (function defineSubtotal(){
     if (customElements.get('subtotal-display')) return;
 
     class SubtotalDisplay extends HTMLElement {
       static get observedAttributes(){ return ['data-cents']; }
 
-      constructor(){
-        super();
-        this._shadow = this.attachShadow({ mode: 'closed' });
-      }
-
       connectedCallback(){ this.render(); }
       attributeChangedCallback(){ this.render(); }
 
       render(){
         var cents = parseInt(this.getAttribute('data-cents') || '0', 10) || 0;
-        this._shadow.textContent = formatMoney(cents);
+        // Render a recognizable money wrapper in the light DOM
+        this.innerHTML = '<span class="glc-money money">' + formatMoney(cents) + '</span>';
       }
     }
 
@@ -844,118 +805,6 @@
     }
   }
 
-  /* ====== Bind "Open/Close all FAQs" toggles ====== */
-  function bindFaqToggles(sectionEl){
-    if(!sectionEl) return;
-    var wrappers = sectionEl.querySelectorAll('.product-tab');
-    wrappers.forEach(function(tabWrap){
-      var btn = tabWrap.querySelector('.faq-toggle-all');
-      if(!btn || btn.__bound) return;
-      btn.__bound = true;
-
-      function setState(openAll){
-        var detailsEls = tabWrap.querySelectorAll('details');
-        detailsEls.forEach(function(d){ d.open = !!openAll; });
-        btn.setAttribute('data-state', openAll ? 'open' : 'closed');
-        btn.setAttribute('aria-expanded', openAll ? 'true' : 'false');
-        var label = btn.querySelector('.label');
-        if(label){ label.textContent = openAll ? 'Close all FAQs' : 'Open all FAQs'; }
-      }
-
-      btn.addEventListener('click', function(){
-        var nextOpen = btn.getAttribute('data-state') !== 'open';
-        setState(nextOpen);
-      });
-
-      if ('MutationObserver' in window){
-        var mo = new MutationObserver(function(){
-          var detailsEls = tabWrap.querySelectorAll('details');
-          if(!detailsEls.length) return;
-          var allOpen = Array.prototype.every.call(detailsEls, function(d){ return d.open; });
-          var noneOpen = Array.prototype.every.call(detailsEls, function(d){ return !d.open; });
-          if(allOpen && btn.getAttribute('data-state') !== 'open') setState(true);
-          if(noneOpen && btn.getAttribute('data-state') !== 'closed') setState(false);
-        });
-        mo.observe(tabWrap, { attributes:true, subtree:true, attributeFilter:['open'] });
-      }
-    });
-  }
-
-  /* ====== Independent accordion behavior (defensive, but may be overridden by theme) ====== */
-  function makeAccordionsIndependent(sectionEl){
-    if(!sectionEl) return;
-    var tabs = sectionEl.querySelectorAll('.product-tab');
-
-    tabs.forEach(function(tab){
-      if(tab.__indepBound) return;
-      tab.__indepBound = true;
-
-      function toggleOnlyThis(targetEvent){
-        var sum = targetEvent.target && targetEvent.target.closest && targetEvent.target.closest('summary');
-        if(!sum || !tab.contains(sum)) return false;
-        var details = sum.closest('details');
-        if(!details) return false;
-
-        // Prevent any "single-open" logic from other scripts
-        targetEvent.preventDefault();
-        if (typeof targetEvent.stopImmediatePropagation === 'function') targetEvent.stopImmediatePropagation();
-        targetEvent.stopPropagation();
-
-        details.open = !details.open; // toggle only this one
-        return true;
-      }
-
-      // Run in capture to beat other handlers that might close siblings
-      tab.addEventListener('click', function(e){
-        toggleOnlyThis(e);
-      }, true);
-
-      // Keyboard accessibility (Enter/Space)
-      tab.addEventListener('keydown', function(e){
-        var isToggleKey = (e.key === 'Enter') || (e.key === ' ') || (e.code === 'Space');
-        if(!isToggleKey) return;
-        toggleOnlyThis(e);
-      }, true);
-    });
-  }
-
-  /* (Optional) still allow clicking an open item to close itself */
-  function enableClosableAccordions(sectionEl){
-    if(!sectionEl) return;
-    var tabs = sectionEl.querySelectorAll('.product-tab');
-    tabs.forEach(function(tab){
-      if(tab.__closableBound) return;
-      tab.__closableBound = true;
-
-      function closeIfAlreadyOpen(targetEvent){
-        var sum = targetEvent.target && targetEvent.target.closest && targetEvent.target.closest('summary');
-        if(!sum || !tab.contains(sum)) return false;
-        var details = sum.closest('details');
-        if(!details) return false;
-
-        if(details.hasAttribute('open')){
-          targetEvent.preventDefault();
-          if (typeof targetEvent.stopImmediatePropagation === 'function') targetEvent.stopImmediatePropagation();
-          targetEvent.stopPropagation();
-          details.open = false;
-          return true;
-        }
-        return false;
-      }
-
-      tab.addEventListener('click', function(e){}, true);
-      tab.addEventListener('click', function(e){
-        closeIfAlreadyOpen(e);
-      });
-
-      tab.addEventListener('keydown', function(e){
-        var isToggleKey = (e.key === 'Enter') || (e.key === ' ') || (e.code === 'Space');
-        if(!isToggleKey) return;
-        if (closeIfAlreadyOpen(e)) return;
-      }, true);
-    });
-  }
-
   function initSection(sectionEl){
     if(!sectionEl) return;
 
@@ -977,7 +826,7 @@
       if(!subtotalEl) return;
       var qty = parseFloat(qtyInput && qtyInput.value ? qtyInput.value : "1") || 1;
       var subtotalCents = Math.max(1, qty) * getPriceCents();
-      subtotalEl.setAttribute('data-cents', String(subtotalCents));
+      subtotalEl.setAttribute('data-cents', String(subtotalCents)); // triggers re-render
     }
 
     if(qtyWrap && qtyInput){
@@ -1153,7 +1002,7 @@
           priceSpan.setAttribute('data-price-cents', v.price);
           priceSpan.textContent = formatMoney(v.price);
           if (subtotalEl){
-            subtotalEl.setAttribute('data-cents', v.price);
+            subtotalEl.setAttribute('data-cents', v.price); // base 1× qty
             setSubtotal();
           }
         }
@@ -1173,9 +1022,7 @@
           restored.setAttribute('data-subtotal','');
           restored.id = "Subtotal-{{ section.id }}";
           restored.setAttribute('data-cents', String(getPriceCents()));
-          restored.setAttribute('data-glc','ignore');
-          restored.setAttribute('data-currency','ignore');
-          restored.className = 'no-glc';
+          restored.className = ''; // no ignore flags
           subWrap.appendChild(restored);
           subtotalEl = restored;
           setSubtotal();
@@ -1186,15 +1033,6 @@
 
     // >>> Connect swatch-group clicks to quantity/subtotal
     wireQuantitySwatches(sectionEl, setSubtotal);
-
-    // >>> FAQ Open/Close all (if you added the button)
-    bindFaqToggles(sectionEl);
-
-    // >>> Make each accordion independent
-    makeAccordionsIndependent(sectionEl);
-
-    // (Optional) allow clicking an open item to close itself
-    enableClosableAccordions(sectionEl);
   }
 
   var sectionRoot = document.getElementById('shopify-section-{{ section.id }}') || document;
@@ -1231,155 +1069,68 @@
     } catch(e){}
   })();
 
-})();
-</script>
+  /* =====================  UPDATED: STRICT TOGGLE FOR .dt-sc-accordion-btn  ===================== */
+  (function wireDtAccordionBtnOnly(){
+    var sectionEl = document.getElementById('shopify-section-{{ section.id }}') || document;
+    if (sectionEl.__dtAccordionBtnWired) return;
 
-<!-- ===== ABSOLUTE OVERRIDE: Force independent toggling for both <details> and button-based accordions ===== -->
-<script>
-(function () {
-  function makeAccordionsIndependent(root) {
-    var scope = root || document;
-    var tabs = scope.querySelectorAll('.product-tab');
-    if (!tabs.length) return;
+    function onClick(e){
+      var btn = e.target.closest('.dt-sc-accordion-btn');
+      if (!btn || !sectionEl.contains(btn)) return;
 
-    tabs.forEach(function (tab) {
-      if (tab.__hardIndepBound) return;
-      tab.__hardIndepBound = true;
+      // Find the <details> container this button controls
+      var details = btn.closest('details') || (btn.closest('summary') ? btn.closest('summary').parentNode : null);
 
-      // <details>/<summary>
-      tab.addEventListener('click', function (e) {
-        var sum = e.target && e.target.closest && e.target.closest('summary');
-        if (!sum || !tab.contains(sum)) return;
-        var details = sum.closest('details');
-        if (!details) return;
-
-        e.preventDefault();
-        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
-        e.stopPropagation();
-
-        details.open = !details.open;
-      }, true);
-
-      tab.addEventListener('keydown', function (e) {
-        var isToggleKey = (e.key === 'Enter') || (e.key === ' ') || (e.code === 'Space');
-        if (!isToggleKey) return;
-        var sum = e.target && e.target.closest && e.target.closest('summary');
-        if (!sum || !tab.contains(sum)) return;
-        var details = sum.closest('details');
-        if (!details) return;
-
-        e.preventDefault();
-        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
-        e.stopPropagation();
-
-        details.open = !details.open;
-      }, true);
-
-      // Button-based accordions (.dt-sc-accordion-btn or [data-accordion-trigger])
-      tab.addEventListener('click', function (e) {
-        var btn = e.target && e.target.closest && e.target.closest('.dt-sc-accordion-btn, [data-accordion-trigger]');
-        if (!btn || !tab.contains(btn)) return;
-
-        var panelId = btn.getAttribute('aria-controls');
-        var panel = (panelId && document.getElementById(panelId)) || btn.nextElementSibling;
-        if (!panel) return;
-
-        e.preventDefault();
-        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
-        e.stopPropagation();
-
-        var isOpen =
-          btn.getAttribute('aria-expanded') === 'true' ||
-          panel.hidden === false ||
-          panel.style.display === 'block' ||
-          panel.classList.contains('is-open');
-
-        var nextState = !isOpen;
-
-        btn.setAttribute('aria-expanded', String(nextState));
-        try { panel.hidden = !nextState; } catch (err) {}
-        if (panel.style) panel.style.display = nextState ? '' : 'none';
-        panel.classList.toggle('is-open', nextState);
-        btn.classList.toggle('is-active', nextState);
-      }, true);
-    });
-  }
-
-  function init() {
-    var section = document.getElementById('shopify-section-{{ section.id }}') || document;
-    // Run after other scripts so we can override them deterministically
-    setTimeout(function(){ makeAccordionsIndependent(section); }, 0);
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-
-  document.addEventListener('shopify:section:load', init);
-  document.addEventListener('shopify:section:select', init);
-})();
-</script>
-
-<!-- FINAL: hard bind for .dt-sc-accordion-btn anywhere in the section (independent toggle on every click) -->
-<script>
-(function(){
-  function bindAccordionButtons(scope){
-    scope.querySelectorAll('.dt-sc-accordion-btn').forEach(function(btn){
-      if (btn.__dtAccordionBound) return;
-      btn.__dtAccordionBound = true;
-
-      btn.addEventListener('click', function(e){
-        // Find the associated panel:
-        var id = btn.getAttribute('aria-controls');
-        var panel = id ? document.getElementById(id) : null;
-        if (!panel) {
-          // fallback: next sibling or common class names
-          panel = btn.nextElementSibling && (btn.nextElementSibling.matches('[id], .dt-sc-accordion-content, [role="region"], [data-accordion-panel]') ? btn.nextElementSibling : null);
-          if (!panel) {
-            var wrap = btn.closest('.dt-sc-accordion, .dt-sc-accordion-container, li, .accordion-item');
-            if (wrap) panel = wrap.querySelector('.dt-sc-accordion-content, [role="region"], [data-accordion-panel], details > div, .accordion-content');
-          }
+      // Fallback: aria-controls or anchor hash
+      if (!details) {
+        var targetId = btn.getAttribute('aria-controls') || (btn.hash ? btn.hash.slice(1) : null);
+        if (targetId) {
+          var panel = document.getElementById(targetId);
+          if (panel) details = panel.closest('details');
         }
-        if (!panel) return;
+      }
 
-        e.preventDefault();
-        e.stopPropagation();
-        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+      if (!details || details.tagName !== 'DETAILS') return;
 
-        var isOpen =
-          btn.getAttribute('aria-expanded') === 'true' ||
-          panel.hidden === false ||
-          panel.classList.contains('is-open') ||
-          panel.style.display === 'block';
+      // Prevent native <summary> toggle double-fire if the button sits inside it
+      e.preventDefault();
+      e.stopPropagation();
 
-        var next = !isOpen;
+      // Toggle ONLY this item
+      details.open = !details.open;
 
-        btn.setAttribute('aria-expanded', String(next));
-        try { panel.hidden = !next; } catch(_) {}
-        if (panel.style) panel.style.display = next ? '' : 'none';
-        panel.classList.toggle('is-open', next);
-        btn.classList.toggle('is-active', next);
-      }, true);
+      // Sync ARIA for accessibility
+      var summary = details.querySelector('summary');
+      if (summary) summary.setAttribute('aria-expanded', details.open ? 'true' : 'false');
+    }
+
+    sectionEl.addEventListener('click', onClick, { passive:false });
+
+    // Re-bind in Theme Editor reload/select
+    document.addEventListener('shopify:section:load', function(ev){
+      if (ev && ev.detail && ev.detail.sectionId === "{{ section.id }}") {
+        var el = document.getElementById('shopify-section-{{ section.id }}');
+        if (el) el.addEventListener('click', onClick, { passive:false });
+      }
     });
-  }
+    document.addEventListener('shopify:section:select', function(ev){
+      if (ev && ev.detail && ev.detail.sectionId === "{{ section.id }}") {
+        var el = document.getElementById('shopify-section-{{ section.id }}');
+        if (el) el.addEventListener('click', onClick, { passive:false });
+      }
+    });
 
-  function init(){
-    var root = document.getElementById('shopify-section-{{ section.id }}') || document;
-    bindAccordionButtons(root);
-  }
+    sectionEl.__dtAccordionBtnWired = true;
+  })();
+  /* ========================================================================== */
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-
-  document.addEventListener('shopify:section:load', init);
-  document.addEventListener('shopify:section:select', init);
 })();
 </script>
+
+<style>
+/* Make the button obviously interactive without altering other styles */
+#shopify-section-{{ section.id }} .dt-sc-accordion-btn { cursor: pointer; }
+</style>
 
 {% schema %}
 {
